@@ -79,3 +79,10 @@ LIMIT $1;
 
 -- name: ListOrdersByUser :many
 SELECT * FROM store_orders WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3;
+
+-- name: ListOrders :many
+-- All orders, newest first, optionally filtered by status ('' means every status).
+SELECT * FROM store_orders
+WHERE ($3::text = '' OR status = $3)
+ORDER BY created_at DESC
+LIMIT $1 OFFSET $2;

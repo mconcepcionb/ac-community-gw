@@ -49,6 +49,7 @@ type Store interface {
 	SetOrderOutput(ctx context.Context, orderID uuid.UUID, output string) error
 	ReconcilePendingOrders(ctx context.Context, limit int) (int, error)
 	Orders(ctx context.Context, userID uuid.UUID, limit, offset int) ([]domain.Order, error)
+	AdminOrders(ctx context.Context, status string, limit, offset int) ([]domain.Order, error)
 }
 
 // Config configures the azeroth-store plugin.
@@ -126,5 +127,7 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		reg.RequirePermission(PermissionPurchase, http.HandlerFunc(p.handlePurchase)))
 	reg.Mux.Handle("POST /api/v1/store/wallets/grant",
 		reg.RequirePermission(PermissionAdminWallets, http.HandlerFunc(p.handleGrant)))
+	reg.Mux.Handle("GET /api/v1/admin/store/orders",
+		reg.RequirePermission(PermissionAdminOrdersRead, http.HandlerFunc(p.handleAdminOrders)))
 	return services.Provide[AccountView](reg.Services, AccountService, p)
 }

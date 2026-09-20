@@ -138,6 +138,17 @@ func (f *fakeStore) Orders(context.Context, uuid.UUID, int, int) ([]domain.Order
 	return out, nil
 }
 
+func (f *fakeStore) AdminOrders(_ context.Context, status string, _, _ int) ([]domain.Order, error) {
+	out := make([]domain.Order, 0, len(f.orders))
+	for _, order := range f.orders {
+		if status != "" && string(order.Status) != status {
+			continue
+		}
+		out = append(out, order)
+	}
+	return out, nil
+}
+
 type fakeDelivery struct {
 	err  error
 	last delivery.Request
@@ -342,5 +353,26 @@ func TestHandleGrantByDiscordID(t *testing.T) {
 	}
 	if store.balance != 250 {
 		t.Fatalf("balance = %d", store.balance)
+	}
+}
+
+func TestHandleAdminOrders(t *testing.T) {
+	store := newFakeStore()
+	delivered := domain.Order{ID: uuid.New(), Status: domain.OrderDelivered, SKU: "starter"}
+	pending := domain.Order{ID: uuid.New(), Status: domain.OrderPending, SKU: "mystery"}
+	store.orders[delivered.ID] = delivered
+	store.orders[pending.ID] = pending
+	plugin := New(Config{Store: store})
+
+	rec := httptest.NewRecorder()
+	plugin.handleAdminOrders(rec, httptest.NewRequest(http.MethodGet,
+		"/api/v1/admin/store/orders?status=delivered", nil))
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("status = %d", rec.Code)
+	}
+	body := rec.Body.String()
+	if !strings.Contains(body, "starter") || strings.Contains(body, "mystery") {
+		t.Fatalf("unexpected body: %s", body)
 	}
 }

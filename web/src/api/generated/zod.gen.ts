@@ -360,6 +360,17 @@ export const zListUsersResponse = z.object({
     users: z.array(zUser).optional()
 });
 
+export const zStoreAdminOrdersListQuery = z.object({
+    status: z.string().optional(),
+    limit: z.int().optional().default(50),
+    offset: z.int().optional().default(0)
+});
+
+/**
+ * OK
+ */
+export const zStoreAdminOrdersListResponse = zStoreOrdersResponse;
+
 export const zAzerothAdminUsersGetPath = z.object({
     id: z.string()
 });

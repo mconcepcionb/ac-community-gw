@@ -286,6 +286,55 @@ func (q *Queries) ListActiveProducts(ctx context.Context) ([]StoreProduct, error
 	return items, nil
 }
 
+const listOrders = `-- name: ListOrders :many
+SELECT id, user_id, product_id, sku, price_points, character_name, account_id, status, command_output, created_at, updated_at FROM store_orders
+WHERE ($3::text = '' OR status = $3)
+ORDER BY created_at DESC
+LIMIT $1 OFFSET $2
+`
+
+type ListOrdersParams struct {
+	Limit   int32
+	Offset  int32
+	Column3 string
+}
+
+// All orders, newest first, optionally filtered by status (” means every status).
+func (q *Queries) ListOrders(ctx context.Context, arg ListOrdersParams) ([]StoreOrder, error) {
+	rows, err := q.db.QueryContext(ctx, listOrders, arg.Limit, arg.Offset, arg.Column3)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []StoreOrder{}
+	for rows.Next() {
+		var i StoreOrder
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.ProductID,
+			&i.Sku,
+			&i.PricePoints,
+			&i.CharacterName,
+			&i.AccountID,
+			&i.Status,
+			&i.CommandOutput,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listOrdersByUser = `-- name: ListOrdersByUser :many
 SELECT id, user_id, product_id, sku, price_points, character_name, account_id, status, command_output, created_at, updated_at FROM store_orders WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
 `

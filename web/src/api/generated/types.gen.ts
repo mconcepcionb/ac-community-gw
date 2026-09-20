@@ -364,6 +364,52 @@ export type User = {
     username?: string;
 };
 
+export type StoreAdminOrdersListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * order status (pending, delivered, failed)
+         */
+        status?: string;
+        /**
+         * page size
+         */
+        limit?: number;
+        /**
+         * page offset
+         */
+        offset?: number;
+    };
+    url: '/api/v1/admin/store/orders';
+};
+
+export type StoreAdminOrdersListErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type StoreAdminOrdersListError = StoreAdminOrdersListErrors[keyof StoreAdminOrdersListErrors];
+
+export type StoreAdminOrdersListResponses = {
+    /**
+     * OK
+     */
+    200: StoreOrdersResponse;
+};
+
+export type StoreAdminOrdersListResponse = StoreAdminOrdersListResponses[keyof StoreAdminOrdersListResponses];
+
 export type AzerothAdminUsersGetData = {
     body?: never;
     path: {

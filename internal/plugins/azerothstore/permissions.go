@@ -15,6 +15,8 @@ const (
 	PermissionAdminWallets permissions.Permission = "store.admin.wallets"
 	// PermissionAdminProducts allows managing the product catalog.
 	PermissionAdminProducts permissions.Permission = "store.admin.products"
+	// PermissionAdminOrdersRead allows reading every order.
+	PermissionAdminOrdersRead permissions.Permission = "store.admin.orders.read"
 )
 
 func permissionDefs() []permissions.Definition {
@@ -47,6 +49,11 @@ func permissionDefs() []permissions.Definition {
 		{
 			Name:        PermissionAdminProducts,
 			Description: "Manage the store product catalog",
+			Owner:       Name,
+		},
+		{
+			Name:        PermissionAdminOrdersRead,
+			Description: "Read every store order",
 			Owner:       Name,
 		},
 	}

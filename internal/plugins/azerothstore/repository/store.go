@@ -396,6 +396,32 @@ func (s *Store) Orders(ctx context.Context, userID uuid.UUID, limit, offset int)
 	return orders, nil
 }
 
+// AdminOrders lists all orders, newest first, optionally filtered by status.
+func (s *Store) AdminOrders(ctx context.Context, status string, limit, offset int) ([]domain.Order, error) {
+	if limit <= 0 {
+		limit = 50
+	}
+	if limit > 200 {
+		limit = 200
+	}
+	if offset < 0 {
+		offset = 0
+	}
+	rows, err := s.q.ListOrders(ctx, azerothstorerepo.ListOrdersParams{
+		Limit:   int32(limit),
+		Offset:  int32(offset),
+		Column3: status,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("repository: list orders: %w", err)
+	}
+	orders := make([]domain.Order, 0, len(rows))
+	for _, row := range rows {
+		orders = append(orders, toOrder(row))
+	}
+	return orders, nil
+}
+
 func (s *Store) productWithItems(ctx context.Context, row azerothstorerepo.StoreProduct) (domain.Product, error) {
 	items, err := s.q.ListProductItems(ctx, row.ID)
 	if err != nil {

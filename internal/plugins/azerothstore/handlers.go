@@ -242,6 +242,41 @@ func (p *Plugin) handleOrders(w http.ResponseWriter, r *http.Request) {
 	httpapi.WriteJSON(w, http.StatusOK, OrdersResponse{Orders: items})
 }
 
+// handleAdminOrders handles GET /api/v1/admin/store/orders.
+//
+//	@Summary		List all orders
+//	@Description	Lists every store order, newest first, optionally filtered by status. Requires the store.admin.orders.read permission.
+//	@Tags			store
+//	@ID				store.admin.orders.list
+//	@Produce		json
+//	@Param			status	query	string	false	"order status (pending, delivered, failed)"
+//	@Param			limit	query	int		false	"page size"	default(50)
+//	@Param			offset	query	int		false	"page offset"	default(0)
+//	@Success		200	{object}	OrdersResponse
+//	@Failure		401	{object}	httpapi.ErrorResponse
+//	@Failure		403	{object}	httpapi.ErrorResponse
+//	@Failure		503	{object}	httpapi.ErrorResponse
+//	@Router			/api/v1/admin/store/orders [get]
+func (p *Plugin) handleAdminOrders(w http.ResponseWriter, r *http.Request) {
+	if p.store == nil {
+		httpapi.WriteError(w, r, errStoreUnavailable)
+		return
+	}
+	status := strings.TrimSpace(r.URL.Query().Get("status"))
+	limit := intParam(r, "limit", 50)
+	offset := intParam(r, "offset", 0)
+	orders, err := p.store.AdminOrders(r.Context(), status, limit, offset)
+	if err != nil {
+		httpapi.WriteError(w, r, errStoreUnavailable)
+		return
+	}
+	items := make([]Order, 0, len(orders))
+	for _, order := range orders {
+		items = append(items, orderDTO(order))
+	}
+	httpapi.WriteJSON(w, http.StatusOK, OrdersResponse{Orders: items})
+}
+
 // handlePurchase handles POST /api/v1/store/orders.
 //
 //	@Summary		Purchase a product
