@@ -22,12 +22,13 @@ export function AppNav() {
           Characters
         </Link>
       </PermissionGate>
+      <PermissionGate permission="store.catalog.read">
+        <Link to="/store" className={linkClass} activeProps={{ className: "text-foreground" }}>
+          Store
+        </Link>
+      </PermissionGate>
       <PermissionGate permission="store.wallet.read">
-        <Link
-          to="/store/wallet"
-          className={linkClass}
-          activeProps={{ className: "text-foreground" }}
-        >
+        <Link to="/wallet" className={linkClass} activeProps={{ className: "text-foreground" }}>
           Wallet
         </Link>
       </PermissionGate>

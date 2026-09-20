@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DeleteProductButton } from "./delete-product-button";
 import { ProductFormDialog } from "./product-form-dialog";
+import { PurchaseDialog } from "./purchase-dialog";
 import { useProduct } from "./use-products";
 
 export function ProductDetailPage({ sku }: { sku: string }) {
@@ -51,8 +52,11 @@ export function ProductDetailPage({ sku }: { sku: string }) {
         title={product?.name ?? sku}
         description={product?.description || "Product detail."}
         actions={
-          <PermissionGate permission="store.admin.products">
-            <div className="flex gap-2">
+          <div className="flex gap-2">
+            <PermissionGate permission="store.purchase">
+              <PurchaseDialog sku={sku} trigger={<Button>Buy</Button>} />
+            </PermissionGate>
+            <PermissionGate permission="store.admin.products">
               <ProductFormDialog
                 mode="update"
                 product={product}
@@ -62,8 +66,8 @@ export function ProductDetailPage({ sku }: { sku: string }) {
                 sku={sku}
                 onDeleted={() => void navigate({ to: "/admin/store" })}
               />
-            </div>
-          </PermissionGate>
+            </PermissionGate>
+          </div>
         }
       />
 

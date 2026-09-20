@@ -48,9 +48,14 @@ export function HomePage() {
               <Link to="/characters">My characters</Link>
             </Button>
           </PermissionGate>
+          <PermissionGate permission="store.catalog.read">
+            <Button asChild variant="outline" size="sm">
+              <Link to="/store">Store</Link>
+            </Button>
+          </PermissionGate>
           <PermissionGate permission="store.wallet.read">
             <Button asChild variant="outline" size="sm">
-              <Link to="/store/wallet">Wallet</Link>
+              <Link to="/wallet">Wallet</Link>
             </Button>
           </PermissionGate>
           <PermissionGate permission="azeroth.info.public.read">

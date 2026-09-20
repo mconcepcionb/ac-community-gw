@@ -20,7 +20,7 @@ function renderPage() {
   const router = createRouter({
     routeTree,
     context: { queryClient },
-    history: createMemoryHistory({ initialEntries: ["/store/wallet"] }),
+    history: createMemoryHistory({ initialEntries: ["/wallet"] }),
   });
 
   render(

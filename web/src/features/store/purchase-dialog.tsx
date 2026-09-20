@@ -28,12 +28,12 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-export function PurchaseDialog({ trigger }: { trigger: ReactNode }) {
+export function PurchaseDialog({ trigger, sku }: { trigger: ReactNode; sku?: string }) {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { sku: "", character: "" },
+    defaultValues: { sku: sku ?? "", character: "" },
   });
   const mutation = useMutation(storeOrdersCreateMutation());
 
@@ -41,7 +41,7 @@ export function PurchaseDialog({ trigger }: { trigger: ReactNode }) {
     try {
       await mutation.mutateAsync({ body: values });
       toast.success("Purchase delivered");
-      form.reset({ sku: "", character: "" });
+      form.reset({ sku: sku ?? "", character: "" });
       setOpen(false);
       await queryClient.invalidateQueries({ queryKey: storeWalletGetQueryKey() });
       await queryClient.invalidateQueries({ queryKey: storeOrdersListQueryKey() });

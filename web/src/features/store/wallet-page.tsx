@@ -7,7 +7,6 @@ import { PageHeader } from "@/components/common/page-header";
 import { PermissionGate } from "@/components/common/permission-gate";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GrantDialog } from "./grant-dialog";
 import { PurchaseDialog } from "./purchase-dialog";
 import { useOrders, useWallet } from "./use-wallet";
 
@@ -31,14 +30,9 @@ export function WalletPage() {
         title="Wallet"
         description="Your points balance and order history."
         actions={
-          <div className="flex gap-2">
-            <PermissionGate permission="store.purchase">
-              <PurchaseDialog trigger={<Button>Purchase</Button>} />
-            </PermissionGate>
-            <PermissionGate permission="store.admin.wallets">
-              <GrantDialog trigger={<Button variant="outline">Grant points</Button>} />
-            </PermissionGate>
-          </div>
+          <PermissionGate permission="store.purchase">
+            <PurchaseDialog trigger={<Button>Purchase</Button>} />
+          </PermissionGate>
         }
       />
 
