@@ -994,7 +994,7 @@ export type ApikeysRotateResponses = {
 
 export type ApikeysRotateResponse = ApikeysRotateResponses[keyof ApikeysRotateResponses];
 
-export type AzerothAdminAuditListData = {
+export type GatewayAdminAuditListData = {
     body?: never;
     path?: never;
     query?: {
@@ -1038,7 +1038,7 @@ export type AzerothAdminAuditListData = {
     url: '/api/v1/admin/audit';
 };
 
-export type AzerothAdminAuditListErrors = {
+export type GatewayAdminAuditListErrors = {
     /**
      * Unauthorized
      */
@@ -1053,16 +1053,16 @@ export type AzerothAdminAuditListErrors = {
     503: ErrorResponse;
 };
 
-export type AzerothAdminAuditListError = AzerothAdminAuditListErrors[keyof AzerothAdminAuditListErrors];
+export type GatewayAdminAuditListError = GatewayAdminAuditListErrors[keyof GatewayAdminAuditListErrors];
 
-export type AzerothAdminAuditListResponses = {
+export type GatewayAdminAuditListResponses = {
     /**
      * OK
      */
     200: AdminAuditResponse;
 };
 
-export type AzerothAdminAuditListResponse = AzerothAdminAuditListResponses[keyof AzerothAdminAuditListResponses];
+export type GatewayAdminAuditListResponse = GatewayAdminAuditListResponses[keyof GatewayAdminAuditListResponses];
 
 export type AzerothAdminCharactersMailData = {
     /**

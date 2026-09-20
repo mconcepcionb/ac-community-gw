@@ -89,5 +89,7 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 
 	reg.Mux.Handle("GET /api/v1/admin/users/{id}",
 		reg.RequirePermission(permissionUserRead, http.HandlerFunc(p.handleUser360)))
+	reg.Mux.Handle("GET /api/v1/admin/audit",
+		reg.RequirePermission(PermissionAuditRead, http.HandlerFunc(p.handleAuditLog)))
 	return nil
 }

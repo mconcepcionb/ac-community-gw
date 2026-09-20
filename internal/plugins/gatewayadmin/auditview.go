@@ -1,4 +1,4 @@
-package azerothadmin
+package gatewayadmin
 
 import (
 	"net/http"
@@ -35,8 +35,8 @@ type AuditResponse struct {
 //
 //	@Summary		Read the audit log
 //	@Description	Lists audit entries, newest first, filterable by actor, target, action and time range. Requires the gw.audit.read permission.
-//	@Tags			azeroth-admin
-//	@ID				azeroth.admin.audit.list
+//	@Tags			gateway-admin
+//	@ID				gateway.admin.audit.list
 //	@Produce		json
 //	@Param			actor		query	string	false	"actor community user id"
 //	@Param			target		query	string	false	"target id substring"
@@ -45,7 +45,7 @@ type AuditResponse struct {
 //	@Param			action		query	string	false	"action substring"
 //	@Param			since	query	string	false	"RFC3339 lower bound"
 //	@Param			until	query	string	false	"RFC3339 upper bound"
-//	@Param			limit	query	int		false	"page size"	default(50)
+//	@Param			limit		query	int		false	"page size"	default(50)
 //	@Param			offset	query	int		false	"page offset"	default(0)
 //	@Success		200	{object}	AuditResponse
 //	@Failure		401	{object}	httpapi.ErrorResponse

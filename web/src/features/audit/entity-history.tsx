@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { azerothAdminAuditListOptions } from "@/api";
+import { gatewayAdminAuditListOptions } from "@/api";
 import { EmptyState } from "@/components/common/empty-state";
 import { ErrorState } from "@/components/common/error-state";
 import { LoadingState } from "@/components/common/loading-state";
@@ -16,7 +16,7 @@ export function EntityHistory({
   limit?: number;
 }) {
   const query = useQuery({
-    ...azerothAdminAuditListOptions({
+    ...gatewayAdminAuditListOptions({
       query: { target_type: targetType, target_id: targetId, limit },
     }),
     enabled: targetType !== "" && targetId !== "",

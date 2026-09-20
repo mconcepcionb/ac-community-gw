@@ -676,7 +676,7 @@ export const zApikeysRotatePath = z.object({
  */
 export const zApikeysRotateResponse = zApiKeySecretResponse;
 
-export const zAzerothAdminAuditListQuery = z.object({
+export const zGatewayAdminAuditListQuery = z.object({
     actor: z.string().optional(),
     target: z.string().optional(),
     target_type: z.string().optional(),
@@ -691,7 +691,7 @@ export const zAzerothAdminAuditListQuery = z.object({
 /**
  * OK
  */
-export const zAzerothAdminAuditListResponse = zAdminAuditResponse;
+export const zGatewayAdminAuditListResponse = zAdminAuditResponse;
 
 /**
  * delivery request

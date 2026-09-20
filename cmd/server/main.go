@@ -279,9 +279,7 @@ func run() error {
 		Visibility:   characterVisibility,
 		NoticeItemID: cfg.Notice.ItemID,
 	}))
-	manager.Add(azerothadmin.New(executor,
-		azerothadmin.WithAudit(auditRecorder),
-		azerothadmin.WithAuditReader(auditReader)))
+	manager.Add(azerothadmin.New(executor, azerothadmin.WithAudit(auditRecorder)))
 	manager.Add(azerothinfo.New(executor))
 	manager.Add(azerothitem.New(azerothitem.Config{Items: itemReader}))
 	manager.Add(azerothstore.New(azerothstore.Config{

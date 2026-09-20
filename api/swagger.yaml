@@ -1492,7 +1492,7 @@ paths:
     get:
       description: Lists audit entries, newest first, filterable by actor, target,
         action and time range. Requires the gw.audit.read permission.
-      operationId: azeroth.admin.audit.list
+      operationId: gateway.admin.audit.list
       parameters:
       - description: actor community user id
         in: query
@@ -1568,7 +1568,7 @@ paths:
           description: Service Unavailable
       summary: Read the audit log
       tags:
-      - azeroth-admin
+      - gateway-admin
   /api/v1/admin/characters/{name}/mail:
     post:
       description: Delivers items and/or money to any character. Requires the azeroth.admin.mail.send

@@ -4,7 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 
 import type { AdminAuditEntry } from "@/api";
-import { azerothAdminAuditListOptions } from "@/api";
+import { gatewayAdminAuditListOptions } from "@/api";
 import { DataTable } from "@/components/common/data-table";
 import { PageHeader } from "@/components/common/page-header";
 import { Input } from "@/components/ui/input";
@@ -32,7 +32,7 @@ export function AdminAuditPage() {
   const actionQuery = useDebouncedValue(action, 300);
 
   const query = useQuery(
-    azerothAdminAuditListOptions({
+    gatewayAdminAuditListOptions({
       query: {
         actor: actorQuery || undefined,
         target: targetQuery || undefined,
