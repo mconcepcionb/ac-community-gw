@@ -51,6 +51,17 @@ type CharacterVisibility struct {
 	UpdatedAt     time.Time
 }
 
+type CommunityReport struct {
+	ID         uuid.UUID
+	ReporterID uuid.UUID
+	Target     string
+	Category   string
+	Message    string
+	Status     string
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+}
+
 type CommunityUser struct {
 	ID            uuid.UUID
 	DiscordID     string

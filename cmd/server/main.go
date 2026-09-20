@@ -44,6 +44,8 @@ import (
 	azerothstorerepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore/repository"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/identitydiscord"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/identitydiscord/repository"
+	"github.com/mconcepcionb/ac-community-gw/internal/plugins/reports"
+	reportsrepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/reports/repository"
 )
 
 // @title			ac-community-gw API
@@ -126,6 +128,7 @@ func run() error {
 	var accountClaims azerothaccount.ClaimStore
 	var storeRepo azerothstore.Store
 	var characterVisibility azerothcharacter.VisibilityStore
+	var reportsStore reports.Store
 	if database != nil {
 		identityRepo = repository.New(database.SQL())
 		sessionStore = identityRepo
@@ -134,6 +137,7 @@ func run() error {
 		accountClaims = accountRepo
 		storeRepo = azerothstorerepo.New(database.SQL())
 		characterVisibility = azerothcharacterrepo.New(database.SQL())
+		reportsStore = reportsrepo.New(database.SQL())
 	}
 	if storeRepo != nil {
 		go runStoreReconciliation(ctx, storeRepo, logger)
@@ -258,6 +262,10 @@ func run() error {
 	manager.Add(azerothitem.New(azerothitem.Config{Items: itemReader}))
 	manager.Add(azerothstore.New(azerothstore.Config{
 		Store: storeRepo,
+		Audit: auditRecorder,
+	}))
+	manager.Add(reports.New(reports.Config{
+		Store: reportsStore,
 		Audit: auditRecorder,
 	}))
 

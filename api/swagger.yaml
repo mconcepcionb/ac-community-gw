@@ -445,6 +445,31 @@ components:
         result:
           type: string
       type: object
+    CommunityReport:
+      properties:
+        category:
+          type: string
+        created_at:
+          type: string
+        id:
+          type: string
+        message:
+          type: string
+        reporter_id:
+          type: string
+        status:
+          type: string
+        target:
+          type: string
+      type: object
+    CommunityReportsResponse:
+      properties:
+        reports:
+          items:
+            $ref: '#/components/schemas/CommunityReport'
+          type: array
+          uniqueItems: false
+      type: object
     CreateAccountRequest:
       properties:
         email:
@@ -677,6 +702,15 @@ components:
         user_id:
           type: string
       type: object
+    SubmitReportRequest:
+      properties:
+        category:
+          type: string
+        message:
+          type: string
+        target:
+          type: string
+      type: object
     User:
       properties:
         created_at:
@@ -703,6 +737,108 @@ info:
   version: "1.0"
 openapi: 3.1.0
 paths:
+  /api/v1/admin/reports:
+    get:
+      description: Lists every report, newest first, optionally filtered by status.
+        Requires the report.read permission.
+      operationId: reports.list
+      parameters:
+      - description: report status (open, closed)
+        in: query
+        name: status
+        schema:
+          type: string
+      - description: page size
+        in: query
+        name: limit
+        schema:
+          default: 50
+          type: integer
+      - description: page offset
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommunityReportsResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List reports
+      tags:
+      - reports
+  /api/v1/admin/reports/{id}/close:
+    post:
+      description: Marks a report closed. Requires the report.read permission.
+      operationId: reports.close
+      parameters:
+      - description: report id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommunityReport'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Close a report
+      tags:
+      - reports
   /api/v1/admin/store/orders:
     get:
       description: Lists every store order, newest first, optionally filtered by status.
@@ -2752,6 +2888,103 @@ paths:
       summary: Current principal
       tags:
       - auth
+  /api/v1/reports:
+    post:
+      description: Reports another player. Requires the report.create permission.
+      operationId: reports.create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitReportRequest'
+        description: report
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommunityReport'
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Submit a report
+      tags:
+      - reports
+  /api/v1/reports/mine:
+    get:
+      description: Lists the authenticated user's own reports. Requires the report.create
+        permission.
+      operationId: reports.mine
+      parameters:
+      - description: page size
+        in: query
+        name: limit
+        schema:
+          default: 50
+          type: integer
+      - description: page offset
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommunityReportsResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: My reports
+      tags:
+      - reports
   /api/v1/store/orders:
     get:
       description: Lists the authenticated user's orders. Requires the store.orders.read

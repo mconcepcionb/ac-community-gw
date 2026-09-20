@@ -254,6 +254,20 @@ export type CommandResult = {
     result?: string;
 };
 
+export type CommunityReport = {
+    category?: string;
+    created_at?: string;
+    id?: string;
+    message?: string;
+    reporter_id?: string;
+    status?: string;
+    target?: string;
+};
+
+export type CommunityReportsResponse = {
+    reports?: Array<CommunityReport>;
+};
+
 export type CreateAccountRequest = {
     email?: string;
     password?: string;
@@ -393,6 +407,12 @@ export type StoreWalletResponse = {
     user_id?: string;
 };
 
+export type SubmitReportRequest = {
+    category?: string;
+    message?: string;
+    target?: string;
+};
+
 export type User = {
     created_at?: string;
     discord_id?: string;
@@ -401,6 +421,98 @@ export type User = {
     user_id?: string;
     username?: string;
 };
+
+export type ReportsListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * report status (open, closed)
+         */
+        status?: string;
+        /**
+         * page size
+         */
+        limit?: number;
+        /**
+         * page offset
+         */
+        offset?: number;
+    };
+    url: '/api/v1/admin/reports';
+};
+
+export type ReportsListErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type ReportsListError = ReportsListErrors[keyof ReportsListErrors];
+
+export type ReportsListResponses = {
+    /**
+     * OK
+     */
+    200: CommunityReportsResponse;
+};
+
+export type ReportsListResponse = ReportsListResponses[keyof ReportsListResponses];
+
+export type ReportsCloseData = {
+    body?: never;
+    path: {
+        /**
+         * report id
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/reports/{id}/close';
+};
+
+export type ReportsCloseErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type ReportsCloseError = ReportsCloseErrors[keyof ReportsCloseErrors];
+
+export type ReportsCloseResponses = {
+    /**
+     * OK
+     */
+    200: CommunityReport;
+};
+
+export type ReportsCloseResponse = ReportsCloseResponses[keyof ReportsCloseResponses];
 
 export type StoreAdminOrdersListData = {
     body?: never;
@@ -2198,6 +2310,92 @@ export type AuthMeResponses = {
 };
 
 export type AuthMeResponse = AuthMeResponses[keyof AuthMeResponses];
+
+export type ReportsCreateData = {
+    /**
+     * report
+     */
+    body: SubmitReportRequest;
+    path?: never;
+    query?: never;
+    url: '/api/v1/reports';
+};
+
+export type ReportsCreateErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type ReportsCreateError = ReportsCreateErrors[keyof ReportsCreateErrors];
+
+export type ReportsCreateResponses = {
+    /**
+     * Created
+     */
+    201: CommunityReport;
+};
+
+export type ReportsCreateResponse = ReportsCreateResponses[keyof ReportsCreateResponses];
+
+export type ReportsMineData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * page size
+         */
+        limit?: number;
+        /**
+         * page offset
+         */
+        offset?: number;
+    };
+    url: '/api/v1/reports/mine';
+};
+
+export type ReportsMineErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type ReportsMineError = ReportsMineErrors[keyof ReportsMineErrors];
+
+export type ReportsMineResponses = {
+    /**
+     * OK
+     */
+    200: CommunityReportsResponse;
+};
+
+export type ReportsMineResponse = ReportsMineResponses[keyof ReportsMineResponses];
 
 export type StoreOrdersListData = {
     body?: never;

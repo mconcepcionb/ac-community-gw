@@ -252,6 +252,20 @@ export const zCommandResult = z.object({
     result: z.string().optional()
 });
 
+export const zCommunityReport = z.object({
+    category: z.string().optional(),
+    created_at: z.string().optional(),
+    id: z.string().optional(),
+    message: z.string().optional(),
+    reporter_id: z.string().optional(),
+    status: z.string().optional(),
+    target: z.string().optional()
+});
+
+export const zCommunityReportsResponse = z.object({
+    reports: z.array(zCommunityReport).optional()
+});
+
 export const zCreateAccountRequest = z.object({
     email: z.string().optional(),
     password: z.string().optional(),
@@ -385,6 +399,12 @@ export const zStoreWalletResponse = z.object({
     user_id: z.string().optional()
 });
 
+export const zSubmitReportRequest = z.object({
+    category: z.string().optional(),
+    message: z.string().optional(),
+    target: z.string().optional()
+});
+
 export const zUser = z.object({
     created_at: z.string().optional(),
     discord_id: z.string().optional(),
@@ -397,6 +417,26 @@ export const zUser = z.object({
 export const zListUsersResponse = z.object({
     users: z.array(zUser).optional()
 });
+
+export const zReportsListQuery = z.object({
+    status: z.string().optional(),
+    limit: z.int().optional().default(50),
+    offset: z.int().optional().default(0)
+});
+
+/**
+ * OK
+ */
+export const zReportsListResponse = zCommunityReportsResponse;
+
+export const zReportsClosePath = z.object({
+    id: z.string()
+});
+
+/**
+ * OK
+ */
+export const zReportsCloseResponse = zCommunityReport;
 
 export const zStoreAdminOrdersListQuery = z.object({
     status: z.string().optional(),
@@ -794,6 +834,26 @@ export const zIdentityUsersListResponse = zListUsersResponse;
  * OK
  */
 export const zAuthMeResponse = zMeResponse;
+
+/**
+ * report
+ */
+export const zReportsCreateBody = zSubmitReportRequest;
+
+/**
+ * Created
+ */
+export const zReportsCreateResponse = zCommunityReport;
+
+export const zReportsMineQuery = z.object({
+    limit: z.int().optional().default(50),
+    offset: z.int().optional().default(0)
+});
+
+/**
+ * OK
+ */
+export const zReportsMineResponse = zCommunityReportsResponse;
 
 export const zStoreOrdersListQuery = z.object({
     limit: z.int().optional().default(50),

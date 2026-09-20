@@ -63,6 +63,11 @@ export function HomePage() {
               <Link to="/status">Server status</Link>
             </Button>
           </PermissionGate>
+          <PermissionGate permission="report.create">
+            <Button asChild variant="outline" size="sm">
+              <Link to="/report">Report a player</Link>
+            </Button>
+          </PermissionGate>
         </div>
       </section>
     </div>

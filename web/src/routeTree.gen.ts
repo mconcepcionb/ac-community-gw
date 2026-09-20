@@ -16,6 +16,7 @@ import { Route as PortalForbiddenRouteImport } from './routes/_portal/forbidden'
 import { Route as PortalLoginRouteImport } from './routes/_portal/login'
 import { Route as PortalOnboardingRouteImport } from './routes/_portal/onboarding'
 import { Route as PortalProfileRouteImport } from './routes/_portal/profile'
+import { Route as PortalReportRouteImport } from './routes/_portal/report'
 import { Route as PortalStatusRouteImport } from './routes/_portal/status'
 import { Route as PortalWalletRouteImport } from './routes/_portal/wallet'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
@@ -68,6 +69,11 @@ const PortalOnboardingRoute = PortalOnboardingRouteImport.update({
 const PortalProfileRoute = PortalProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalReportRoute = PortalReportRouteImport.update({
+  id: '/report',
+  path: '/report',
   getParentRoute: () => PortalRoute,
 } as any)
 const PortalStatusRoute = PortalStatusRouteImport.update({
@@ -173,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof PortalLoginRoute
   '/onboarding': typeof PortalOnboardingRoute
   '/profile': typeof PortalProfileRoute
+  '/report': typeof PortalReportRoute
   '/status': typeof PortalStatusRoute
   '/wallet': typeof PortalWalletRoute
   '/admin/accounts': typeof AdminAccountsRoute
@@ -198,6 +205,7 @@ export interface FileRoutesByTo {
   '/login': typeof PortalLoginRoute
   '/onboarding': typeof PortalOnboardingRoute
   '/profile': typeof PortalProfileRoute
+  '/report': typeof PortalReportRoute
   '/status': typeof PortalStatusRoute
   '/wallet': typeof PortalWalletRoute
   '/admin/accounts': typeof AdminAccountsRoute
@@ -226,6 +234,7 @@ export interface FileRoutesById {
   '/_portal/login': typeof PortalLoginRoute
   '/_portal/onboarding': typeof PortalOnboardingRoute
   '/_portal/profile': typeof PortalProfileRoute
+  '/_portal/report': typeof PortalReportRoute
   '/_portal/status': typeof PortalStatusRoute
   '/_portal/wallet': typeof PortalWalletRoute
   '/admin/accounts': typeof AdminAccountsRoute
@@ -256,6 +265,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/onboarding'
     | '/profile'
+    | '/report'
     | '/status'
     | '/wallet'
     | '/admin/accounts'
@@ -281,6 +291,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/onboarding'
     | '/profile'
+    | '/report'
     | '/status'
     | '/wallet'
     | '/admin/accounts'
@@ -308,6 +319,7 @@ export interface FileRouteTypes {
     | '/_portal/login'
     | '/_portal/onboarding'
     | '/_portal/profile'
+    | '/_portal/report'
     | '/_portal/status'
     | '/_portal/wallet'
     | '/admin/accounts'
@@ -384,6 +396,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof PortalProfileRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/report': {
+      id: '/_portal/report'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof PortalReportRouteImport
       parentRoute: typeof PortalRoute
     }
     '/_portal/status': {
@@ -527,6 +546,7 @@ interface PortalRouteChildren {
   PortalLoginRoute: typeof PortalLoginRoute
   PortalOnboardingRoute: typeof PortalOnboardingRoute
   PortalProfileRoute: typeof PortalProfileRoute
+  PortalReportRoute: typeof PortalReportRoute
   PortalStatusRoute: typeof PortalStatusRoute
   PortalWalletRoute: typeof PortalWalletRoute
   PortalIndexRoute: typeof PortalIndexRoute
@@ -540,6 +560,7 @@ const PortalRouteChildren: PortalRouteChildren = {
   PortalLoginRoute: PortalLoginRoute,
   PortalOnboardingRoute: PortalOnboardingRoute,
   PortalProfileRoute: PortalProfileRoute,
+  PortalReportRoute: PortalReportRoute,
   PortalStatusRoute: PortalStatusRoute,
   PortalWalletRoute: PortalWalletRoute,
   PortalIndexRoute: PortalIndexRoute,

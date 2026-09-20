@@ -3,8 +3,8 @@
 import { type InfiniteData, infiniteQueryOptions, queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { authDiscordCallback, authDiscordLogin, authLogout, authMe, azerothAccountLinksCreate, azerothAccountLinksDelete, azerothAccountLinksGet, azerothAccountLinksList, azerothAccountsBan, azerothAccountsCreate, azerothAccountsList, azerothAccountsSetEmail, azerothAccountsSetGmlevel, azerothAccountsSetPassword, azerothAccountsUnban, azerothAdminUsersGet, azerothAnnounceSend, azerothCharactersBan, azerothCharactersGet, azerothCharactersList, azerothCharactersUnban, azerothInfoStatus, azerothItemsGet, azerothItemsList, azerothMailSend, azerothMeAccountClaimStart, azerothMeAccountClaimVerify, azerothMeAccountCreate, azerothMeAccountGet, azerothMeCharactersList, azerothMeCharactersVisibilityList, azerothMeCharactersVisibilitySet, azerothMeMailSend, azerothOnlineList, azerothPlayersKick, azerothPlayersMute, azerothPlayersUnmute, azerothUserCharactersList, identityUsersList, operationsHealth, operationsReady, type Options, storeAdminOrdersList, storeOrdersCreate, storeOrdersList, storeProductsCreate, storeProductsDelete, storeProductsGet, storeProductsList, storeProductsUpdate, storeWalletGet, storeWalletsGrant } from '../sdk.gen';
-import type { AuthDiscordCallbackData, AuthDiscordCallbackError, AuthDiscordCallbackResponse, AuthDiscordLoginData, AuthDiscordLoginError, AuthLogoutData, AuthLogoutError, AuthLogoutResponse, AuthMeData, AuthMeError, AuthMeResponse, AzerothAccountLinksCreateData, AzerothAccountLinksCreateError, AzerothAccountLinksCreateResponse, AzerothAccountLinksDeleteData, AzerothAccountLinksDeleteError, AzerothAccountLinksDeleteResponse, AzerothAccountLinksGetData, AzerothAccountLinksGetError, AzerothAccountLinksGetResponse, AzerothAccountLinksListData, AzerothAccountLinksListError, AzerothAccountLinksListResponse, AzerothAccountsBanData, AzerothAccountsBanError, AzerothAccountsBanResponse, AzerothAccountsCreateData, AzerothAccountsCreateError, AzerothAccountsCreateResponse, AzerothAccountsListData, AzerothAccountsListError, AzerothAccountsListResponse, AzerothAccountsSetEmailData, AzerothAccountsSetEmailError, AzerothAccountsSetEmailResponse, AzerothAccountsSetGmlevelData, AzerothAccountsSetGmlevelError, AzerothAccountsSetGmlevelResponse, AzerothAccountsSetPasswordData, AzerothAccountsSetPasswordError, AzerothAccountsSetPasswordResponse, AzerothAccountsUnbanData, AzerothAccountsUnbanError, AzerothAccountsUnbanResponse, AzerothAdminUsersGetData, AzerothAdminUsersGetError, AzerothAdminUsersGetResponse, AzerothAnnounceSendData, AzerothAnnounceSendError, AzerothAnnounceSendResponse, AzerothCharactersBanData, AzerothCharactersBanError, AzerothCharactersBanResponse, AzerothCharactersGetData, AzerothCharactersGetError, AzerothCharactersGetResponse, AzerothCharactersListData, AzerothCharactersListError, AzerothCharactersListResponse, AzerothCharactersUnbanData, AzerothCharactersUnbanError, AzerothCharactersUnbanResponse, AzerothInfoStatusData, AzerothInfoStatusError, AzerothInfoStatusResponse, AzerothItemsGetData, AzerothItemsGetError, AzerothItemsGetResponse, AzerothItemsListData, AzerothItemsListError, AzerothItemsListResponse, AzerothMailSendData, AzerothMailSendError, AzerothMailSendResponse, AzerothMeAccountClaimStartData, AzerothMeAccountClaimStartError, AzerothMeAccountClaimStartResponse, AzerothMeAccountClaimVerifyData, AzerothMeAccountClaimVerifyError, AzerothMeAccountClaimVerifyResponse, AzerothMeAccountCreateData, AzerothMeAccountCreateError, AzerothMeAccountCreateResponse, AzerothMeAccountGetData, AzerothMeAccountGetError, AzerothMeAccountGetResponse, AzerothMeCharactersListData, AzerothMeCharactersListError, AzerothMeCharactersListResponse, AzerothMeCharactersVisibilityListData, AzerothMeCharactersVisibilityListError, AzerothMeCharactersVisibilityListResponse, AzerothMeCharactersVisibilitySetData, AzerothMeCharactersVisibilitySetError, AzerothMeCharactersVisibilitySetResponse, AzerothMeMailSendData, AzerothMeMailSendError, AzerothMeMailSendResponse, AzerothOnlineListData, AzerothOnlineListError, AzerothOnlineListResponse2, AzerothPlayersKickData, AzerothPlayersKickError, AzerothPlayersKickResponse, AzerothPlayersMuteData, AzerothPlayersMuteError, AzerothPlayersMuteResponse, AzerothPlayersUnmuteData, AzerothPlayersUnmuteError, AzerothPlayersUnmuteResponse, AzerothUserCharactersListData, AzerothUserCharactersListError, AzerothUserCharactersListResponse, IdentityUsersListData, IdentityUsersListError, IdentityUsersListResponse, OperationsHealthData, OperationsHealthError, OperationsHealthResponse, OperationsReadyData, OperationsReadyError, OperationsReadyResponse, StoreAdminOrdersListData, StoreAdminOrdersListError, StoreAdminOrdersListResponse, StoreOrdersCreateData, StoreOrdersCreateError, StoreOrdersCreateResponse, StoreOrdersListData, StoreOrdersListError, StoreOrdersListResponse, StoreProductsCreateData, StoreProductsCreateError, StoreProductsCreateResponse, StoreProductsDeleteData, StoreProductsDeleteError, StoreProductsDeleteResponse, StoreProductsGetData, StoreProductsGetError, StoreProductsGetResponse, StoreProductsListData, StoreProductsListError, StoreProductsListResponse, StoreProductsUpdateData, StoreProductsUpdateError, StoreProductsUpdateResponse, StoreWalletGetData, StoreWalletGetError, StoreWalletGetResponse, StoreWalletsGrantData, StoreWalletsGrantError, StoreWalletsGrantResponse } from '../types.gen';
+import { authDiscordCallback, authDiscordLogin, authLogout, authMe, azerothAccountLinksCreate, azerothAccountLinksDelete, azerothAccountLinksGet, azerothAccountLinksList, azerothAccountsBan, azerothAccountsCreate, azerothAccountsList, azerothAccountsSetEmail, azerothAccountsSetGmlevel, azerothAccountsSetPassword, azerothAccountsUnban, azerothAdminUsersGet, azerothAnnounceSend, azerothCharactersBan, azerothCharactersGet, azerothCharactersList, azerothCharactersUnban, azerothInfoStatus, azerothItemsGet, azerothItemsList, azerothMailSend, azerothMeAccountClaimStart, azerothMeAccountClaimVerify, azerothMeAccountCreate, azerothMeAccountGet, azerothMeCharactersList, azerothMeCharactersVisibilityList, azerothMeCharactersVisibilitySet, azerothMeMailSend, azerothOnlineList, azerothPlayersKick, azerothPlayersMute, azerothPlayersUnmute, azerothUserCharactersList, identityUsersList, operationsHealth, operationsReady, type Options, reportsClose, reportsCreate, reportsList, reportsMine, storeAdminOrdersList, storeOrdersCreate, storeOrdersList, storeProductsCreate, storeProductsDelete, storeProductsGet, storeProductsList, storeProductsUpdate, storeWalletGet, storeWalletsGrant } from '../sdk.gen';
+import type { AuthDiscordCallbackData, AuthDiscordCallbackError, AuthDiscordCallbackResponse, AuthDiscordLoginData, AuthDiscordLoginError, AuthLogoutData, AuthLogoutError, AuthLogoutResponse, AuthMeData, AuthMeError, AuthMeResponse, AzerothAccountLinksCreateData, AzerothAccountLinksCreateError, AzerothAccountLinksCreateResponse, AzerothAccountLinksDeleteData, AzerothAccountLinksDeleteError, AzerothAccountLinksDeleteResponse, AzerothAccountLinksGetData, AzerothAccountLinksGetError, AzerothAccountLinksGetResponse, AzerothAccountLinksListData, AzerothAccountLinksListError, AzerothAccountLinksListResponse, AzerothAccountsBanData, AzerothAccountsBanError, AzerothAccountsBanResponse, AzerothAccountsCreateData, AzerothAccountsCreateError, AzerothAccountsCreateResponse, AzerothAccountsListData, AzerothAccountsListError, AzerothAccountsListResponse, AzerothAccountsSetEmailData, AzerothAccountsSetEmailError, AzerothAccountsSetEmailResponse, AzerothAccountsSetGmlevelData, AzerothAccountsSetGmlevelError, AzerothAccountsSetGmlevelResponse, AzerothAccountsSetPasswordData, AzerothAccountsSetPasswordError, AzerothAccountsSetPasswordResponse, AzerothAccountsUnbanData, AzerothAccountsUnbanError, AzerothAccountsUnbanResponse, AzerothAdminUsersGetData, AzerothAdminUsersGetError, AzerothAdminUsersGetResponse, AzerothAnnounceSendData, AzerothAnnounceSendError, AzerothAnnounceSendResponse, AzerothCharactersBanData, AzerothCharactersBanError, AzerothCharactersBanResponse, AzerothCharactersGetData, AzerothCharactersGetError, AzerothCharactersGetResponse, AzerothCharactersListData, AzerothCharactersListError, AzerothCharactersListResponse, AzerothCharactersUnbanData, AzerothCharactersUnbanError, AzerothCharactersUnbanResponse, AzerothInfoStatusData, AzerothInfoStatusError, AzerothInfoStatusResponse, AzerothItemsGetData, AzerothItemsGetError, AzerothItemsGetResponse, AzerothItemsListData, AzerothItemsListError, AzerothItemsListResponse, AzerothMailSendData, AzerothMailSendError, AzerothMailSendResponse, AzerothMeAccountClaimStartData, AzerothMeAccountClaimStartError, AzerothMeAccountClaimStartResponse, AzerothMeAccountClaimVerifyData, AzerothMeAccountClaimVerifyError, AzerothMeAccountClaimVerifyResponse, AzerothMeAccountCreateData, AzerothMeAccountCreateError, AzerothMeAccountCreateResponse, AzerothMeAccountGetData, AzerothMeAccountGetError, AzerothMeAccountGetResponse, AzerothMeCharactersListData, AzerothMeCharactersListError, AzerothMeCharactersListResponse, AzerothMeCharactersVisibilityListData, AzerothMeCharactersVisibilityListError, AzerothMeCharactersVisibilityListResponse, AzerothMeCharactersVisibilitySetData, AzerothMeCharactersVisibilitySetError, AzerothMeCharactersVisibilitySetResponse, AzerothMeMailSendData, AzerothMeMailSendError, AzerothMeMailSendResponse, AzerothOnlineListData, AzerothOnlineListError, AzerothOnlineListResponse2, AzerothPlayersKickData, AzerothPlayersKickError, AzerothPlayersKickResponse, AzerothPlayersMuteData, AzerothPlayersMuteError, AzerothPlayersMuteResponse, AzerothPlayersUnmuteData, AzerothPlayersUnmuteError, AzerothPlayersUnmuteResponse, AzerothUserCharactersListData, AzerothUserCharactersListError, AzerothUserCharactersListResponse, IdentityUsersListData, IdentityUsersListError, IdentityUsersListResponse, OperationsHealthData, OperationsHealthError, OperationsHealthResponse, OperationsReadyData, OperationsReadyError, OperationsReadyResponse, ReportsCloseData, ReportsCloseError, ReportsCloseResponse, ReportsCreateData, ReportsCreateError, ReportsCreateResponse, ReportsListData, ReportsListError, ReportsListResponse, ReportsMineData, ReportsMineError, ReportsMineResponse, StoreAdminOrdersListData, StoreAdminOrdersListError, StoreAdminOrdersListResponse, StoreOrdersCreateData, StoreOrdersCreateError, StoreOrdersCreateResponse, StoreOrdersListData, StoreOrdersListError, StoreOrdersListResponse, StoreProductsCreateData, StoreProductsCreateError, StoreProductsCreateResponse, StoreProductsDeleteData, StoreProductsDeleteError, StoreProductsDeleteResponse, StoreProductsGetData, StoreProductsGetError, StoreProductsGetResponse, StoreProductsListData, StoreProductsListError, StoreProductsListResponse, StoreProductsUpdateData, StoreProductsUpdateError, StoreProductsUpdateResponse, StoreWalletGetData, StoreWalletGetError, StoreWalletGetResponse, StoreWalletsGrantData, StoreWalletsGrantError, StoreWalletsGrantResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -39,16 +39,16 @@ const createQueryKey = <TOptions extends Options>(id: string, options?: TOptions
     return [params];
 };
 
-export const storeAdminOrdersListQueryKey = (options?: Options<StoreAdminOrdersListData>) => createQueryKey('storeAdminOrdersList', options);
+export const reportsListQueryKey = (options?: Options<ReportsListData>) => createQueryKey('reportsList', options);
 
 /**
- * List all orders
+ * List reports
  *
- * Lists every store order, newest first, optionally filtered by status. Requires the store.admin.orders.read permission.
+ * Lists every report, newest first, optionally filtered by status. Requires the report.read permission.
  */
-export const storeAdminOrdersListOptions = (options?: Options<StoreAdminOrdersListData>) => queryOptions<StoreAdminOrdersListResponse, StoreAdminOrdersListError, StoreAdminOrdersListResponse, ReturnType<typeof storeAdminOrdersListQueryKey>>({
+export const reportsListOptions = (options?: Options<ReportsListData>) => queryOptions<ReportsListResponse, ReportsListError, ReportsListResponse, ReturnType<typeof reportsListQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await storeAdminOrdersList({
+        const { data } = await reportsList({
             ...options,
             ...queryKey[0],
             signal,
@@ -56,7 +56,7 @@ export const storeAdminOrdersListOptions = (options?: Options<StoreAdminOrdersLi
         });
         return data;
     },
-    queryKey: storeAdminOrdersListQueryKey(options)
+    queryKey: reportsListQueryKey(options)
 });
 
 const createInfiniteParams = <K extends Pick<QueryKey<Options>[0], 'body' | 'headers' | 'path' | 'query'>>(queryKey: QueryKey<Options>, page: K) => {
@@ -87,6 +87,77 @@ const createInfiniteParams = <K extends Pick<QueryKey<Options>[0], 'body' | 'hea
     }
     return params as unknown as typeof page;
 };
+
+export const reportsListInfiniteQueryKey = (options?: Options<ReportsListData>): QueryKey<Options<ReportsListData>> => createQueryKey('reportsList', options, true);
+
+/**
+ * List reports
+ *
+ * Lists every report, newest first, optionally filtered by status. Requires the report.read permission.
+ */
+export const reportsListInfiniteOptions = (options?: Options<ReportsListData>) => {
+    const opts = infiniteQueryOptions<ReportsListResponse, ReportsListError, InfiniteData<ReportsListResponse>, QueryKey<Options<ReportsListData>>, number | Pick<QueryKey<Options<ReportsListData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
+    // @ts-ignore
+    {
+        queryFn: async ({ pageParam, queryKey, signal }) => {
+            // @ts-ignore
+            const page: Pick<QueryKey<Options<ReportsListData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
+                query: {
+                    offset: pageParam
+                }
+            };
+            const params = createInfiniteParams(queryKey, page);
+            const { data } = await reportsList({
+                ...options,
+                ...params,
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: reportsListInfiniteQueryKey(options)
+    });
+    return opts as Omit<typeof opts, 'initialData'>;
+};
+
+/**
+ * Close a report
+ *
+ * Marks a report closed. Requires the report.read permission.
+ */
+export const reportsCloseMutation = (options?: Partial<Options<ReportsCloseData>>): UseMutationOptions<ReportsCloseResponse, ReportsCloseError, Options<ReportsCloseData>> => {
+    const mutationOptions: UseMutationOptions<ReportsCloseResponse, ReportsCloseError, Options<ReportsCloseData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await reportsClose({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const storeAdminOrdersListQueryKey = (options?: Options<StoreAdminOrdersListData>) => createQueryKey('storeAdminOrdersList', options);
+
+/**
+ * List all orders
+ *
+ * Lists every store order, newest first, optionally filtered by status. Requires the store.admin.orders.read permission.
+ */
+export const storeAdminOrdersListOptions = (options?: Options<StoreAdminOrdersListData>) => queryOptions<StoreAdminOrdersListResponse, StoreAdminOrdersListError, StoreAdminOrdersListResponse, ReturnType<typeof storeAdminOrdersListQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await storeAdminOrdersList({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: storeAdminOrdersListQueryKey(options)
+});
 
 export const storeAdminOrdersListInfiniteQueryKey = (options?: Options<StoreAdminOrdersListData>): QueryKey<Options<StoreAdminOrdersListData>> => createQueryKey('storeAdminOrdersList', options, true);
 
@@ -1070,6 +1141,77 @@ export const authMeOptions = (options?: Options<AuthMeData>) => queryOptions<Aut
     },
     queryKey: authMeQueryKey(options)
 });
+
+/**
+ * Submit a report
+ *
+ * Reports another player. Requires the report.create permission.
+ */
+export const reportsCreateMutation = (options?: Partial<Options<ReportsCreateData>>): UseMutationOptions<ReportsCreateResponse, ReportsCreateError, Options<ReportsCreateData>> => {
+    const mutationOptions: UseMutationOptions<ReportsCreateResponse, ReportsCreateError, Options<ReportsCreateData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await reportsCreate({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const reportsMineQueryKey = (options?: Options<ReportsMineData>) => createQueryKey('reportsMine', options);
+
+/**
+ * My reports
+ *
+ * Lists the authenticated user's own reports. Requires the report.create permission.
+ */
+export const reportsMineOptions = (options?: Options<ReportsMineData>) => queryOptions<ReportsMineResponse, ReportsMineError, ReportsMineResponse, ReturnType<typeof reportsMineQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await reportsMine({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: reportsMineQueryKey(options)
+});
+
+export const reportsMineInfiniteQueryKey = (options?: Options<ReportsMineData>): QueryKey<Options<ReportsMineData>> => createQueryKey('reportsMine', options, true);
+
+/**
+ * My reports
+ *
+ * Lists the authenticated user's own reports. Requires the report.create permission.
+ */
+export const reportsMineInfiniteOptions = (options?: Options<ReportsMineData>) => {
+    const opts = infiniteQueryOptions<ReportsMineResponse, ReportsMineError, InfiniteData<ReportsMineResponse>, QueryKey<Options<ReportsMineData>>, number | Pick<QueryKey<Options<ReportsMineData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
+    // @ts-ignore
+    {
+        queryFn: async ({ pageParam, queryKey, signal }) => {
+            // @ts-ignore
+            const page: Pick<QueryKey<Options<ReportsMineData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
+                query: {
+                    offset: pageParam
+                }
+            };
+            const params = createInfiniteParams(queryKey, page);
+            const { data } = await reportsMine({
+                ...options,
+                ...params,
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: reportsMineInfiniteQueryKey(options)
+    });
+    return opts as Omit<typeof opts, 'initialData'>;
+};
 
 export const storeOrdersListQueryKey = (options?: Options<StoreOrdersListData>) => createQueryKey('storeOrdersList', options);
 
