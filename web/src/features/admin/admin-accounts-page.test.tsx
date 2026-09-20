@@ -109,4 +109,39 @@ describe("AdminAccountsPage", () => {
     await waitFor(() => expect(banBody).toBeDefined());
     expect(banBody).toMatchObject({ username: "ADMIN", duration: "1d", reason: "cheating" });
   });
+
+  it("shows only Unban for a banned account", async () => {
+    mockSession(["azeroth.account.list", "azeroth.admin.accounts.ban"]);
+    server.use(
+      http.get(accountsUrl, () =>
+        HttpResponse.json({
+          accounts: [
+            {
+              id: 2,
+              username: "BAD",
+              email: "bad@example.test",
+              gm_level: 0,
+              online: false,
+              banned: true,
+              ban_reason: "cheating",
+              last_login: null,
+            },
+          ],
+        }),
+      ),
+    );
+
+    renderPage();
+    expect(await screen.findByRole("button", { name: "Unban" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Ban" })).not.toBeInTheDocument();
+    expect(screen.getByText("cheating")).toBeInTheDocument();
+  });
+
+  it("reflects the current GM level in the control", async () => {
+    mockSession(["azeroth.account.list", "azeroth.admin.accounts.gmlevel"]);
+    mockAccounts();
+
+    renderPage();
+    expect(await screen.findByRole("button", { name: "3 — Administrator" })).toBeInTheDocument();
+  });
 });

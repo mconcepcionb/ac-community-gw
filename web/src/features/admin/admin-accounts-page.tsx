@@ -22,6 +22,8 @@ import { UnbanAccountButton } from "./unban-account-button";
 
 const route = getRouteApi("/admin/accounts/");
 
+const gmLevelLabels = ["Player", "Moderator", "Game Master", "Administrator", "Console"];
+
 const columns: ColumnDef<AzerothAccount, unknown>[] = [
   { accessorKey: "id", header: "ID" },
   {
@@ -59,7 +61,27 @@ const columns: ColumnDef<AzerothAccount, unknown>[] = [
       );
     },
   },
-  { accessorKey: "gm_level", header: "GM" },
+  {
+    accessorKey: "gm_level",
+    header: "GM",
+    cell: ({ row }) => {
+      const level = row.original.gm_level ?? 0;
+      const label = `${level} — ${gmLevelLabels[level] ?? "Unknown"}`;
+      return (
+        <PermissionGate permission="azeroth.admin.accounts.gmlevel" fallback={<span>{label}</span>}>
+          <SetGmLevelDialog
+            username={row.original.username ?? ""}
+            currentLevel={level}
+            trigger={
+              <Button variant="outline" size="sm">
+                {label}
+              </Button>
+            }
+          />
+        </PermissionGate>
+      );
+    },
+  },
   {
     accessorKey: "online",
     header: "Online",
@@ -73,11 +95,17 @@ const columns: ColumnDef<AzerothAccount, unknown>[] = [
     accessorKey: "banned",
     header: "Banned",
     cell: ({ row }) => (
-      <StatusBadge tone={row.original.banned ? "negative" : "positive"}>
-        {row.original.banned ? "Banned" : "Active"}
-      </StatusBadge>
+      <div className="flex flex-col gap-1">
+        <StatusBadge tone={row.original.banned ? "negative" : "positive"}>
+          {row.original.banned ? "Banned" : "Active"}
+        </StatusBadge>
+        {row.original.banned && row.original.ban_reason ? (
+          <span className="text-xs text-muted-foreground">{row.original.ban_reason}</span>
+        ) : null}
+      </div>
     ),
   },
+  { accessorKey: "last_ip", header: "Last IP" },
   { accessorKey: "last_login", header: "Last login" },
   {
     id: "actions",
@@ -125,16 +153,6 @@ const columns: ColumnDef<AzerothAccount, unknown>[] = [
                 }
               />
             )}
-          </PermissionGate>
-          <PermissionGate permission="azeroth.admin.accounts.gmlevel">
-            <SetGmLevelDialog
-              username={username}
-              trigger={
-                <Button variant="outline" size="sm">
-                  GM level
-                </Button>
-              }
-            />
           </PermissionGate>
         </RowActions>
       );

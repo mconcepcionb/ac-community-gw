@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -34,12 +34,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+const levelValues = ["0", "1", "2", "3", "4"] as const;
+
 const schema = z.object({
-  level: z.enum(["0", "1", "2", "3", "4"]),
+  level: z.enum(levelValues),
   realm: z.string(),
 });
 
 type FormValues = z.infer<typeof schema>;
+
+function levelValue(level: number): FormValues["level"] {
+  const value = String(level);
+  return (levelValues as readonly string[]).includes(value)
+    ? (value as FormValues["level"])
+    : "0";
+}
 
 const levels = [
   { value: "0", label: "0 — Player" },
@@ -49,14 +58,30 @@ const levels = [
   { value: "4", label: "4 — Console" },
 ];
 
-export function SetGmLevelDialog({ username, trigger }: { username: string; trigger: ReactNode }) {
+export function SetGmLevelDialog({
+  username,
+  currentLevel = 0,
+  currentRealm = "",
+  trigger,
+}: {
+  username: string;
+  currentLevel?: number;
+  currentRealm?: string;
+  trigger: ReactNode;
+}) {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { level: "0", realm: "" },
+    defaultValues: { level: levelValue(currentLevel), realm: currentRealm },
   });
   const mutation = useMutation(azerothAccountsSetGmlevelMutation());
+
+  useEffect(() => {
+    if (open) {
+      form.reset({ level: levelValue(currentLevel), realm: currentRealm });
+    }
+  }, [open, currentLevel, currentRealm, form]);
 
   const submit = form.handleSubmit(async (values) => {
     try {
