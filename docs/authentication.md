@@ -25,6 +25,15 @@ user, synchronises roles, creates a session and redirects to
 `ACGW_DISCORD_POST_LOGIN_REDIRECT_URL` when configured. Discord access tokens
 live only for the duration of the callback; they are never persisted or logged.
 
+Both `ACGW_DISCORD_REDIRECT_URL` and `ACGW_DISCORD_POST_LOGIN_REDIRECT_URL` must
+point at the **public SPA origin**, and the redirect URI must be registered
+verbatim in the Discord Developer Portal. A relative `return_to` is resolved
+against the callback origin, so a callback on the API port would send the browser
+to the gateway instead of the SPA:
+
+- `task dev` (Vite on `:5173`, API proxied): `http://localhost:5173/api/v1/auth/discord/callback`
+- compose/production (Caddy on `:8080`): `http://localhost:8080/api/v1/auth/discord/callback`
+
 The Discord HTTP client lives in `internal/adapters/discord` and is injected
 through the core `auth.DiscordProvider` interface, mirroring the SOAP adapter.
 
