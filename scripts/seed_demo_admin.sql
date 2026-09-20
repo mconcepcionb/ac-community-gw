@@ -44,7 +44,7 @@ INSERT INTO permissions (name, description, owner) VALUES
     ('gw.identity.roles.manage', 'Manage roles, permission grants and Discord role mappings', 'identity-discord'),
     ('gw.report.create', 'Submit a player report and read your own reports', 'reports'),
     ('gw.report.read', 'Read and close player reports', 'reports'),
-    ('gw.audit.read', 'Read the audit log', 'azeroth-admin'),
+    ('gw.audit.read', 'Read the audit log', 'gateway-admin'),
     ('gw.apikeys.manage', 'Create, rotate and revoke API keys', 'apikeys'),
     ('gw.notes.read', 'Read staff annotations', 'admin-notes'),
     ('gw.notes.write', 'Create staff annotations and edit your own', 'admin-notes'),

@@ -14,7 +14,7 @@ plugins (and vice versa), which will not survive a second game.
 | Area | State |
 | --- | --- |
 | Route inventory and classification | done |
-| Gateway admin plugin (skeleton, wiring, ownership) | planned |
+| Gateway admin plugin (skeleton, wiring, ownership) | implemented (001) |
 | Move community user 360 into the gateway plugin | planned |
 | Move the audit viewer and `gw.audit.read` | planned |
 | Correct game routes wrongly under `/admin` | planned |

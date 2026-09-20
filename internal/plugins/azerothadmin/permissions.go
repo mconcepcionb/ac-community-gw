@@ -17,10 +17,10 @@ const (
 	PermissionAdminCharactersBan permissions.Permission = "azeroth.admin.characters.ban"
 	// PermissionAdminAnnounce allows broadcasting announcements.
 	PermissionAdminAnnounce permissions.Permission = "azeroth.admin.announce"
-	// PermissionAdminAuditRead allows reading the audit log. It is
-	// gateway-generic (ADR 0014); the definition is registered here until the
-	// generic admin routes move to a gateway plugin.
-	PermissionAdminAuditRead permissions.Permission = "gw.audit.read"
+	// permissionAuditRead is the gateway-generic permission that gates the audit
+	// viewer. Its definition is owned by gateway-admin (ADR 0014); this plugin
+	// only enforces it on its aggregate route until the route moves.
+	permissionAuditRead permissions.Permission = "gw.audit.read"
 	// permissionUserRead is the gateway-generic permission that gates the
 	// community user 360 view. It is owned by identity-discord; this plugin only
 	// enforces it on its aggregate route.
@@ -70,12 +70,6 @@ func permissionDefs() []permissions.Definition {
 			Description: "Broadcast announcements",
 			Owner:       Name,
 			Namespace:   "azeroth",
-		},
-		{
-			Name:        PermissionAdminAuditRead,
-			Description: "Read the audit log",
-			Owner:       Name,
-			Namespace:   "gw",
 		},
 	}
 }

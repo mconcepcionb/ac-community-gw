@@ -46,6 +46,7 @@ import (
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothitem"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore"
 	azerothstorerepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore/repository"
+	"github.com/mconcepcionb/ac-community-gw/internal/plugins/gatewayadmin"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/identitydiscord"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/identitydiscord/repository"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/reports"
@@ -303,6 +304,10 @@ func run() error {
 	manager.Add(apikeys.New(apikeys.Config{
 		Store: apiKeyPluginStore,
 		Audit: auditRecorder,
+	}))
+	manager.Add(gatewayadmin.New(gatewayadmin.Config{
+		Audit:       auditRecorder,
+		AuditReader: auditReader,
 	}))
 
 	if err := manager.RegisterAll(ctx, registry); err != nil {
