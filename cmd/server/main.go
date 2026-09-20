@@ -202,7 +202,14 @@ func run() error {
 	eventBus := events.NewBus()
 	permissionRegistry := permissions.NewRegistry()
 	authorizer := permissions.NewAuthorizer()
-	auditRecorder := audit.NewLogRecorder(logger)
+	logRecorder := audit.NewLogRecorder(logger)
+	var auditRecorder audit.Recorder = logRecorder
+	var auditReader audit.Reader
+	if database != nil {
+		auditStore := postgres.NewAuditStore(database.SQL())
+		auditRecorder = audit.NewMultiRecorder(logRecorder, auditStore)
+		auditReader = auditStore
+	}
 
 	server := httpapi.New(httpapi.Dependencies{
 		Config:      cfg,
@@ -257,7 +264,9 @@ func run() error {
 		Visibility:   characterVisibility,
 		NoticeItemID: cfg.Notice.ItemID,
 	}))
-	manager.Add(azerothadmin.New(executor, azerothadmin.WithAudit(auditRecorder)))
+	manager.Add(azerothadmin.New(executor,
+		azerothadmin.WithAudit(auditRecorder),
+		azerothadmin.WithAuditReader(auditReader)))
 	manager.Add(azerothinfo.New(executor))
 	manager.Add(azerothitem.New(azerothitem.Config{Items: itemReader}))
 	manager.Add(azerothstore.New(azerothstore.Config{

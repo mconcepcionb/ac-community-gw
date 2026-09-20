@@ -2,6 +2,22 @@
 
 import * as z from 'zod';
 
+export const zAdminAuditEntry = z.object({
+    action: z.string().optional(),
+    actor_discord_id: z.string().optional(),
+    actor_id: z.string().optional(),
+    occurred_at: z.string().optional(),
+    permission: z.string().optional(),
+    request_id: z.string().optional(),
+    result: z.string().optional(),
+    target_id: z.string().optional(),
+    target_type: z.string().optional()
+});
+
+export const zAdminAuditResponse = z.object({
+    entries: z.array(zAdminAuditEntry).optional()
+});
+
 export const zAdminUserCharacter = z.object({
     class: z.int().optional(),
     guid: z.int().optional(),
@@ -437,6 +453,21 @@ export const zListUsersResponse = z.object({
  * OK
  */
 export const zAzerothAdminAccountClaimsListResponse = zAzerothAdminClaimsResponse;
+
+export const zAzerothAdminAuditListQuery = z.object({
+    actor: z.string().optional(),
+    target: z.string().optional(),
+    action: z.string().optional(),
+    since: z.string().optional(),
+    until: z.string().optional(),
+    limit: z.int().optional().default(50),
+    offset: z.int().optional().default(0)
+});
+
+/**
+ * OK
+ */
+export const zAzerothAdminAuditListResponse = zAdminAuditResponse;
 
 export const zReportsListQuery = z.object({
     status: z.string().optional(),

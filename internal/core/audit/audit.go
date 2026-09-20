@@ -41,11 +41,51 @@ type Recorder interface {
 	Record(ctx context.Context, entry Entry) error
 }
 
+// ListFilter filters audit entries. Zero values mean "no filter".
+type ListFilter struct {
+	// ActorID matches the actor's community user id exactly.
+	ActorID string
+	// Target matches target_id (case-insensitive substring).
+	Target string
+	// Action matches the action (case-insensitive substring).
+	Action string
+	// Since and Until bound occurred_at (inclusive); zero means unbounded.
+	Since time.Time
+	Until time.Time
+}
+
+// Reader reads audit entries, newest first.
+type Reader interface {
+	List(ctx context.Context, filter ListFilter, limit, offset int) ([]Entry, error)
+}
+
 // NopRecorder discards audit entries.
 type NopRecorder struct{}
 
 // Record implements Recorder.
 func (NopRecorder) Record(context.Context, Entry) error { return nil }
+
+// MultiRecorder records every entry to each underlying recorder.
+type MultiRecorder struct {
+	recorders []Recorder
+}
+
+// NewMultiRecorder fans out audit entries to every recorder.
+func NewMultiRecorder(recorders ...Recorder) *MultiRecorder {
+	return &MultiRecorder{recorders: recorders}
+}
+
+// Record implements Recorder. It reports the first error but always tries every
+// recorder.
+func (m *MultiRecorder) Record(ctx context.Context, entry Entry) error {
+	var firstErr error
+	for _, recorder := range m.recorders {
+		if err := recorder.Record(ctx, entry); err != nil && firstErr == nil {
+			firstErr = err
+		}
+	}
+	return firstErr
+}
 
 // LogRecorder writes audit entries to the structured logger.
 type LogRecorder struct {

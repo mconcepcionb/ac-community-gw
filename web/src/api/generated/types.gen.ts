@@ -4,6 +4,22 @@ export type ClientOptions = {
     baseUrl: `${string}://${string}` | (string & {});
 };
 
+export type AdminAuditEntry = {
+    action?: string;
+    actor_discord_id?: string;
+    actor_id?: string;
+    occurred_at?: string;
+    permission?: string;
+    request_id?: string;
+    result?: string;
+    target_id?: string;
+    target_type?: string;
+};
+
+export type AdminAuditResponse = {
+    entries?: Array<AdminAuditEntry>;
+};
+
 export type AdminUser = {
     account_id?: number;
     account_username?: string;
@@ -469,6 +485,68 @@ export type AzerothAdminAccountClaimsListResponses = {
 };
 
 export type AzerothAdminAccountClaimsListResponse = AzerothAdminAccountClaimsListResponses[keyof AzerothAdminAccountClaimsListResponses];
+
+export type AzerothAdminAuditListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * actor community user id
+         */
+        actor?: string;
+        /**
+         * target id substring
+         */
+        target?: string;
+        /**
+         * action substring
+         */
+        action?: string;
+        /**
+         * RFC3339 lower bound
+         */
+        since?: string;
+        /**
+         * RFC3339 upper bound
+         */
+        until?: string;
+        /**
+         * page size
+         */
+        limit?: number;
+        /**
+         * page offset
+         */
+        offset?: number;
+    };
+    url: '/api/v1/admin/audit';
+};
+
+export type AzerothAdminAuditListErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothAdminAuditListError = AzerothAdminAuditListErrors[keyof AzerothAdminAuditListErrors];
+
+export type AzerothAdminAuditListResponses = {
+    /**
+     * OK
+     */
+    200: AdminAuditResponse;
+};
+
+export type AzerothAdminAuditListResponse = AzerothAdminAuditListResponses[keyof AzerothAdminAuditListResponses];
 
 export type ReportsListData = {
     body?: never;

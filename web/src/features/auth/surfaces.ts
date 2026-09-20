@@ -24,6 +24,7 @@ export const CONSOLE_PERMISSIONS = [
   "store.admin.orders.read",
   "store.admin.orders.resolve",
   "azeroth.admin.claims.read",
+  "audit.read",
   "report.read",
 ] as const;
 

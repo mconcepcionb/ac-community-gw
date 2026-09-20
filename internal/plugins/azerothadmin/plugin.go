@@ -63,8 +63,9 @@ type storeAccount interface {
 
 // Plugin implements plugins.Plugin.
 type Plugin struct {
-	executor azerothcore.CommandExecutor
-	audit    audit.Recorder
+	executor    azerothcore.CommandExecutor
+	audit       audit.Recorder
+	auditReader audit.Reader
 	// registry resolves cross-plugin capabilities on demand so the aggregate
 	// does not depend on plugin registration order.
 	registry *services.Registry
@@ -78,6 +79,15 @@ func WithAudit(recorder audit.Recorder) Option {
 	return func(p *Plugin) {
 		if recorder != nil {
 			p.audit = recorder
+		}
+	}
+}
+
+// WithAuditReader injects the audit reader used by the audit viewer.
+func WithAuditReader(reader audit.Reader) Option {
+	return func(p *Plugin) {
+		if reader != nil {
+			p.auditReader = reader
 		}
 	}
 }
@@ -137,6 +147,8 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		reg.RequirePermission(PermissionAdminAnnounce, http.HandlerFunc(p.handleAnnounce)))
 	reg.Mux.Handle("GET /api/v1/admin/users/{id}",
 		reg.RequirePermission(PermissionAdminUsersRead, http.HandlerFunc(p.handleUser360)))
+	reg.Mux.Handle("GET /api/v1/admin/audit",
+		reg.RequirePermission(PermissionAdminAuditRead, http.HandlerFunc(p.handleAuditLog)))
 	return nil
 }
 

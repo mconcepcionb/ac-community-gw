@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 
 import { azerothAdminUsersGetOptions, azerothAdminUsersGetQueryKey } from "@/api";
 import { ErrorState } from "@/components/common/error-state";
@@ -181,9 +182,11 @@ export function AdminUserDetailPage({ userId }: { userId: string }) {
 
       <section className="mt-8">
         <h2 className="mb-3 text-lg font-semibold">Audit</h2>
-        <p className="text-sm text-muted-foreground">
-          Audit entries arrive with the audit viewer (ticket 016).
-        </p>
+        <Button asChild variant="outline" size="sm">
+          <Link to="/admin/audit" search={{ actor: userId }}>
+            View audit entries
+          </Link>
+        </Button>
       </section>
     </div>
   );

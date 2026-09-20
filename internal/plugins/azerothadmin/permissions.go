@@ -21,6 +21,8 @@ const (
 	PermissionAdminAnnounce permissions.Permission = "azeroth.admin.announce"
 	// PermissionAdminUsersRead allows reading the community user 360 view.
 	PermissionAdminUsersRead permissions.Permission = "azeroth.admin.users.read"
+	// PermissionAdminAuditRead allows reading the audit log.
+	PermissionAdminAuditRead permissions.Permission = "audit.read"
 )
 
 func permissionDefs() []permissions.Definition {
@@ -68,6 +70,11 @@ func permissionDefs() []permissions.Definition {
 		{
 			Name:        PermissionAdminUsersRead,
 			Description: "Read the community user 360 view",
+			Owner:       Name,
+		},
+		{
+			Name:        PermissionAdminAuditRead,
+			Description: "Read the audit log",
 			Owner:       Name,
 		},
 	}

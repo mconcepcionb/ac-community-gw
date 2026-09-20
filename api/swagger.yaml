@@ -5,6 +5,35 @@ components:
       in: cookie
       name: acgw_session
   schemas:
+    AdminAuditEntry:
+      properties:
+        action:
+          type: string
+        actor_discord_id:
+          type: string
+        actor_id:
+          type: string
+        occurred_at:
+          type: string
+        permission:
+          type: string
+        request_id:
+          type: string
+        result:
+          type: string
+        target_id:
+          type: string
+        target_type:
+          type: string
+      type: object
+    AdminAuditResponse:
+      properties:
+        entries:
+          items:
+            $ref: '#/components/schemas/AdminAuditEntry'
+          type: array
+          uniqueItems: false
+      type: object
     AdminUser:
       properties:
         account_id:
@@ -794,6 +823,77 @@ paths:
       summary: List account claims
       tags:
       - azeroth-account
+  /api/v1/admin/audit:
+    get:
+      description: Lists audit entries, newest first, filterable by actor, target,
+        action and time range. Requires the audit.read permission.
+      operationId: azeroth.admin.audit.list
+      parameters:
+      - description: actor community user id
+        in: query
+        name: actor
+        schema:
+          type: string
+      - description: target id substring
+        in: query
+        name: target
+        schema:
+          type: string
+      - description: action substring
+        in: query
+        name: action
+        schema:
+          type: string
+      - description: RFC3339 lower bound
+        in: query
+        name: since
+        schema:
+          type: string
+      - description: RFC3339 upper bound
+        in: query
+        name: until
+        schema:
+          type: string
+      - description: page size
+        in: query
+        name: limit
+        schema:
+          default: 50
+          type: integer
+      - description: page offset
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminAuditResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Read the audit log
+      tags:
+      - azeroth-admin
   /api/v1/admin/reports:
     get:
       description: Lists every report, newest first, optionally filtered by status.
