@@ -56,8 +56,14 @@ export type AdminMappingRequest = {
     role?: string;
 };
 
-export type AdminPermissionRequest = {
-    permission?: string;
+export type AdminPermissionDefinition = {
+    description?: string;
+    name?: string;
+    owner?: string;
+};
+
+export type AdminReplaceRolePermissionsRequest = {
+    permissions?: Array<string>;
 };
 
 export type AdminRoleGrant = {
@@ -68,6 +74,8 @@ export type AdminRoleGrant = {
 export type AdminRolesResponse = {
     grants?: Array<AdminRoleGrant>;
     mappings?: Array<AdminDiscordRoleMapping>;
+    permissions?: Array<AdminPermissionDefinition>;
+    roles?: Array<string>;
 };
 
 export type AdminUser = {
@@ -1338,11 +1346,11 @@ export type IdentityAdminRolesListResponses = {
 
 export type IdentityAdminRolesListResponse = IdentityAdminRolesListResponses[keyof IdentityAdminRolesListResponses];
 
-export type IdentityAdminRolesGrantData = {
+export type IdentityAdminRolesReplacePermissionsData = {
     /**
-     * permission
+     * permissions
      */
-    body: AdminPermissionRequest;
+    body: AdminReplaceRolePermissionsRequest;
     path: {
         /**
          * role
@@ -1353,7 +1361,7 @@ export type IdentityAdminRolesGrantData = {
     url: '/api/v1/admin/roles/{role}/permissions';
 };
 
-export type IdentityAdminRolesGrantErrors = {
+export type IdentityAdminRolesReplacePermissionsErrors = {
     /**
      * Bad Request
      */
@@ -1376,62 +1384,16 @@ export type IdentityAdminRolesGrantErrors = {
     503: ErrorResponse;
 };
 
-export type IdentityAdminRolesGrantError = IdentityAdminRolesGrantErrors[keyof IdentityAdminRolesGrantErrors];
+export type IdentityAdminRolesReplacePermissionsError = IdentityAdminRolesReplacePermissionsErrors[keyof IdentityAdminRolesReplacePermissionsErrors];
 
-export type IdentityAdminRolesGrantResponses = {
+export type IdentityAdminRolesReplacePermissionsResponses = {
     /**
-     * Granted
+     * Replaced
      */
     204: void;
 };
 
-export type IdentityAdminRolesGrantResponse = IdentityAdminRolesGrantResponses[keyof IdentityAdminRolesGrantResponses];
-
-export type IdentityAdminRolesRevokeData = {
-    body?: never;
-    path: {
-        /**
-         * role
-         */
-        role: string;
-        /**
-         * permission
-         */
-        permission: string;
-    };
-    query?: never;
-    url: '/api/v1/admin/roles/{role}/permissions/{permission}';
-};
-
-export type IdentityAdminRolesRevokeErrors = {
-    /**
-     * Unauthorized
-     */
-    401: ErrorResponse;
-    /**
-     * Forbidden
-     */
-    403: ErrorResponse;
-    /**
-     * Unprocessable Entity
-     */
-    422: ErrorResponse;
-    /**
-     * Service Unavailable
-     */
-    503: ErrorResponse;
-};
-
-export type IdentityAdminRolesRevokeError = IdentityAdminRolesRevokeErrors[keyof IdentityAdminRolesRevokeErrors];
-
-export type IdentityAdminRolesRevokeResponses = {
-    /**
-     * Revoked
-     */
-    204: void;
-};
-
-export type IdentityAdminRolesRevokeResponse = IdentityAdminRolesRevokeResponses[keyof IdentityAdminRolesRevokeResponses];
+export type IdentityAdminRolesReplacePermissionsResponse = IdentityAdminRolesReplacePermissionsResponses[keyof IdentityAdminRolesReplacePermissionsResponses];
 
 export type StoreAdminOrdersListData = {
     body?: never;

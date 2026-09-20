@@ -321,6 +321,43 @@ func (s *Store) RevokeRolePermission(ctx context.Context, role, permission strin
 	return nil
 }
 
+// ListRoles returns every internal role name, sorted.
+func (s *Store) ListRoles(ctx context.Context) ([]string, error) {
+	rows, err := s.q.ListRoles(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("repository: list roles: %w", err)
+	}
+	return rows, nil
+}
+
+// ReplaceRolePermissions replaces a role's permission grants atomically.
+func (s *Store) ReplaceRolePermissions(ctx context.Context, role string, perms []string) error {
+	tx, err := s.db.BeginTx(ctx, nil)
+	if err != nil {
+		return fmt.Errorf("repository: begin replace role permissions: %w", err)
+	}
+	defer func() { _ = tx.Rollback() }()
+	queries := s.q.WithTx(tx)
+	if err := queries.UpsertRole(ctx, role); err != nil {
+		return fmt.Errorf("repository: upsert role: %w", err)
+	}
+	if err := queries.DeleteRolePermissions(ctx, role); err != nil {
+		return fmt.Errorf("repository: delete role permissions: %w", err)
+	}
+	for _, permission := range perms {
+		if err := queries.GrantRolePermission(ctx, identitydiscordrepo.GrantRolePermissionParams{
+			Role:       role,
+			Permission: permission,
+		}); err != nil {
+			return fmt.Errorf("repository: grant role permission: %w", err)
+		}
+	}
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("repository: commit replace role permissions: %w", err)
+	}
+	return nil
+}
+
 // ListDiscordRoleMappings returns every Discord role -> internal role mapping.
 func (s *Store) ListDiscordRoleMappings(ctx context.Context) ([]identitydiscordrepo.DiscordRoleMapping, error) {
 	rows, err := s.q.ListDiscordRoleMappings(ctx)

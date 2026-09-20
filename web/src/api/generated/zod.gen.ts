@@ -52,8 +52,14 @@ export const zAdminMappingRequest = z.object({
     role: z.string().optional()
 });
 
-export const zAdminPermissionRequest = z.object({
-    permission: z.string().optional()
+export const zAdminPermissionDefinition = z.object({
+    description: z.string().optional(),
+    name: z.string().optional(),
+    owner: z.string().optional()
+});
+
+export const zAdminReplaceRolePermissionsRequest = z.object({
+    permissions: z.array(z.string()).optional()
 });
 
 export const zAdminRoleGrant = z.object({
@@ -63,7 +69,9 @@ export const zAdminRoleGrant = z.object({
 
 export const zAdminRolesResponse = z.object({
     grants: z.array(zAdminRoleGrant).optional(),
-    mappings: z.array(zAdminDiscordRoleMapping).optional()
+    mappings: z.array(zAdminDiscordRoleMapping).optional(),
+    permissions: z.array(zAdminPermissionDefinition).optional(),
+    roles: z.array(z.string()).optional()
 });
 
 export const zAdminUserCharacter = z.object({
@@ -741,28 +749,18 @@ export const zReportsCloseResponse = zCommunityReport;
 export const zIdentityAdminRolesListResponse = zAdminRolesResponse;
 
 /**
- * permission
+ * permissions
  */
-export const zIdentityAdminRolesGrantBody = zAdminPermissionRequest;
+export const zIdentityAdminRolesReplacePermissionsBody = zAdminReplaceRolePermissionsRequest;
 
-export const zIdentityAdminRolesGrantPath = z.object({
+export const zIdentityAdminRolesReplacePermissionsPath = z.object({
     role: z.string()
 });
 
 /**
- * Granted
+ * Replaced
  */
-export const zIdentityAdminRolesGrantResponse = z.void();
-
-export const zIdentityAdminRolesRevokePath = z.object({
-    role: z.string(),
-    permission: z.string()
-});
-
-/**
- * Revoked
- */
-export const zIdentityAdminRolesRevokeResponse = z.void();
+export const zIdentityAdminRolesReplacePermissionsResponse = z.void();
 
 export const zStoreAdminOrdersListQuery = z.object({
     status: z.string().optional(),

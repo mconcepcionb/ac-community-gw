@@ -88,9 +88,15 @@ ON CONFLICT (name) DO UPDATE
 SET description = EXCLUDED.description,
     owner = EXCLUDED.owner;
 
+-- name: ListRoles :many
+SELECT name FROM roles ORDER BY name;
+
 -- name: UpsertRole :exec
 INSERT INTO roles (name) VALUES ($1)
 ON CONFLICT (name) DO NOTHING;
+
+-- name: DeleteRolePermissions :exec
+DELETE FROM role_permissions WHERE role = $1;
 
 -- name: GrantRolePermission :exec
 INSERT INTO role_permissions (role, permission)

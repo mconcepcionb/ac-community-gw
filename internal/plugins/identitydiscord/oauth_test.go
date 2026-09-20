@@ -114,11 +114,15 @@ func (f *fakeRepo) ListRolePermissions(context.Context) ([]identitydiscordrepo.R
 	return nil, nil
 }
 
+func (f *fakeRepo) ListRoles(context.Context) ([]string, error) { return nil, nil }
+
 func (f *fakeRepo) UpsertRole(context.Context, string) error { return nil }
 
 func (f *fakeRepo) GrantRolePermission(context.Context, string, string) error { return nil }
 
 func (f *fakeRepo) RevokeRolePermission(context.Context, string, string) error { return nil }
+
+func (f *fakeRepo) ReplaceRolePermissions(context.Context, string, []string) error { return nil }
 
 func (f *fakeRepo) ListDiscordRoleMappings(context.Context) ([]identitydiscordrepo.DiscordRoleMapping, error) {
 	return nil, nil

@@ -140,6 +140,15 @@ func (q *Queries) DeleteExpiredSessions(ctx context.Context) error {
 	return err
 }
 
+const deleteRolePermissions = `-- name: DeleteRolePermissions :exec
+DELETE FROM role_permissions WHERE role = $1
+`
+
+func (q *Queries) DeleteRolePermissions(ctx context.Context, role string) error {
+	_, err := q.db.ExecContext(ctx, deleteRolePermissions, role)
+	return err
+}
+
 const deleteSession = `-- name: DeleteSession :exec
 DELETE FROM sessions WHERE id = $1
 `
@@ -434,6 +443,33 @@ func (q *Queries) ListRolePermissions(ctx context.Context) ([]RolePermission, er
 			return nil, err
 		}
 		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listRoles = `-- name: ListRoles :many
+SELECT name FROM roles ORDER BY name
+`
+
+func (q *Queries) ListRoles(ctx context.Context) ([]string, error) {
+	rows, err := q.db.QueryContext(ctx, listRoles)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []string{}
+	for rows.Next() {
+		var name string
+		if err := rows.Scan(&name); err != nil {
+			return nil, err
+		}
+		items = append(items, name)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

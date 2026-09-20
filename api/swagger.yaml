@@ -88,10 +88,22 @@ components:
         role:
           type: string
       type: object
-    AdminPermissionRequest:
+    AdminPermissionDefinition:
       properties:
-        permission:
+        description:
           type: string
+        name:
+          type: string
+        owner:
+          type: string
+      type: object
+    AdminReplaceRolePermissionsRequest:
+      properties:
+        permissions:
+          items:
+            type: string
+          type: array
+          uniqueItems: false
       type: object
     AdminRoleGrant:
       properties:
@@ -110,6 +122,16 @@ components:
         mappings:
           items:
             $ref: '#/components/schemas/AdminDiscordRoleMapping'
+          type: array
+          uniqueItems: false
+        permissions:
+          items:
+            $ref: '#/components/schemas/AdminPermissionDefinition'
+          type: array
+          uniqueItems: false
+        roles:
+          items:
+            type: string
           type: array
           uniqueItems: false
       type: object
@@ -1809,8 +1831,9 @@ paths:
       - reports
   /api/v1/admin/roles:
     get:
-      description: Returns every role -> permission grant and Discord role mapping.
-        Requires the gw.identity.roles.manage permission.
+      description: Returns every internal role, the registered permission catalog,
+        every role -> permission grant and every Discord role mapping. Requires the
+        gw.identity.roles.manage permission.
       operationId: identity.admin.roles.list
       responses:
         "200":
@@ -1837,14 +1860,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Service Unavailable
-      summary: List roles and mappings
+      summary: List roles, permissions and mappings
       tags:
       - identity
   /api/v1/admin/roles/{role}/permissions:
-    post:
-      description: Grants a permission to a role (creating the role if needed). Requires
-        the gw.identity.roles.manage permission.
-      operationId: identity.admin.roles.grant
+    put:
+      description: Replaces the full set of permission grants of a role (creating
+        the role if needed) in one transaction. Requires the gw.identity.roles.manage
+        permission.
+      operationId: identity.admin.roles.replace_permissions
       parameters:
       - description: role
         in: path
@@ -1856,12 +1880,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AdminPermissionRequest'
-        description: permission
+              $ref: '#/components/schemas/AdminReplaceRolePermissionsRequest'
+        description: permissions
         required: true
       responses:
         "204":
-          description: Granted
+          description: Replaced
         "400":
           content:
             application/json:
@@ -1892,55 +1916,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Service Unavailable
-      summary: Grant a permission to a role
-      tags:
-      - identity
-  /api/v1/admin/roles/{role}/permissions/{permission}:
-    delete:
-      description: Revokes a permission from a role. Requires the gw.identity.roles.manage
-        permission.
-      operationId: identity.admin.roles.revoke
-      parameters:
-      - description: role
-        in: path
-        name: role
-        required: true
-        schema:
-          type: string
-      - description: permission
-        in: path
-        name: permission
-        required: true
-        schema:
-          type: string
-      responses:
-        "204":
-          description: Revoked
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Unauthorized
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Forbidden
-        "422":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Unprocessable Entity
-        "503":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Service Unavailable
-      summary: Revoke a permission from a role
+      summary: Replace a role's permissions
       tags:
       - identity
   /api/v1/admin/store/orders:

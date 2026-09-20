@@ -1,86 +1,97 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
+import type { AdminDiscordRoleMapping, AdminPermissionDefinition } from "@/api";
 import {
   identityAdminDiscordMappingsDeleteMutation,
   identityAdminDiscordMappingsUpsertMutation,
-  identityAdminRolesGrantMutation,
   identityAdminRolesListOptions,
   identityAdminRolesListQueryKey,
-  identityAdminRolesRevokeMutation,
+  identityAdminRolesReplacePermissionsMutation,
 } from "@/api";
 import { isApiError } from "@/api/errors";
+import { ConfirmDialog } from "@/components/common/confirm-dialog";
+import { EmptyState } from "@/components/common/empty-state";
+import { ErrorState } from "@/components/common/error-state";
+import { LoadingState } from "@/components/common/loading-state";
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+const report = (error: unknown) =>
+  toast.error(isApiError(error) ? `${error.message} (${error.code})` : String(error));
 
 /** AdminRolesPage manages role grants and Discord role mappings. */
 export function AdminRolesPage() {
   const queryClient = useQueryClient();
   const query = useQuery(identityAdminRolesListOptions());
-  const [newRole, setNewRole] = useState("");
-  const [newPermission, setNewPermission] = useState("");
-  const [mappingDiscordID, setMappingDiscordID] = useState("");
-  const [mappingRole, setMappingRole] = useState("");
-
-  const grant = useMutation(identityAdminRolesGrantMutation());
-  const revoke = useMutation(identityAdminRolesRevokeMutation());
+  const replace = useMutation(identityAdminRolesReplacePermissionsMutation());
   const upsertMapping = useMutation(identityAdminDiscordMappingsUpsertMutation());
   const deleteMapping = useMutation(identityAdminDiscordMappingsDeleteMutation());
 
-  const report = (error: unknown) =>
-    toast.error(isApiError(error) ? `${error.message} (${error.code})` : String(error));
   const refresh = () =>
     queryClient.invalidateQueries({ queryKey: identityAdminRolesListQueryKey() });
 
-  const grantsByRole = useMemo(() => {
-    const map: Record<string, string[]> = {};
-    for (const item of query.data?.grants ?? []) {
-      if (!item.role || !item.permission) {
-        continue;
-      }
-      if (!map[item.role]) {
-        map[item.role] = [];
-      }
-      map[item.role].push(item.permission);
-    }
-    return map;
-  }, [query.data]);
-
+  const roles = query.data?.roles ?? [];
+  const permissions = query.data?.permissions ?? [];
+  const grants = query.data?.grants ?? [];
   const mappings = query.data?.mappings ?? [];
 
-  const onGrant = async () => {
-    try {
-      await grant.mutateAsync({ path: { role: newRole }, body: { permission: newPermission } });
-      toast.success("Permission granted");
-      setNewPermission("");
-      await refresh();
-    } catch (error) {
-      report(error);
+  const grouped = useMemo(() => {
+    const groups = new Map<string, AdminPermissionDefinition[]>();
+    for (const permission of permissions) {
+      const owner = permission.owner || "other";
+      const bucket = groups.get(owner) ?? [];
+      bucket.push(permission);
+      groups.set(owner, bucket);
     }
-  };
+    return [...groups.entries()].sort(([a], [b]) => a.localeCompare(b));
+  }, [permissions]);
 
-  const onRevoke = async (role: string, permission: string) => {
-    try {
-      await revoke.mutateAsync({ path: { role, permission } });
-      toast.success("Permission revoked");
-      await refresh();
-    } catch (error) {
-      report(error);
+  const grantsByRole = useMemo(() => {
+    const map: Record<string, Set<string>> = {};
+    for (const grant of grants) {
+      if (!grant.role || !grant.permission) {
+        continue;
+      }
+      map[grant.role] = map[grant.role] ?? new Set();
+      map[grant.role].add(grant.permission);
     }
-  };
+    return map;
+  }, [grants]);
 
-  const onAddMapping = async () => {
+  if (query.isPending) {
+    return <LoadingState label="Loading roles…" />;
+  }
+  if (query.isError) {
+    return (
+      <div className="mx-auto max-w-5xl p-8">
+        <PageHeader title="Roles" />
+        <ErrorState error={query.error} onRetry={() => void query.refetch()} />
+      </div>
+    );
+  }
+
+  const onSave = async (role: string, selected: Set<string>) => {
     try {
-      await upsertMapping.mutateAsync({
-        path: { discord_role_id: mappingDiscordID },
-        body: { role: mappingRole },
+      await replace.mutateAsync({
+        path: { role },
+        body: { permissions: Array.from(selected) },
       });
+      toast.success("Permissions saved");
+      await refresh();
+    } catch (error) {
+      report(error);
+    }
+  };
+
+  const onAddMapping = async (discordRoleID: string, role: string) => {
+    try {
+      await upsertMapping.mutateAsync({ path: { discord_role_id: discordRoleID }, body: { role } });
       toast.success("Mapping saved");
-      setMappingDiscordID("");
-      setMappingRole("");
       await refresh();
     } catch (error) {
       report(error);
@@ -104,117 +115,204 @@ export function AdminRolesPage() {
         description="Permission grants and Discord role mappings. Changes apply within the refresh interval."
       />
 
-      <section className="mb-8">
-        <h2 className="mb-3 text-lg font-semibold">Role permissions</h2>
-        {query.isPending ? <p className="text-sm text-muted-foreground">Loading…</p> : null}
-        {query.isError ? <p className="text-sm text-muted-foreground">Unavailable.</p> : null}
-        {Object.keys(grantsByRole).length === 0 && query.data ? (
-          <p className="text-sm text-muted-foreground">No grants.</p>
-        ) : null}
-        <div className="space-y-2">
-          {Object.entries(grantsByRole).map(([role, permissions]) => (
-            <Card key={role}>
-              <CardHeader>
-                <CardTitle className="text-base">{role}</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-wrap gap-2">
-                {permissions.map((permission) => (
-                  <span
-                    key={permission}
-                    className="inline-flex items-center gap-1 rounded border border-border px-2 py-1 text-xs"
-                  >
-                    {permission}
-                    <button
-                      type="button"
-                      className="text-muted-foreground hover:text-foreground"
-                      aria-label={`Revoke ${permission}`}
-                      onClick={() => void onRevoke(role, permission)}
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+      <Tabs defaultValue="matrix">
+        <TabsList>
+          <TabsTrigger value="matrix">Role permissions</TabsTrigger>
+          <TabsTrigger value="mappings">Discord mappings</TabsTrigger>
+        </TabsList>
 
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Input
-            className="max-w-[12rem]"
-            placeholder="Role"
-            aria-label="Role"
-            value={newRole}
-            onChange={(event) => setNewRole(event.target.value)}
+        <TabsContent value="matrix">
+          {roles.length === 0 ? (
+            <EmptyState title="No roles" description="Create a role by mapping a Discord role." />
+          ) : (
+            <div className="space-y-4">
+              {roles.map((role) => (
+                <RoleMatrix
+                  key={role}
+                  role={role}
+                  grouped={grouped}
+                  current={grantsByRole[role] ?? new Set()}
+                  pending={replace.isPending}
+                  onSave={onSave}
+                />
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="mappings">
+          <MappingsTab
+            mappings={mappings}
+            roles={roles}
+            pending={upsertMapping.isPending}
+            onAdd={onAddMapping}
+            onDelete={onDeleteMapping}
           />
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
+
+function RoleMatrix({
+  role,
+  grouped,
+  current,
+  pending,
+  onSave,
+}: {
+  role: string;
+  grouped: [string, AdminPermissionDefinition[]][];
+  current: Set<string>;
+  pending: boolean;
+  onSave: (role: string, selected: Set<string>) => void;
+}) {
+  const [selected, setSelected] = useState<Set<string>>(() => new Set(current));
+
+  useEffect(() => {
+    setSelected(new Set(current));
+  }, [current]);
+
+  const toggle = (permission: string) => {
+    setSelected((value) => {
+      const next = new Set(value);
+      if (next.has(permission)) {
+        next.delete(permission);
+      } else {
+        next.add(permission);
+      }
+      return next;
+    });
+  };
+
+  const dirty = selected.size !== current.size || [...selected].some((item) => !current.has(item));
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between gap-2">
+        <CardTitle className="text-base">{role}</CardTitle>
+        <Button size="sm" disabled={!dirty || pending} onClick={() => onSave(role, selected)}>
+          Save
+        </Button>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {grouped.map(([owner, items]) => (
+          <div key={owner}>
+            <p className="mb-1 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+              {owner}
+            </p>
+            <div className="grid gap-1 sm:grid-cols-2">
+              {items.map((permission) => (
+                <label
+                  key={permission.name}
+                  className="flex items-start gap-2 text-sm"
+                  title={permission.description}
+                >
+                  <input
+                    type="checkbox"
+                    className="mt-1"
+                    checked={selected.has(permission.name ?? "")}
+                    onChange={() => toggle(permission.name ?? "")}
+                  />
+                  <span className="font-mono text-xs">{permission.name}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        ))}
+      </CardContent>
+    </Card>
+  );
+}
+
+function MappingsTab({
+  mappings,
+  roles,
+  pending,
+  onAdd,
+  onDelete,
+}: {
+  mappings: AdminDiscordRoleMapping[];
+  roles: string[];
+  pending: boolean;
+  onAdd: (discordRoleID: string, role: string) => void;
+  onDelete: (discordRoleID: string) => void;
+}) {
+  const [discordRoleID, setDiscordRoleID] = useState("");
+  const [role, setRole] = useState("");
+
+  return (
+    <div className="space-y-4">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">New mapping</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-wrap items-center gap-2">
           <Input
             className="max-w-[16rem]"
-            placeholder="Permission"
-            aria-label="Permission"
-            value={newPermission}
-            onChange={(event) => setNewPermission(event.target.value)}
-          />
-          <Button
-            type="button"
-            onClick={() => void onGrant()}
-            disabled={grant.isPending || !newRole || !newPermission}
-          >
-            Grant
-          </Button>
-        </div>
-      </section>
-
-      <section>
-        <h2 className="mb-3 text-lg font-semibold">Discord role mappings</h2>
-        {mappings.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No mappings.</p>
-        ) : (
-          <ul className="space-y-1 text-sm">
-            {mappings.map((mapping) => (
-              <li
-                key={mapping.discord_role_id}
-                className="flex items-center justify-between rounded border border-border px-3 py-2"
-              >
-                <span>
-                  {mapping.discord_role_id} → <span className="font-medium">{mapping.role}</span>
-                </span>
-                <button
-                  type="button"
-                  className="text-muted-foreground hover:text-foreground"
-                  aria-label={`Remove ${mapping.discord_role_id}`}
-                  onClick={() => void onDeleteMapping(mapping.discord_role_id ?? "")}
-                >
-                  ×
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Input
-            className="max-w-[14rem]"
             placeholder="Discord role id"
             aria-label="Discord role id"
-            value={mappingDiscordID}
-            onChange={(event) => setMappingDiscordID(event.target.value)}
+            value={discordRoleID}
+            onChange={(event) => setDiscordRoleID(event.target.value)}
           />
           <Input
-            className="max-w-[12rem]"
+            className="max-w-[14rem]"
             placeholder="Internal role"
             aria-label="Internal role"
-            value={mappingRole}
-            onChange={(event) => setMappingRole(event.target.value)}
+            value={role}
+            onChange={(event) => setRole(event.target.value)}
+            list="role-options"
           />
+          <datalist id="role-options">
+            {roles.map((item) => (
+              <option key={item} value={item} />
+            ))}
+          </datalist>
           <Button
             type="button"
-            onClick={() => void onAddMapping()}
-            disabled={upsertMapping.isPending || !mappingDiscordID || !mappingRole}
+            disabled={pending || discordRoleID === "" || role === ""}
+            onClick={() => {
+              onAdd(discordRoleID, role);
+              setDiscordRoleID("");
+              setRole("");
+            }}
           >
             Add mapping
           </Button>
-        </div>
-      </section>
+        </CardContent>
+      </Card>
+
+      {mappings.length === 0 ? (
+        <EmptyState title="No mappings" />
+      ) : (
+        <ul className="space-y-1 text-sm">
+          {mappings.map((mapping) => (
+            <li
+              key={mapping.discord_role_id}
+              className="flex items-center justify-between rounded border border-border px-3 py-2"
+            >
+              <span>
+                {mapping.discord_role_id} → <span className="font-medium">{mapping.role}</span>
+              </span>
+              <ConfirmDialog
+                trigger={
+                  <Button variant="outline" size="sm">
+                    Remove
+                  </Button>
+                }
+                title="Remove this mapping?"
+                description="The Discord role stops granting the internal role."
+                confirmLabel="Remove"
+                destructive
+                onConfirm={() => {
+                  onDelete(mapping.discord_role_id ?? "");
+                  return true;
+                }}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
