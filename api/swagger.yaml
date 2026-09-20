@@ -1,0 +1,2582 @@
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: acgw_session
+  schemas:
+    AnnounceRequest:
+      properties:
+        message:
+          type: string
+      type: object
+    AzerothAccount:
+      properties:
+        ban_reason:
+          type: string
+        banned:
+          type: boolean
+        email:
+          type: string
+        expansion:
+          type: integer
+        gm_level:
+          type: integer
+        id:
+          type: integer
+        last_ip:
+          type: string
+        last_login:
+          type: string
+        online:
+          type: boolean
+        username:
+          type: string
+      type: object
+    AzerothAccountLink:
+      properties:
+        account_id:
+          type: integer
+        account_username:
+          type: string
+        linked_at:
+          type: string
+        user_id:
+          type: string
+      type: object
+    AzerothAccountLinksResponse:
+      properties:
+        links:
+          items:
+            $ref: '#/components/schemas/AzerothAccountLink'
+          type: array
+          uniqueItems: false
+      type: object
+    AzerothAccountsResponse:
+      properties:
+        accounts:
+          items:
+            $ref: '#/components/schemas/AzerothAccount'
+          type: array
+          uniqueItems: false
+      type: object
+    AzerothCharacter:
+      properties:
+        class:
+          type: integer
+        class_name:
+          type: string
+        gender:
+          type: integer
+        guid:
+          type: integer
+        guild:
+          type: string
+        level:
+          type: integer
+        logout_time:
+          type: string
+        money:
+          type: integer
+        name:
+          type: string
+        online:
+          type: boolean
+        race:
+          type: integer
+        race_name:
+          type: string
+        total_time:
+          type: integer
+      type: object
+    AzerothCharactersResponse:
+      properties:
+        characters:
+          items:
+            $ref: '#/components/schemas/AzerothCharacter'
+          type: array
+          uniqueItems: false
+      type: object
+    AzerothItem:
+      properties:
+        armor:
+          type: integer
+        bonding:
+          type: integer
+        bonding_name:
+          type: string
+        buy_price:
+          type: integer
+        class:
+          type: integer
+        class_name:
+          type: string
+        container_slots:
+          type: integer
+        damage:
+          items:
+            $ref: '#/components/schemas/AzerothItemDamage'
+          type: array
+          uniqueItems: false
+        delay:
+          type: integer
+        description:
+          type: string
+        display_id:
+          type: integer
+        entry:
+          type: integer
+        inventory_type:
+          type: integer
+        inventory_type_name:
+          type: string
+        item_level:
+          type: integer
+        item_set:
+          type: integer
+        max_count:
+          type: integer
+        name:
+          type: string
+        quality:
+          type: integer
+        quality_color:
+          type: string
+        quality_name:
+          type: string
+        required_level:
+          type: integer
+        resistances:
+          $ref: '#/components/schemas/AzerothItemResistances'
+        sell_price:
+          type: integer
+        spells:
+          items:
+            $ref: '#/components/schemas/AzerothItemSpell'
+          type: array
+          uniqueItems: false
+        stackable:
+          type: integer
+        stats:
+          items:
+            $ref: '#/components/schemas/AzerothItemStat'
+          type: array
+          uniqueItems: false
+        subclass:
+          type: integer
+        subclass_name:
+          type: string
+      type: object
+    AzerothItemDamage:
+      properties:
+        dps:
+          type: number
+        max:
+          type: number
+        min:
+          type: number
+        type:
+          type: integer
+        type_name:
+          type: string
+      type: object
+    AzerothItemResistances:
+      properties:
+        arcane:
+          type: integer
+        fire:
+          type: integer
+        frost:
+          type: integer
+        holy:
+          type: integer
+        nature:
+          type: integer
+        shadow:
+          type: integer
+      type: object
+    AzerothItemSpell:
+      properties:
+        cooldown_ms:
+          type: integer
+        id:
+          type: integer
+        trigger:
+          type: integer
+        trigger_name:
+          type: string
+      type: object
+    AzerothItemStat:
+      properties:
+        name:
+          type: string
+        type:
+          type: integer
+        value:
+          type: integer
+      type: object
+    AzerothItemsResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/AzerothItem'
+          type: array
+          uniqueItems: false
+      type: object
+    AzerothMailItem:
+      properties:
+        count:
+          type: integer
+        id:
+          type: integer
+      type: object
+    AzerothOnlineListResponse:
+      properties:
+        output:
+          type: string
+      type: object
+    AzerothSendMailRequest:
+      properties:
+        body:
+          type: string
+        character:
+          type: string
+        items:
+          items:
+            $ref: '#/components/schemas/AzerothMailItem'
+          type: array
+          uniqueItems: false
+        money:
+          type: integer
+        subject:
+          type: string
+      type: object
+    AzerothSendMailResponse:
+      properties:
+        recipient:
+          type: string
+        results:
+          items:
+            type: string
+          type: array
+          uniqueItems: false
+      type: object
+    AzerothStatusResponse:
+      properties:
+        characters_in_world:
+          type: integer
+        connected_players:
+          type: integer
+        connection_peak:
+          type: integer
+        output:
+          type: string
+        queue:
+          type: integer
+        uptime:
+          type: string
+        version:
+          type: string
+      type: object
+    BanAccountRequest:
+      properties:
+        duration:
+          type: string
+        reason:
+          type: string
+        username:
+          type: string
+      type: object
+    BanCharacterRequest:
+      properties:
+        duration:
+          type: string
+        reason:
+          type: string
+      type: object
+    CallbackResponse:
+      properties:
+        discord_id:
+          type: string
+        roles:
+          items:
+            type: string
+          type: array
+          uniqueItems: false
+        user_id:
+          type: string
+      type: object
+    ChangePasswordRequest:
+      properties:
+        password:
+          type: string
+        username:
+          type: string
+      type: object
+    CommandResult:
+      properties:
+        result:
+          type: string
+      type: object
+    CreateAccountRequest:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        username:
+          type: string
+      type: object
+    CreateLinkRequest:
+      properties:
+        account_username:
+          type: string
+        discord_id:
+          type: string
+        discord_username:
+          type: string
+        user_id:
+          type: string
+      type: object
+    ErrorBody:
+      properties:
+        code:
+          type: string
+        details: {}
+        message:
+          type: string
+      type: object
+    ErrorResponse:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+        request_id:
+          type: string
+      type: object
+    HealthResponse:
+      properties:
+        status:
+          example: ok
+          type: string
+      type: object
+    KickPlayerRequest:
+      properties:
+        reason:
+          type: string
+      type: object
+    ListUsersResponse:
+      properties:
+        users:
+          items:
+            $ref: '#/components/schemas/User'
+          type: array
+          uniqueItems: false
+      type: object
+    MeResponse:
+      properties:
+        discord_id:
+          type: string
+        permissions:
+          items:
+            type: string
+          type: array
+          uniqueItems: false
+        roles:
+          items:
+            type: string
+          type: array
+          uniqueItems: false
+        user_id:
+          type: string
+      type: object
+    MutePlayerRequest:
+      properties:
+        duration:
+          type: string
+        reason:
+          type: string
+      type: object
+    ReadyResponse:
+      properties:
+        checks:
+          additionalProperties:
+            type: string
+          type: object
+        status:
+          example: ready
+          type: string
+      type: object
+    SetEmailRequest:
+      properties:
+        email:
+          type: string
+        username:
+          type: string
+      type: object
+    SetGMLevelRequest:
+      properties:
+        level:
+          type: integer
+        realm:
+          type: string
+        username:
+          type: string
+      type: object
+    StoreGrantRequest:
+      properties:
+        discord_id:
+          type: string
+        points:
+          type: integer
+        reason:
+          type: string
+        user_id:
+          type: string
+      type: object
+    StoreOrder:
+      properties:
+        character:
+          type: string
+        created_at:
+          type: string
+        order_id:
+          type: string
+        output:
+          type: string
+        price_points:
+          type: integer
+        sku:
+          type: string
+        status:
+          type: string
+        user_id:
+          type: string
+      type: object
+    StoreOrdersResponse:
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/StoreOrder'
+          type: array
+          uniqueItems: false
+      type: object
+    StoreProduct:
+      properties:
+        active:
+          type: boolean
+        description:
+          type: string
+        items:
+          items:
+            $ref: '#/components/schemas/StoreProductItem'
+          type: array
+          uniqueItems: false
+        money:
+          type: integer
+        name:
+          type: string
+        price_points:
+          type: integer
+        sku:
+          type: string
+      type: object
+    StoreProductItem:
+      properties:
+        count:
+          type: integer
+        item_id:
+          type: integer
+        name:
+          type: string
+        render:
+          $ref: '#/components/schemas/AzerothItem'
+      type: object
+    StoreProductItemRequest:
+      properties:
+        count:
+          type: integer
+        item_id:
+          type: integer
+      type: object
+    StoreProductRequest:
+      properties:
+        active:
+          type: boolean
+        description:
+          type: string
+        items:
+          items:
+            $ref: '#/components/schemas/StoreProductItemRequest'
+          type: array
+          uniqueItems: false
+        money:
+          type: integer
+        name:
+          type: string
+        price_points:
+          type: integer
+        sku:
+          type: string
+      type: object
+    StoreProductsResponse:
+      properties:
+        products:
+          items:
+            $ref: '#/components/schemas/StoreProduct'
+          type: array
+          uniqueItems: false
+      type: object
+    StorePurchaseRequest:
+      properties:
+        character:
+          type: string
+        sku:
+          type: string
+      type: object
+    StoreWalletResponse:
+      properties:
+        balance:
+          type: integer
+        user_id:
+          type: string
+      type: object
+    User:
+      properties:
+        created_at:
+          type: string
+        discord_id:
+          type: string
+        display_name:
+          type: string
+        global_name:
+          type: string
+        user_id:
+          type: string
+        username:
+          type: string
+      type: object
+externalDocs:
+  description: ""
+  url: ""
+info:
+  description: |-
+    REST gateway between community applications and AzerothCore.
+    It hides the AzerothCore SOAP/CLI internals behind a typed, authenticated and authorized HTTP API.
+  title: ac-community-gw API
+  version: "1.0"
+openapi: 3.1.0
+paths:
+  /api/v1/auth/discord/callback:
+    get:
+      description: Consumes the single-use state, exchanges the code, provisions the
+        user, synchronises roles and creates a session. Redirects to return_to or
+        the configured post-login URL; returns the principal when neither is set.
+      operationId: auth.discord.callback
+      parameters:
+      - description: authorization code
+        in: query
+        name: code
+        required: true
+        schema:
+          type: string
+      - description: single-use OAuth state
+        in: query
+        name: state
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallbackResponse'
+          description: Returned when no redirect is configured
+        "302":
+          description: Redirect to return_to or the post-login URL
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Too Many Requests
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Discord OAuth2 callback
+      tags:
+      - auth
+  /api/v1/auth/discord/login:
+    get:
+      description: Mints a single-use state and PKCE verifier and redirects to Discord.
+        The optional return_to must be a same-site absolute path.
+      operationId: auth.discord.login
+      parameters:
+      - description: same-site absolute path to redirect to after login
+        in: query
+        name: return_to
+        schema:
+          type: string
+      responses:
+        "302":
+          description: Redirect to Discord
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Too Many Requests
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Start Discord login
+      tags:
+      - auth
+  /api/v1/auth/logout:
+    post:
+      description: Revokes the current server-side session and clears the session
+        cookie.
+      operationId: auth.logout
+      responses:
+        "204":
+          description: Session revoked
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Log out
+      tags:
+      - auth
+  /api/v1/azeroth/account-links:
+    get:
+      description: Lists every community user <-> account link. Requires the azeroth.account.read
+        permission.
+      operationId: azeroth.account_links.list
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothAccountLinksResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List account links
+      tags:
+      - azeroth-account
+    post:
+      description: Creates or replaces the link between a community user and an AzerothCore
+        account. Requires the azeroth.account.link permission.
+      operationId: azeroth.account_links.create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLinkRequest'
+        description: link to create
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothAccountLink'
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Conflict
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Link a community user to an account
+      tags:
+      - azeroth-account
+  /api/v1/azeroth/account-links/{user_id}:
+    delete:
+      description: Removes the link for a community user. Requires the azeroth.account.link
+        permission.
+      operationId: azeroth.account_links.delete
+      parameters:
+      - description: community user UUID
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Link deleted
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Delete an account link
+      tags:
+      - azeroth-account
+    get:
+      description: Returns the link for a community user. Requires the azeroth.account.read
+        permission.
+      operationId: azeroth.account_links.get
+      parameters:
+      - description: community user UUID
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothAccountLink'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Get an account link
+      tags:
+      - azeroth-account
+  /api/v1/azeroth/accounts:
+    get:
+      description: Lists AzerothCore login accounts. Requires the azeroth.account.list
+        permission.
+      operationId: azeroth.accounts.list
+      parameters:
+      - description: username filter
+        in: query
+        name: filter
+        schema:
+          type: string
+      - description: page size
+        in: query
+        name: limit
+        schema:
+          default: 50
+          type: integer
+      - description: page offset
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothAccountsResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List accounts
+      tags:
+      - azeroth-account
+    post:
+      description: Creates a game account. Requires the azeroth.account.manage permission.
+      operationId: azeroth.accounts.create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccountRequest'
+        description: account to create
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResult'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Create an AzerothCore account
+      tags:
+      - azeroth-account
+  /api/v1/azeroth/accounts/{username}/ban:
+    post:
+      description: Bans an AzerothCore account. Requires the azeroth.admin.accounts.ban
+        permission.
+      operationId: azeroth.accounts.ban
+      parameters:
+      - description: account username
+        in: path
+        name: username
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BanAccountRequest'
+        description: ban details
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResult'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Ban an account
+      tags:
+      - azeroth-admin
+  /api/v1/azeroth/accounts/{username}/email:
+    put:
+      description: Sets the email of a game account. Requires the azeroth.account.manage
+        permission.
+      operationId: azeroth.accounts.set_email
+      parameters:
+      - description: account username
+        in: path
+        name: username
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetEmailRequest'
+        description: new email
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResult'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Set an account email
+      tags:
+      - azeroth-account
+  /api/v1/azeroth/accounts/{username}/gmlevel:
+    put:
+      description: Changes the GM level of an AzerothCore account. Requires the azeroth.admin.accounts.gmlevel
+        permission.
+      operationId: azeroth.accounts.set_gmlevel
+      parameters:
+      - description: account username
+        in: path
+        name: username
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetGMLevelRequest'
+        description: GM level
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResult'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Set account GM level
+      tags:
+      - azeroth-admin
+  /api/v1/azeroth/accounts/{username}/password:
+    post:
+      description: Sets a new password for a game account. Requires the azeroth.account.manage
+        permission.
+      operationId: azeroth.accounts.set_password
+      parameters:
+      - description: account username
+        in: path
+        name: username
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        description: new password
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResult'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Change an account password
+      tags:
+      - azeroth-account
+  /api/v1/azeroth/accounts/{username}/unban:
+    post:
+      description: Lifts the ban on an AzerothCore account. Requires the azeroth.admin.accounts.ban
+        permission.
+      operationId: azeroth.accounts.unban
+      parameters:
+      - description: account username
+        in: path
+        name: username
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResult'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Unban an account
+      tags:
+      - azeroth-admin
+  /api/v1/azeroth/announce:
+    post:
+      description: Sends a server-wide announcement. Requires the azeroth.admin.announce
+        permission.
+      operationId: azeroth.announce.send
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnnounceRequest'
+        description: announcement
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResult'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Broadcast an announcement
+      tags:
+      - azeroth-admin
+  /api/v1/azeroth/characters:
+    get:
+      description: Lists characters filtered by account (account_id or account username)
+        with an optional name filter. Requires the azeroth.character.list permission.
+      operationId: azeroth.characters.list
+      parameters:
+      - description: login account id
+        in: query
+        name: account_id
+        schema:
+          type: integer
+      - description: login account username
+        in: query
+        name: account
+        schema:
+          type: string
+      - description: character name filter
+        in: query
+        name: filter
+        schema:
+          type: string
+      - description: page size
+        in: query
+        name: limit
+        schema:
+          default: 100
+          type: integer
+      - description: page offset
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothCharactersResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List characters
+      tags:
+      - azeroth-character
+  /api/v1/azeroth/characters/{name}:
+    get:
+      description: Returns one character by name. Requires the azeroth.character.list
+        permission.
+      operationId: azeroth.characters.get
+      parameters:
+      - description: character name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothCharacter'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Get a character
+      tags:
+      - azeroth-character
+  /api/v1/azeroth/characters/{name}/ban:
+    post:
+      description: Bans a character. Requires the azeroth.admin.characters.ban permission.
+      operationId: azeroth.characters.ban
+      parameters:
+      - description: character name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BanCharacterRequest'
+        description: ban details
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResult'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Ban a character
+      tags:
+      - azeroth-admin
+  /api/v1/azeroth/characters/{name}/unban:
+    post:
+      description: Lifts the ban on a character. Requires the azeroth.admin.characters.ban
+        permission.
+      operationId: azeroth.characters.unban
+      parameters:
+      - description: character name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResult'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Unban a character
+      tags:
+      - azeroth-admin
+  /api/v1/azeroth/info/status:
+    get:
+      description: Reports connected players, peak, queue and uptime. Requires the
+        azeroth.info.public.read permission.
+      operationId: azeroth.info.status
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothStatusResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: AzerothCore server status
+      tags:
+      - azeroth-info
+  /api/v1/azeroth/items:
+    get:
+      description: Searches the AzerothCore item catalog. Requires the azeroth.item.list
+        permission.
+      operationId: azeroth.items.list
+      parameters:
+      - description: item name filter
+        in: query
+        name: filter
+        schema:
+          type: string
+      - description: item class id
+        in: query
+        name: class
+        schema:
+          type: integer
+      - description: page size
+        in: query
+        name: limit
+        schema:
+          default: 50
+          type: integer
+      - description: page offset
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothItemsResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Search items
+      tags:
+      - azeroth-item
+  /api/v1/azeroth/items/{entry}:
+    get:
+      description: Returns one item template by entry id. Requires the azeroth.item.list
+        permission.
+      operationId: azeroth.items.get
+      parameters:
+      - description: item entry id
+        in: path
+        name: entry
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothItem'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Get an item
+      tags:
+      - azeroth-item
+  /api/v1/azeroth/mail:
+    post:
+      description: Delivers items and/or money to a character. Requires the azeroth.mail.send
+        permission.
+      operationId: azeroth.mail.send
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AzerothSendMailRequest'
+        description: delivery request
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothSendMailResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Send in-game mail
+      tags:
+      - azeroth-character
+  /api/v1/azeroth/online:
+    get:
+      description: Runs the AzerothCore online list command. Requires the azeroth.admin.players.read
+        permission.
+      operationId: azeroth.online.list
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothOnlineListResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: List online players
+      tags:
+      - azeroth-admin
+  /api/v1/azeroth/players/{name}/kick:
+    post:
+      description: Kicks an online player. Requires the azeroth.admin.players.kick
+        permission.
+      operationId: azeroth.players.kick
+      parameters:
+      - description: player name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KickPlayerRequest'
+        description: optional reason
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResult'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Kick a player
+      tags:
+      - azeroth-admin
+  /api/v1/azeroth/players/{name}/mute:
+    post:
+      description: Mutes an online player. Requires the azeroth.admin.players.mute
+        permission.
+      operationId: azeroth.players.mute
+      parameters:
+      - description: player name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MutePlayerRequest'
+        description: mute details
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResult'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Mute a player
+      tags:
+      - azeroth-admin
+  /api/v1/azeroth/players/{name}/unmute:
+    post:
+      description: Unmutes a player. Requires the azeroth.admin.players.mute permission.
+      operationId: azeroth.players.unmute
+      parameters:
+      - description: player name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResult'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Unmute a player
+      tags:
+      - azeroth-admin
+  /api/v1/azeroth/users/{user_id}/characters:
+    get:
+      description: Resolves the user's linked AzerothCore account and lists its characters.
+        Requires the azeroth.character.list permission.
+      operationId: azeroth.user_characters.list
+      parameters:
+      - description: community user UUID
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+      - description: character name filter
+        in: query
+        name: filter
+        schema:
+          type: string
+      - description: page size
+        in: query
+        name: limit
+        schema:
+          default: 100
+          type: integer
+      - description: page offset
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothCharactersResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List a community user's characters
+      tags:
+      - azeroth-character
+  /api/v1/identity/users:
+    get:
+      description: Lists provisioned community users. Requires the identity.user.list
+        permission.
+      operationId: identity.users.list
+      parameters:
+      - description: filter by username or Discord name
+        in: query
+        name: filter
+        schema:
+          type: string
+      - description: page size
+        in: query
+        name: limit
+        schema:
+          default: 50
+          type: integer
+      - description: page offset
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUsersResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List community users
+      tags:
+      - identity
+  /api/v1/me:
+    get:
+      description: Returns the authenticated community user with internal roles and
+        effective permissions.
+      operationId: auth.me
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Current principal
+      tags:
+      - auth
+  /api/v1/store/orders:
+    get:
+      description: Lists the authenticated user's orders. Requires the store.orders.read
+        permission.
+      operationId: store.orders.list
+      parameters:
+      - description: page size
+        in: query
+        name: limit
+        schema:
+          default: 50
+          type: integer
+      - description: page offset
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreOrdersResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List orders
+      tags:
+      - store
+    post:
+      description: Buys a product and delivers it to a character. Requires the store.purchase
+        permission.
+      operationId: store.orders.create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorePurchaseRequest'
+        description: purchase request
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreOrder'
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Payment Required
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Conflict
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Purchase a product
+      tags:
+      - store
+  /api/v1/store/products:
+    get:
+      description: Lists the store catalog. Requires the store.catalog.read permission.
+      operationId: store.products.list
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreProductsResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List products
+      tags:
+      - store
+    post:
+      description: Creates a catalog product. Requires the store.admin.products permission.
+      operationId: store.products.create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreProductRequest'
+        description: product to create
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreProduct'
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Conflict
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Create a product
+      tags:
+      - store
+  /api/v1/store/products/{sku}:
+    delete:
+      description: Deactivates a catalog product. Requires the store.admin.products
+        permission.
+      operationId: store.products.delete
+      parameters:
+      - description: product SKU
+        in: path
+        name: sku
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreProduct'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Deactivate a product
+      tags:
+      - store
+    get:
+      description: Returns one catalog product. Requires the store.catalog.read permission.
+      operationId: store.products.get
+      parameters:
+      - description: product SKU
+        in: path
+        name: sku
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreProduct'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Get a product
+      tags:
+      - store
+    put:
+      description: Updates a catalog product. Requires the store.admin.products permission.
+      operationId: store.products.update
+      parameters:
+      - description: product SKU
+        in: path
+        name: sku
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreProductRequest'
+        description: product to update
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreProduct'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Update a product
+      tags:
+      - store
+  /api/v1/store/wallet:
+    get:
+      description: Returns the authenticated user's point balance. Requires the store.wallet.read
+        permission.
+      operationId: store.wallet.get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreWalletResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Get the wallet
+      tags:
+      - store
+  /api/v1/store/wallets/grant:
+    post:
+      description: Adds points to a community user's wallet. Requires the store.admin.wallets
+        permission.
+      operationId: store.wallets.grant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreGrantRequest'
+        description: grant request
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreWalletResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Grant wallet points
+      tags:
+      - store
+  /healthz:
+    get:
+      description: Reports that the process is alive. It does not check downstream
+        dependencies.
+      operationId: operations.health
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+          description: OK
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+      summary: Liveness probe
+      tags:
+      - operations
+  /readyz:
+    get:
+      description: Evaluates every registered readiness check and reports per-check
+        status.
+      operationId: operations.ready
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadyResponse'
+          description: OK
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal Server Error
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadyResponse'
+          description: Service Unavailable
+      summary: Readiness probe
+      tags:
+      - operations

@@ -1,0 +1,53 @@
+# Reverse proxy and static host for the SPA.
+#
+# The gateway serves only /api/* and the operational endpoints. This proxy owns
+# the public origin: it serves the built SPA and forwards API traffic to the
+# gateway. See docs/ADR/0012.
+#
+# Required:
+#   ACGW_SITE_ADDRESS   site address Caddy listens on. Development: ":8080".
+#                       Production: the public hostname (e.g. "gw.example.com"),
+#                       for which Caddy obtains and renews TLS automatically.
+#                       Discord OAuth requires https in production.
+# Optional:
+#   ACGW_API_HOST       gateway host (default "app")
+#   ACGW_API_PORT       gateway port (default "8080")
+
+{$ACGW_SITE_ADDRESS} {
+	encode zstd gzip
+
+	# API and operational endpoints stay on the gateway. `handle` (not
+	# `handle_path`) preserves the path the gateway expects.
+	handle /api/* {
+		reverse_proxy {$ACGW_API_HOST:app}:{$ACGW_API_PORT:8080}
+	}
+	handle /healthz {
+		reverse_proxy {$ACGW_API_HOST:app}:{$ACGW_API_PORT:8080}
+	}
+	handle /readyz {
+		reverse_proxy {$ACGW_API_HOST:app}:{$ACGW_API_PORT:8080}
+	}
+
+	# Everything else is the SPA. Hashed assets are immutable; extension-less
+	# paths fall back to index.html so deep client routes survive a refresh.
+	handle {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+
+	@assets path /assets/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		X-Frame-Options DENY
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; font-src 'self'"
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}

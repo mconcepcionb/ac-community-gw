@@ -1,0 +1,81 @@
+import { Link } from "@tanstack/react-router";
+
+import { PageHeader } from "@/components/common/page-header";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+const sections = [
+  {
+    title: "AzerothCore status",
+    description: "Connected players, peak, queue and uptime.",
+    to: "/azeroth/status",
+  },
+  {
+    title: "Community users",
+    description: "Discord users provisioned by the gateway.",
+    to: "/identity/users",
+  },
+  {
+    title: "Characters",
+    description: "Browse characters and open a detail view.",
+    to: "/characters",
+  },
+  {
+    title: "Items",
+    description: "Search the AzerothCore item catalog.",
+    to: "/items",
+  },
+  {
+    title: "Accounts",
+    description: "List and manage AzerothCore login accounts.",
+    to: "/accounts",
+  },
+  {
+    title: "Account links",
+    description: "Community users linked to game accounts.",
+    to: "/account-links",
+  },
+  {
+    title: "Admin accounts",
+    description: "Ban, unban and set GM levels.",
+    to: "/admin/accounts",
+  },
+  {
+    title: "Online players",
+    description: "Live list of connected players.",
+    to: "/admin/online",
+  },
+  {
+    title: "Store",
+    description: "Browse and manage the product catalog.",
+    to: "/store/products",
+  },
+  {
+    title: "Wallet",
+    description: "Your points balance and order history.",
+    to: "/store/wallet",
+  },
+] as const;
+
+export function HomePage() {
+  return (
+    <div className="mx-auto max-w-5xl p-8">
+      <PageHeader
+        title="ac-community-gw"
+        description="Operations console for the community gateway."
+      />
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {sections.map((section) => (
+          <Link key={section.to} to={section.to} className="block">
+            <Card className="h-full transition-colors hover:border-foreground/30">
+              <CardHeader>
+                <CardTitle>{section.title}</CardTitle>
+                <CardDescription>{section.description}</CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
