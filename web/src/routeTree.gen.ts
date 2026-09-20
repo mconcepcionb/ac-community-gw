@@ -27,6 +27,8 @@ import { Route as AdminOnlineRouteImport } from './routes/admin/online'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminStoreRouteImport } from './routes/admin/store'
 import { Route as PortalCharactersIndexRouteImport } from './routes/_portal/characters/index'
+import { Route as PortalLeaderboardsIndexRouteImport } from './routes/_portal/leaderboards/index'
+import { Route as PortalLeaderboardsBoardRouteImport } from './routes/_portal/leaderboards/$board'
 import { Route as PortalStoreIndexRouteImport } from './routes/_portal/store/index'
 import { Route as AdminCharactersIndexRouteImport } from './routes/admin/characters/index'
 import { Route as AdminCharactersNameRouteImport } from './routes/admin/characters/$name'
@@ -129,6 +131,16 @@ const PortalCharactersIndexRoute = PortalCharactersIndexRouteImport.update({
   path: '/characters/',
   getParentRoute: () => PortalRoute,
 } as any)
+const PortalLeaderboardsIndexRoute = PortalLeaderboardsIndexRouteImport.update({
+  id: '/leaderboards/',
+  path: '/leaderboards/',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalLeaderboardsBoardRoute = PortalLeaderboardsBoardRouteImport.update({
+  id: '/leaderboards/$board',
+  path: '/leaderboards/$board',
+  getParentRoute: () => PortalRoute,
+} as any)
 const PortalStoreIndexRoute = PortalStoreIndexRouteImport.update({
   id: '/store/',
   path: '/store/',
@@ -207,6 +219,7 @@ export interface FileRoutesByFullPath {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/store': typeof AdminStoreRouteWithChildren
   '/admin/': typeof AdminIndexRoute
+  '/leaderboards/$board': typeof PortalLeaderboardsBoardRoute
   '/admin/characters/$name': typeof AdminCharactersNameRoute
   '/admin/items/$entry': typeof AdminItemsEntryRoute
   '/admin/store/$sku': typeof AdminStoreSkuRoute
@@ -214,6 +227,7 @@ export interface FileRoutesByFullPath {
   '/admin/store/wallets': typeof AdminStoreWalletsRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
   '/characters/': typeof PortalCharactersIndexRoute
+  '/leaderboards/': typeof PortalLeaderboardsIndexRoute
   '/store/': typeof PortalStoreIndexRoute
   '/admin/characters/': typeof AdminCharactersIndexRoute
   '/admin/items/': typeof AdminItemsIndexRoute
@@ -236,6 +250,7 @@ export interface FileRoutesByTo {
   '/admin/roles': typeof AdminRolesRoute
   '/': typeof PortalIndexRoute
   '/admin': typeof AdminIndexRoute
+  '/leaderboards/$board': typeof PortalLeaderboardsBoardRoute
   '/admin/characters/$name': typeof AdminCharactersNameRoute
   '/admin/items/$entry': typeof AdminItemsEntryRoute
   '/admin/store/$sku': typeof AdminStoreSkuRoute
@@ -243,6 +258,7 @@ export interface FileRoutesByTo {
   '/admin/store/wallets': typeof AdminStoreWalletsRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
   '/characters': typeof PortalCharactersIndexRoute
+  '/leaderboards': typeof PortalLeaderboardsIndexRoute
   '/store': typeof PortalStoreIndexRoute
   '/admin/characters': typeof AdminCharactersIndexRoute
   '/admin/items': typeof AdminItemsIndexRoute
@@ -269,6 +285,7 @@ export interface FileRoutesById {
   '/admin/store': typeof AdminStoreRouteWithChildren
   '/_portal/': typeof PortalIndexRoute
   '/admin/': typeof AdminIndexRoute
+  '/_portal/leaderboards/$board': typeof PortalLeaderboardsBoardRoute
   '/admin/characters/$name': typeof AdminCharactersNameRoute
   '/admin/items/$entry': typeof AdminItemsEntryRoute
   '/admin/store/$sku': typeof AdminStoreSkuRoute
@@ -276,6 +293,7 @@ export interface FileRoutesById {
   '/admin/store/wallets': typeof AdminStoreWalletsRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
   '/_portal/characters/': typeof PortalCharactersIndexRoute
+  '/_portal/leaderboards/': typeof PortalLeaderboardsIndexRoute
   '/_portal/store/': typeof PortalStoreIndexRoute
   '/admin/characters/': typeof AdminCharactersIndexRoute
   '/admin/items/': typeof AdminItemsIndexRoute
@@ -302,6 +320,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/store'
     | '/admin/'
+    | '/leaderboards/$board'
     | '/admin/characters/$name'
     | '/admin/items/$entry'
     | '/admin/store/$sku'
@@ -309,6 +328,7 @@ export interface FileRouteTypes {
     | '/admin/store/wallets'
     | '/admin/users/$userId'
     | '/characters/'
+    | '/leaderboards/'
     | '/store/'
     | '/admin/characters/'
     | '/admin/items/'
@@ -331,6 +351,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/'
     | '/admin'
+    | '/leaderboards/$board'
     | '/admin/characters/$name'
     | '/admin/items/$entry'
     | '/admin/store/$sku'
@@ -338,6 +359,7 @@ export interface FileRouteTypes {
     | '/admin/store/wallets'
     | '/admin/users/$userId'
     | '/characters'
+    | '/leaderboards'
     | '/store'
     | '/admin/characters'
     | '/admin/items'
@@ -363,6 +385,7 @@ export interface FileRouteTypes {
     | '/admin/store'
     | '/_portal/'
     | '/admin/'
+    | '/_portal/leaderboards/$board'
     | '/admin/characters/$name'
     | '/admin/items/$entry'
     | '/admin/store/$sku'
@@ -370,6 +393,7 @@ export interface FileRouteTypes {
     | '/admin/store/wallets'
     | '/admin/users/$userId'
     | '/_portal/characters/'
+    | '/_portal/leaderboards/'
     | '/_portal/store/'
     | '/admin/characters/'
     | '/admin/items/'
@@ -511,6 +535,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalCharactersIndexRouteImport
       parentRoute: typeof PortalRoute
     }
+    '/_portal/leaderboards/': {
+      id: '/_portal/leaderboards/'
+      path: '/leaderboards'
+      fullPath: '/leaderboards/'
+      preLoaderRoute: typeof PortalLeaderboardsIndexRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/leaderboards/$board': {
+      id: '/_portal/leaderboards/$board'
+      path: '/leaderboards/$board'
+      fullPath: '/leaderboards/$board'
+      preLoaderRoute: typeof PortalLeaderboardsBoardRouteImport
+      parentRoute: typeof PortalRoute
+    }
     '/_portal/store/': {
       id: '/_portal/store/'
       path: '/store'
@@ -607,7 +645,9 @@ interface PortalRouteChildren {
   PortalStatusRoute: typeof PortalStatusRoute
   PortalWalletRoute: typeof PortalWalletRoute
   PortalIndexRoute: typeof PortalIndexRoute
+  PortalLeaderboardsBoardRoute: typeof PortalLeaderboardsBoardRoute
   PortalCharactersIndexRoute: typeof PortalCharactersIndexRoute
+  PortalLeaderboardsIndexRoute: typeof PortalLeaderboardsIndexRoute
   PortalStoreIndexRoute: typeof PortalStoreIndexRoute
   PortalStoreProductsSkuRoute: typeof PortalStoreProductsSkuRoute
 }
@@ -621,7 +661,9 @@ const PortalRouteChildren: PortalRouteChildren = {
   PortalStatusRoute: PortalStatusRoute,
   PortalWalletRoute: PortalWalletRoute,
   PortalIndexRoute: PortalIndexRoute,
+  PortalLeaderboardsBoardRoute: PortalLeaderboardsBoardRoute,
   PortalCharactersIndexRoute: PortalCharactersIndexRoute,
+  PortalLeaderboardsIndexRoute: PortalLeaderboardsIndexRoute,
   PortalStoreIndexRoute: PortalStoreIndexRoute,
   PortalStoreProductsSkuRoute: PortalStoreProductsSkuRoute,
 }

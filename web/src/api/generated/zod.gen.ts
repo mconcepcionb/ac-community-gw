@@ -215,6 +215,23 @@ export const zAzerothItemsResponse = z.object({
     items: z.array(zAzerothItem).optional()
 });
 
+export const zAzerothLeaderboardEntry = z.object({
+    arena_points: z.int().optional(),
+    class_name: z.string().optional(),
+    guild: z.string().optional(),
+    level: z.int().optional(),
+    money: z.int().optional(),
+    name: z.string().optional(),
+    race_name: z.string().optional(),
+    rank: z.int().optional(),
+    total_time: z.int().optional()
+});
+
+export const zAzerothLeaderboardResponse = z.object({
+    board: z.string().optional(),
+    entries: z.array(zAzerothLeaderboardEntry).optional()
+});
+
 export const zAzerothMailItem = z.object({
     count: z.int().optional(),
     id: z.int().optional()
@@ -825,6 +842,20 @@ export const zAzerothItemsGetPath = z.object({
  * OK
  */
 export const zAzerothItemsGetResponse = zAzerothItem;
+
+export const zAzerothLeaderboardsGetPath = z.object({
+    board: z.string()
+});
+
+export const zAzerothLeaderboardsGetQuery = z.object({
+    limit: z.int().optional().default(25),
+    offset: z.int().optional().default(0)
+});
+
+/**
+ * OK
+ */
+export const zAzerothLeaderboardsGetResponse = zAzerothLeaderboardResponse;
 
 /**
  * delivery request

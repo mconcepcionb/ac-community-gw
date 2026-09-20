@@ -96,6 +96,8 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		reg.RequirePermission(PermissionCharacterSelf, http.HandlerFunc(p.handleListVisibility)))
 	reg.Mux.Handle("PUT /api/v1/azeroth/me/characters/{name}/visibility",
 		reg.RequirePermission(PermissionCharacterSelf, http.HandlerFunc(p.handleSetVisibility)))
+	reg.Mux.Handle("GET /api/v1/azeroth/leaderboards/{board}",
+		reg.RequirePermission(PermissionLeaderboardRead, http.HandlerFunc(p.handleLeaderboard)))
 	if err := services.Provide[Directory](reg.Services, DirectoryService, p); err != nil {
 		return err
 	}

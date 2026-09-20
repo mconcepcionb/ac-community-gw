@@ -22,6 +22,15 @@ export function AppNav() {
           Characters
         </Link>
       </PermissionGate>
+      <PermissionGate permission="azeroth.leaderboard.read">
+        <Link
+          to="/leaderboards"
+          className={linkClass}
+          activeProps={{ className: "text-foreground" }}
+        >
+          Leaderboards
+        </Link>
+      </PermissionGate>
       <PermissionGate permission="store.catalog.read">
         <Link to="/store" className={linkClass} activeProps={{ className: "text-foreground" }}>
           Store

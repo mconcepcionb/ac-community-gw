@@ -22,6 +22,7 @@ const characterColumns = `
        c.logout_time,
        c.totaltime,
        c.money,
+       c.arenaPoints,
        COALESCE(g.name, '') AS guild_name`
 
 const listCharactersQuery = `SELECT ` + characterColumns + `
@@ -96,6 +97,52 @@ func (c *CharacterStore) FindCharacter(ctx context.Context, name string) (azerot
 	return character, nil
 }
 
+// TopCharacters implements azerothdb.CharacterReader.
+func (c *CharacterStore) TopCharacters(
+	ctx context.Context,
+	board string,
+	limit, offset int,
+) ([]azerothdb.Character, error) {
+	rows, err := c.db.QueryContext(ctx, leaderboardQuery(board), clampLimit(limit), clampOffset(offset))
+	if err != nil {
+		return nil, fmt.Errorf("azerothmysql: top characters: %w", err)
+	}
+	defer func() { _ = rows.Close() }()
+
+	characters := make([]azerothdb.Character, 0)
+	for rows.Next() {
+		character, err := scanCharacter(rows)
+		if err != nil {
+			return nil, fmt.Errorf("azerothmysql: scan character: %w", err)
+		}
+		characters = append(characters, character)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("azerothmysql: iterate characters: %w", err)
+	}
+	return characters, nil
+}
+
+// leaderboardQuery builds the ordering for a board. The board name is validated
+// by the caller, so it never reaches the query as free text.
+func leaderboardQuery(board string) string {
+	order := "c.level DESC, c.name ASC"
+	switch board {
+	case azerothdb.BoardWealth:
+		order = "c.money DESC, c.name ASC"
+	case azerothdb.BoardPlaytime:
+		order = "c.totaltime DESC, c.name ASC"
+	case azerothdb.BoardPvP:
+		order = "c.arenaPoints DESC, c.name ASC"
+	}
+	return `SELECT ` + characterColumns + `
+FROM characters c
+LEFT JOIN guild_member gm ON gm.guid = c.guid
+LEFT JOIN guild g ON g.guildid = gm.guildid
+ORDER BY ` + order + `
+LIMIT ? OFFSET ?`
+}
+
 // Close closes the pool.
 func (c *CharacterStore) Close() error { return c.db.Close() }
 
@@ -113,6 +160,7 @@ func scanCharacter(row rowScanner) (azerothdb.Character, error) {
 		&character.LogoutTime,
 		&character.TotalTime,
 		&character.Money,
+		&character.ArenaPoints,
 		&character.GuildName,
 	); err != nil {
 		return azerothdb.Character{}, err

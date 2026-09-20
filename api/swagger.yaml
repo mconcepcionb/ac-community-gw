@@ -395,6 +395,37 @@ components:
           type: array
           uniqueItems: false
       type: object
+    AzerothLeaderboardEntry:
+      properties:
+        arena_points:
+          type: integer
+        class_name:
+          type: string
+        guild:
+          type: string
+        level:
+          type: integer
+        money:
+          type: integer
+        name:
+          type: string
+        race_name:
+          type: string
+        rank:
+          type: integer
+        total_time:
+          type: integer
+      type: object
+    AzerothLeaderboardResponse:
+      properties:
+        board:
+          type: string
+        entries:
+          items:
+            $ref: '#/components/schemas/AzerothLeaderboardEntry'
+          type: array
+          uniqueItems: false
+      type: object
     AzerothMailItem:
       properties:
         count:
@@ -2598,6 +2629,64 @@ paths:
       summary: Get an item
       tags:
       - azeroth-item
+  /api/v1/azeroth/leaderboards/{board}:
+    get:
+      description: Ranks opted-in characters by progression, wealth, playtime or PvP.
+        Requires the azeroth.leaderboard.read permission.
+      operationId: azeroth.leaderboards.get
+      parameters:
+      - description: 'board: progression, wealth, playtime or pvp'
+        in: path
+        name: board
+        required: true
+        schema:
+          type: string
+      - description: page size
+        in: query
+        name: limit
+        schema:
+          default: 25
+          type: integer
+      - description: page offset
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothLeaderboardResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Character leaderboard
+      tags:
+      - azeroth-character
   /api/v1/azeroth/mail:
     post:
       description: Delivers items and/or money to a character. Requires the azeroth.mail.send

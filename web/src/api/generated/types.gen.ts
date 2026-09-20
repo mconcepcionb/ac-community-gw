@@ -217,6 +217,23 @@ export type AzerothItemsResponse = {
     items?: Array<AzerothItem>;
 };
 
+export type AzerothLeaderboardEntry = {
+    arena_points?: number;
+    class_name?: string;
+    guild?: string;
+    level?: number;
+    money?: number;
+    name?: string;
+    race_name?: string;
+    rank?: number;
+    total_time?: number;
+};
+
+export type AzerothLeaderboardResponse = {
+    board?: string;
+    entries?: Array<AzerothLeaderboardEntry>;
+};
+
 export type AzerothMailItem = {
     count?: number;
     id?: number;
@@ -2053,6 +2070,57 @@ export type AzerothItemsGetResponses = {
 };
 
 export type AzerothItemsGetResponse = AzerothItemsGetResponses[keyof AzerothItemsGetResponses];
+
+export type AzerothLeaderboardsGetData = {
+    body?: never;
+    path: {
+        /**
+         * board: progression, wealth, playtime or pvp
+         */
+        board: string;
+    };
+    query?: {
+        /**
+         * page size
+         */
+        limit?: number;
+        /**
+         * page offset
+         */
+        offset?: number;
+    };
+    url: '/api/v1/azeroth/leaderboards/{board}';
+};
+
+export type AzerothLeaderboardsGetErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothLeaderboardsGetError = AzerothLeaderboardsGetErrors[keyof AzerothLeaderboardsGetErrors];
+
+export type AzerothLeaderboardsGetResponses = {
+    /**
+     * OK
+     */
+    200: AzerothLeaderboardResponse;
+};
+
+export type AzerothLeaderboardsGetResponse = AzerothLeaderboardsGetResponses[keyof AzerothLeaderboardsGetResponses];
 
 export type AzerothMailSendData = {
     /**

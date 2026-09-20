@@ -11,18 +11,41 @@ var ErrCharacterNotFound = errors.New("azerothdb: character not found")
 
 // Character is a read-only view of an AzerothCore character.
 type Character struct {
-	GUID       int64
-	AccountID  int64
-	Name       string
-	Race       int
-	Class      int
-	Gender     int
-	Level      int
-	Online     bool
-	LogoutTime int64
-	TotalTime  int
-	Money      int64
-	GuildName  string
+	GUID        int64
+	AccountID   int64
+	Name        string
+	Race        int
+	Class       int
+	Gender      int
+	Level       int
+	Online      bool
+	LogoutTime  int64
+	TotalTime   int
+	Money       int64
+	GuildName   string
+	ArenaPoints int
+}
+
+// Leaderboard board names.
+const (
+	// BoardProgression ranks by character level.
+	BoardProgression = "progression"
+	// BoardWealth ranks by money.
+	BoardWealth = "wealth"
+	// BoardPlaytime ranks by total played time.
+	BoardPlaytime = "playtime"
+	// BoardPvP ranks by arena points.
+	BoardPvP = "pvp"
+)
+
+// ValidLeaderboard reports whether a board name is supported.
+func ValidLeaderboard(board string) bool {
+	switch board {
+	case BoardProgression, BoardWealth, BoardPlaytime, BoardPvP:
+		return true
+	default:
+		return false
+	}
 }
 
 // CharacterQuery filters and paginates a character listing.
@@ -40,6 +63,8 @@ type CharacterReader interface {
 	ListCharacters(ctx context.Context, query CharacterQuery) ([]Character, error)
 	// FindCharacter returns one character by name or ErrCharacterNotFound.
 	FindCharacter(ctx context.Context, name string) (Character, error)
+	// TopCharacters returns one leaderboard page ordered by the board metric.
+	TopCharacters(ctx context.Context, board string, limit, offset int) ([]Character, error)
 }
 
 // UnavailableCharacters is a CharacterReader used when the character database
@@ -62,4 +87,12 @@ func (u UnavailableCharacters) FindCharacter(context.Context, string) (Character
 		return Character{}, fmt.Errorf("%w: %v", ErrUnavailable, u.Err)
 	}
 	return Character{}, ErrUnavailable
+}
+
+// TopCharacters implements CharacterReader.
+func (u UnavailableCharacters) TopCharacters(context.Context, string, int, int) ([]Character, error) {
+	if u.Err != nil {
+		return nil, fmt.Errorf("%w: %v", ErrUnavailable, u.Err)
+	}
+	return nil, ErrUnavailable
 }

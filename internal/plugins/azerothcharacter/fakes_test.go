@@ -29,6 +29,10 @@ func (f *fakeCharacters) ListCharacters(_ context.Context, query azerothdb.Chara
 	return f.characters, nil
 }
 
+func (f *fakeCharacters) TopCharacters(_ context.Context, _ string, _, _ int) ([]azerothdb.Character, error) {
+	return f.characters, nil
+}
+
 func (f *fakeCharacters) FindCharacter(_ context.Context, name string) (azerothdb.Character, error) {
 	if f.findErr != nil {
 		return azerothdb.Character{}, f.findErr

@@ -11,6 +11,8 @@ const (
 	PermissionCharacterSelf permissions.Permission = "azeroth.character.self"
 	// PermissionMailSelf allows a user to mail their own characters.
 	PermissionMailSelf permissions.Permission = "azeroth.mail.self"
+	// PermissionLeaderboardRead allows reading character leaderboards.
+	PermissionLeaderboardRead permissions.Permission = "azeroth.leaderboard.read"
 )
 
 func permissionDefs() []permissions.Definition {
@@ -33,6 +35,11 @@ func permissionDefs() []permissions.Definition {
 		{
 			Name:        PermissionMailSelf,
 			Description: "Mail your own characters",
+			Owner:       Name,
+		},
+		{
+			Name:        PermissionLeaderboardRead,
+			Description: "Read character leaderboards",
 			Owner:       Name,
 		},
 	}
