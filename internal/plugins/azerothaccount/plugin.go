@@ -122,6 +122,8 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		reg.RequirePermission(PermissionAccountManage, http.HandlerFunc(p.handleSetEmail)))
 	reg.Mux.Handle("GET /api/v1/azeroth/accounts",
 		reg.RequirePermission(PermissionAccountList, http.HandlerFunc(p.handleListAccounts)))
+	reg.Mux.Handle("GET /api/v1/azeroth/accounts/{username}",
+		reg.RequirePermission(PermissionAccountList, http.HandlerFunc(p.handleGetAccount)))
 
 	reg.Mux.Handle("POST /api/v1/azeroth/account-links",
 		reg.RequirePermission(PermissionAccountLink, http.HandlerFunc(p.handleCreateLink)))

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { azerothAccountsListOptions } from "@/api";
+import { azerothAccountsGetOptions, azerothAccountsListOptions } from "@/api";
 
 export interface AccountsQuery {
   filter?: string;
@@ -15,4 +15,12 @@ export function useAccounts({ filter, limit = 50, offset = 0 }: AccountsQuery) {
       query: { filter: filter || undefined, limit, offset },
     }),
   );
+}
+
+/** useAccount fetches one AzerothCore account with its owner and pending claim. */
+export function useAccount(username: string) {
+  return useQuery({
+    ...azerothAccountsGetOptions({ path: { username } }),
+    enabled: username !== "",
+  });
 }

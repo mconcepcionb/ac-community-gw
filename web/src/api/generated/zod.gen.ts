@@ -134,19 +134,6 @@ export const zApiPermissionsResponse = z.object({
     permissions: z.array(zApiPermission).optional()
 });
 
-export const zAzerothAccount = z.object({
-    ban_reason: z.string().optional(),
-    banned: z.boolean().optional(),
-    email: z.string().optional(),
-    expansion: z.int().optional(),
-    gm_level: z.int().optional(),
-    id: z.int().optional(),
-    last_ip: z.string().optional(),
-    last_login: z.string().optional(),
-    online: z.boolean().optional(),
-    username: z.string().optional()
-});
-
 export const zAzerothAccountLink = z.object({
     account_id: z.int().optional(),
     account_username: z.string().optional(),
@@ -158,6 +145,28 @@ export const zAzerothAccountLinksResponse = z.object({
     links: z.array(zAzerothAccountLink).optional()
 });
 
+export const zAzerothAccountOwner = z.object({
+    discord_id: z.string().optional(),
+    display_name: z.string().optional(),
+    linked_at: z.string().optional(),
+    user_id: z.string().optional()
+});
+
+export const zAzerothAccount = z.object({
+    ban_reason: z.string().optional(),
+    banned: z.boolean().optional(),
+    claimed: z.boolean().optional(),
+    claimed_by: zAzerothAccountOwner.optional(),
+    email: z.string().optional(),
+    expansion: z.int().optional(),
+    gm_level: z.int().optional(),
+    id: z.int().optional(),
+    last_ip: z.string().optional(),
+    last_login: z.string().optional(),
+    online: z.boolean().optional(),
+    username: z.string().optional()
+});
+
 export const zAzerothAccountsResponse = z.object({
     accounts: z.array(zAzerothAccount).optional()
 });
@@ -167,6 +176,11 @@ export const zAzerothAdminClaim = z.object({
     attempts: z.int().optional(),
     expires_at: z.string().optional(),
     user_id: z.string().optional()
+});
+
+export const zAzerothAccountDetail = z.object({
+    account: zAzerothAccount.optional(),
+    claim: zAzerothAdminClaim.optional()
 });
 
 export const zAzerothAdminClaimsResponse = z.object({
@@ -839,6 +853,15 @@ export const zAzerothAccountsCreateBody = zCreateAccountRequest;
  * OK
  */
 export const zAzerothAccountsCreateResponse = zCommandResult;
+
+export const zAzerothAccountsGetPath = z.object({
+    username: z.string()
+});
+
+/**
+ * OK
+ */
+export const zAzerothAccountsGetResponse = zAzerothAccountDetail;
 
 /**
  * ban details

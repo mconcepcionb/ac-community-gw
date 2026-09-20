@@ -141,6 +141,8 @@ export type ApiPermissionsResponse = {
 export type AzerothAccount = {
     ban_reason?: string;
     banned?: boolean;
+    claimed?: boolean;
+    claimed_by?: AzerothAccountOwner;
     email?: string;
     expansion?: number;
     gm_level?: number;
@@ -149,6 +151,11 @@ export type AzerothAccount = {
     last_login?: string;
     online?: boolean;
     username?: string;
+};
+
+export type AzerothAccountDetail = {
+    account?: AzerothAccount;
+    claim?: AzerothAdminClaim;
 };
 
 export type AzerothAccountLink = {
@@ -160,6 +167,13 @@ export type AzerothAccountLink = {
 
 export type AzerothAccountLinksResponse = {
     links?: Array<AzerothAccountLink>;
+};
+
+export type AzerothAccountOwner = {
+    discord_id?: string;
+    display_name?: string;
+    linked_at?: string;
+    user_id?: string;
 };
 
 export type AzerothAccountsResponse = {
@@ -1919,6 +1933,48 @@ export type AzerothAccountsCreateResponses = {
 };
 
 export type AzerothAccountsCreateResponse = AzerothAccountsCreateResponses[keyof AzerothAccountsCreateResponses];
+
+export type AzerothAccountsGetData = {
+    body?: never;
+    path: {
+        /**
+         * account username
+         */
+        username: string;
+    };
+    query?: never;
+    url: '/api/v1/azeroth/accounts/{username}';
+};
+
+export type AzerothAccountsGetErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothAccountsGetError = AzerothAccountsGetErrors[keyof AzerothAccountsGetErrors];
+
+export type AzerothAccountsGetResponses = {
+    /**
+     * OK
+     */
+    200: AzerothAccountDetail;
+};
+
+export type AzerothAccountsGetResponse = AzerothAccountsGetResponses[keyof AzerothAccountsGetResponses];
 
 export type AzerothAccountsBanData = {
     /**

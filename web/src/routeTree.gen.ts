@@ -20,7 +20,6 @@ import { Route as PortalReportRouteImport } from './routes/_portal/report'
 import { Route as PortalStatusRouteImport } from './routes/_portal/status'
 import { Route as PortalWalletRouteImport } from './routes/_portal/wallet'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as AdminAccountsRouteImport } from './routes/admin/accounts'
 import { Route as AdminApiClientsRouteImport } from './routes/admin/api-clients'
 import { Route as AdminAuditRouteImport } from './routes/admin/audit'
 import { Route as AdminModerationRouteImport } from './routes/admin/moderation'
@@ -31,6 +30,8 @@ import { Route as PortalCharactersIndexRouteImport } from './routes/_portal/char
 import { Route as PortalLeaderboardsIndexRouteImport } from './routes/_portal/leaderboards/index'
 import { Route as PortalLeaderboardsBoardRouteImport } from './routes/_portal/leaderboards/$board'
 import { Route as PortalStoreIndexRouteImport } from './routes/_portal/store/index'
+import { Route as AdminAccountsIndexRouteImport } from './routes/admin/accounts/index'
+import { Route as AdminAccountsUsernameRouteImport } from './routes/admin/accounts/$username'
 import { Route as AdminCharactersIndexRouteImport } from './routes/admin/characters/index'
 import { Route as AdminCharactersNameRouteImport } from './routes/admin/characters/$name'
 import { Route as AdminItemsIndexRouteImport } from './routes/admin/items/index'
@@ -97,11 +98,6 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminAccountsRoute = AdminAccountsRouteImport.update({
-  id: '/accounts',
-  path: '/accounts',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminApiClientsRoute = AdminApiClientsRouteImport.update({
   id: '/api-clients',
   path: '/api-clients',
@@ -151,6 +147,16 @@ const PortalStoreIndexRoute = PortalStoreIndexRouteImport.update({
   id: '/store/',
   path: '/store/',
   getParentRoute: () => PortalRoute,
+} as any)
+const AdminAccountsIndexRoute = AdminAccountsIndexRouteImport.update({
+  id: '/accounts/',
+  path: '/accounts/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAccountsUsernameRoute = AdminAccountsUsernameRouteImport.update({
+  id: '/accounts/$username',
+  path: '/accounts/$username',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminCharactersIndexRoute = AdminCharactersIndexRouteImport.update({
   id: '/characters/',
@@ -218,7 +224,6 @@ export interface FileRoutesByFullPath {
   '/report': typeof PortalReportRoute
   '/status': typeof PortalStatusRoute
   '/wallet': typeof PortalWalletRoute
-  '/admin/accounts': typeof AdminAccountsRoute
   '/admin/api-clients': typeof AdminApiClientsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/moderation': typeof AdminModerationRoute
@@ -227,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/admin/store': typeof AdminStoreRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/leaderboards/$board': typeof PortalLeaderboardsBoardRoute
+  '/admin/accounts/$username': typeof AdminAccountsUsernameRoute
   '/admin/characters/$name': typeof AdminCharactersNameRoute
   '/admin/items/$entry': typeof AdminItemsEntryRoute
   '/admin/store/$sku': typeof AdminStoreSkuRoute
@@ -236,6 +242,7 @@ export interface FileRoutesByFullPath {
   '/characters/': typeof PortalCharactersIndexRoute
   '/leaderboards/': typeof PortalLeaderboardsIndexRoute
   '/store/': typeof PortalStoreIndexRoute
+  '/admin/accounts/': typeof AdminAccountsIndexRoute
   '/admin/characters/': typeof AdminCharactersIndexRoute
   '/admin/items/': typeof AdminItemsIndexRoute
   '/admin/store/': typeof AdminStoreIndexRoute
@@ -250,7 +257,6 @@ export interface FileRoutesByTo {
   '/report': typeof PortalReportRoute
   '/status': typeof PortalStatusRoute
   '/wallet': typeof PortalWalletRoute
-  '/admin/accounts': typeof AdminAccountsRoute
   '/admin/api-clients': typeof AdminApiClientsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/moderation': typeof AdminModerationRoute
@@ -259,6 +265,7 @@ export interface FileRoutesByTo {
   '/': typeof PortalIndexRoute
   '/admin': typeof AdminIndexRoute
   '/leaderboards/$board': typeof PortalLeaderboardsBoardRoute
+  '/admin/accounts/$username': typeof AdminAccountsUsernameRoute
   '/admin/characters/$name': typeof AdminCharactersNameRoute
   '/admin/items/$entry': typeof AdminItemsEntryRoute
   '/admin/store/$sku': typeof AdminStoreSkuRoute
@@ -268,6 +275,7 @@ export interface FileRoutesByTo {
   '/characters': typeof PortalCharactersIndexRoute
   '/leaderboards': typeof PortalLeaderboardsIndexRoute
   '/store': typeof PortalStoreIndexRoute
+  '/admin/accounts': typeof AdminAccountsIndexRoute
   '/admin/characters': typeof AdminCharactersIndexRoute
   '/admin/items': typeof AdminItemsIndexRoute
   '/admin/store': typeof AdminStoreIndexRoute
@@ -285,7 +293,6 @@ export interface FileRoutesById {
   '/_portal/report': typeof PortalReportRoute
   '/_portal/status': typeof PortalStatusRoute
   '/_portal/wallet': typeof PortalWalletRoute
-  '/admin/accounts': typeof AdminAccountsRoute
   '/admin/api-clients': typeof AdminApiClientsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/moderation': typeof AdminModerationRoute
@@ -295,6 +302,7 @@ export interface FileRoutesById {
   '/_portal/': typeof PortalIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/_portal/leaderboards/$board': typeof PortalLeaderboardsBoardRoute
+  '/admin/accounts/$username': typeof AdminAccountsUsernameRoute
   '/admin/characters/$name': typeof AdminCharactersNameRoute
   '/admin/items/$entry': typeof AdminItemsEntryRoute
   '/admin/store/$sku': typeof AdminStoreSkuRoute
@@ -304,6 +312,7 @@ export interface FileRoutesById {
   '/_portal/characters/': typeof PortalCharactersIndexRoute
   '/_portal/leaderboards/': typeof PortalLeaderboardsIndexRoute
   '/_portal/store/': typeof PortalStoreIndexRoute
+  '/admin/accounts/': typeof AdminAccountsIndexRoute
   '/admin/characters/': typeof AdminCharactersIndexRoute
   '/admin/items/': typeof AdminItemsIndexRoute
   '/admin/store/': typeof AdminStoreIndexRoute
@@ -322,7 +331,6 @@ export interface FileRouteTypes {
     | '/report'
     | '/status'
     | '/wallet'
-    | '/admin/accounts'
     | '/admin/api-clients'
     | '/admin/audit'
     | '/admin/moderation'
@@ -331,6 +339,7 @@ export interface FileRouteTypes {
     | '/admin/store'
     | '/admin/'
     | '/leaderboards/$board'
+    | '/admin/accounts/$username'
     | '/admin/characters/$name'
     | '/admin/items/$entry'
     | '/admin/store/$sku'
@@ -340,6 +349,7 @@ export interface FileRouteTypes {
     | '/characters/'
     | '/leaderboards/'
     | '/store/'
+    | '/admin/accounts/'
     | '/admin/characters/'
     | '/admin/items/'
     | '/admin/store/'
@@ -354,7 +364,6 @@ export interface FileRouteTypes {
     | '/report'
     | '/status'
     | '/wallet'
-    | '/admin/accounts'
     | '/admin/api-clients'
     | '/admin/audit'
     | '/admin/moderation'
@@ -363,6 +372,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/leaderboards/$board'
+    | '/admin/accounts/$username'
     | '/admin/characters/$name'
     | '/admin/items/$entry'
     | '/admin/store/$sku'
@@ -372,6 +382,7 @@ export interface FileRouteTypes {
     | '/characters'
     | '/leaderboards'
     | '/store'
+    | '/admin/accounts'
     | '/admin/characters'
     | '/admin/items'
     | '/admin/store'
@@ -388,7 +399,6 @@ export interface FileRouteTypes {
     | '/_portal/report'
     | '/_portal/status'
     | '/_portal/wallet'
-    | '/admin/accounts'
     | '/admin/api-clients'
     | '/admin/audit'
     | '/admin/moderation'
@@ -398,6 +408,7 @@ export interface FileRouteTypes {
     | '/_portal/'
     | '/admin/'
     | '/_portal/leaderboards/$board'
+    | '/admin/accounts/$username'
     | '/admin/characters/$name'
     | '/admin/items/$entry'
     | '/admin/store/$sku'
@@ -407,6 +418,7 @@ export interface FileRouteTypes {
     | '/_portal/characters/'
     | '/_portal/leaderboards/'
     | '/_portal/store/'
+    | '/admin/accounts/'
     | '/admin/characters/'
     | '/admin/items/'
     | '/admin/store/'
@@ -498,13 +510,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/accounts': {
-      id: '/admin/accounts'
-      path: '/accounts'
-      fullPath: '/admin/accounts'
-      preLoaderRoute: typeof AdminAccountsRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/api-clients': {
       id: '/admin/api-clients'
       path: '/api-clients'
@@ -574,6 +579,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/store/'
       preLoaderRoute: typeof PortalStoreIndexRouteImport
       parentRoute: typeof PortalRoute
+    }
+    '/admin/accounts/': {
+      id: '/admin/accounts/'
+      path: '/accounts'
+      fullPath: '/admin/accounts/'
+      preLoaderRoute: typeof AdminAccountsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/accounts/$username': {
+      id: '/admin/accounts/$username'
+      path: '/accounts/$username'
+      fullPath: '/admin/accounts/$username'
+      preLoaderRoute: typeof AdminAccountsUsernameRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/characters/': {
       id: '/admin/characters/'
@@ -709,7 +728,6 @@ const AdminStoreRouteWithChildren = AdminStoreRoute._addFileChildren(
 )
 
 interface AdminRouteChildren {
-  AdminAccountsRoute: typeof AdminAccountsRoute
   AdminApiClientsRoute: typeof AdminApiClientsRoute
   AdminAuditRoute: typeof AdminAuditRoute
   AdminModerationRoute: typeof AdminModerationRoute
@@ -717,16 +735,17 @@ interface AdminRouteChildren {
   AdminRolesRoute: typeof AdminRolesRoute
   AdminStoreRoute: typeof AdminStoreRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminAccountsUsernameRoute: typeof AdminAccountsUsernameRoute
   AdminCharactersNameRoute: typeof AdminCharactersNameRoute
   AdminItemsEntryRoute: typeof AdminItemsEntryRoute
   AdminUsersUserIdRoute: typeof AdminUsersUserIdRoute
+  AdminAccountsIndexRoute: typeof AdminAccountsIndexRoute
   AdminCharactersIndexRoute: typeof AdminCharactersIndexRoute
   AdminItemsIndexRoute: typeof AdminItemsIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-  AdminAccountsRoute: AdminAccountsRoute,
   AdminApiClientsRoute: AdminApiClientsRoute,
   AdminAuditRoute: AdminAuditRoute,
   AdminModerationRoute: AdminModerationRoute,
@@ -734,9 +753,11 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminRolesRoute: AdminRolesRoute,
   AdminStoreRoute: AdminStoreRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
+  AdminAccountsUsernameRoute: AdminAccountsUsernameRoute,
   AdminCharactersNameRoute: AdminCharactersNameRoute,
   AdminItemsEntryRoute: AdminItemsEntryRoute,
   AdminUsersUserIdRoute: AdminUsersUserIdRoute,
+  AdminAccountsIndexRoute: AdminAccountsIndexRoute,
   AdminCharactersIndexRoute: AdminCharactersIndexRoute,
   AdminItemsIndexRoute: AdminItemsIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,

@@ -246,6 +246,10 @@ components:
           type: string
         banned:
           type: boolean
+        claimed:
+          type: boolean
+        claimed_by:
+          $ref: '#/components/schemas/AzerothAccountOwner'
         email:
           type: string
         expansion:
@@ -262,6 +266,13 @@ components:
           type: boolean
         username:
           type: string
+      type: object
+    AzerothAccountDetail:
+      properties:
+        account:
+          $ref: '#/components/schemas/AzerothAccount'
+        claim:
+          $ref: '#/components/schemas/AzerothAdminClaim'
       type: object
     AzerothAccountLink:
       properties:
@@ -281,6 +292,17 @@ components:
             $ref: '#/components/schemas/AzerothAccountLink'
           type: array
           uniqueItems: false
+      type: object
+    AzerothAccountOwner:
+      properties:
+        discord_id:
+          type: string
+        display_name:
+          type: string
+        linked_at:
+          type: string
+        user_id:
+          type: string
       type: object
     AzerothAccountsResponse:
       properties:
@@ -2465,6 +2487,52 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Bad Gateway
       summary: Create an AzerothCore account
+      tags:
+      - azeroth-account
+  /api/v1/azeroth/accounts/{username}:
+    get:
+      description: Returns one AzerothCore account with its community owner and any
+        pending claim. Requires the azeroth.account.list permission.
+      operationId: azeroth.accounts.get
+      parameters:
+      - description: account username
+        in: path
+        name: username
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothAccountDetail'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Account detail
       tags:
       - azeroth-account
   /api/v1/azeroth/accounts/{username}/ban:

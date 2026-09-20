@@ -392,3 +392,41 @@ func TestHandleGetAndDeleteLink(t *testing.T) {
 		t.Fatalf("delete status = %d", delRec.Code)
 	}
 }
+
+func TestHandleGetAccountWithOwner(t *testing.T) {
+	userID := uuid.New()
+	reader := &fakeReader{accounts: []azerothdb.Account{{ID: 1, Username: "ADMIN", GMLevel: 3}}}
+	links := newFakeLinks()
+	if _, err := links.Upsert(context.Background(), userID, "ADMIN", nil); err != nil {
+		t.Fatalf("seed link: %v", err)
+	}
+	plugin := New(Config{Accounts: reader, Links: links})
+	plugin.users = &fakeDirectory{byName: map[string][]userdir.User{
+		"ADMIN": {{ID: userID, DiscordID: "42", Username: "thrall", DisplayName: "Thrall"}},
+	}}
+
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/azeroth/accounts/ADMIN", nil)
+	req.SetPathValue("username", "ADMIN")
+	rec := httptest.NewRecorder()
+	plugin.handleGetAccount(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("status = %d body=%s", rec.Code, rec.Body.String())
+	}
+	body := rec.Body.String()
+	if !strings.Contains(body, `"claimed":true`) || !strings.Contains(body, "Thrall") {
+		t.Fatalf("owner missing from body: %s", body)
+	}
+}
+
+func TestHandleGetAccountNotFound(t *testing.T) {
+	plugin := New(Config{Accounts: &fakeReader{}})
+	req := httptest.NewRequest(http.MethodGet, "/api/v1/azeroth/accounts/MISSING", nil)
+	req.SetPathValue("username", "MISSING")
+	rec := httptest.NewRecorder()
+	plugin.handleGetAccount(rec, req)
+
+	if rec.Code != http.StatusNotFound {
+		t.Fatalf("status = %d body=%s", rec.Code, rec.Body.String())
+	}
+}

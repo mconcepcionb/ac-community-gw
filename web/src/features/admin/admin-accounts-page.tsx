@@ -1,4 +1,4 @@
-import { getRouteApi } from "@tanstack/react-router";
+import { getRouteApi, Link } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 
@@ -20,12 +20,45 @@ import { BanAccountDialog } from "./ban-account-dialog";
 import { SetGmLevelDialog } from "./set-gmlevel-dialog";
 import { UnbanAccountButton } from "./unban-account-button";
 
-const route = getRouteApi("/admin/accounts");
+const route = getRouteApi("/admin/accounts/");
 
 const columns: ColumnDef<AzerothAccount, unknown>[] = [
   { accessorKey: "id", header: "ID" },
-  { accessorKey: "username", header: "Username" },
+  {
+    accessorKey: "username",
+    header: "Username",
+    cell: ({ row }) => (
+      <Link
+        to="/admin/accounts/$username"
+        params={{ username: row.original.username ?? "" }}
+        className="text-blue-400 underline"
+      >
+        {row.original.username}
+      </Link>
+    ),
+  },
   { accessorKey: "email", header: "Email" },
+  {
+    id: "owner",
+    header: "Owner",
+    cell: ({ row }) => {
+      const owner = row.original.claimed_by;
+      if (!owner) {
+        return <StatusBadge tone="neutral">Unclaimed</StatusBadge>;
+      }
+      return owner.user_id ? (
+        <Link
+          to="/admin/users/$userId"
+          params={{ userId: owner.user_id }}
+          className="text-blue-400 underline"
+        >
+          {owner.display_name || owner.user_id}
+        </Link>
+      ) : (
+        <span>{owner.display_name}</span>
+      );
+    },
+  },
   { accessorKey: "gm_level", header: "GM" },
   {
     accessorKey: "online",
