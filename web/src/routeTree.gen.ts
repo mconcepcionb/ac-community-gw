@@ -18,17 +18,19 @@ import { Route as PortalProfileRouteImport } from './routes/_portal/profile'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAccountsRouteImport } from './routes/admin/accounts'
 import { Route as AdminOnlineRouteImport } from './routes/admin/online'
+import { Route as AdminStoreRouteImport } from './routes/admin/store'
 import { Route as PortalAzerothStatusRouteImport } from './routes/_portal/azeroth/status'
-import { Route as PortalItemsIndexRouteImport } from './routes/_portal/items/index'
-import { Route as PortalItemsEntryRouteImport } from './routes/_portal/items/$entry'
-import { Route as PortalStoreProductsRouteImport } from './routes/_portal/store/products'
 import { Route as PortalStoreWalletRouteImport } from './routes/_portal/store/wallet'
 import { Route as AdminCharactersIndexRouteImport } from './routes/admin/characters/index'
 import { Route as AdminCharactersNameRouteImport } from './routes/admin/characters/$name'
+import { Route as AdminItemsIndexRouteImport } from './routes/admin/items/index'
+import { Route as AdminItemsEntryRouteImport } from './routes/admin/items/$entry'
+import { Route as AdminStoreIndexRouteImport } from './routes/admin/store/index'
+import { Route as AdminStoreSkuRouteImport } from './routes/admin/store/$sku'
+import { Route as AdminStoreOrdersRouteImport } from './routes/admin/store/orders'
+import { Route as AdminStoreWalletsRouteImport } from './routes/admin/store/wallets'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminUsersUserIdRouteImport } from './routes/admin/users/$userId'
-import { Route as PortalStoreProductsIndexRouteImport } from './routes/_portal/store/products.index'
-import { Route as PortalStoreProductsSkuRouteImport } from './routes/_portal/store/products.$sku'
 
 const PortalRoute = PortalRouteImport.update({
   id: '/_portal',
@@ -74,24 +76,14 @@ const AdminOnlineRoute = AdminOnlineRouteImport.update({
   path: '/online',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminStoreRoute = AdminStoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => AdminRoute,
+} as any)
 const PortalAzerothStatusRoute = PortalAzerothStatusRouteImport.update({
   id: '/azeroth/status',
   path: '/azeroth/status',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalItemsIndexRoute = PortalItemsIndexRouteImport.update({
-  id: '/items/',
-  path: '/items/',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalItemsEntryRoute = PortalItemsEntryRouteImport.update({
-  id: '/items/$entry',
-  path: '/items/$entry',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalStoreProductsRoute = PortalStoreProductsRouteImport.update({
-  id: '/store/products',
-  path: '/store/products',
   getParentRoute: () => PortalRoute,
 } as any)
 const PortalStoreWalletRoute = PortalStoreWalletRouteImport.update({
@@ -109,6 +101,36 @@ const AdminCharactersNameRoute = AdminCharactersNameRouteImport.update({
   path: '/characters/$name',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminItemsIndexRoute = AdminItemsIndexRouteImport.update({
+  id: '/items/',
+  path: '/items/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminItemsEntryRoute = AdminItemsEntryRouteImport.update({
+  id: '/items/$entry',
+  path: '/items/$entry',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminStoreIndexRoute = AdminStoreIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminStoreRoute,
+} as any)
+const AdminStoreSkuRoute = AdminStoreSkuRouteImport.update({
+  id: '/$sku',
+  path: '/$sku',
+  getParentRoute: () => AdminStoreRoute,
+} as any)
+const AdminStoreOrdersRoute = AdminStoreOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AdminStoreRoute,
+} as any)
+const AdminStoreWalletsRoute = AdminStoreWalletsRouteImport.update({
+  id: '/wallets',
+  path: '/wallets',
+  getParentRoute: () => AdminStoreRoute,
+} as any)
 const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
@@ -119,17 +141,6 @@ const AdminUsersUserIdRoute = AdminUsersUserIdRouteImport.update({
   path: '/users/$userId',
   getParentRoute: () => AdminRoute,
 } as any)
-const PortalStoreProductsIndexRoute =
-  PortalStoreProductsIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => PortalStoreProductsRoute,
-  } as any)
-const PortalStoreProductsSkuRoute = PortalStoreProductsSkuRouteImport.update({
-  id: '/$sku',
-  path: '/$sku',
-  getParentRoute: () => PortalStoreProductsRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PortalIndexRoute
@@ -139,18 +150,20 @@ export interface FileRoutesByFullPath {
   '/profile': typeof PortalProfileRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/online': typeof AdminOnlineRoute
+  '/admin/store': typeof AdminStoreRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/azeroth/status': typeof PortalAzerothStatusRoute
-  '/items/$entry': typeof PortalItemsEntryRoute
-  '/store/products': typeof PortalStoreProductsRouteWithChildren
   '/store/wallet': typeof PortalStoreWalletRoute
   '/admin/characters/$name': typeof AdminCharactersNameRoute
+  '/admin/items/$entry': typeof AdminItemsEntryRoute
+  '/admin/store/$sku': typeof AdminStoreSkuRoute
+  '/admin/store/orders': typeof AdminStoreOrdersRoute
+  '/admin/store/wallets': typeof AdminStoreWalletsRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
-  '/items/': typeof PortalItemsIndexRoute
   '/admin/characters/': typeof AdminCharactersIndexRoute
+  '/admin/items/': typeof AdminItemsIndexRoute
+  '/admin/store/': typeof AdminStoreIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
-  '/store/products/$sku': typeof PortalStoreProductsSkuRoute
-  '/store/products/': typeof PortalStoreProductsIndexRoute
 }
 export interface FileRoutesByTo {
   '/forbidden': typeof PortalForbiddenRoute
@@ -161,15 +174,17 @@ export interface FileRoutesByTo {
   '/': typeof PortalIndexRoute
   '/admin': typeof AdminIndexRoute
   '/azeroth/status': typeof PortalAzerothStatusRoute
-  '/items/$entry': typeof PortalItemsEntryRoute
   '/store/wallet': typeof PortalStoreWalletRoute
   '/admin/characters/$name': typeof AdminCharactersNameRoute
+  '/admin/items/$entry': typeof AdminItemsEntryRoute
+  '/admin/store/$sku': typeof AdminStoreSkuRoute
+  '/admin/store/orders': typeof AdminStoreOrdersRoute
+  '/admin/store/wallets': typeof AdminStoreWalletsRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
-  '/items': typeof PortalItemsIndexRoute
   '/admin/characters': typeof AdminCharactersIndexRoute
+  '/admin/items': typeof AdminItemsIndexRoute
+  '/admin/store': typeof AdminStoreIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
-  '/store/products/$sku': typeof PortalStoreProductsSkuRoute
-  '/store/products': typeof PortalStoreProductsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -180,19 +195,21 @@ export interface FileRoutesById {
   '/_portal/profile': typeof PortalProfileRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/online': typeof AdminOnlineRoute
+  '/admin/store': typeof AdminStoreRouteWithChildren
   '/_portal/': typeof PortalIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/_portal/azeroth/status': typeof PortalAzerothStatusRoute
-  '/_portal/items/$entry': typeof PortalItemsEntryRoute
-  '/_portal/store/products': typeof PortalStoreProductsRouteWithChildren
   '/_portal/store/wallet': typeof PortalStoreWalletRoute
   '/admin/characters/$name': typeof AdminCharactersNameRoute
+  '/admin/items/$entry': typeof AdminItemsEntryRoute
+  '/admin/store/$sku': typeof AdminStoreSkuRoute
+  '/admin/store/orders': typeof AdminStoreOrdersRoute
+  '/admin/store/wallets': typeof AdminStoreWalletsRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
-  '/_portal/items/': typeof PortalItemsIndexRoute
   '/admin/characters/': typeof AdminCharactersIndexRoute
+  '/admin/items/': typeof AdminItemsIndexRoute
+  '/admin/store/': typeof AdminStoreIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
-  '/_portal/store/products/$sku': typeof PortalStoreProductsSkuRoute
-  '/_portal/store/products/': typeof PortalStoreProductsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -204,18 +221,20 @@ export interface FileRouteTypes {
     | '/profile'
     | '/admin/accounts'
     | '/admin/online'
+    | '/admin/store'
     | '/admin/'
     | '/azeroth/status'
-    | '/items/$entry'
-    | '/store/products'
     | '/store/wallet'
     | '/admin/characters/$name'
+    | '/admin/items/$entry'
+    | '/admin/store/$sku'
+    | '/admin/store/orders'
+    | '/admin/store/wallets'
     | '/admin/users/$userId'
-    | '/items/'
     | '/admin/characters/'
+    | '/admin/items/'
+    | '/admin/store/'
     | '/admin/users/'
-    | '/store/products/$sku'
-    | '/store/products/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forbidden'
@@ -226,15 +245,17 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/azeroth/status'
-    | '/items/$entry'
     | '/store/wallet'
     | '/admin/characters/$name'
+    | '/admin/items/$entry'
+    | '/admin/store/$sku'
+    | '/admin/store/orders'
+    | '/admin/store/wallets'
     | '/admin/users/$userId'
-    | '/items'
     | '/admin/characters'
+    | '/admin/items'
+    | '/admin/store'
     | '/admin/users'
-    | '/store/products/$sku'
-    | '/store/products'
   id:
     | '__root__'
     | '/_portal'
@@ -244,19 +265,21 @@ export interface FileRouteTypes {
     | '/_portal/profile'
     | '/admin/accounts'
     | '/admin/online'
+    | '/admin/store'
     | '/_portal/'
     | '/admin/'
     | '/_portal/azeroth/status'
-    | '/_portal/items/$entry'
-    | '/_portal/store/products'
     | '/_portal/store/wallet'
     | '/admin/characters/$name'
+    | '/admin/items/$entry'
+    | '/admin/store/$sku'
+    | '/admin/store/orders'
+    | '/admin/store/wallets'
     | '/admin/users/$userId'
-    | '/_portal/items/'
     | '/admin/characters/'
+    | '/admin/items/'
+    | '/admin/store/'
     | '/admin/users/'
-    | '/_portal/store/products/$sku'
-    | '/_portal/store/products/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -329,32 +352,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOnlineRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/store': {
+      id: '/admin/store'
+      path: '/store'
+      fullPath: '/admin/store'
+      preLoaderRoute: typeof AdminStoreRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_portal/azeroth/status': {
       id: '/_portal/azeroth/status'
       path: '/azeroth/status'
       fullPath: '/azeroth/status'
       preLoaderRoute: typeof PortalAzerothStatusRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/_portal/items/': {
-      id: '/_portal/items/'
-      path: '/items'
-      fullPath: '/items/'
-      preLoaderRoute: typeof PortalItemsIndexRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/_portal/items/$entry': {
-      id: '/_portal/items/$entry'
-      path: '/items/$entry'
-      fullPath: '/items/$entry'
-      preLoaderRoute: typeof PortalItemsEntryRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/_portal/store/products': {
-      id: '/_portal/store/products'
-      path: '/store/products'
-      fullPath: '/store/products'
-      preLoaderRoute: typeof PortalStoreProductsRouteImport
       parentRoute: typeof PortalRoute
     }
     '/_portal/store/wallet': {
@@ -378,6 +387,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCharactersNameRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/items/': {
+      id: '/admin/items/'
+      path: '/items'
+      fullPath: '/admin/items/'
+      preLoaderRoute: typeof AdminItemsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/items/$entry': {
+      id: '/admin/items/$entry'
+      path: '/items/$entry'
+      fullPath: '/admin/items/$entry'
+      preLoaderRoute: typeof AdminItemsEntryRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/store/': {
+      id: '/admin/store/'
+      path: '/'
+      fullPath: '/admin/store/'
+      preLoaderRoute: typeof AdminStoreIndexRouteImport
+      parentRoute: typeof AdminStoreRoute
+    }
+    '/admin/store/$sku': {
+      id: '/admin/store/$sku'
+      path: '/$sku'
+      fullPath: '/admin/store/$sku'
+      preLoaderRoute: typeof AdminStoreSkuRouteImport
+      parentRoute: typeof AdminStoreRoute
+    }
+    '/admin/store/orders': {
+      id: '/admin/store/orders'
+      path: '/orders'
+      fullPath: '/admin/store/orders'
+      preLoaderRoute: typeof AdminStoreOrdersRouteImport
+      parentRoute: typeof AdminStoreRoute
+    }
+    '/admin/store/wallets': {
+      id: '/admin/store/wallets'
+      path: '/wallets'
+      fullPath: '/admin/store/wallets'
+      preLoaderRoute: typeof AdminStoreWalletsRouteImport
+      parentRoute: typeof AdminStoreRoute
+    }
     '/admin/users/': {
       id: '/admin/users/'
       path: '/users'
@@ -392,35 +443,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersUserIdRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/_portal/store/products/': {
-      id: '/_portal/store/products/'
-      path: '/'
-      fullPath: '/store/products/'
-      preLoaderRoute: typeof PortalStoreProductsIndexRouteImport
-      parentRoute: typeof PortalStoreProductsRoute
-    }
-    '/_portal/store/products/$sku': {
-      id: '/_portal/store/products/$sku'
-      path: '/$sku'
-      fullPath: '/store/products/$sku'
-      preLoaderRoute: typeof PortalStoreProductsSkuRouteImport
-      parentRoute: typeof PortalStoreProductsRoute
-    }
   }
 }
-
-interface PortalStoreProductsRouteChildren {
-  PortalStoreProductsSkuRoute: typeof PortalStoreProductsSkuRoute
-  PortalStoreProductsIndexRoute: typeof PortalStoreProductsIndexRoute
-}
-
-const PortalStoreProductsRouteChildren: PortalStoreProductsRouteChildren = {
-  PortalStoreProductsSkuRoute: PortalStoreProductsSkuRoute,
-  PortalStoreProductsIndexRoute: PortalStoreProductsIndexRoute,
-}
-
-const PortalStoreProductsRouteWithChildren =
-  PortalStoreProductsRoute._addFileChildren(PortalStoreProductsRouteChildren)
 
 interface PortalRouteChildren {
   PortalForbiddenRoute: typeof PortalForbiddenRoute
@@ -428,10 +452,7 @@ interface PortalRouteChildren {
   PortalProfileRoute: typeof PortalProfileRoute
   PortalIndexRoute: typeof PortalIndexRoute
   PortalAzerothStatusRoute: typeof PortalAzerothStatusRoute
-  PortalItemsEntryRoute: typeof PortalItemsEntryRoute
-  PortalStoreProductsRoute: typeof PortalStoreProductsRouteWithChildren
   PortalStoreWalletRoute: typeof PortalStoreWalletRoute
-  PortalItemsIndexRoute: typeof PortalItemsIndexRoute
 }
 
 const PortalRouteChildren: PortalRouteChildren = {
@@ -440,32 +461,53 @@ const PortalRouteChildren: PortalRouteChildren = {
   PortalProfileRoute: PortalProfileRoute,
   PortalIndexRoute: PortalIndexRoute,
   PortalAzerothStatusRoute: PortalAzerothStatusRoute,
-  PortalItemsEntryRoute: PortalItemsEntryRoute,
-  PortalStoreProductsRoute: PortalStoreProductsRouteWithChildren,
   PortalStoreWalletRoute: PortalStoreWalletRoute,
-  PortalItemsIndexRoute: PortalItemsIndexRoute,
 }
 
 const PortalRouteWithChildren =
   PortalRoute._addFileChildren(PortalRouteChildren)
 
+interface AdminStoreRouteChildren {
+  AdminStoreSkuRoute: typeof AdminStoreSkuRoute
+  AdminStoreOrdersRoute: typeof AdminStoreOrdersRoute
+  AdminStoreWalletsRoute: typeof AdminStoreWalletsRoute
+  AdminStoreIndexRoute: typeof AdminStoreIndexRoute
+}
+
+const AdminStoreRouteChildren: AdminStoreRouteChildren = {
+  AdminStoreSkuRoute: AdminStoreSkuRoute,
+  AdminStoreOrdersRoute: AdminStoreOrdersRoute,
+  AdminStoreWalletsRoute: AdminStoreWalletsRoute,
+  AdminStoreIndexRoute: AdminStoreIndexRoute,
+}
+
+const AdminStoreRouteWithChildren = AdminStoreRoute._addFileChildren(
+  AdminStoreRouteChildren,
+)
+
 interface AdminRouteChildren {
   AdminAccountsRoute: typeof AdminAccountsRoute
   AdminOnlineRoute: typeof AdminOnlineRoute
+  AdminStoreRoute: typeof AdminStoreRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCharactersNameRoute: typeof AdminCharactersNameRoute
+  AdminItemsEntryRoute: typeof AdminItemsEntryRoute
   AdminUsersUserIdRoute: typeof AdminUsersUserIdRoute
   AdminCharactersIndexRoute: typeof AdminCharactersIndexRoute
+  AdminItemsIndexRoute: typeof AdminItemsIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAccountsRoute: AdminAccountsRoute,
   AdminOnlineRoute: AdminOnlineRoute,
+  AdminStoreRoute: AdminStoreRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
   AdminCharactersNameRoute: AdminCharactersNameRoute,
+  AdminItemsEntryRoute: AdminItemsEntryRoute,
   AdminUsersUserIdRoute: AdminUsersUserIdRoute,
   AdminCharactersIndexRoute: AdminCharactersIndexRoute,
+  AdminItemsIndexRoute: AdminItemsIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
 }
 

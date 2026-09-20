@@ -60,7 +60,7 @@ export function ProductDetailPage({ sku }: { sku: string }) {
               />
               <DeleteProductButton
                 sku={sku}
-                onDeleted={() => void navigate({ to: "/store/products" })}
+                onDeleted={() => void navigate({ to: "/admin/store" })}
               />
             </div>
           </PermissionGate>

@@ -10,11 +10,6 @@ const sections = [
     to: "/azeroth/status",
   },
   {
-    title: "Items",
-    description: "Search the AzerothCore item catalog.",
-    to: "/items",
-  },
-  {
     title: "Admin accounts",
     description: "Ban, unban and set GM levels.",
     to: "/admin/accounts",
@@ -23,11 +18,6 @@ const sections = [
     title: "Online players",
     description: "Live list of connected players.",
     to: "/admin/online",
-  },
-  {
-    title: "Store",
-    description: "Browse and manage the product catalog.",
-    to: "/store/products",
   },
   {
     title: "Wallet",

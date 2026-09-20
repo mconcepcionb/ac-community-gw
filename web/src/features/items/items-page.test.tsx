@@ -63,7 +63,7 @@ describe("ItemsPage", () => {
       ),
     );
 
-    renderAt("/items");
+    renderAt("/admin/items");
 
     expect(await screen.findByRole("link", { name: "19019" })).toBeInTheDocument();
     expect(screen.getByText("Thunderfury")).toBeInTheDocument();
@@ -79,7 +79,7 @@ describe("ItemDetailPage", () => {
       ),
     );
 
-    renderAt("/items/19019");
+    renderAt("/admin/items/19019");
 
     expect(await screen.findByText("Thunderfury")).toBeInTheDocument();
     expect(screen.getByText("Legendary")).toBeInTheDocument();

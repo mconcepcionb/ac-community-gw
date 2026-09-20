@@ -20,7 +20,7 @@ const columns: ColumnDef<StoreProduct, unknown>[] = [
     header: "SKU",
     cell: ({ row }) => (
       <Link
-        to="/store/products/$sku"
+        to="/admin/store/$sku"
         params={{ sku: row.original.sku ?? "" }}
         className="text-blue-400 underline"
       >

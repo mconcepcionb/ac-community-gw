@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useItems } from "./use-items";
 
-const route = getRouteApi("/_portal/items/");
+const route = getRouteApi("/admin/items/");
 
 const columns: ColumnDef<AzerothItem, unknown>[] = [
   {
@@ -18,7 +18,7 @@ const columns: ColumnDef<AzerothItem, unknown>[] = [
     header: "Entry",
     cell: ({ row }) => (
       <Link
-        to="/items/$entry"
+        to="/admin/items/$entry"
         params={{ entry: String(row.original.entry ?? 0) }}
         className="text-blue-400 underline"
       >

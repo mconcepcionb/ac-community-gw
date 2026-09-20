@@ -21,15 +21,6 @@ export function AppNav() {
           Status
         </Link>
       </PermissionGate>
-      <PermissionGate permission="store.catalog.read">
-        <Link
-          to="/store/products"
-          className={linkClass}
-          activeProps={{ className: "text-foreground" }}
-        >
-          Store
-        </Link>
-      </PermissionGate>
       <PermissionGate permission="store.wallet.read">
         <Link
           to="/store/wallet"
