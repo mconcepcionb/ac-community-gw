@@ -7,22 +7,31 @@ its `azeroth-account`, `azeroth-admin` and `azeroth-info` plugins) can be
 exercised without a real worldserver.
 
 The double speaks the same wire protocol as the real server, keeps the provided
-account state in memory and logs every command. It never touches MySQL.
+account state in memory and logs every command. It only touches MySQL when a
+login DB DSN is configured, in which case it mirrors account commands (see
+[Login database mirror](#login-database-mirror)).
 
 ## Preconditions
 
 - Go toolchain (or the built binary).
+- Docker (for the MariaDB fixture that `task fake:ac` starts).
 - Nothing listening on the chosen port (default `7878`).
 
 ## Procedure
 
-Start it:
+Start everything that fakes AzerothCore - the MariaDB database fixture and the
+SOAP double:
 
 ```bash
 task fake:ac
 # or, with a seed:
 go run ./cmd/fakeazerothcore -state ./cmd/fakeazerothcore/seed.example.json
 ```
+
+`task fake:ac` depends on `task fake:ac:db`, which runs
+`docker compose up -d --wait mariadb`, so the read databases
+(`acore_auth`, `acore_characters`, `acore_world`) are up before the double
+starts. To start only the database fixture, run `task fake:ac:db`.
 
 Flags:
 
@@ -134,13 +143,15 @@ invoke `.server info` via the status route.
 When `-login-db-dsn` (or `ACGW_AZEROTH_LOGIN_DB_DSN`) is set, account commands
 are mirrored into an AzerothCore login database so the gateway's read adapter
 (`GET /api/v1/azeroth/accounts`) sees the same accounts the double serves over
-SOAP. The compose MariaDB fixture reproduces the official login and character
-base schemas (`data/sql/base/db_auth`, `db_characters`):
+SOAP. The compose MariaDB fixture reproduces the official login, character and
+world base schemas. `task fake:ac` starts it for you:
 
 ```bash
-docker compose up -d mariadb
-task fake:ac   # picks up ACGW_AZEROTH_LOGIN_DB_DSN from .env
+task fake:ac   # starts the MariaDB fixture, then the double; picks up ACGW_AZEROTH_LOGIN_DB_DSN from .env
 ```
+
+If the fixture is unreachable the double still starts and runs in-memory only,
+logging `login database unavailable`.
 
 `POST /reset` resets the in-memory state and journal only; it does not clear the
 database.

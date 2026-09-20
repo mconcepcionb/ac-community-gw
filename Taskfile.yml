@@ -24,8 +24,14 @@ tasks:
       - run
       - web:dev
 
+  fake:ac:db:
+    desc: Start the fake AzerothCore database fixture (MariaDB)
+    cmds:
+      - docker compose up -d --wait mariadb
+
   fake:ac:
-    desc: Run the fake AzerothCore SOAP server on 127.0.0.1:7878
+    desc: Run the fake AzerothCore (database fixture + SOAP server) on 127.0.0.1:7878
+    deps: [fake:ac:db]
     cmds:
       - go run ./cmd/fakeazerothcore -addr 127.0.0.1:7878 -user acgw -pass acgw
 
