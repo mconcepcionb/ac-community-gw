@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useUsers } from "./use-users";
 
-const route = getRouteApi("/_portal/identity/users/");
+const route = getRouteApi("/admin/users/");
 
 const columns: ColumnDef<User, unknown>[] = [
   { accessorKey: "username", header: "Username" },
@@ -22,7 +22,7 @@ const columns: ColumnDef<User, unknown>[] = [
     header: "User ID",
     cell: ({ row }) => (
       <Link
-        to="/identity/users/$userId/characters"
+        to="/admin/users/$userId"
         params={{ userId: row.original.user_id ?? "" }}
         className="text-blue-400 underline"
       >

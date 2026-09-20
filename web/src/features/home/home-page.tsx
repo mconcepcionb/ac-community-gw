@@ -10,19 +10,9 @@ const sections = [
     to: "/azeroth/status",
   },
   {
-    title: "Community users",
-    description: "Discord users provisioned by the gateway.",
-    to: "/identity/users",
-  },
-  {
     title: "Items",
     description: "Search the AzerothCore item catalog.",
     to: "/items",
-  },
-  {
-    title: "Account links",
-    description: "Community users linked to game accounts.",
-    to: "/account-links",
   },
   {
     title: "Admin accounts",

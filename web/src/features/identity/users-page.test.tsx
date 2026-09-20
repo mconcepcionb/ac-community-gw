@@ -22,7 +22,7 @@ function renderUsers() {
   const router = createRouter({
     routeTree,
     context: { queryClient },
-    history: createMemoryHistory({ initialEntries: ["/identity/users"] }),
+    history: createMemoryHistory({ initialEntries: ["/admin/users"] }),
   });
 
   render(
