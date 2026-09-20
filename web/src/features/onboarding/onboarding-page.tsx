@@ -17,6 +17,7 @@ import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
+import { ClaimAccountCard } from "./claim-account-card";
 
 const schema = z.object({
   username: z.string().min(1, "Required").max(32),
@@ -94,19 +95,7 @@ export function OnboardingPage() {
               </Form>
             </CardContent>
           </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>I already have an account</CardTitle>
-              <CardDescription>
-                Claim an existing account with an in-game code. Coming soon.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" disabled>
-                Claim account
-              </Button>
-            </CardContent>
-          </Card>
+          <ClaimAccountCard />
         </div>
       )}
     </div>

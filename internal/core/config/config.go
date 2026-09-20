@@ -32,6 +32,8 @@ type Config struct {
 	Metrics  Metrics
 	// Permissions configures the role -> permission reload.
 	Permissions Permissions
+	// Notice configures in-game text notices.
+	Notice Notice
 }
 
 // Database configures the gateway-owned PostgreSQL database.
@@ -102,6 +104,12 @@ type Permissions struct {
 	RefreshInterval time.Duration
 }
 
+// Notice configures in-game text notices. AzerothCore mail requires an
+// enclosure, so a notice attaches Notice.ItemID; zero disables notices.
+type Notice struct {
+	ItemID int
+}
+
 // Load reads configuration from the process environment, applying defaults
 // and validating the result.
 func Load() (*Config, error) {
@@ -163,6 +171,9 @@ func Load() (*Config, error) {
 		},
 		Permissions: Permissions{
 			RefreshInterval: p.duration("ACGW_PERMISSIONS_REFRESH_INTERVAL", 30*time.Second),
+		},
+		Notice: Notice{
+			ItemID: p.integer("ACGW_NOTICE_ITEM_ID", 0),
 		},
 	}
 
@@ -269,6 +280,9 @@ func (c *Config) validate() error {
 	}
 	if c.Permissions.RefreshInterval < 0 {
 		return fmt.Errorf("config: ACGW_PERMISSIONS_REFRESH_INTERVAL must not be negative")
+	}
+	if c.Notice.ItemID < 0 {
+		return fmt.Errorf("config: ACGW_NOTICE_ITEM_ID must not be negative")
 	}
 	if strings.EqualFold(c.Env, "production") {
 		if !c.Session.Secure {

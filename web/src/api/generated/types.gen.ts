@@ -204,6 +204,15 @@ export type AzerothSetVisibilityRequest = {
     public?: boolean;
 };
 
+export type AzerothStartClaimRequest = {
+    account_username?: string;
+    character?: string;
+};
+
+export type AzerothStartClaimResponse = {
+    expires_at?: string;
+};
+
 export type AzerothStatusResponse = {
     characters_in_world?: number;
     connected_players?: number;
@@ -212,6 +221,11 @@ export type AzerothStatusResponse = {
     queue?: number;
     uptime?: string;
     version?: string;
+};
+
+export type AzerothVerifyClaimRequest = {
+    account_username?: string;
+    code?: string;
 };
 
 export type BanAccountRequest = {
@@ -1589,6 +1603,110 @@ export type AzerothMeAccountCreateResponses = {
 };
 
 export type AzerothMeAccountCreateResponse = AzerothMeAccountCreateResponses[keyof AzerothMeAccountCreateResponses];
+
+export type AzerothMeAccountClaimStartData = {
+    /**
+     * account and character
+     */
+    body: AzerothStartClaimRequest;
+    path?: never;
+    query?: never;
+    url: '/api/v1/azeroth/me/account/claim';
+};
+
+export type AzerothMeAccountClaimStartErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Conflict
+     */
+    409: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Bad Gateway
+     */
+    502: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothMeAccountClaimStartError = AzerothMeAccountClaimStartErrors[keyof AzerothMeAccountClaimStartErrors];
+
+export type AzerothMeAccountClaimStartResponses = {
+    /**
+     * OK
+     */
+    200: AzerothStartClaimResponse;
+};
+
+export type AzerothMeAccountClaimStartResponse = AzerothMeAccountClaimStartResponses[keyof AzerothMeAccountClaimStartResponses];
+
+export type AzerothMeAccountClaimVerifyData = {
+    /**
+     * account and code
+     */
+    body: AzerothVerifyClaimRequest;
+    path?: never;
+    query?: never;
+    url: '/api/v1/azeroth/me/account/claim/verify';
+};
+
+export type AzerothMeAccountClaimVerifyErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Conflict
+     */
+    409: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Too Many Requests
+     */
+    429: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothMeAccountClaimVerifyError = AzerothMeAccountClaimVerifyErrors[keyof AzerothMeAccountClaimVerifyErrors];
+
+export type AzerothMeAccountClaimVerifyResponses = {
+    /**
+     * OK
+     */
+    200: AzerothSelfAccountResponse;
+};
+
+export type AzerothMeAccountClaimVerifyResponse = AzerothMeAccountClaimVerifyResponses[keyof AzerothMeAccountClaimVerifyResponses];
 
 export type AzerothMeCharactersListData = {
     body?: never;

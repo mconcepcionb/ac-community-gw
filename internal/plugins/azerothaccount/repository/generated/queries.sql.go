@@ -8,9 +8,19 @@ package azerothaccountrepo
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	"github.com/google/uuid"
 )
+
+const deleteAccountClaim = `-- name: DeleteAccountClaim :exec
+DELETE FROM account_claims WHERE user_id = $1
+`
+
+func (q *Queries) DeleteAccountClaim(ctx context.Context, userID uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteAccountClaim, userID)
+	return err
+}
 
 const deleteAccountLink = `-- name: DeleteAccountLink :exec
 DELETE FROM azeroth_account_links WHERE user_id = $1
@@ -19,6 +29,25 @@ DELETE FROM azeroth_account_links WHERE user_id = $1
 func (q *Queries) DeleteAccountLink(ctx context.Context, userID uuid.UUID) error {
 	_, err := q.db.ExecContext(ctx, deleteAccountLink, userID)
 	return err
+}
+
+const getAccountClaim = `-- name: GetAccountClaim :one
+SELECT user_id, account_username, code_hash, expires_at, attempts, created_at, updated_at FROM account_claims WHERE user_id = $1
+`
+
+func (q *Queries) GetAccountClaim(ctx context.Context, userID uuid.UUID) (AccountClaim, error) {
+	row := q.db.QueryRowContext(ctx, getAccountClaim, userID)
+	var i AccountClaim
+	err := row.Scan(
+		&i.UserID,
+		&i.AccountUsername,
+		&i.CodeHash,
+		&i.ExpiresAt,
+		&i.Attempts,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const getAccountLinkByUserID = `-- name: GetAccountLinkByUserID :one
@@ -33,6 +62,28 @@ func (q *Queries) GetAccountLinkByUserID(ctx context.Context, userID uuid.UUID) 
 		&i.AccountUsername,
 		&i.AccountID,
 		&i.LinkedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const incrementAccountClaimAttempts = `-- name: IncrementAccountClaimAttempts :one
+UPDATE account_claims
+SET attempts = attempts + 1, updated_at = now()
+WHERE user_id = $1
+RETURNING user_id, account_username, code_hash, expires_at, attempts, created_at, updated_at
+`
+
+func (q *Queries) IncrementAccountClaimAttempts(ctx context.Context, userID uuid.UUID) (AccountClaim, error) {
+	row := q.db.QueryRowContext(ctx, incrementAccountClaimAttempts, userID)
+	var i AccountClaim
+	err := row.Scan(
+		&i.UserID,
+		&i.AccountUsername,
+		&i.CodeHash,
+		&i.ExpiresAt,
+		&i.Attempts,
+		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
 	return i, err
@@ -69,6 +120,45 @@ func (q *Queries) ListAccountLinks(ctx context.Context) ([]AzerothAccountLink, e
 		return nil, err
 	}
 	return items, nil
+}
+
+const upsertAccountClaim = `-- name: UpsertAccountClaim :one
+INSERT INTO account_claims (user_id, account_username, code_hash, expires_at, attempts, updated_at)
+VALUES ($1, $2, $3, $4, 0, now())
+ON CONFLICT (user_id) DO UPDATE
+SET account_username = EXCLUDED.account_username,
+    code_hash = EXCLUDED.code_hash,
+    expires_at = EXCLUDED.expires_at,
+    attempts = 0,
+    updated_at = now()
+RETURNING user_id, account_username, code_hash, expires_at, attempts, created_at, updated_at
+`
+
+type UpsertAccountClaimParams struct {
+	UserID          uuid.UUID
+	AccountUsername string
+	CodeHash        string
+	ExpiresAt       time.Time
+}
+
+func (q *Queries) UpsertAccountClaim(ctx context.Context, arg UpsertAccountClaimParams) (AccountClaim, error) {
+	row := q.db.QueryRowContext(ctx, upsertAccountClaim,
+		arg.UserID,
+		arg.AccountUsername,
+		arg.CodeHash,
+		arg.ExpiresAt,
+	)
+	var i AccountClaim
+	err := row.Scan(
+		&i.UserID,
+		&i.AccountUsername,
+		&i.CodeHash,
+		&i.ExpiresAt,
+		&i.Attempts,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const upsertAccountLink = `-- name: UpsertAccountLink :one

@@ -11,6 +11,7 @@ import (
 	"github.com/mconcepcionb/ac-community-gw/internal/core/azerothcore"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/azerothdb"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/delivery"
+	"github.com/mconcepcionb/ac-community-gw/internal/core/notice"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/plugins"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/services"
 )
@@ -27,21 +28,23 @@ type accountDirectory interface {
 
 // Config configures the azeroth-character plugin.
 type Config struct {
-	Executor   azerothcore.CommandExecutor
-	Characters azerothdb.CharacterReader
-	Accounts   azerothdb.AccountReader
-	Audit      audit.Recorder
-	Visibility VisibilityStore
+	Executor     azerothcore.CommandExecutor
+	Characters   azerothdb.CharacterReader
+	Accounts     azerothdb.AccountReader
+	Audit        audit.Recorder
+	Visibility   VisibilityStore
+	NoticeItemID int
 }
 
 // Plugin implements plugins.Plugin.
 type Plugin struct {
-	executor   azerothcore.CommandExecutor
-	characters azerothdb.CharacterReader
-	accounts   azerothdb.AccountReader
-	audit      audit.Recorder
-	directory  accountDirectory
-	visibility VisibilityStore
+	executor     azerothcore.CommandExecutor
+	characters   azerothdb.CharacterReader
+	accounts     azerothdb.AccountReader
+	audit        audit.Recorder
+	directory    accountDirectory
+	visibility   VisibilityStore
+	noticeItemID int
 }
 
 // New creates the azeroth-character plugin.
@@ -51,11 +54,12 @@ func New(cfg Config) *Plugin {
 		recorder = audit.NopRecorder{}
 	}
 	return &Plugin{
-		executor:   cfg.Executor,
-		characters: cfg.Characters,
-		accounts:   cfg.Accounts,
-		audit:      recorder,
-		visibility: cfg.Visibility,
+		executor:     cfg.Executor,
+		characters:   cfg.Characters,
+		accounts:     cfg.Accounts,
+		audit:        recorder,
+		visibility:   cfg.Visibility,
+		noticeItemID: cfg.NoticeItemID,
 	}
 }
 
@@ -93,6 +97,9 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 	reg.Mux.Handle("PUT /api/v1/azeroth/me/characters/{name}/visibility",
 		reg.RequirePermission(PermissionCharacterSelf, http.HandlerFunc(p.handleSetVisibility)))
 	if err := services.Provide[Directory](reg.Services, DirectoryService, p); err != nil {
+		return err
+	}
+	if err := services.Provide[notice.Service](reg.Services, NoticeService, p); err != nil {
 		return err
 	}
 	return services.Provide[delivery.Service](reg.Services, DeliveryService, p)

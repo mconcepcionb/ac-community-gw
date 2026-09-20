@@ -55,6 +55,7 @@ type Config struct {
 	Executor azerothcore.CommandExecutor
 	Accounts azerothdb.AccountReader
 	Links    LinkStore
+	Claims   ClaimStore
 	Audit    audit.Recorder
 }
 
@@ -63,8 +64,10 @@ type Plugin struct {
 	executor azerothcore.CommandExecutor
 	accounts azerothdb.AccountReader
 	links    LinkStore
+	claims   ClaimStore
 	audit    audit.Recorder
 	users    userdir.Directory
+	registry *services.Registry
 }
 
 // New creates the azeroth-account plugin. Accounts, Links and Audit may be nil;
@@ -78,6 +81,7 @@ func New(cfg Config) *Plugin {
 		executor: cfg.Executor,
 		accounts: cfg.Accounts,
 		links:    cfg.Links,
+		claims:   cfg.Claims,
 		audit:    recorder,
 	}
 }
@@ -98,6 +102,7 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		return fmt.Errorf("azeroth-account: user directory unavailable: %w", err)
 	}
 	p.users = directory
+	p.registry = reg.Services
 
 	if err := commands.RegisterTyped(reg.Commands, CommandCreateAccount, p.createAccount); err != nil {
 		return err
@@ -132,6 +137,12 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 	reg.Mux.Handle("POST /api/v1/azeroth/me/account",
 		rateLimit(reg, reg.RequirePermission(PermissionAccountSelf,
 			http.HandlerFunc(p.handleCreateMyAccount))))
+	reg.Mux.Handle("POST /api/v1/azeroth/me/account/claim",
+		rateLimit(reg, reg.RequirePermission(PermissionAccountSelf,
+			http.HandlerFunc(p.handleStartClaim))))
+	reg.Mux.Handle("POST /api/v1/azeroth/me/account/claim/verify",
+		rateLimit(reg, reg.RequirePermission(PermissionAccountSelf,
+			http.HandlerFunc(p.handleVerifyClaim))))
 
 	return services.Provide[AccountDirectory](reg.Services, ServiceAccountDirectory, p)
 }

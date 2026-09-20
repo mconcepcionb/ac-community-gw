@@ -202,6 +202,15 @@ export const zAzerothSetVisibilityRequest = z.object({
     public: z.boolean().optional()
 });
 
+export const zAzerothStartClaimRequest = z.object({
+    account_username: z.string().optional(),
+    character: z.string().optional()
+});
+
+export const zAzerothStartClaimResponse = z.object({
+    expires_at: z.string().optional()
+});
+
 export const zAzerothStatusResponse = z.object({
     characters_in_world: z.int().optional(),
     connected_players: z.int().optional(),
@@ -210,6 +219,11 @@ export const zAzerothStatusResponse = z.object({
     queue: z.int().optional(),
     uptime: z.string().optional(),
     version: z.string().optional()
+});
+
+export const zAzerothVerifyClaimRequest = z.object({
+    account_username: z.string().optional(),
+    code: z.string().optional()
 });
 
 export const zBanAccountRequest = z.object({
@@ -647,6 +661,26 @@ export const zAzerothMeAccountCreateBody = zAzerothSelfAccountRequest;
  * Created
  */
 export const zAzerothMeAccountCreateResponse = zAzerothSelfAccountResponse;
+
+/**
+ * account and character
+ */
+export const zAzerothMeAccountClaimStartBody = zAzerothStartClaimRequest;
+
+/**
+ * OK
+ */
+export const zAzerothMeAccountClaimStartResponse = zAzerothStartClaimResponse;
+
+/**
+ * account and code
+ */
+export const zAzerothMeAccountClaimVerifyBody = zAzerothVerifyClaimRequest;
+
+/**
+ * OK
+ */
+export const zAzerothMeAccountClaimVerifyResponse = zAzerothSelfAccountResponse;
 
 export const zAzerothMeCharactersListQuery = z.object({
     filter: z.string().optional(),

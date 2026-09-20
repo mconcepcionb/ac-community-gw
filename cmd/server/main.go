@@ -123,12 +123,15 @@ func run() error {
 	sessionStore := auth.Store(auth.NewMemoryStore())
 	var identityRepo *repository.Store
 	var accountLinks azerothaccount.LinkStore
+	var accountClaims azerothaccount.ClaimStore
 	var storeRepo azerothstore.Store
 	var characterVisibility azerothcharacter.VisibilityStore
 	if database != nil {
 		identityRepo = repository.New(database.SQL())
 		sessionStore = identityRepo
-		accountLinks = azerothaccountrepo.New(database.SQL())
+		accountRepo := azerothaccountrepo.New(database.SQL())
+		accountLinks = accountRepo
+		accountClaims = accountRepo
 		storeRepo = azerothstorerepo.New(database.SQL())
 		characterVisibility = azerothcharacterrepo.New(database.SQL())
 	}
@@ -239,14 +242,16 @@ func run() error {
 		Executor: executor,
 		Accounts: accountReader,
 		Links:    accountLinks,
+		Claims:   accountClaims,
 		Audit:    auditRecorder,
 	}))
 	manager.Add(azerothcharacter.New(azerothcharacter.Config{
-		Executor:   executor,
-		Characters: characterReader,
-		Accounts:   accountReader,
-		Audit:      auditRecorder,
-		Visibility: characterVisibility,
+		Executor:     executor,
+		Characters:   characterReader,
+		Accounts:     accountReader,
+		Audit:        auditRecorder,
+		Visibility:   characterVisibility,
+		NoticeItemID: cfg.Notice.ItemID,
 	}))
 	manager.Add(azerothadmin.New(executor, azerothadmin.WithAudit(auditRecorder)))
 	manager.Add(azerothinfo.New(executor))

@@ -13,7 +13,18 @@ var (
 	ErrLinkNotFound = errors.New("azerothaccount: account link not found")
 	// ErrAccountAlreadyLinked is returned when an account links another user.
 	ErrAccountAlreadyLinked = errors.New("azerothaccount: account already linked")
+	// ErrClaimNotFound is returned when a user has no pending account claim.
+	ErrClaimNotFound = errors.New("azerothaccount: account claim not found")
 )
+
+// Claim is a pending in-game account-claim code.
+type Claim struct {
+	UserID          uuid.UUID
+	AccountUsername string
+	CodeHash        string
+	ExpiresAt       time.Time
+	Attempts        int
+}
 
 // Link is a community user's link to an AzerothCore account.
 type Link struct {

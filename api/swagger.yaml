@@ -369,6 +369,18 @@ components:
         public:
           type: boolean
       type: object
+    AzerothStartClaimRequest:
+      properties:
+        account_username:
+          type: string
+        character:
+          type: string
+      type: object
+    AzerothStartClaimResponse:
+      properties:
+        expires_at:
+          type: string
+      type: object
     AzerothStatusResponse:
       properties:
         characters_in_world:
@@ -384,6 +396,13 @@ components:
         uptime:
           type: string
         version:
+          type: string
+      type: object
+    AzerothVerifyClaimRequest:
+      properties:
+        account_username:
+          type: string
+        code:
           type: string
       type: object
     BanAccountRequest:
@@ -2048,6 +2067,134 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Service Unavailable
       summary: Create and link my account
+      tags:
+      - azeroth-account
+  /api/v1/azeroth/me/account/claim:
+    post:
+      description: Mails a one-time code to a character of the account the user wants
+        to claim. Requires the azeroth.account.self permission.
+      operationId: azeroth.me.account.claim.start
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AzerothStartClaimRequest'
+        description: account and character
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothStartClaimResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Conflict
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Start claiming an account
+      tags:
+      - azeroth-account
+  /api/v1/azeroth/me/account/claim/verify:
+    post:
+      description: Verifies the one-time code and links the account to the user. Requires
+        the azeroth.account.self permission.
+      operationId: azeroth.me.account.claim.verify
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AzerothVerifyClaimRequest'
+        description: account and code
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothSelfAccountResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Conflict
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Too Many Requests
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Verify an account claim
       tags:
       - azeroth-account
   /api/v1/azeroth/me/characters:

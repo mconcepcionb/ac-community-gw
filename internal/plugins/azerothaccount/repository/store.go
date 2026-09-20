@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -69,6 +70,61 @@ func (s *Store) List(ctx context.Context) ([]domain.Link, error) {
 		links = append(links, toDomain(row))
 	}
 	return links, nil
+}
+
+// UpsertClaim creates or replaces a user's pending account claim.
+func (s *Store) UpsertClaim(
+	ctx context.Context,
+	userID uuid.UUID,
+	accountUsername, codeHash string,
+	expiresAt time.Time,
+) (domain.Claim, error) {
+	row, err := s.q.UpsertAccountClaim(ctx, azerothaccountrepo.UpsertAccountClaimParams{
+		UserID:          userID,
+		AccountUsername: accountUsername,
+		CodeHash:        codeHash,
+		ExpiresAt:       expiresAt,
+	})
+	if err != nil {
+		return domain.Claim{}, fmt.Errorf("repository: upsert claim: %w", err)
+	}
+	return toClaim(row), nil
+}
+
+// GetClaim returns a user's pending claim or domain.ErrClaimNotFound.
+func (s *Store) GetClaim(ctx context.Context, userID uuid.UUID) (domain.Claim, error) {
+	row, err := s.q.GetAccountClaim(ctx, userID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return domain.Claim{}, domain.ErrClaimNotFound
+	}
+	if err != nil {
+		return domain.Claim{}, fmt.Errorf("repository: get claim: %w", err)
+	}
+	return toClaim(row), nil
+}
+
+// IncrementClaimAttempts records a failed verification attempt.
+func (s *Store) IncrementClaimAttempts(ctx context.Context, userID uuid.UUID) (domain.Claim, error) {
+	row, err := s.q.IncrementAccountClaimAttempts(ctx, userID)
+	if err != nil {
+		return domain.Claim{}, fmt.Errorf("repository: increment claim attempts: %w", err)
+	}
+	return toClaim(row), nil
+}
+
+// DeleteClaim removes a user's claim. Unknown users are not an error.
+func (s *Store) DeleteClaim(ctx context.Context, userID uuid.UUID) error {
+	return s.q.DeleteAccountClaim(ctx, userID)
+}
+
+func toClaim(row azerothaccountrepo.AccountClaim) domain.Claim {
+	return domain.Claim{
+		UserID:          row.UserID,
+		AccountUsername: row.AccountUsername,
+		CodeHash:        row.CodeHash,
+		ExpiresAt:       row.ExpiresAt,
+		Attempts:        int(row.Attempts),
+	}
 }
 
 func toDomain(row azerothaccountrepo.AzerothAccountLink) domain.Link {

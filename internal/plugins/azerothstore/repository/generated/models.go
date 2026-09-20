@@ -12,6 +12,16 @@ import (
 	"github.com/google/uuid"
 )
 
+type AccountClaim struct {
+	UserID          uuid.UUID
+	AccountUsername string
+	CodeHash        string
+	ExpiresAt       time.Time
+	Attempts        int32
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
+}
+
 type AuditLog struct {
 	ID             int64
 	OccurredAt     time.Time
