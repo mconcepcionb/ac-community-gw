@@ -42,7 +42,7 @@ describe("app shell", () => {
   it("renders the portal layout at / for anonymous visitors", async () => {
     renderAt("/");
 
-    expect(await screen.findByText("AzerothCore status")).toBeInTheDocument();
+    expect(await screen.findByText("Community portal")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "ac-community-gw" })).toBeInTheDocument();
   });
 

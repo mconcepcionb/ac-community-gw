@@ -13,11 +13,7 @@ export function AppNav() {
   return (
     <nav className="ml-auto flex items-center gap-4 text-sm">
       <PermissionGate permission="azeroth.info.public.read">
-        <Link
-          to="/azeroth/status"
-          className={linkClass}
-          activeProps={{ className: "text-foreground" }}
-        >
+        <Link to="/status" className={linkClass} activeProps={{ className: "text-foreground" }}>
           Status
         </Link>
       </PermissionGate>
