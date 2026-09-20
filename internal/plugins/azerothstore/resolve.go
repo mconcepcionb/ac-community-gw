@@ -28,7 +28,7 @@ type ResolveOrderRequest struct {
 // handleRefundOrder handles POST /api/v1/admin/store/orders/{id}/refund.
 //
 //	@Summary		Refund a stuck order
-//	@Description	Marks a pending order failed and refunds its points. Requires the store.admin.orders.resolve permission.
+//	@Description	Marks a pending order failed and refunds its points. Requires the gw.store.admin.orders.resolve permission.
 //	@Tags			store
 //	@ID				store.admin.orders.refund
 //	@Accept			json
@@ -88,7 +88,7 @@ func (p *Plugin) handleRefundOrder(w http.ResponseWriter, r *http.Request) {
 // handleRetryOrder handles POST /api/v1/admin/store/orders/{id}/retry.
 //
 //	@Summary		Retry a stuck order
-//	@Description	Re-delivers a pending order's reward and completes it. Requires the store.admin.orders.resolve permission.
+//	@Description	Re-delivers a pending order's reward and completes it. Requires the gw.store.admin.orders.resolve permission.
 //	@Tags			store
 //	@ID				store.admin.orders.retry
 //	@Produce		json

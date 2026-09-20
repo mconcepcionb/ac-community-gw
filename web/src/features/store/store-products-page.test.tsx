@@ -40,7 +40,7 @@ describe("StoreProductsPage", () => {
           user_id: "u1",
           discord_id: "1",
           roles: [],
-          permissions: ["store.catalog.read", "store.admin.products"],
+          permissions: ["gw.store.catalog.read", "gw.store.admin.products"],
         }),
       ),
       http.get(productsUrl, () =>

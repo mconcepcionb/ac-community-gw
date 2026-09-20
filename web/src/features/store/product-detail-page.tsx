@@ -53,10 +53,10 @@ export function ProductDetailPage({ sku }: { sku: string }) {
         description={product?.description || "Product detail."}
         actions={
           <div className="flex gap-2">
-            <PermissionGate permission="store.purchase">
+            <PermissionGate permission="gw.store.purchase">
               <PurchaseDialog sku={sku} trigger={<Button>Buy</Button>} />
             </PermissionGate>
-            <PermissionGate permission="store.admin.products">
+            <PermissionGate permission="gw.store.admin.products">
               <ProductFormDialog
                 mode="update"
                 product={product}

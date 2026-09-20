@@ -23,31 +23,37 @@ func permissionDefs() []permissions.Definition {
 			Name:        PermissionAccountRead,
 			Description: "Read AzerothCore account information linked to a user",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionAccountManage,
 			Description: "Create and manage AzerothCore accounts",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionAccountList,
 			Description: "List AzerothCore login accounts",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionAccountLink,
 			Description: "Create and remove community user / AzerothCore account links",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionAccountSelf,
 			Description: "Create and link your own AzerothCore account",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionAdminClaimsRead,
 			Description: "List pending account claims",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 	}
 }

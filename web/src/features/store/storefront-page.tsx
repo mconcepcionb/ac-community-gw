@@ -36,7 +36,7 @@ export function StorefrontPage() {
             </CardHeader>
             <CardContent className="space-y-2">
               <p className="text-sm font-semibold">{product.price_points ?? 0} points</p>
-              <PermissionGate permission="store.purchase">
+              <PermissionGate permission="gw.store.purchase">
                 <PurchaseDialog
                   sku={product.sku ?? ""}
                   trigger={

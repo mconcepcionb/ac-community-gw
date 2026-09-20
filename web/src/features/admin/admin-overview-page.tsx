@@ -10,9 +10,9 @@ import { useAzerothStatus } from "@/features/azeroth-info/use-status";
 const links = [
   { to: "/admin/accounts", label: "Accounts", permission: "azeroth.account.list" },
   { to: "/admin/characters", label: "Characters", permission: "azeroth.character.list" },
-  { to: "/admin/users", label: "Community users", permission: "identity.user.list" },
+  { to: "/admin/users", label: "Community users", permission: "gw.identity.user.read" },
   { to: "/admin/items", label: "Items", permission: "azeroth.item.list" },
-  { to: "/admin/store", label: "Store", permission: "store.admin.products" },
+  { to: "/admin/store", label: "Store", permission: "gw.store.admin.products" },
   { to: "/admin/online", label: "Online players", permission: "azeroth.admin.players.read" },
 ] as const;
 
@@ -26,7 +26,7 @@ export function AdminOverviewPage() {
         <PermissionGate permission="azeroth.info.public.read">
           <StatusCard />
         </PermissionGate>
-        <PermissionGate permission="store.admin.orders.read">
+        <PermissionGate permission="gw.store.admin.orders.read">
           <RecentOrdersCard />
         </PermissionGate>
       </div>

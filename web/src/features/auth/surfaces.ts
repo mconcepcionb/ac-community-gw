@@ -3,15 +3,13 @@
  * console. Holding any one of them makes `/admin` the landing surface.
  */
 export const CONSOLE_PERMISSIONS = [
-  "identity.user.list",
+  "gw.identity.user.read",
   "azeroth.account.list",
   "azeroth.account.read",
   "azeroth.account.manage",
   "azeroth.account.link",
-  "azeroth.admin.accounts.read",
   "azeroth.admin.accounts.ban",
   "azeroth.admin.accounts.gmlevel",
-  "azeroth.admin.users.read",
   "azeroth.admin.players.read",
   "azeroth.admin.players.kick",
   "azeroth.admin.players.mute",
@@ -19,15 +17,15 @@ export const CONSOLE_PERMISSIONS = [
   "azeroth.admin.announce",
   "azeroth.character.list",
   "azeroth.item.list",
-  "store.admin.products",
-  "store.admin.wallets",
-  "store.admin.orders.read",
-  "store.admin.orders.resolve",
+  "gw.store.admin.products",
+  "gw.store.admin.wallets",
+  "gw.store.admin.orders.read",
+  "gw.store.admin.orders.resolve",
   "azeroth.admin.claims.read",
-  "audit.read",
-  "report.read",
-  "identity.roles.manage",
-  "apikeys.manage",
+  "gw.audit.read",
+  "gw.report.read",
+  "gw.identity.roles.manage",
+  "gw.apikeys.manage",
 ] as const;
 
 /** hasAnyConsolePermission reports whether the principal may open the console. */

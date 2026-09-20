@@ -13,6 +13,7 @@ func permissionDefs() []permissions.Definition {
 			Name:        PermissionItemList,
 			Description: "Search the AzerothCore item catalog",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 	}
 }

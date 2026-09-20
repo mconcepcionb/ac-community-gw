@@ -27,12 +27,12 @@ describe("PermissionGate", () => {
           user_id: "u1",
           discord_id: "42",
           roles: [],
-          permissions: ["store.admin.products"],
+          permissions: ["gw.store.admin.products"],
         }),
       ),
     );
 
-    renderGate("store.admin.products");
+    renderGate("gw.store.admin.products");
     expect(await screen.findByText("secret")).toBeInTheDocument();
   });
 
@@ -48,7 +48,7 @@ describe("PermissionGate", () => {
       ),
     );
 
-    renderGate("store.admin.products");
+    renderGate("gw.store.admin.products");
     expect(await screen.findByText("hidden")).toBeInTheDocument();
   });
 });

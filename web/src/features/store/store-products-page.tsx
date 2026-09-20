@@ -40,7 +40,7 @@ const columns: ColumnDef<StoreProduct, unknown>[] = [
     id: "actions",
     header: "",
     cell: ({ row }) => (
-      <PermissionGate permission="store.admin.products">
+      <PermissionGate permission="gw.store.admin.products">
         <div className="flex gap-2">
           <ProductFormDialog
             mode="update"
@@ -84,7 +84,7 @@ export function StoreProductsPage() {
         title="Store products"
         description="Catalog of purchasable products."
         actions={
-          <PermissionGate permission="store.admin.products">
+          <PermissionGate permission="gw.store.admin.products">
             <ProductFormDialog mode="create" trigger={<Button>Create product</Button>} />
           </PermissionGate>
         }

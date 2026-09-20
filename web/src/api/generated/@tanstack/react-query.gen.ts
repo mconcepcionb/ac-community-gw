@@ -202,7 +202,7 @@ export const apikeysListQueryKey = (options?: Options<ApikeysListData>) => creat
 /**
  * List API keys
  *
- * Lists every API key (without secrets). Requires the apikeys.manage permission.
+ * Lists every API key (without secrets). Requires the gw.apikeys.manage permission.
  */
 export const apikeysListOptions = (options?: Options<ApikeysListData>) => queryOptions<ApikeysListResponse, ApikeysListError, ApikeysListResponse, ReturnType<typeof apikeysListQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -220,7 +220,7 @@ export const apikeysListOptions = (options?: Options<ApikeysListData>) => queryO
 /**
  * Create an API key
  *
- * Issues a scoped API key. The secret is returned once. Requires the apikeys.manage permission.
+ * Issues a scoped API key. The secret is returned once. Requires the gw.apikeys.manage permission.
  */
 export const apikeysCreateMutation = (options?: Partial<Options<ApikeysCreateData>>): UseMutationOptions<ApikeysCreateResponse, ApikeysCreateError, Options<ApikeysCreateData>> => {
     const mutationOptions: UseMutationOptions<ApikeysCreateResponse, ApikeysCreateError, Options<ApikeysCreateData>> = {
@@ -239,7 +239,7 @@ export const apikeysCreateMutation = (options?: Partial<Options<ApikeysCreateDat
 /**
  * Revoke an API key
  *
- * Deletes an API key immediately. Requires the apikeys.manage permission.
+ * Deletes an API key immediately. Requires the gw.apikeys.manage permission.
  */
 export const apikeysRevokeMutation = (options?: Partial<Options<ApikeysRevokeData>>): UseMutationOptions<ApikeysRevokeResponse, ApikeysRevokeError, Options<ApikeysRevokeData>> => {
     const mutationOptions: UseMutationOptions<ApikeysRevokeResponse, ApikeysRevokeError, Options<ApikeysRevokeData>> = {
@@ -258,7 +258,7 @@ export const apikeysRevokeMutation = (options?: Partial<Options<ApikeysRevokeDat
 /**
  * Rotate an API key
  *
- * Issues a new secret for a key. Requires the apikeys.manage permission.
+ * Issues a new secret for a key. Requires the gw.apikeys.manage permission.
  */
 export const apikeysRotateMutation = (options?: Partial<Options<ApikeysRotateData>>): UseMutationOptions<ApikeysRotateResponse, ApikeysRotateError, Options<ApikeysRotateData>> => {
     const mutationOptions: UseMutationOptions<ApikeysRotateResponse, ApikeysRotateError, Options<ApikeysRotateData>> = {
@@ -279,7 +279,7 @@ export const azerothAdminAuditListQueryKey = (options?: Options<AzerothAdminAudi
 /**
  * Read the audit log
  *
- * Lists audit entries, newest first, filterable by actor, target, action and time range. Requires the audit.read permission.
+ * Lists audit entries, newest first, filterable by actor, target, action and time range. Requires the gw.audit.read permission.
  */
 export const azerothAdminAuditListOptions = (options?: Options<AzerothAdminAuditListData>) => queryOptions<AzerothAdminAuditListResponse, AzerothAdminAuditListError, AzerothAdminAuditListResponse, ReturnType<typeof azerothAdminAuditListQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -299,7 +299,7 @@ export const azerothAdminAuditListInfiniteQueryKey = (options?: Options<AzerothA
 /**
  * Read the audit log
  *
- * Lists audit entries, newest first, filterable by actor, target, action and time range. Requires the audit.read permission.
+ * Lists audit entries, newest first, filterable by actor, target, action and time range. Requires the gw.audit.read permission.
  */
 export const azerothAdminAuditListInfiniteOptions = (options?: Options<AzerothAdminAuditListData>) => {
     const opts = infiniteQueryOptions<AzerothAdminAuditListResponse, AzerothAdminAuditListError, InfiniteData<AzerothAdminAuditListResponse>, QueryKey<Options<AzerothAdminAuditListData>>, number | Pick<QueryKey<Options<AzerothAdminAuditListData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
@@ -329,7 +329,7 @@ export const azerothAdminAuditListInfiniteOptions = (options?: Options<AzerothAd
 /**
  * Delete a Discord role mapping
  *
- * Removes a Discord role mapping. Requires the identity.roles.manage permission.
+ * Removes a Discord role mapping. Requires the gw.identity.roles.manage permission.
  */
 export const identityAdminDiscordMappingsDeleteMutation = (options?: Partial<Options<IdentityAdminDiscordMappingsDeleteData>>): UseMutationOptions<IdentityAdminDiscordMappingsDeleteResponse, IdentityAdminDiscordMappingsDeleteError, Options<IdentityAdminDiscordMappingsDeleteData>> => {
     const mutationOptions: UseMutationOptions<IdentityAdminDiscordMappingsDeleteResponse, IdentityAdminDiscordMappingsDeleteError, Options<IdentityAdminDiscordMappingsDeleteData>> = {
@@ -348,7 +348,7 @@ export const identityAdminDiscordMappingsDeleteMutation = (options?: Partial<Opt
 /**
  * Map a Discord role to an internal role
  *
- * Creates or updates a Discord role mapping. Requires the identity.roles.manage permission.
+ * Creates or updates a Discord role mapping. Requires the gw.identity.roles.manage permission.
  */
 export const identityAdminDiscordMappingsUpsertMutation = (options?: Partial<Options<IdentityAdminDiscordMappingsUpsertData>>): UseMutationOptions<IdentityAdminDiscordMappingsUpsertResponse, IdentityAdminDiscordMappingsUpsertError, Options<IdentityAdminDiscordMappingsUpsertData>> => {
     const mutationOptions: UseMutationOptions<IdentityAdminDiscordMappingsUpsertResponse, IdentityAdminDiscordMappingsUpsertError, Options<IdentityAdminDiscordMappingsUpsertData>> = {
@@ -369,7 +369,7 @@ export const apikeysPermissionsListQueryKey = (options?: Options<ApikeysPermissi
 /**
  * List registered permissions
  *
- * Returns every permission registered by the plugins, for the API key scope picker. Requires the apikeys.manage permission.
+ * Returns every permission registered by the plugins, for the API key scope picker. Requires the gw.apikeys.manage permission.
  */
 export const apikeysPermissionsListOptions = (options?: Options<ApikeysPermissionsListData>) => queryOptions<ApikeysPermissionsListResponse, ApikeysPermissionsListError, ApikeysPermissionsListResponse, ReturnType<typeof apikeysPermissionsListQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -389,7 +389,7 @@ export const reportsListQueryKey = (options?: Options<ReportsListData>) => creat
 /**
  * List reports
  *
- * Lists every report, newest first, optionally filtered by status. Requires the report.read permission.
+ * Lists every report, newest first, optionally filtered by status. Requires the gw.report.read permission.
  */
 export const reportsListOptions = (options?: Options<ReportsListData>) => queryOptions<ReportsListResponse, ReportsListError, ReportsListResponse, ReturnType<typeof reportsListQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -409,7 +409,7 @@ export const reportsListInfiniteQueryKey = (options?: Options<ReportsListData>):
 /**
  * List reports
  *
- * Lists every report, newest first, optionally filtered by status. Requires the report.read permission.
+ * Lists every report, newest first, optionally filtered by status. Requires the gw.report.read permission.
  */
 export const reportsListInfiniteOptions = (options?: Options<ReportsListData>) => {
     const opts = infiniteQueryOptions<ReportsListResponse, ReportsListError, InfiniteData<ReportsListResponse>, QueryKey<Options<ReportsListData>>, number | Pick<QueryKey<Options<ReportsListData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
@@ -439,7 +439,7 @@ export const reportsListInfiniteOptions = (options?: Options<ReportsListData>) =
 /**
  * Close a report
  *
- * Marks a report closed. Requires the report.read permission.
+ * Marks a report closed. Requires the gw.report.read permission.
  */
 export const reportsCloseMutation = (options?: Partial<Options<ReportsCloseData>>): UseMutationOptions<ReportsCloseResponse, ReportsCloseError, Options<ReportsCloseData>> => {
     const mutationOptions: UseMutationOptions<ReportsCloseResponse, ReportsCloseError, Options<ReportsCloseData>> = {
@@ -460,7 +460,7 @@ export const identityAdminRolesListQueryKey = (options?: Options<IdentityAdminRo
 /**
  * List roles and mappings
  *
- * Returns every role -> permission grant and Discord role mapping. Requires the identity.roles.manage permission.
+ * Returns every role -> permission grant and Discord role mapping. Requires the gw.identity.roles.manage permission.
  */
 export const identityAdminRolesListOptions = (options?: Options<IdentityAdminRolesListData>) => queryOptions<IdentityAdminRolesListResponse, IdentityAdminRolesListError, IdentityAdminRolesListResponse, ReturnType<typeof identityAdminRolesListQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -478,7 +478,7 @@ export const identityAdminRolesListOptions = (options?: Options<IdentityAdminRol
 /**
  * Grant a permission to a role
  *
- * Grants a permission to a role (creating the role if needed). Requires the identity.roles.manage permission.
+ * Grants a permission to a role (creating the role if needed). Requires the gw.identity.roles.manage permission.
  */
 export const identityAdminRolesGrantMutation = (options?: Partial<Options<IdentityAdminRolesGrantData>>): UseMutationOptions<IdentityAdminRolesGrantResponse, IdentityAdminRolesGrantError, Options<IdentityAdminRolesGrantData>> => {
     const mutationOptions: UseMutationOptions<IdentityAdminRolesGrantResponse, IdentityAdminRolesGrantError, Options<IdentityAdminRolesGrantData>> = {
@@ -497,7 +497,7 @@ export const identityAdminRolesGrantMutation = (options?: Partial<Options<Identi
 /**
  * Revoke a permission from a role
  *
- * Revokes a permission from a role. Requires the identity.roles.manage permission.
+ * Revokes a permission from a role. Requires the gw.identity.roles.manage permission.
  */
 export const identityAdminRolesRevokeMutation = (options?: Partial<Options<IdentityAdminRolesRevokeData>>): UseMutationOptions<IdentityAdminRolesRevokeResponse, IdentityAdminRolesRevokeError, Options<IdentityAdminRolesRevokeData>> => {
     const mutationOptions: UseMutationOptions<IdentityAdminRolesRevokeResponse, IdentityAdminRolesRevokeError, Options<IdentityAdminRolesRevokeData>> = {
@@ -518,7 +518,7 @@ export const storeAdminOrdersListQueryKey = (options?: Options<StoreAdminOrdersL
 /**
  * List all orders
  *
- * Lists every store order, newest first, optionally filtered by status. Requires the store.admin.orders.read permission.
+ * Lists every store order, newest first, optionally filtered by status. Requires the gw.store.admin.orders.read permission.
  */
 export const storeAdminOrdersListOptions = (options?: Options<StoreAdminOrdersListData>) => queryOptions<StoreAdminOrdersListResponse, StoreAdminOrdersListError, StoreAdminOrdersListResponse, ReturnType<typeof storeAdminOrdersListQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -538,7 +538,7 @@ export const storeAdminOrdersListInfiniteQueryKey = (options?: Options<StoreAdmi
 /**
  * List all orders
  *
- * Lists every store order, newest first, optionally filtered by status. Requires the store.admin.orders.read permission.
+ * Lists every store order, newest first, optionally filtered by status. Requires the gw.store.admin.orders.read permission.
  */
 export const storeAdminOrdersListInfiniteOptions = (options?: Options<StoreAdminOrdersListData>) => {
     const opts = infiniteQueryOptions<StoreAdminOrdersListResponse, StoreAdminOrdersListError, InfiniteData<StoreAdminOrdersListResponse>, QueryKey<Options<StoreAdminOrdersListData>>, number | Pick<QueryKey<Options<StoreAdminOrdersListData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
@@ -568,7 +568,7 @@ export const storeAdminOrdersListInfiniteOptions = (options?: Options<StoreAdmin
 /**
  * Refund a stuck order
  *
- * Marks a pending order failed and refunds its points. Requires the store.admin.orders.resolve permission.
+ * Marks a pending order failed and refunds its points. Requires the gw.store.admin.orders.resolve permission.
  */
 export const storeAdminOrdersRefundMutation = (options?: Partial<Options<StoreAdminOrdersRefundData>>): UseMutationOptions<StoreAdminOrdersRefundResponse, StoreAdminOrdersRefundError, Options<StoreAdminOrdersRefundData>> => {
     const mutationOptions: UseMutationOptions<StoreAdminOrdersRefundResponse, StoreAdminOrdersRefundError, Options<StoreAdminOrdersRefundData>> = {
@@ -587,7 +587,7 @@ export const storeAdminOrdersRefundMutation = (options?: Partial<Options<StoreAd
 /**
  * Retry a stuck order
  *
- * Re-delivers a pending order's reward and completes it. Requires the store.admin.orders.resolve permission.
+ * Re-delivers a pending order's reward and completes it. Requires the gw.store.admin.orders.resolve permission.
  */
 export const storeAdminOrdersRetryMutation = (options?: Partial<Options<StoreAdminOrdersRetryData>>): UseMutationOptions<StoreAdminOrdersRetryResponse, StoreAdminOrdersRetryError, Options<StoreAdminOrdersRetryData>> => {
     const mutationOptions: UseMutationOptions<StoreAdminOrdersRetryResponse, StoreAdminOrdersRetryError, Options<StoreAdminOrdersRetryData>> = {
@@ -608,7 +608,7 @@ export const azerothAdminUsersGetQueryKey = (options: Options<AzerothAdminUsersG
 /**
  * Community user 360 view
  *
- * Returns the profile, roles, linked account, characters, wallet and recent orders for a community user. Requires the azeroth.admin.users.read permission.
+ * Returns the profile, roles, linked account, characters, wallet and recent orders for a community user. Requires the gw.identity.user.read permission.
  */
 export const azerothAdminUsersGetOptions = (options: Options<AzerothAdminUsersGetData>) => queryOptions<AzerothAdminUsersGetResponse, AzerothAdminUsersGetError, AzerothAdminUsersGetResponse, ReturnType<typeof azerothAdminUsersGetQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -1539,7 +1539,7 @@ export const identityUsersListQueryKey = (options?: Options<IdentityUsersListDat
 /**
  * List community users
  *
- * Lists provisioned community users. Requires the identity.user.list permission.
+ * Lists provisioned community users. Requires the gw.identity.user.read permission.
  */
 export const identityUsersListOptions = (options?: Options<IdentityUsersListData>) => queryOptions<IdentityUsersListResponse, IdentityUsersListError, IdentityUsersListResponse, ReturnType<typeof identityUsersListQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -1559,7 +1559,7 @@ export const identityUsersListInfiniteQueryKey = (options?: Options<IdentityUser
 /**
  * List community users
  *
- * Lists provisioned community users. Requires the identity.user.list permission.
+ * Lists provisioned community users. Requires the gw.identity.user.read permission.
  */
 export const identityUsersListInfiniteOptions = (options?: Options<IdentityUsersListData>) => {
     const opts = infiniteQueryOptions<IdentityUsersListResponse, IdentityUsersListError, InfiniteData<IdentityUsersListResponse>, QueryKey<Options<IdentityUsersListData>>, number | Pick<QueryKey<Options<IdentityUsersListData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
@@ -1681,7 +1681,7 @@ export const azerothPublicStatusOptions = (options?: Options<AzerothPublicStatus
 /**
  * Submit a report
  *
- * Reports another player. Requires the report.create permission.
+ * Reports another player. Requires the gw.report.create permission.
  */
 export const reportsCreateMutation = (options?: Partial<Options<ReportsCreateData>>): UseMutationOptions<ReportsCreateResponse, ReportsCreateError, Options<ReportsCreateData>> => {
     const mutationOptions: UseMutationOptions<ReportsCreateResponse, ReportsCreateError, Options<ReportsCreateData>> = {
@@ -1702,7 +1702,7 @@ export const reportsMineQueryKey = (options?: Options<ReportsMineData>) => creat
 /**
  * My reports
  *
- * Lists the authenticated user's own reports. Requires the report.create permission.
+ * Lists the authenticated user's own reports. Requires the gw.report.create permission.
  */
 export const reportsMineOptions = (options?: Options<ReportsMineData>) => queryOptions<ReportsMineResponse, ReportsMineError, ReportsMineResponse, ReturnType<typeof reportsMineQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -1722,7 +1722,7 @@ export const reportsMineInfiniteQueryKey = (options?: Options<ReportsMineData>):
 /**
  * My reports
  *
- * Lists the authenticated user's own reports. Requires the report.create permission.
+ * Lists the authenticated user's own reports. Requires the gw.report.create permission.
  */
 export const reportsMineInfiniteOptions = (options?: Options<ReportsMineData>) => {
     const opts = infiniteQueryOptions<ReportsMineResponse, ReportsMineError, InfiniteData<ReportsMineResponse>, QueryKey<Options<ReportsMineData>>, number | Pick<QueryKey<Options<ReportsMineData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
@@ -1754,7 +1754,7 @@ export const storeOrdersListQueryKey = (options?: Options<StoreOrdersListData>) 
 /**
  * List orders
  *
- * Lists the authenticated user's orders. Requires the store.orders.read permission.
+ * Lists the authenticated user's orders. Requires the gw.store.orders.read permission.
  */
 export const storeOrdersListOptions = (options?: Options<StoreOrdersListData>) => queryOptions<StoreOrdersListResponse, StoreOrdersListError, StoreOrdersListResponse, ReturnType<typeof storeOrdersListQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -1774,7 +1774,7 @@ export const storeOrdersListInfiniteQueryKey = (options?: Options<StoreOrdersLis
 /**
  * List orders
  *
- * Lists the authenticated user's orders. Requires the store.orders.read permission.
+ * Lists the authenticated user's orders. Requires the gw.store.orders.read permission.
  */
 export const storeOrdersListInfiniteOptions = (options?: Options<StoreOrdersListData>) => {
     const opts = infiniteQueryOptions<StoreOrdersListResponse, StoreOrdersListError, InfiniteData<StoreOrdersListResponse>, QueryKey<Options<StoreOrdersListData>>, number | Pick<QueryKey<Options<StoreOrdersListData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
@@ -1804,7 +1804,7 @@ export const storeOrdersListInfiniteOptions = (options?: Options<StoreOrdersList
 /**
  * Purchase a product
  *
- * Buys a product and delivers it to a character. Requires the store.purchase permission.
+ * Buys a product and delivers it to a character. Requires the gw.store.purchase permission.
  */
 export const storeOrdersCreateMutation = (options?: Partial<Options<StoreOrdersCreateData>>): UseMutationOptions<StoreOrdersCreateResponse, StoreOrdersCreateError, Options<StoreOrdersCreateData>> => {
     const mutationOptions: UseMutationOptions<StoreOrdersCreateResponse, StoreOrdersCreateError, Options<StoreOrdersCreateData>> = {
@@ -1825,7 +1825,7 @@ export const storeProductsListQueryKey = (options?: Options<StoreProductsListDat
 /**
  * List products
  *
- * Lists the store catalog. Requires the store.catalog.read permission.
+ * Lists the store catalog. Requires the gw.store.catalog.read permission.
  */
 export const storeProductsListOptions = (options?: Options<StoreProductsListData>) => queryOptions<StoreProductsListResponse, StoreProductsListError, StoreProductsListResponse, ReturnType<typeof storeProductsListQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -1843,7 +1843,7 @@ export const storeProductsListOptions = (options?: Options<StoreProductsListData
 /**
  * Create a product
  *
- * Creates a catalog product. Requires the store.admin.products permission.
+ * Creates a catalog product. Requires the gw.store.admin.products permission.
  */
 export const storeProductsCreateMutation = (options?: Partial<Options<StoreProductsCreateData>>): UseMutationOptions<StoreProductsCreateResponse, StoreProductsCreateError, Options<StoreProductsCreateData>> => {
     const mutationOptions: UseMutationOptions<StoreProductsCreateResponse, StoreProductsCreateError, Options<StoreProductsCreateData>> = {
@@ -1862,7 +1862,7 @@ export const storeProductsCreateMutation = (options?: Partial<Options<StoreProdu
 /**
  * Deactivate a product
  *
- * Deactivates a catalog product. Requires the store.admin.products permission.
+ * Deactivates a catalog product. Requires the gw.store.admin.products permission.
  */
 export const storeProductsDeleteMutation = (options?: Partial<Options<StoreProductsDeleteData>>): UseMutationOptions<StoreProductsDeleteResponse, StoreProductsDeleteError, Options<StoreProductsDeleteData>> => {
     const mutationOptions: UseMutationOptions<StoreProductsDeleteResponse, StoreProductsDeleteError, Options<StoreProductsDeleteData>> = {
@@ -1883,7 +1883,7 @@ export const storeProductsGetQueryKey = (options: Options<StoreProductsGetData>)
 /**
  * Get a product
  *
- * Returns one catalog product. Requires the store.catalog.read permission.
+ * Returns one catalog product. Requires the gw.store.catalog.read permission.
  */
 export const storeProductsGetOptions = (options: Options<StoreProductsGetData>) => queryOptions<StoreProductsGetResponse, StoreProductsGetError, StoreProductsGetResponse, ReturnType<typeof storeProductsGetQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -1901,7 +1901,7 @@ export const storeProductsGetOptions = (options: Options<StoreProductsGetData>) 
 /**
  * Update a product
  *
- * Updates a catalog product. Requires the store.admin.products permission.
+ * Updates a catalog product. Requires the gw.store.admin.products permission.
  */
 export const storeProductsUpdateMutation = (options?: Partial<Options<StoreProductsUpdateData>>): UseMutationOptions<StoreProductsUpdateResponse, StoreProductsUpdateError, Options<StoreProductsUpdateData>> => {
     const mutationOptions: UseMutationOptions<StoreProductsUpdateResponse, StoreProductsUpdateError, Options<StoreProductsUpdateData>> = {
@@ -1922,7 +1922,7 @@ export const storeWalletGetQueryKey = (options?: Options<StoreWalletGetData>) =>
 /**
  * Get the wallet
  *
- * Returns the authenticated user's point balance. Requires the store.wallet.read permission.
+ * Returns the authenticated user's point balance. Requires the gw.store.wallet.read permission.
  */
 export const storeWalletGetOptions = (options?: Options<StoreWalletGetData>) => queryOptions<StoreWalletGetResponse, StoreWalletGetError, StoreWalletGetResponse, ReturnType<typeof storeWalletGetQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -1940,7 +1940,7 @@ export const storeWalletGetOptions = (options?: Options<StoreWalletGetData>) => 
 /**
  * Grant wallet points
  *
- * Adds points to a community user's wallet. Requires the store.admin.wallets permission.
+ * Adds points to a community user's wallet. Requires the gw.store.admin.wallets permission.
  */
 export const storeWalletsGrantMutation = (options?: Partial<Options<StoreWalletsGrantData>>): UseMutationOptions<StoreWalletsGrantResponse, StoreWalletsGrantError, Options<StoreWalletsGrantData>> => {
     const mutationOptions: UseMutationOptions<StoreWalletsGrantResponse, StoreWalletsGrantError, Options<StoreWalletsGrantData>> = {

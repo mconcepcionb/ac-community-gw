@@ -52,7 +52,7 @@ type ReportsResponse struct {
 // handleCreate handles POST /api/v1/reports.
 //
 //	@Summary		Submit a report
-//	@Description	Reports another player. Requires the report.create permission.
+//	@Description	Reports another player. Requires the gw.report.create permission.
 //	@Tags			reports
 //	@ID				reports.create
 //	@Accept			json
@@ -105,7 +105,7 @@ func (p *Plugin) handleCreate(w http.ResponseWriter, r *http.Request) {
 // handleMine handles GET /api/v1/reports/mine.
 //
 //	@Summary		My reports
-//	@Description	Lists the authenticated user's own reports. Requires the report.create permission.
+//	@Description	Lists the authenticated user's own reports. Requires the gw.report.create permission.
 //	@Tags			reports
 //	@ID				reports.mine
 //	@Produce		json
@@ -134,7 +134,7 @@ func (p *Plugin) handleMine(w http.ResponseWriter, r *http.Request) {
 // handleList handles GET /api/v1/admin/reports.
 //
 //	@Summary		List reports
-//	@Description	Lists every report, newest first, optionally filtered by status. Requires the report.read permission.
+//	@Description	Lists every report, newest first, optionally filtered by status. Requires the gw.report.read permission.
 //	@Tags			reports
 //	@ID				reports.list
 //	@Produce		json
@@ -164,7 +164,7 @@ func (p *Plugin) handleList(w http.ResponseWriter, r *http.Request) {
 // handleClose handles POST /api/v1/admin/reports/{id}/close.
 //
 //	@Summary		Close a report
-//	@Description	Marks a report closed. Requires the report.read permission.
+//	@Description	Marks a report closed. Requires the gw.report.read permission.
 //	@Tags			reports
 //	@ID				reports.close
 //	@Produce		json

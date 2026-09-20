@@ -65,7 +65,7 @@ type APIKeySecretResponse struct {
 // handlePermissions handles GET /api/v1/admin/permissions.
 //
 //	@Summary		List registered permissions
-//	@Description	Returns every permission registered by the plugins, for the API key scope picker. Requires the apikeys.manage permission.
+//	@Description	Returns every permission registered by the plugins, for the API key scope picker. Requires the gw.apikeys.manage permission.
 //	@Tags			apikeys
 //	@ID				apikeys.permissions.list
 //	@Produce		json
@@ -93,7 +93,7 @@ func (p *Plugin) handlePermissions(w http.ResponseWriter, r *http.Request) {
 // handleList handles GET /api/v1/admin/api-keys.
 //
 //	@Summary		List API keys
-//	@Description	Lists every API key (without secrets). Requires the apikeys.manage permission.
+//	@Description	Lists every API key (without secrets). Requires the gw.apikeys.manage permission.
 //	@Tags			apikeys
 //	@ID				apikeys.list
 //	@Produce		json
@@ -122,7 +122,7 @@ func (p *Plugin) handleList(w http.ResponseWriter, r *http.Request) {
 // handleCreate handles POST /api/v1/admin/api-keys.
 //
 //	@Summary		Create an API key
-//	@Description	Issues a scoped API key. The secret is returned once. Requires the apikeys.manage permission.
+//	@Description	Issues a scoped API key. The secret is returned once. Requires the gw.apikeys.manage permission.
 //	@Tags			apikeys
 //	@ID				apikeys.create
 //	@Accept			json
@@ -163,7 +163,7 @@ func (p *Plugin) handleCreate(w http.ResponseWriter, r *http.Request) {
 // handleRotate handles POST /api/v1/admin/api-keys/{id}/rotate.
 //
 //	@Summary		Rotate an API key
-//	@Description	Issues a new secret for a key. Requires the apikeys.manage permission.
+//	@Description	Issues a new secret for a key. Requires the gw.apikeys.manage permission.
 //	@Tags			apikeys
 //	@ID				apikeys.rotate
 //	@Produce		json
@@ -201,7 +201,7 @@ func (p *Plugin) handleRotate(w http.ResponseWriter, r *http.Request) {
 // handleRevoke handles DELETE /api/v1/admin/api-keys/{id}.
 //
 //	@Summary		Revoke an API key
-//	@Description	Deletes an API key immediately. Requires the apikeys.manage permission.
+//	@Description	Deletes an API key immediately. Requires the gw.apikeys.manage permission.
 //	@Tags			apikeys
 //	@ID				apikeys.revoke
 //	@Param			id	path	string	true	"key id"

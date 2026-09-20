@@ -3,38 +3,26 @@ package identitydiscord
 import "github.com/mconcepcionb/ac-community-gw/internal/core/permissions"
 
 const (
-	// PermissionSelfRead allows reading the authenticated user's profile.
-	PermissionSelfRead permissions.Permission = "identity.self.read"
-	// PermissionSessionRevoke allows revoking user sessions.
-	PermissionSessionRevoke permissions.Permission = "identity.session.revoke"
-	// PermissionUserList allows searching community users.
-	PermissionUserList permissions.Permission = "identity.user.list"
+	// PermissionUserRead allows reading and searching community users.
+	PermissionUserRead permissions.Permission = "gw.identity.user.read"
 	// PermissionRolesManage allows managing roles, permission grants and Discord
 	// role mappings.
-	PermissionRolesManage permissions.Permission = "identity.roles.manage"
+	PermissionRolesManage permissions.Permission = "gw.identity.roles.manage"
 )
 
 func permissionDefs() []permissions.Definition {
 	return []permissions.Definition{
 		{
-			Name:        PermissionSelfRead,
-			Description: "Read the authenticated user's own profile",
+			Name:        PermissionUserRead,
+			Description: "Read and search community users",
 			Owner:       Name,
-		},
-		{
-			Name:        PermissionSessionRevoke,
-			Description: "Revoke user sessions",
-			Owner:       Name,
-		},
-		{
-			Name:        PermissionUserList,
-			Description: "Search community users",
-			Owner:       Name,
+			Namespace:   "gw",
 		},
 		{
 			Name:        PermissionRolesManage,
 			Description: "Manage roles, permission grants and Discord role mappings",
 			Owner:       Name,
+			Namespace:   "gw",
 		},
 	}
 }

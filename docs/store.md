@@ -25,15 +25,15 @@ entries are picked from the [item catalog](azerothcore-integration.md#item-catal
 
 | Method | Path | Permission |
 | --- | --- | --- |
-| `GET` | `/api/v1/store/products` | `store.catalog.read` |
-| `GET` | `/api/v1/store/products/{sku}` | `store.catalog.read` |
-| `POST` | `/api/v1/store/products` | `store.admin.products` |
-| `PUT` | `/api/v1/store/products/{sku}` | `store.admin.products` |
-| `DELETE` | `/api/v1/store/products/{sku}` | `store.admin.products` |
-| `GET` | `/api/v1/store/wallet` | `store.wallet.read` |
-| `GET` | `/api/v1/store/orders` | `store.orders.read` |
-| `POST` | `/api/v1/store/orders` | `store.purchase` |
-| `POST` | `/api/v1/store/wallets/grant` | `store.admin.wallets` |
+| `GET` | `/api/v1/store/products` | `gw.store.catalog.read` |
+| `GET` | `/api/v1/store/products/{sku}` | `gw.store.catalog.read` |
+| `POST` | `/api/v1/store/products` | `gw.store.admin.products` |
+| `PUT` | `/api/v1/store/products/{sku}` | `gw.store.admin.products` |
+| `DELETE` | `/api/v1/store/products/{sku}` | `gw.store.admin.products` |
+| `GET` | `/api/v1/store/wallet` | `gw.store.wallet.read` |
+| `GET` | `/api/v1/store/orders` | `gw.store.orders.read` |
+| `POST` | `/api/v1/store/orders` | `gw.store.purchase` |
+| `POST` | `/api/v1/store/wallets/grant` | `gw.store.admin.wallets` |
 
 `POST /api/v1/store/orders` body `{"sku": "...", "character": "..."}`.
 `POST /api/v1/store/wallets/grant` body `{"user_id": "..." | "discord_id": "...",
@@ -89,7 +89,7 @@ task db:migrate
 psql "$ACGW_DATABASE_URL" -f scripts/seed_demo_store.sql   # example catalog
 ```
 
-Grant `store.*` permissions to a role (the demo seed
+Grant `gw.store.*` permissions to a role (the demo seed
 `scripts/seed_demo_admin.sql` grants them to `ac-core.admin`).
 
 ## Out of scope (v1)

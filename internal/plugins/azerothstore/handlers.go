@@ -125,7 +125,7 @@ type OrdersResponse struct {
 // handleProducts handles GET /api/v1/store/products.
 //
 //	@Summary		List products
-//	@Description	Lists the store catalog. Requires the store.catalog.read permission.
+//	@Description	Lists the store catalog. Requires the gw.store.catalog.read permission.
 //	@Tags			store
 //	@ID				store.products.list
 //	@Produce		json
@@ -154,7 +154,7 @@ func (p *Plugin) handleProducts(w http.ResponseWriter, r *http.Request) {
 // handleProduct handles GET /api/v1/store/products/{sku}.
 //
 //	@Summary		Get a product
-//	@Description	Returns one catalog product. Requires the store.catalog.read permission.
+//	@Description	Returns one catalog product. Requires the gw.store.catalog.read permission.
 //	@Tags			store
 //	@ID				store.products.get
 //	@Produce		json
@@ -185,7 +185,7 @@ func (p *Plugin) handleProduct(w http.ResponseWriter, r *http.Request) {
 // handleWallet handles GET /api/v1/store/wallet.
 //
 //	@Summary		Get the wallet
-//	@Description	Returns the authenticated user's point balance. Requires the store.wallet.read permission.
+//	@Description	Returns the authenticated user's point balance. Requires the gw.store.wallet.read permission.
 //	@Tags			store
 //	@ID				store.wallet.get
 //	@Produce		json
@@ -211,7 +211,7 @@ func (p *Plugin) handleWallet(w http.ResponseWriter, r *http.Request) {
 // handleOrders handles GET /api/v1/store/orders.
 //
 //	@Summary		List orders
-//	@Description	Lists the authenticated user's orders. Requires the store.orders.read permission.
+//	@Description	Lists the authenticated user's orders. Requires the gw.store.orders.read permission.
 //	@Tags			store
 //	@ID				store.orders.list
 //	@Produce		json
@@ -245,7 +245,7 @@ func (p *Plugin) handleOrders(w http.ResponseWriter, r *http.Request) {
 // handleAdminOrders handles GET /api/v1/admin/store/orders.
 //
 //	@Summary		List all orders
-//	@Description	Lists every store order, newest first, optionally filtered by status. Requires the store.admin.orders.read permission.
+//	@Description	Lists every store order, newest first, optionally filtered by status. Requires the gw.store.admin.orders.read permission.
 //	@Tags			store
 //	@ID				store.admin.orders.list
 //	@Produce		json
@@ -280,7 +280,7 @@ func (p *Plugin) handleAdminOrders(w http.ResponseWriter, r *http.Request) {
 // handlePurchase handles POST /api/v1/store/orders.
 //
 //	@Summary		Purchase a product
-//	@Description	Buys a product and delivers it to a character. Requires the store.purchase permission.
+//	@Description	Buys a product and delivers it to a character. Requires the gw.store.purchase permission.
 //	@Tags			store
 //	@ID				store.orders.create
 //	@Accept			json
@@ -399,7 +399,7 @@ func (p *Plugin) completeOrderWithRetry(ctx context.Context, orderID uuid.UUID, 
 // handleGrant handles POST /api/v1/store/wallets/grant.
 //
 //	@Summary		Grant wallet points
-//	@Description	Adds points to a community user's wallet. Requires the store.admin.wallets permission.
+//	@Description	Adds points to a community user's wallet. Requires the gw.store.admin.wallets permission.
 //	@Tags			store
 //	@ID				store.wallets.grant
 //	@Accept			json
@@ -564,7 +564,7 @@ type ProductRequest struct {
 // handleCreateProduct handles POST /api/v1/store/products.
 //
 //	@Summary		Create a product
-//	@Description	Creates a catalog product. Requires the store.admin.products permission.
+//	@Description	Creates a catalog product. Requires the gw.store.admin.products permission.
 //	@Tags			store
 //	@ID				store.products.create
 //	@Accept			json
@@ -608,7 +608,7 @@ func (p *Plugin) handleCreateProduct(w http.ResponseWriter, r *http.Request) {
 // handleUpdateProduct handles PUT /api/v1/store/products/{sku}.
 //
 //	@Summary		Update a product
-//	@Description	Updates a catalog product. Requires the store.admin.products permission.
+//	@Description	Updates a catalog product. Requires the gw.store.admin.products permission.
 //	@Tags			store
 //	@ID				store.products.update
 //	@Accept			json
@@ -653,7 +653,7 @@ func (p *Plugin) handleUpdateProduct(w http.ResponseWriter, r *http.Request) {
 // handleDeleteProduct handles DELETE /api/v1/store/products/{sku}.
 //
 //	@Summary		Deactivate a product
-//	@Description	Deactivates a catalog product. Requires the store.admin.products permission.
+//	@Description	Deactivates a catalog product. Requires the gw.store.admin.products permission.
 //	@Tags			store
 //	@ID				store.products.delete
 //	@Produce		json

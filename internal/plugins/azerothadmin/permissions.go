@@ -3,8 +3,6 @@ package azerothadmin
 import "github.com/mconcepcionb/ac-community-gw/internal/core/permissions"
 
 const (
-	// PermissionAdminAccountsRead allows reading accounts as an administrator.
-	PermissionAdminAccountsRead permissions.Permission = "azeroth.admin.accounts.read"
 	// PermissionAdminAccountsBan allows banning and unbanning accounts.
 	PermissionAdminAccountsBan permissions.Permission = "azeroth.admin.accounts.ban"
 	// PermissionAdminAccountsGMLevel allows changing account GM level.
@@ -19,63 +17,65 @@ const (
 	PermissionAdminCharactersBan permissions.Permission = "azeroth.admin.characters.ban"
 	// PermissionAdminAnnounce allows broadcasting announcements.
 	PermissionAdminAnnounce permissions.Permission = "azeroth.admin.announce"
-	// PermissionAdminUsersRead allows reading the community user 360 view.
-	PermissionAdminUsersRead permissions.Permission = "azeroth.admin.users.read"
-	// PermissionAdminAuditRead allows reading the audit log.
-	PermissionAdminAuditRead permissions.Permission = "audit.read"
+	// PermissionAdminAuditRead allows reading the audit log. It is
+	// gateway-generic (ADR 0014); the definition is registered here until the
+	// generic admin routes move to a gateway plugin.
+	PermissionAdminAuditRead permissions.Permission = "gw.audit.read"
+	// permissionUserRead is the gateway-generic permission that gates the
+	// community user 360 view. It is owned by identity-discord; this plugin only
+	// enforces it on its aggregate route.
+	permissionUserRead permissions.Permission = "gw.identity.user.read"
 )
 
 func permissionDefs() []permissions.Definition {
 	return []permissions.Definition{
 		{
-			Name:        PermissionAdminAccountsRead,
-			Description: "Read AzerothCore accounts as an administrator",
-			Owner:       Name,
-		},
-		{
 			Name:        PermissionAdminAccountsBan,
 			Description: "Ban and unban AzerothCore accounts",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionAdminAccountsGMLevel,
 			Description: "Change AzerothCore account GM level",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionAdminPlayersRead,
 			Description: "List online players",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionAdminPlayersKick,
 			Description: "Kick online players",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionAdminPlayersMute,
 			Description: "Mute and unmute players",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionAdminCharactersBan,
 			Description: "Ban and unban characters",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionAdminAnnounce,
 			Description: "Broadcast announcements",
 			Owner:       Name,
-		},
-		{
-			Name:        PermissionAdminUsersRead,
-			Description: "Read the community user 360 view",
-			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionAdminAuditRead,
 			Description: "Read the audit log",
 			Owner:       Name,
+			Namespace:   "gw",
 		},
 	}
 }

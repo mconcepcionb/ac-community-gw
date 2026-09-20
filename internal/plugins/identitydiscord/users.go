@@ -27,7 +27,7 @@ type ListUsersResponse struct {
 // handleListUsers handles GET /api/v1/identity/users.
 //
 //	@Summary		List community users
-//	@Description	Lists provisioned community users. Requires the identity.user.list permission.
+//	@Description	Lists provisioned community users. Requires the gw.identity.user.read permission.
 //	@Tags			identity
 //	@ID				identity.users.list
 //	@Produce		json

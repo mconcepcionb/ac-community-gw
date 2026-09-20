@@ -33,14 +33,14 @@ function meWithPermissions(permissions: string[]) {
 
 describe("Can", () => {
   it("renders children when the permission is granted", async () => {
-    server.use(meWithPermissions(["store.catalog.read"]));
-    renderCan("store.catalog.read");
+    server.use(meWithPermissions(["gw.store.catalog.read"]));
+    renderCan("gw.store.catalog.read");
     expect(await screen.findByText("allowed")).toBeInTheDocument();
   });
 
   it("renders the fallback when the permission is missing", async () => {
     server.use(meWithPermissions([]));
-    renderCan("store.admin.products");
+    renderCan("gw.store.admin.products");
     expect(await screen.findByText("denied")).toBeInTheDocument();
   });
 });

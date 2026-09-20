@@ -62,7 +62,7 @@ type AdminUser struct {
 // handleUser360 handles GET /api/v1/admin/users/{id}.
 //
 //	@Summary		Community user 360 view
-//	@Description	Returns the profile, roles, linked account, characters, wallet and recent orders for a community user. Requires the azeroth.admin.users.read permission.
+//	@Description	Returns the profile, roles, linked account, characters, wallet and recent orders for a community user. Requires the gw.identity.user.read permission.
 //	@Tags			azeroth-admin
 //	@ID				azeroth.admin.users.get
 //	@Produce		json

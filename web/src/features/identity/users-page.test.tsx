@@ -35,7 +35,7 @@ function renderUsers() {
 describe("UsersPage", () => {
   it("lists users when authorized", async () => {
     server.use(
-      authorized(["identity.user.list"]),
+      authorized(["gw.identity.user.read"]),
       http.get(usersUrl, () =>
         HttpResponse.json({
           users: [
@@ -58,7 +58,7 @@ describe("UsersPage", () => {
 
   it("shows the empty state", async () => {
     server.use(
-      authorized(["identity.user.list"]),
+      authorized(["gw.identity.user.read"]),
       http.get(usersUrl, () => HttpResponse.json({ users: [] })),
     );
 

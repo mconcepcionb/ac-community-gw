@@ -41,7 +41,7 @@ describe("WalletPage", () => {
           user_id: "u1",
           discord_id: "1",
           roles: [],
-          permissions: ["store.wallet.read", "store.orders.read", "store.purchase"],
+          permissions: ["gw.store.wallet.read", "gw.store.orders.read", "gw.store.purchase"],
         }),
       ),
       http.get(walletUrl, () => HttpResponse.json({ user_id: "u1", balance: 1000 })),

@@ -30,7 +30,7 @@ export function WalletPage() {
         title="Wallet"
         description="Your points balance and order history."
         actions={
-          <PermissionGate permission="store.purchase">
+          <PermissionGate permission="gw.store.purchase">
             <PurchaseDialog trigger={<Button>Purchase</Button>} />
           </PermissionGate>
         }

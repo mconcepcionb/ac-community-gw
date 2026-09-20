@@ -78,13 +78,13 @@ describe("api client", () => {
           user_id: "u1",
           discord_id: "42",
           roles: ["member"],
-          permissions: ["store.catalog.read"],
+          permissions: ["gw.store.catalog.read"],
         }),
       ),
     );
 
     const { data } = await authMe();
     expect(data?.discord_id).toBe("42");
-    expect(data?.permissions).toEqual(["store.catalog.read"]);
+    expect(data?.permissions).toEqual(["gw.store.catalog.read"]);
   });
 });

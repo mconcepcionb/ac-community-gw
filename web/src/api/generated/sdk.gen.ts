@@ -70,14 +70,14 @@ export const adminNotesUpdate = <ThrowOnError extends boolean = false>(options: 
 /**
  * List API keys
  *
- * Lists every API key (without secrets). Requires the apikeys.manage permission.
+ * Lists every API key (without secrets). Requires the gw.apikeys.manage permission.
  */
 export const apikeysList = <ThrowOnError extends boolean = false>(options?: Options<ApikeysListData, ThrowOnError>): RequestResult<ApikeysListResponses, ApikeysListErrors, ThrowOnError> => (options?.client ?? client).get<ApikeysListResponses, ApikeysListErrors, ThrowOnError>({ url: '/api/v1/admin/api-keys', ...options });
 
 /**
  * Create an API key
  *
- * Issues a scoped API key. The secret is returned once. Requires the apikeys.manage permission.
+ * Issues a scoped API key. The secret is returned once. Requires the gw.apikeys.manage permission.
  */
 export const apikeysCreate = <ThrowOnError extends boolean = false>(options: Options<ApikeysCreateData, ThrowOnError>): RequestResult<ApikeysCreateResponses, ApikeysCreateErrors, ThrowOnError> => (options.client ?? client).post<ApikeysCreateResponses, ApikeysCreateErrors, ThrowOnError>({
     url: '/api/v1/admin/api-keys',
@@ -91,35 +91,35 @@ export const apikeysCreate = <ThrowOnError extends boolean = false>(options: Opt
 /**
  * Revoke an API key
  *
- * Deletes an API key immediately. Requires the apikeys.manage permission.
+ * Deletes an API key immediately. Requires the gw.apikeys.manage permission.
  */
 export const apikeysRevoke = <ThrowOnError extends boolean = false>(options: Options<ApikeysRevokeData, ThrowOnError>): RequestResult<ApikeysRevokeResponses, ApikeysRevokeErrors, ThrowOnError> => (options.client ?? client).delete<ApikeysRevokeResponses, ApikeysRevokeErrors, ThrowOnError>({ url: '/api/v1/admin/api-keys/{id}', ...options });
 
 /**
  * Rotate an API key
  *
- * Issues a new secret for a key. Requires the apikeys.manage permission.
+ * Issues a new secret for a key. Requires the gw.apikeys.manage permission.
  */
 export const apikeysRotate = <ThrowOnError extends boolean = false>(options: Options<ApikeysRotateData, ThrowOnError>): RequestResult<ApikeysRotateResponses, ApikeysRotateErrors, ThrowOnError> => (options.client ?? client).post<ApikeysRotateResponses, ApikeysRotateErrors, ThrowOnError>({ url: '/api/v1/admin/api-keys/{id}/rotate', ...options });
 
 /**
  * Read the audit log
  *
- * Lists audit entries, newest first, filterable by actor, target, action and time range. Requires the audit.read permission.
+ * Lists audit entries, newest first, filterable by actor, target, action and time range. Requires the gw.audit.read permission.
  */
 export const azerothAdminAuditList = <ThrowOnError extends boolean = false>(options?: Options<AzerothAdminAuditListData, ThrowOnError>): RequestResult<AzerothAdminAuditListResponses, AzerothAdminAuditListErrors, ThrowOnError> => (options?.client ?? client).get<AzerothAdminAuditListResponses, AzerothAdminAuditListErrors, ThrowOnError>({ url: '/api/v1/admin/audit', ...options });
 
 /**
  * Delete a Discord role mapping
  *
- * Removes a Discord role mapping. Requires the identity.roles.manage permission.
+ * Removes a Discord role mapping. Requires the gw.identity.roles.manage permission.
  */
 export const identityAdminDiscordMappingsDelete = <ThrowOnError extends boolean = false>(options: Options<IdentityAdminDiscordMappingsDeleteData, ThrowOnError>): RequestResult<IdentityAdminDiscordMappingsDeleteResponses, IdentityAdminDiscordMappingsDeleteErrors, ThrowOnError> => (options.client ?? client).delete<IdentityAdminDiscordMappingsDeleteResponses, IdentityAdminDiscordMappingsDeleteErrors, ThrowOnError>({ url: '/api/v1/admin/discord-role-mappings/{discord_role_id}', ...options });
 
 /**
  * Map a Discord role to an internal role
  *
- * Creates or updates a Discord role mapping. Requires the identity.roles.manage permission.
+ * Creates or updates a Discord role mapping. Requires the gw.identity.roles.manage permission.
  */
 export const identityAdminDiscordMappingsUpsert = <ThrowOnError extends boolean = false>(options: Options<IdentityAdminDiscordMappingsUpsertData, ThrowOnError>): RequestResult<IdentityAdminDiscordMappingsUpsertResponses, IdentityAdminDiscordMappingsUpsertErrors, ThrowOnError> => (options.client ?? client).put<IdentityAdminDiscordMappingsUpsertResponses, IdentityAdminDiscordMappingsUpsertErrors, ThrowOnError>({
     url: '/api/v1/admin/discord-role-mappings/{discord_role_id}',
@@ -133,35 +133,35 @@ export const identityAdminDiscordMappingsUpsert = <ThrowOnError extends boolean 
 /**
  * List registered permissions
  *
- * Returns every permission registered by the plugins, for the API key scope picker. Requires the apikeys.manage permission.
+ * Returns every permission registered by the plugins, for the API key scope picker. Requires the gw.apikeys.manage permission.
  */
 export const apikeysPermissionsList = <ThrowOnError extends boolean = false>(options?: Options<ApikeysPermissionsListData, ThrowOnError>): RequestResult<ApikeysPermissionsListResponses, ApikeysPermissionsListErrors, ThrowOnError> => (options?.client ?? client).get<ApikeysPermissionsListResponses, ApikeysPermissionsListErrors, ThrowOnError>({ url: '/api/v1/admin/permissions', ...options });
 
 /**
  * List reports
  *
- * Lists every report, newest first, optionally filtered by status. Requires the report.read permission.
+ * Lists every report, newest first, optionally filtered by status. Requires the gw.report.read permission.
  */
 export const reportsList = <ThrowOnError extends boolean = false>(options?: Options<ReportsListData, ThrowOnError>): RequestResult<ReportsListResponses, ReportsListErrors, ThrowOnError> => (options?.client ?? client).get<ReportsListResponses, ReportsListErrors, ThrowOnError>({ url: '/api/v1/admin/reports', ...options });
 
 /**
  * Close a report
  *
- * Marks a report closed. Requires the report.read permission.
+ * Marks a report closed. Requires the gw.report.read permission.
  */
 export const reportsClose = <ThrowOnError extends boolean = false>(options: Options<ReportsCloseData, ThrowOnError>): RequestResult<ReportsCloseResponses, ReportsCloseErrors, ThrowOnError> => (options.client ?? client).post<ReportsCloseResponses, ReportsCloseErrors, ThrowOnError>({ url: '/api/v1/admin/reports/{id}/close', ...options });
 
 /**
  * List roles and mappings
  *
- * Returns every role -> permission grant and Discord role mapping. Requires the identity.roles.manage permission.
+ * Returns every role -> permission grant and Discord role mapping. Requires the gw.identity.roles.manage permission.
  */
 export const identityAdminRolesList = <ThrowOnError extends boolean = false>(options?: Options<IdentityAdminRolesListData, ThrowOnError>): RequestResult<IdentityAdminRolesListResponses, IdentityAdminRolesListErrors, ThrowOnError> => (options?.client ?? client).get<IdentityAdminRolesListResponses, IdentityAdminRolesListErrors, ThrowOnError>({ url: '/api/v1/admin/roles', ...options });
 
 /**
  * Grant a permission to a role
  *
- * Grants a permission to a role (creating the role if needed). Requires the identity.roles.manage permission.
+ * Grants a permission to a role (creating the role if needed). Requires the gw.identity.roles.manage permission.
  */
 export const identityAdminRolesGrant = <ThrowOnError extends boolean = false>(options: Options<IdentityAdminRolesGrantData, ThrowOnError>): RequestResult<IdentityAdminRolesGrantResponses, IdentityAdminRolesGrantErrors, ThrowOnError> => (options.client ?? client).post<IdentityAdminRolesGrantResponses, IdentityAdminRolesGrantErrors, ThrowOnError>({
     url: '/api/v1/admin/roles/{role}/permissions',
@@ -175,21 +175,21 @@ export const identityAdminRolesGrant = <ThrowOnError extends boolean = false>(op
 /**
  * Revoke a permission from a role
  *
- * Revokes a permission from a role. Requires the identity.roles.manage permission.
+ * Revokes a permission from a role. Requires the gw.identity.roles.manage permission.
  */
 export const identityAdminRolesRevoke = <ThrowOnError extends boolean = false>(options: Options<IdentityAdminRolesRevokeData, ThrowOnError>): RequestResult<IdentityAdminRolesRevokeResponses, IdentityAdminRolesRevokeErrors, ThrowOnError> => (options.client ?? client).delete<IdentityAdminRolesRevokeResponses, IdentityAdminRolesRevokeErrors, ThrowOnError>({ url: '/api/v1/admin/roles/{role}/permissions/{permission}', ...options });
 
 /**
  * List all orders
  *
- * Lists every store order, newest first, optionally filtered by status. Requires the store.admin.orders.read permission.
+ * Lists every store order, newest first, optionally filtered by status. Requires the gw.store.admin.orders.read permission.
  */
 export const storeAdminOrdersList = <ThrowOnError extends boolean = false>(options?: Options<StoreAdminOrdersListData, ThrowOnError>): RequestResult<StoreAdminOrdersListResponses, StoreAdminOrdersListErrors, ThrowOnError> => (options?.client ?? client).get<StoreAdminOrdersListResponses, StoreAdminOrdersListErrors, ThrowOnError>({ url: '/api/v1/admin/store/orders', ...options });
 
 /**
  * Refund a stuck order
  *
- * Marks a pending order failed and refunds its points. Requires the store.admin.orders.resolve permission.
+ * Marks a pending order failed and refunds its points. Requires the gw.store.admin.orders.resolve permission.
  */
 export const storeAdminOrdersRefund = <ThrowOnError extends boolean = false>(options: Options<StoreAdminOrdersRefundData, ThrowOnError>): RequestResult<StoreAdminOrdersRefundResponses, StoreAdminOrdersRefundErrors, ThrowOnError> => (options.client ?? client).post<StoreAdminOrdersRefundResponses, StoreAdminOrdersRefundErrors, ThrowOnError>({
     url: '/api/v1/admin/store/orders/{id}/refund',
@@ -203,14 +203,14 @@ export const storeAdminOrdersRefund = <ThrowOnError extends boolean = false>(opt
 /**
  * Retry a stuck order
  *
- * Re-delivers a pending order's reward and completes it. Requires the store.admin.orders.resolve permission.
+ * Re-delivers a pending order's reward and completes it. Requires the gw.store.admin.orders.resolve permission.
  */
 export const storeAdminOrdersRetry = <ThrowOnError extends boolean = false>(options: Options<StoreAdminOrdersRetryData, ThrowOnError>): RequestResult<StoreAdminOrdersRetryResponses, StoreAdminOrdersRetryErrors, ThrowOnError> => (options.client ?? client).post<StoreAdminOrdersRetryResponses, StoreAdminOrdersRetryErrors, ThrowOnError>({ url: '/api/v1/admin/store/orders/{id}/retry', ...options });
 
 /**
  * Community user 360 view
  *
- * Returns the profile, roles, linked account, characters, wallet and recent orders for a community user. Requires the azeroth.admin.users.read permission.
+ * Returns the profile, roles, linked account, characters, wallet and recent orders for a community user. Requires the gw.identity.user.read permission.
  */
 export const azerothAdminUsersGet = <ThrowOnError extends boolean = false>(options: Options<AzerothAdminUsersGetData, ThrowOnError>): RequestResult<AzerothAdminUsersGetResponses, AzerothAdminUsersGetErrors, ThrowOnError> => (options.client ?? client).get<AzerothAdminUsersGetResponses, AzerothAdminUsersGetErrors, ThrowOnError>({ url: '/api/v1/admin/users/{id}', ...options });
 
@@ -588,7 +588,7 @@ export const azerothUserCharactersList = <ThrowOnError extends boolean = false>(
 /**
  * List community users
  *
- * Lists provisioned community users. Requires the identity.user.list permission.
+ * Lists provisioned community users. Requires the gw.identity.user.read permission.
  */
 export const identityUsersList = <ThrowOnError extends boolean = false>(options?: Options<IdentityUsersListData, ThrowOnError>): RequestResult<IdentityUsersListResponses, IdentityUsersListErrors, ThrowOnError> => (options?.client ?? client).get<IdentityUsersListResponses, IdentityUsersListErrors, ThrowOnError>({ url: '/api/v1/identity/users', ...options });
 
@@ -616,7 +616,7 @@ export const azerothPublicStatus = <ThrowOnError extends boolean = false>(option
 /**
  * Submit a report
  *
- * Reports another player. Requires the report.create permission.
+ * Reports another player. Requires the gw.report.create permission.
  */
 export const reportsCreate = <ThrowOnError extends boolean = false>(options: Options<ReportsCreateData, ThrowOnError>): RequestResult<ReportsCreateResponses, ReportsCreateErrors, ThrowOnError> => (options.client ?? client).post<ReportsCreateResponses, ReportsCreateErrors, ThrowOnError>({
     url: '/api/v1/reports',
@@ -630,21 +630,21 @@ export const reportsCreate = <ThrowOnError extends boolean = false>(options: Opt
 /**
  * My reports
  *
- * Lists the authenticated user's own reports. Requires the report.create permission.
+ * Lists the authenticated user's own reports. Requires the gw.report.create permission.
  */
 export const reportsMine = <ThrowOnError extends boolean = false>(options?: Options<ReportsMineData, ThrowOnError>): RequestResult<ReportsMineResponses, ReportsMineErrors, ThrowOnError> => (options?.client ?? client).get<ReportsMineResponses, ReportsMineErrors, ThrowOnError>({ url: '/api/v1/reports/mine', ...options });
 
 /**
  * List orders
  *
- * Lists the authenticated user's orders. Requires the store.orders.read permission.
+ * Lists the authenticated user's orders. Requires the gw.store.orders.read permission.
  */
 export const storeOrdersList = <ThrowOnError extends boolean = false>(options?: Options<StoreOrdersListData, ThrowOnError>): RequestResult<StoreOrdersListResponses, StoreOrdersListErrors, ThrowOnError> => (options?.client ?? client).get<StoreOrdersListResponses, StoreOrdersListErrors, ThrowOnError>({ url: '/api/v1/store/orders', ...options });
 
 /**
  * Purchase a product
  *
- * Buys a product and delivers it to a character. Requires the store.purchase permission.
+ * Buys a product and delivers it to a character. Requires the gw.store.purchase permission.
  */
 export const storeOrdersCreate = <ThrowOnError extends boolean = false>(options: Options<StoreOrdersCreateData, ThrowOnError>): RequestResult<StoreOrdersCreateResponses, StoreOrdersCreateErrors, ThrowOnError> => (options.client ?? client).post<StoreOrdersCreateResponses, StoreOrdersCreateErrors, ThrowOnError>({
     url: '/api/v1/store/orders',
@@ -658,14 +658,14 @@ export const storeOrdersCreate = <ThrowOnError extends boolean = false>(options:
 /**
  * List products
  *
- * Lists the store catalog. Requires the store.catalog.read permission.
+ * Lists the store catalog. Requires the gw.store.catalog.read permission.
  */
 export const storeProductsList = <ThrowOnError extends boolean = false>(options?: Options<StoreProductsListData, ThrowOnError>): RequestResult<StoreProductsListResponses, StoreProductsListErrors, ThrowOnError> => (options?.client ?? client).get<StoreProductsListResponses, StoreProductsListErrors, ThrowOnError>({ url: '/api/v1/store/products', ...options });
 
 /**
  * Create a product
  *
- * Creates a catalog product. Requires the store.admin.products permission.
+ * Creates a catalog product. Requires the gw.store.admin.products permission.
  */
 export const storeProductsCreate = <ThrowOnError extends boolean = false>(options: Options<StoreProductsCreateData, ThrowOnError>): RequestResult<StoreProductsCreateResponses, StoreProductsCreateErrors, ThrowOnError> => (options.client ?? client).post<StoreProductsCreateResponses, StoreProductsCreateErrors, ThrowOnError>({
     url: '/api/v1/store/products',
@@ -679,21 +679,21 @@ export const storeProductsCreate = <ThrowOnError extends boolean = false>(option
 /**
  * Deactivate a product
  *
- * Deactivates a catalog product. Requires the store.admin.products permission.
+ * Deactivates a catalog product. Requires the gw.store.admin.products permission.
  */
 export const storeProductsDelete = <ThrowOnError extends boolean = false>(options: Options<StoreProductsDeleteData, ThrowOnError>): RequestResult<StoreProductsDeleteResponses, StoreProductsDeleteErrors, ThrowOnError> => (options.client ?? client).delete<StoreProductsDeleteResponses, StoreProductsDeleteErrors, ThrowOnError>({ url: '/api/v1/store/products/{sku}', ...options });
 
 /**
  * Get a product
  *
- * Returns one catalog product. Requires the store.catalog.read permission.
+ * Returns one catalog product. Requires the gw.store.catalog.read permission.
  */
 export const storeProductsGet = <ThrowOnError extends boolean = false>(options: Options<StoreProductsGetData, ThrowOnError>): RequestResult<StoreProductsGetResponses, StoreProductsGetErrors, ThrowOnError> => (options.client ?? client).get<StoreProductsGetResponses, StoreProductsGetErrors, ThrowOnError>({ url: '/api/v1/store/products/{sku}', ...options });
 
 /**
  * Update a product
  *
- * Updates a catalog product. Requires the store.admin.products permission.
+ * Updates a catalog product. Requires the gw.store.admin.products permission.
  */
 export const storeProductsUpdate = <ThrowOnError extends boolean = false>(options: Options<StoreProductsUpdateData, ThrowOnError>): RequestResult<StoreProductsUpdateResponses, StoreProductsUpdateErrors, ThrowOnError> => (options.client ?? client).put<StoreProductsUpdateResponses, StoreProductsUpdateErrors, ThrowOnError>({
     url: '/api/v1/store/products/{sku}',
@@ -707,14 +707,14 @@ export const storeProductsUpdate = <ThrowOnError extends boolean = false>(option
 /**
  * Get the wallet
  *
- * Returns the authenticated user's point balance. Requires the store.wallet.read permission.
+ * Returns the authenticated user's point balance. Requires the gw.store.wallet.read permission.
  */
 export const storeWalletGet = <ThrowOnError extends boolean = false>(options?: Options<StoreWalletGetData, ThrowOnError>): RequestResult<StoreWalletGetResponses, StoreWalletGetErrors, ThrowOnError> => (options?.client ?? client).get<StoreWalletGetResponses, StoreWalletGetErrors, ThrowOnError>({ url: '/api/v1/store/wallet', ...options });
 
 /**
  * Grant wallet points
  *
- * Adds points to a community user's wallet. Requires the store.admin.wallets permission.
+ * Adds points to a community user's wallet. Requires the gw.store.admin.wallets permission.
  */
 export const storeWalletsGrant = <ThrowOnError extends boolean = false>(options: Options<StoreWalletsGrantData, ThrowOnError>): RequestResult<StoreWalletsGrantResponses, StoreWalletsGrantErrors, ThrowOnError> => (options.client ?? client).post<StoreWalletsGrantResponses, StoreWalletsGrantErrors, ThrowOnError>({
     url: '/api/v1/store/wallets/grant',

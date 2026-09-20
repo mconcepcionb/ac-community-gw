@@ -29,10 +29,10 @@ export function HomePage() {
         <PermissionGate permission="azeroth.character.self">
           <CharactersCard />
         </PermissionGate>
-        <PermissionGate permission="store.wallet.read">
+        <PermissionGate permission="gw.store.wallet.read">
           <WalletCard />
         </PermissionGate>
-        <PermissionGate permission="store.orders.read">
+        <PermissionGate permission="gw.store.orders.read">
           <OrdersCard />
         </PermissionGate>
         <PermissionGate permission="azeroth.info.public.read">
@@ -48,12 +48,12 @@ export function HomePage() {
               <Link to="/characters">My characters</Link>
             </Button>
           </PermissionGate>
-          <PermissionGate permission="store.catalog.read">
+          <PermissionGate permission="gw.store.catalog.read">
             <Button asChild variant="outline" size="sm">
               <Link to="/store">Store</Link>
             </Button>
           </PermissionGate>
-          <PermissionGate permission="store.wallet.read">
+          <PermissionGate permission="gw.store.wallet.read">
             <Button asChild variant="outline" size="sm">
               <Link to="/wallet">Wallet</Link>
             </Button>
@@ -63,7 +63,7 @@ export function HomePage() {
               <Link to="/status">Server status</Link>
             </Button>
           </PermissionGate>
-          <PermissionGate permission="report.create">
+          <PermissionGate permission="gw.report.create">
             <Button asChild variant="outline" size="sm">
               <Link to="/report">Report a player</Link>
             </Button>

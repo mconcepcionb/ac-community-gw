@@ -34,7 +34,7 @@ describe("AdminUserDetailPage", () => {
           user_id: "u1",
           discord_id: "1",
           roles: [],
-          permissions: ["azeroth.admin.users.read"],
+          permissions: ["gw.identity.user.read"],
         }),
       ),
       http.get(`http://localhost:8080/api/v1/admin/users/${userId}`, () =>

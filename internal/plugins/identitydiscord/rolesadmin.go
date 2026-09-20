@@ -44,7 +44,7 @@ type MappingRequest struct {
 // handleListRoles handles GET /api/v1/admin/roles.
 //
 //	@Summary		List roles and mappings
-//	@Description	Returns every role -> permission grant and Discord role mapping. Requires the identity.roles.manage permission.
+//	@Description	Returns every role -> permission grant and Discord role mapping. Requires the gw.identity.roles.manage permission.
 //	@Tags			identity
 //	@ID				identity.admin.roles.list
 //	@Produce		json
@@ -87,7 +87,7 @@ func (p *Plugin) handleListRoles(w http.ResponseWriter, r *http.Request) {
 // handleGrantRolePermission handles POST /api/v1/admin/roles/{role}/permissions.
 //
 //	@Summary		Grant a permission to a role
-//	@Description	Grants a permission to a role (creating the role if needed). Requires the identity.roles.manage permission.
+//	@Description	Grants a permission to a role (creating the role if needed). Requires the gw.identity.roles.manage permission.
 //	@Tags			identity
 //	@ID				identity.admin.roles.grant
 //	@Accept			json
@@ -132,7 +132,7 @@ func (p *Plugin) handleGrantRolePermission(w http.ResponseWriter, r *http.Reques
 // handleRevokeRolePermission handles DELETE /api/v1/admin/roles/{role}/permissions/{permission}.
 //
 //	@Summary		Revoke a permission from a role
-//	@Description	Revokes a permission from a role. Requires the identity.roles.manage permission.
+//	@Description	Revokes a permission from a role. Requires the gw.identity.roles.manage permission.
 //	@Tags			identity
 //	@ID				identity.admin.roles.revoke
 //	@Param			role		path	string	true	"role"
@@ -166,7 +166,7 @@ func (p *Plugin) handleRevokeRolePermission(w http.ResponseWriter, r *http.Reque
 // handleUpsertDiscordMapping handles PUT /api/v1/admin/discord-role-mappings/{discord_role_id}.
 //
 //	@Summary		Map a Discord role to an internal role
-//	@Description	Creates or updates a Discord role mapping. Requires the identity.roles.manage permission.
+//	@Description	Creates or updates a Discord role mapping. Requires the gw.identity.roles.manage permission.
 //	@Tags			identity
 //	@ID				identity.admin.discord_mappings.upsert
 //	@Accept			json
@@ -211,7 +211,7 @@ func (p *Plugin) handleUpsertDiscordMapping(w http.ResponseWriter, r *http.Reque
 // handleDeleteDiscordMapping handles DELETE /api/v1/admin/discord-role-mappings/{discord_role_id}.
 //
 //	@Summary		Delete a Discord role mapping
-//	@Description	Removes a Discord role mapping. Requires the identity.roles.manage permission.
+//	@Description	Removes a Discord role mapping. Requires the gw.identity.roles.manage permission.
 //	@Tags			identity
 //	@ID				identity.admin.discord_mappings.delete
 //	@Param			discord_role_id	path	string	true	"Discord role id"

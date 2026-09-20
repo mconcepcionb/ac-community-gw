@@ -31,12 +31,12 @@ export function AppNav() {
           Leaderboards
         </Link>
       </PermissionGate>
-      <PermissionGate permission="store.catalog.read">
+      <PermissionGate permission="gw.store.catalog.read">
         <Link to="/store" className={linkClass} activeProps={{ className: "text-foreground" }}>
           Store
         </Link>
       </PermissionGate>
-      <PermissionGate permission="store.wallet.read">
+      <PermissionGate permission="gw.store.wallet.read">
         <Link to="/wallet" className={linkClass} activeProps={{ className: "text-foreground" }}>
           Wallet
         </Link>

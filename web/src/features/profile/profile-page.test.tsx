@@ -22,7 +22,7 @@ describe("ProfilePage", () => {
           avatar: "abc",
           created_at: "2024-01-02T03:04:05Z",
           roles: ["member"],
-          permissions: ["store.catalog.read"],
+          permissions: ["gw.store.catalog.read"],
         }),
       ),
     );
@@ -36,6 +36,6 @@ describe("ProfilePage", () => {
     expect((await screen.findAllByText("Alice")).length).toBeGreaterThan(0);
     expect(screen.getAllByText("42").length).toBeGreaterThan(0);
     expect(screen.getByText("member")).toBeInTheDocument();
-    expect(screen.getByText("store.catalog.read")).toBeInTheDocument();
+    expect(screen.getByText("gw.store.catalog.read")).toBeInTheDocument();
   });
 });

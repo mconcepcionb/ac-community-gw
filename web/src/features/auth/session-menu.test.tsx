@@ -63,7 +63,7 @@ describe("SessionMenu", () => {
           user_id: "u1",
           discord_id: "42",
           roles: ["member"],
-          permissions: ["store.catalog.read"],
+          permissions: ["gw.store.catalog.read"],
         }),
       ),
     );

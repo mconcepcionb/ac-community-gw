@@ -189,7 +189,7 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 	reg.Mux.HandleFunc("POST /api/v1/auth/logout", p.handleLogout)
 	reg.Mux.Handle("GET /api/v1/me", reg.RequireAuth(http.HandlerFunc(p.handleMe)))
 	reg.Mux.Handle("GET /api/v1/identity/users",
-		reg.RequirePermission(PermissionUserList, http.HandlerFunc(p.handleListUsers)))
+		reg.RequirePermission(PermissionUserRead, http.HandlerFunc(p.handleListUsers)))
 	reg.Mux.Handle("GET /api/v1/admin/roles",
 		reg.RequirePermission(PermissionRolesManage, http.HandlerFunc(p.handleListRoles)))
 	reg.Mux.Handle("POST /api/v1/admin/roles/{role}/permissions",

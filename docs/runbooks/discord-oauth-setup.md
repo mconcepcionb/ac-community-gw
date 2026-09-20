@@ -165,10 +165,12 @@ VALUES ('<discord role id>', 'member'),
        ('<discord role id>', 'moderator')
 ON CONFLICT (discord_role_id) DO UPDATE SET role = EXCLUDED.role;
 
-INSERT INTO role_permissions (role, permission)
-VALUES ('member', 'identity.self.read'),
-       ('moderator', 'identity.self.read')
-ON CONFLICT DO NOTHING;
+-- GET /api/v1/me only requires an authenticated session, so member/moderator
+-- need no permission for the profile page. Grant gw.* or azeroth.* permissions
+-- here as your community requires, for example:
+--   INSERT INTO role_permissions (role, permission)
+--   VALUES ('member', 'gw.store.catalog.read')
+--   ON CONFLICT DO NOTHING;
 ```
 
 Permission names must exist in the registry, otherwise the authorization check
@@ -178,7 +180,7 @@ authorizer. An unmapped Discord role contributes nothing.
 ### Demo admin role (for the test frontend)
 
 To run the AzerothCore commands from the test frontend, grant a role the
-`azeroth.*` permissions and map it to a Discord role. The helper script inserts
+`azeroth.*` and `gw.*` permissions and map it to a Discord role. The helper script inserts
 the permissions, creates an internal role with all of them and maps your Discord
 role id:
 
@@ -212,7 +214,7 @@ to write to the database. The internal role must still exist in
 
 ### Demo store catalog
 
-The demo admin role also receives the `store.*` permissions. Seed an example
+The demo admin role also receives the `gw.store.*` permissions. Seed an example
 catalog (three products) to exercise the store:
 
 ```bash

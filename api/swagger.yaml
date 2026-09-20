@@ -1221,7 +1221,7 @@ paths:
       - admin-notes
   /api/v1/admin/api-keys:
     get:
-      description: Lists every API key (without secrets). Requires the apikeys.manage
+      description: Lists every API key (without secrets). Requires the gw.apikeys.manage
         permission.
       operationId: apikeys.list
       responses:
@@ -1254,7 +1254,7 @@ paths:
       - apikeys
     post:
       description: Issues a scoped API key. The secret is returned once. Requires
-        the apikeys.manage permission.
+        the gw.apikeys.manage permission.
       operationId: apikeys.create
       requestBody:
         content:
@@ -1305,7 +1305,8 @@ paths:
       - apikeys
   /api/v1/admin/api-keys/{id}:
     delete:
-      description: Deletes an API key immediately. Requires the apikeys.manage permission.
+      description: Deletes an API key immediately. Requires the gw.apikeys.manage
+        permission.
       operationId: apikeys.revoke
       parameters:
       - description: key id
@@ -1346,7 +1347,7 @@ paths:
       - apikeys
   /api/v1/admin/api-keys/{id}/rotate:
     post:
-      description: Issues a new secret for a key. Requires the apikeys.manage permission.
+      description: Issues a new secret for a key. Requires the gw.apikeys.manage permission.
       operationId: apikeys.rotate
       parameters:
       - description: key id
@@ -1398,7 +1399,7 @@ paths:
   /api/v1/admin/audit:
     get:
       description: Lists audit entries, newest first, filterable by actor, target,
-        action and time range. Requires the audit.read permission.
+        action and time range. Requires the gw.audit.read permission.
       operationId: azeroth.admin.audit.list
       parameters:
       - description: actor community user id
@@ -1478,7 +1479,7 @@ paths:
       - azeroth-admin
   /api/v1/admin/discord-role-mappings/{discord_role_id}:
     delete:
-      description: Removes a Discord role mapping. Requires the identity.roles.manage
+      description: Removes a Discord role mapping. Requires the gw.identity.roles.manage
         permission.
       operationId: identity.admin.discord_mappings.delete
       parameters:
@@ -1513,7 +1514,7 @@ paths:
       tags:
       - identity
     put:
-      description: Creates or updates a Discord role mapping. Requires the identity.roles.manage
+      description: Creates or updates a Discord role mapping. Requires the gw.identity.roles.manage
         permission.
       operationId: identity.admin.discord_mappings.upsert
       parameters:
@@ -1569,7 +1570,7 @@ paths:
   /api/v1/admin/permissions:
     get:
       description: Returns every permission registered by the plugins, for the API
-        key scope picker. Requires the apikeys.manage permission.
+        key scope picker. Requires the gw.apikeys.manage permission.
       operationId: apikeys.permissions.list
       responses:
         "200":
@@ -1596,7 +1597,7 @@ paths:
   /api/v1/admin/reports:
     get:
       description: Lists every report, newest first, optionally filtered by status.
-        Requires the report.read permission.
+        Requires the gw.report.read permission.
       operationId: reports.list
       parameters:
       - description: report status (open, closed)
@@ -1646,7 +1647,7 @@ paths:
       - reports
   /api/v1/admin/reports/{id}/close:
     post:
-      description: Marks a report closed. Requires the report.read permission.
+      description: Marks a report closed. Requires the gw.report.read permission.
       operationId: reports.close
       parameters:
       - description: report id
@@ -1698,7 +1699,7 @@ paths:
   /api/v1/admin/roles:
     get:
       description: Returns every role -> permission grant and Discord role mapping.
-        Requires the identity.roles.manage permission.
+        Requires the gw.identity.roles.manage permission.
       operationId: identity.admin.roles.list
       responses:
         "200":
@@ -1731,7 +1732,7 @@ paths:
   /api/v1/admin/roles/{role}/permissions:
     post:
       description: Grants a permission to a role (creating the role if needed). Requires
-        the identity.roles.manage permission.
+        the gw.identity.roles.manage permission.
       operationId: identity.admin.roles.grant
       parameters:
       - description: role
@@ -1785,7 +1786,7 @@ paths:
       - identity
   /api/v1/admin/roles/{role}/permissions/{permission}:
     delete:
-      description: Revokes a permission from a role. Requires the identity.roles.manage
+      description: Revokes a permission from a role. Requires the gw.identity.roles.manage
         permission.
       operationId: identity.admin.roles.revoke
       parameters:
@@ -1834,7 +1835,7 @@ paths:
   /api/v1/admin/store/orders:
     get:
       description: Lists every store order, newest first, optionally filtered by status.
-        Requires the store.admin.orders.read permission.
+        Requires the gw.store.admin.orders.read permission.
       operationId: store.admin.orders.list
       parameters:
       - description: order status (pending, delivered, failed)
@@ -1885,7 +1886,7 @@ paths:
   /api/v1/admin/store/orders/{id}/refund:
     post:
       description: Marks a pending order failed and refunds its points. Requires the
-        store.admin.orders.resolve permission.
+        gw.store.admin.orders.resolve permission.
       operationId: store.admin.orders.refund
       parameters:
       - description: order id
@@ -1949,7 +1950,7 @@ paths:
   /api/v1/admin/store/orders/{id}/retry:
     post:
       description: Re-delivers a pending order's reward and completes it. Requires
-        the store.admin.orders.resolve permission.
+        the gw.store.admin.orders.resolve permission.
       operationId: store.admin.orders.retry
       parameters:
       - description: order id
@@ -2013,7 +2014,7 @@ paths:
   /api/v1/admin/users/{id}:
     get:
       description: Returns the profile, roles, linked account, characters, wallet
-        and recent orders for a community user. Requires the azeroth.admin.users.read
+        and recent orders for a community user. Requires the gw.identity.user.read
         permission.
       operationId: azeroth.admin.users.get
       parameters:
@@ -3984,7 +3985,7 @@ paths:
       - azeroth-character
   /api/v1/identity/users:
     get:
-      description: Lists provisioned community users. Requires the identity.user.list
+      description: Lists provisioned community users. Requires the gw.identity.user.read
         permission.
       operationId: identity.users.list
       parameters:
@@ -4141,7 +4142,7 @@ paths:
       - azeroth-info
   /api/v1/reports:
     post:
-      description: Reports another player. Requires the report.create permission.
+      description: Reports another player. Requires the gw.report.create permission.
       operationId: reports.create
       requestBody:
         content:
@@ -4192,7 +4193,7 @@ paths:
       - reports
   /api/v1/reports/mine:
     get:
-      description: Lists the authenticated user's own reports. Requires the report.create
+      description: Lists the authenticated user's own reports. Requires the gw.report.create
         permission.
       operationId: reports.mine
       parameters:
@@ -4238,7 +4239,7 @@ paths:
       - reports
   /api/v1/store/orders:
     get:
-      description: Lists the authenticated user's orders. Requires the store.orders.read
+      description: Lists the authenticated user's orders. Requires the gw.store.orders.read
         permission.
       operationId: store.orders.list
       parameters:
@@ -4283,7 +4284,7 @@ paths:
       tags:
       - store
     post:
-      description: Buys a product and delivers it to a character. Requires the store.purchase
+      description: Buys a product and delivers it to a character. Requires the gw.store.purchase
         permission.
       operationId: store.orders.create
       requestBody:
@@ -4359,7 +4360,7 @@ paths:
       - store
   /api/v1/store/products:
     get:
-      description: Lists the store catalog. Requires the store.catalog.read permission.
+      description: Lists the store catalog. Requires the gw.store.catalog.read permission.
       operationId: store.products.list
       responses:
         "200":
@@ -4390,7 +4391,8 @@ paths:
       tags:
       - store
     post:
-      description: Creates a catalog product. Requires the store.admin.products permission.
+      description: Creates a catalog product. Requires the gw.store.admin.products
+        permission.
       operationId: store.products.create
       requestBody:
         content:
@@ -4447,7 +4449,7 @@ paths:
       - store
   /api/v1/store/products/{sku}:
     delete:
-      description: Deactivates a catalog product. Requires the store.admin.products
+      description: Deactivates a catalog product. Requires the gw.store.admin.products
         permission.
       operationId: store.products.delete
       parameters:
@@ -4492,7 +4494,8 @@ paths:
       tags:
       - store
     get:
-      description: Returns one catalog product. Requires the store.catalog.read permission.
+      description: Returns one catalog product. Requires the gw.store.catalog.read
+        permission.
       operationId: store.products.get
       parameters:
       - description: product SKU
@@ -4536,7 +4539,8 @@ paths:
       tags:
       - store
     put:
-      description: Updates a catalog product. Requires the store.admin.products permission.
+      description: Updates a catalog product. Requires the gw.store.admin.products
+        permission.
       operationId: store.products.update
       parameters:
       - description: product SKU
@@ -4600,7 +4604,7 @@ paths:
       - store
   /api/v1/store/wallet:
     get:
-      description: Returns the authenticated user's point balance. Requires the store.wallet.read
+      description: Returns the authenticated user's point balance. Requires the gw.store.wallet.read
         permission.
       operationId: store.wallet.get
       responses:
@@ -4633,7 +4637,7 @@ paths:
       - store
   /api/v1/store/wallets/grant:
     post:
-      description: Adds points to a community user's wallet. Requires the store.admin.wallets
+      description: Adds points to a community user's wallet. Requires the gw.store.admin.wallets
         permission.
       operationId: store.wallets.grant
       requestBody:

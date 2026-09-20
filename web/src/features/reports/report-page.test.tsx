@@ -34,7 +34,7 @@ describe("ReportPage", () => {
           user_id: "u1",
           discord_id: "1",
           roles: [],
-          permissions: ["report.create"],
+          permissions: ["gw.report.create"],
         }),
       ),
       http.get(mineUrl, () =>

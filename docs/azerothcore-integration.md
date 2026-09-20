@@ -126,7 +126,7 @@ An administrator links a community user to an AzerothCore account with
 ```
 
 To find those values, search community users with
-`GET /api/v1/identity/users?filter=` (`identity.user.list`) and AzerothCore
+`GET /api/v1/identity/users?filter=` (`gw.identity.user.read`) and AzerothCore
 accounts with `GET /api/v1/azeroth/accounts?filter=` (`azeroth.account.list`).
 A `discord_username` that matches more than one user returns
 `409 ambiguous_user` with the candidates, so the admin can retry by id.

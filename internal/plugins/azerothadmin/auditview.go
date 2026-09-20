@@ -34,7 +34,7 @@ type AuditResponse struct {
 // handleAuditLog handles GET /api/v1/admin/audit.
 //
 //	@Summary		Read the audit log
-//	@Description	Lists audit entries, newest first, filterable by actor, target, action and time range. Requires the audit.read permission.
+//	@Description	Lists audit entries, newest first, filterable by actor, target, action and time range. Requires the gw.audit.read permission.
 //	@Tags			azeroth-admin
 //	@ID				azeroth.admin.audit.list
 //	@Produce		json

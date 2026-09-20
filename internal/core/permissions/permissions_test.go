@@ -7,11 +7,11 @@ import (
 
 func TestRegisterPermission(t *testing.T) {
 	registry := NewRegistry()
-	def := Definition{Name: "account.read", Description: "read", Owner: "test"}
+	def := Definition{Name: "gw.account.read", Description: "read", Owner: "test", Namespace: "gw"}
 	if err := registry.Register(def); err != nil {
 		t.Fatalf("Register: %v", err)
 	}
-	if !registry.Has("account.read") {
+	if !registry.Has("gw.account.read") {
 		t.Fatal("permission not registered")
 	}
 	if err := registry.Register(def); !errors.Is(err, ErrAlreadyRegistered) {
@@ -23,6 +23,18 @@ func TestRegisterRejectsEmptyName(t *testing.T) {
 	registry := NewRegistry()
 	if err := registry.Register(Definition{}); !errors.Is(err, ErrEmptyName) {
 		t.Fatalf("expected ErrEmptyName, got %v", err)
+	}
+}
+
+func TestRegisterRejectsNamespaceMismatch(t *testing.T) {
+	registry := NewRegistry()
+	def := Definition{Name: "azeroth.account.read", Owner: "test", Namespace: "gw"}
+	if err := registry.Register(def); !errors.Is(err, ErrNamespaceMismatch) {
+		t.Fatalf("expected ErrNamespaceMismatch, got %v", err)
+	}
+	missing := Definition{Name: "gw.account.read", Owner: "test"}
+	if err := registry.Register(missing); !errors.Is(err, ErrNamespaceMismatch) {
+		t.Fatalf("expected ErrNamespaceMismatch for missing namespace, got %v", err)
 	}
 }
 

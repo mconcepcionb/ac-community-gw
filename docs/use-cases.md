@@ -224,7 +224,7 @@ can* decide what to buy.
 - Opening a product shows its items (name, quality, stats) and/or money reward,
   with the same rendering as the admin view.
 - Inactive products are hidden from players.
-- Permission: `store.catalog.read`.
+- Permission: `gw.store.catalog.read`.
 
 **Sub-flows**: today's `/store/products` and `/store/products/$sku` player view.
 
@@ -240,7 +240,7 @@ can* decide what to buy.
 - On success points are debited atomically and the reward is delivered; on
   delivery failure the points are refunded.
 - The order appears immediately in the wallet as pending, delivered or failed.
-- Permission: `store.purchase`.
+- Permission: `gw.store.purchase`.
 
 **Sub-flows**: today's purchase dialog and `POST /api/v1/store/orders`.
 
@@ -255,7 +255,7 @@ page, *so I can* track spending and delivery.
 - Orders show status, product, character and time; failed orders state that
   points were returned.
 - The view is personal; other users' wallets are never reachable.
-- Permissions: `store.wallet.read`, `store.orders.read`.
+- Permissions: `gw.store.wallet.read`, `gw.store.orders.read`.
 
 **Sub-flows**: today's `/store/wallet`.
 
@@ -300,7 +300,7 @@ profile page, *so I can* see my identity, roles and permissions.
 - Shows the Discord profile, community user id, member since, roles and
   permissions.
 - Roles and permissions update without a re-login, within the refresh interval.
-- Permission: `identity.self.read`.
+- Permission: authenticated session; `/me` requires no explicit permission.
 
 **Sub-flows**: today's `/profile`.
 
@@ -362,7 +362,7 @@ their* balance reflects it.
 - A ledger entry is recorded and the balance updates immediately.
 - Granting to an unknown user is refused.
 - The action is audited.
-- Permission: `store.admin.wallets`.
+- Permission: `gw.store.admin.wallets`.
 
 **Sub-flows**: today's grant dialog and
 `POST /api/v1/store/wallets/grant`.
@@ -513,8 +513,8 @@ storefront stays current.
 - Each item id is validated against the catalog; unknown ids are rejected.
 - Products can be deactivated without deleting order history.
 - The admin preview renders items exactly like the storefront (P6).
-- Permissions: `store.admin.products`; catalog reads use
-  `store.catalog.read`.
+- Permissions: `gw.store.admin.products`; catalog reads use
+  `gw.store.catalog.read`.
 
 **Sub-flows**: today's `/store/products` admin view and product form.
 
@@ -529,7 +529,7 @@ reason, *so* the ledger stays correct.
 - Next: manual debit, correction and refund with a mandatory reason.
 - Every change is a ledger entry; balances are derived, never edited in place.
 - Actions are audited.
-- Permission: `store.admin.wallets`.
+- Permission: `gw.store.admin.wallets`.
 
 **Sub-flows**: today's grant dialog; the wallet view becomes an ops view.
 
@@ -544,7 +544,7 @@ its state, *so* the player is made whole.
 - Failed orders show that the points were refunded; stuck pending orders can be
   reconciled idempotently.
 - Reconciliation never double-refunds or refunds a delivered order.
-- Permission: `store.orders.read`.
+- Permission: `gw.store.orders.read`.
 
 **Sub-flows**: today's order list in the wallet page, broadened into an ops
 view; the reconciliation action joins the queue (G5).

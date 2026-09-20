@@ -21,26 +21,31 @@ func permissionDefs() []permissions.Definition {
 			Name:        PermissionCharacterList,
 			Description: "Read AzerothCore characters",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionMailSend,
 			Description: "Send in-game mail, items and money",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionCharacterSelf,
 			Description: "Read your own characters",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionMailSelf,
 			Description: "Mail your own characters",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 		{
 			Name:        PermissionLeaderboardRead,
 			Description: "Read character leaderboards",
 			Owner:       Name,
+			Namespace:   "azeroth",
 		},
 	}
 }

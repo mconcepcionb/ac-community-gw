@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"sort"
+	"strings"
 	"sync"
 )
 
@@ -23,6 +24,9 @@ var (
 	ErrEmptyName = errors.New("permissions: name must not be empty")
 	// ErrAlreadyRegistered is returned when registering a duplicate permission.
 	ErrAlreadyRegistered = errors.New("permissions: already registered")
+	// ErrNamespaceMismatch is returned when a permission name does not start
+	// with its declared namespace.
+	ErrNamespaceMismatch = errors.New("permissions: name does not match namespace")
 )
 
 // Definition describes a permission owned by a plugin.
@@ -30,6 +34,10 @@ type Definition struct {
 	Name        Permission
 	Description string
 	Owner       string
+	// Namespace is the required name prefix: "gw" for gateway-generic
+	// capabilities or a registered game id (for example "azeroth"). The name
+	// must start with Namespace + ".". See ADR 0014.
+	Namespace string
 }
 
 // Registry is a concurrency-safe catalogue of permission definitions.
@@ -47,6 +55,9 @@ func NewRegistry() *Registry {
 func (r *Registry) Register(def Definition) error {
 	if def.Name == "" {
 		return ErrEmptyName
+	}
+	if def.Namespace == "" || !strings.HasPrefix(string(def.Name), def.Namespace+".") {
+		return fmt.Errorf("%w: %s is not in namespace %q", ErrNamespaceMismatch, def.Name, def.Namespace)
 	}
 	r.mu.Lock()
 	defer r.mu.Unlock()

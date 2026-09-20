@@ -15,8 +15,8 @@
 --                    enabled (right-click the role -> Copy Role ID).
 --   internal_role    (optional) internal role name, defaults to ac-core.admin.
 --   include_admin    (optional) set to "true" to also grant azeroth.admin.* and
---                    store.admin.* scopes. Defaults to "false" so the demo role
---                    cannot administer the server.
+--                    gw.store.admin.* scopes. Defaults to "false" so the demo
+--                    role cannot administer the server.
 --
 -- The gateway loads role grants at startup, so restart it and log in again
 -- afterwards.
@@ -40,32 +40,43 @@
 BEGIN;
 
 INSERT INTO permissions (name, description, owner) VALUES
-    ('identity.self.read', 'Read the authenticated user''s own profile', 'identity-discord'),
-    ('identity.session.revoke', 'Revoke user sessions', 'identity-discord'),
-    ('identity.user.list', 'Search community users', 'identity-discord'),
+    ('gw.identity.user.read', 'Read and search community users', 'identity-discord'),
+    ('gw.identity.roles.manage', 'Manage roles, permission grants and Discord role mappings', 'identity-discord'),
+    ('gw.report.create', 'Submit a player report and read your own reports', 'reports'),
+    ('gw.report.read', 'Read and close player reports', 'reports'),
+    ('gw.audit.read', 'Read the audit log', 'azeroth-admin'),
+    ('gw.apikeys.manage', 'Create, rotate and revoke API keys', 'apikeys'),
+    ('gw.notes.read', 'Read staff annotations', 'admin-notes'),
+    ('gw.notes.write', 'Create staff annotations and edit your own', 'admin-notes'),
+    ('gw.notes.manage', 'Edit and delete any staff annotation', 'admin-notes'),
+    ('gw.store.catalog.read', 'Read the store product catalog', 'azeroth-store'),
+    ('gw.store.wallet.read', 'Read the authenticated user''s wallet balance', 'azeroth-store'),
+    ('gw.store.orders.read', 'Read the authenticated user''s orders', 'azeroth-store'),
+    ('gw.store.purchase', 'Buy store products', 'azeroth-store'),
+    ('gw.store.admin.wallets', 'Grant points to any wallet', 'azeroth-store'),
+    ('gw.store.admin.products', 'Manage the store product catalog', 'azeroth-store'),
+    ('gw.store.admin.orders.read', 'Read every store order', 'azeroth-store'),
+    ('gw.store.admin.orders.resolve', 'Refund or retry stuck store orders', 'azeroth-store'),
     ('azeroth.info.public.read', 'Read public AzerothCore server information', 'azeroth-info'),
-    ('azeroth.info.private.read', 'Read private AzerothCore server information', 'azeroth-info'),
-    ('azeroth.account.read', 'Read linked AzerothCore account information', 'azeroth-account'),
+    ('azeroth.account.read', 'Read AzerothCore account information linked to a user', 'azeroth-account'),
     ('azeroth.account.manage', 'Create and manage AzerothCore accounts', 'azeroth-account'),
     ('azeroth.account.list', 'List AzerothCore login accounts', 'azeroth-account'),
     ('azeroth.account.link', 'Create and remove community user / AzerothCore account links', 'azeroth-account'),
+    ('azeroth.account.self', 'Create and link your own AzerothCore account', 'azeroth-account'),
+    ('azeroth.admin.claims.read', 'List pending account claims', 'azeroth-account'),
     ('azeroth.character.list', 'Read AzerothCore characters', 'azeroth-character'),
+    ('azeroth.character.self', 'Read your own characters', 'azeroth-character'),
     ('azeroth.mail.send', 'Send in-game mail, items and money', 'azeroth-character'),
+    ('azeroth.mail.self', 'Mail your own characters', 'azeroth-character'),
+    ('azeroth.leaderboard.read', 'Read character leaderboards', 'azeroth-character'),
     ('azeroth.item.list', 'Search the AzerothCore item catalog', 'azeroth-item'),
-    ('azeroth.admin.accounts.read', 'Read AzerothCore accounts as an administrator', 'azeroth-admin'),
     ('azeroth.admin.accounts.ban', 'Ban and unban AzerothCore accounts', 'azeroth-admin'),
-    ('azeroth.admin.accounts.gmlevel', 'Change AzerothCore GM level', 'azeroth-admin'),
+    ('azeroth.admin.accounts.gmlevel', 'Change AzerothCore account GM level', 'azeroth-admin'),
     ('azeroth.admin.players.read', 'List online players', 'azeroth-admin'),
     ('azeroth.admin.players.kick', 'Kick online players', 'azeroth-admin'),
     ('azeroth.admin.players.mute', 'Mute and unmute players', 'azeroth-admin'),
     ('azeroth.admin.characters.ban', 'Ban and unban characters', 'azeroth-admin'),
-    ('azeroth.admin.announce', 'Broadcast announcements', 'azeroth-admin'),
-    ('store.catalog.read', 'Read the store product catalog', 'azeroth-store'),
-    ('store.wallet.read', 'Read the authenticated user''s wallet balance', 'azeroth-store'),
-    ('store.orders.read', 'Read the authenticated user''s orders', 'azeroth-store'),
-    ('store.purchase', 'Buy store products', 'azeroth-store'),
-    ('store.admin.wallets', 'Grant points to any wallet', 'azeroth-store'),
-    ('store.admin.products', 'Manage the store product catalog', 'azeroth-store')
+    ('azeroth.admin.announce', 'Broadcast announcements', 'azeroth-admin')
 ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO roles (name, description) VALUES
@@ -77,7 +88,7 @@ ON CONFLICT (name) DO NOTHING;
 INSERT INTO role_permissions (role, permission)
 SELECT :'internal_role', name FROM permissions
 WHERE :'include_admin' = 'true'
-   OR (name NOT LIKE 'azeroth.admin.%' AND name NOT LIKE 'store.admin.%')
+   OR (name NOT LIKE 'azeroth.admin.%' AND name NOT LIKE 'gw.store.admin.%')
 ON CONFLICT DO NOTHING;
 
 -- Optional database mapping; equivalent static mappings can be provided with

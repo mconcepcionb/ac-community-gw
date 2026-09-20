@@ -146,7 +146,7 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 	reg.Mux.Handle("POST /api/v1/azeroth/announce",
 		reg.RequirePermission(PermissionAdminAnnounce, http.HandlerFunc(p.handleAnnounce)))
 	reg.Mux.Handle("GET /api/v1/admin/users/{id}",
-		reg.RequirePermission(PermissionAdminUsersRead, http.HandlerFunc(p.handleUser360)))
+		reg.RequirePermission(permissionUserRead, http.HandlerFunc(p.handleUser360)))
 	reg.Mux.Handle("GET /api/v1/admin/audit",
 		reg.RequirePermission(PermissionAdminAuditRead, http.HandlerFunc(p.handleAuditLog)))
 	return nil
