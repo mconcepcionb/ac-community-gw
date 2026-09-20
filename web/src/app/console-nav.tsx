@@ -8,6 +8,8 @@ const links = [
   { to: "/admin/online", label: "Online", exact: false },
 ] as const;
 
+const linkClass = "text-muted-foreground hover:text-foreground";
+
 /** ConsoleNav is the staff console navigation slot. */
 export function ConsoleNav() {
   return (
@@ -16,13 +18,16 @@ export function ConsoleNav() {
         <Link
           key={link.to}
           to={link.to}
-          className="text-muted-foreground hover:text-foreground"
+          className={linkClass}
           activeProps={{ className: "text-foreground" }}
           activeOptions={{ exact: link.exact }}
         >
           {link.label}
         </Link>
       ))}
+      <Link to="/profile" className={linkClass}>
+        Portal
+      </Link>
       <SessionMenu />
     </nav>
   );

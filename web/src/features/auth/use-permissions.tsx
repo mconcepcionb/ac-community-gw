@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { hasAnyConsolePermission } from "./surfaces";
 import { useSession } from "./use-session";
 
 /** usePermissions exposes the principal's effective permissions. */
@@ -11,6 +12,12 @@ export function usePermissions() {
     permissions,
     has: (permission: string) => permissions.includes(permission),
   };
+}
+
+/** useHasConsoleAccess reports whether the principal may open the console. */
+export function useHasConsoleAccess(): boolean {
+  const { permissions } = usePermissions();
+  return hasAnyConsolePermission(permissions);
 }
 
 interface CanProps {
