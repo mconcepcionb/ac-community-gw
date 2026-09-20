@@ -14,10 +14,8 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as PortalIndexRouteImport } from './routes/_portal/index'
 import { Route as PortalForbiddenRouteImport } from './routes/_portal/forbidden'
 import { Route as PortalLoginRouteImport } from './routes/_portal/login'
-import { Route as PortalOnboardingRouteImport } from './routes/_portal/onboarding'
 import { Route as PortalProfileRouteImport } from './routes/_portal/profile'
 import { Route as PortalReportRouteImport } from './routes/_portal/report'
-import { Route as PortalStatusRouteImport } from './routes/_portal/status'
 import { Route as PortalWalletRouteImport } from './routes/_portal/wallet'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminApiClientsRouteImport } from './routes/admin/api-clients'
@@ -25,9 +23,8 @@ import { Route as AdminAuditRouteImport } from './routes/admin/audit'
 import { Route as AdminModerationRouteImport } from './routes/admin/moderation'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminStoreRouteImport } from './routes/admin/store'
-import { Route as PortalCharactersIndexRouteImport } from './routes/_portal/characters/index'
-import { Route as PortalLeaderboardsIndexRouteImport } from './routes/_portal/leaderboards/index'
-import { Route as PortalLeaderboardsBoardRouteImport } from './routes/_portal/leaderboards/$board'
+import { Route as PortalAzerothOnboardingRouteImport } from './routes/_portal/azeroth/onboarding'
+import { Route as PortalAzerothStatusRouteImport } from './routes/_portal/azeroth/status'
 import { Route as PortalStoreIndexRouteImport } from './routes/_portal/store/index'
 import { Route as AdminAzerothOnlineRouteImport } from './routes/admin/azeroth/online'
 import { Route as AdminStoreIndexRouteImport } from './routes/admin/store/index'
@@ -36,6 +33,9 @@ import { Route as AdminStoreOrdersRouteImport } from './routes/admin/store/order
 import { Route as AdminStoreWalletsRouteImport } from './routes/admin/store/wallets'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminUsersUserIdRouteImport } from './routes/admin/users/$userId'
+import { Route as PortalAzerothCharactersIndexRouteImport } from './routes/_portal/azeroth/characters/index'
+import { Route as PortalAzerothLeaderboardsIndexRouteImport } from './routes/_portal/azeroth/leaderboards/index'
+import { Route as PortalAzerothLeaderboardsBoardRouteImport } from './routes/_portal/azeroth/leaderboards/$board'
 import { Route as PortalStoreProductsSkuRouteImport } from './routes/_portal/store/products.$sku'
 import { Route as AdminAzerothAccountsIndexRouteImport } from './routes/admin/azeroth/accounts/index'
 import { Route as AdminAzerothAccountsUsernameRouteImport } from './routes/admin/azeroth/accounts/$username'
@@ -68,11 +68,6 @@ const PortalLoginRoute = PortalLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => PortalRoute,
 } as any)
-const PortalOnboardingRoute = PortalOnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
-  getParentRoute: () => PortalRoute,
-} as any)
 const PortalProfileRoute = PortalProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -81,11 +76,6 @@ const PortalProfileRoute = PortalProfileRouteImport.update({
 const PortalReportRoute = PortalReportRouteImport.update({
   id: '/report',
   path: '/report',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalStatusRoute = PortalStatusRouteImport.update({
-  id: '/status',
-  path: '/status',
   getParentRoute: () => PortalRoute,
 } as any)
 const PortalWalletRoute = PortalWalletRouteImport.update({
@@ -123,19 +113,14 @@ const AdminStoreRoute = AdminStoreRouteImport.update({
   path: '/store',
   getParentRoute: () => AdminRoute,
 } as any)
-const PortalCharactersIndexRoute = PortalCharactersIndexRouteImport.update({
-  id: '/characters/',
-  path: '/characters/',
+const PortalAzerothOnboardingRoute = PortalAzerothOnboardingRouteImport.update({
+  id: '/azeroth/onboarding',
+  path: '/azeroth/onboarding',
   getParentRoute: () => PortalRoute,
 } as any)
-const PortalLeaderboardsIndexRoute = PortalLeaderboardsIndexRouteImport.update({
-  id: '/leaderboards/',
-  path: '/leaderboards/',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalLeaderboardsBoardRoute = PortalLeaderboardsBoardRouteImport.update({
-  id: '/leaderboards/$board',
-  path: '/leaderboards/$board',
+const PortalAzerothStatusRoute = PortalAzerothStatusRouteImport.update({
+  id: '/azeroth/status',
+  path: '/azeroth/status',
   getParentRoute: () => PortalRoute,
 } as any)
 const PortalStoreIndexRoute = PortalStoreIndexRouteImport.update({
@@ -178,6 +163,24 @@ const AdminUsersUserIdRoute = AdminUsersUserIdRouteImport.update({
   path: '/users/$userId',
   getParentRoute: () => AdminRoute,
 } as any)
+const PortalAzerothCharactersIndexRoute =
+  PortalAzerothCharactersIndexRouteImport.update({
+    id: '/azeroth/characters/',
+    path: '/azeroth/characters/',
+    getParentRoute: () => PortalRoute,
+  } as any)
+const PortalAzerothLeaderboardsIndexRoute =
+  PortalAzerothLeaderboardsIndexRouteImport.update({
+    id: '/azeroth/leaderboards/',
+    path: '/azeroth/leaderboards/',
+    getParentRoute: () => PortalRoute,
+  } as any)
+const PortalAzerothLeaderboardsBoardRoute =
+  PortalAzerothLeaderboardsBoardRouteImport.update({
+    id: '/azeroth/leaderboards/$board',
+    path: '/azeroth/leaderboards/$board',
+    getParentRoute: () => PortalRoute,
+  } as any)
 const PortalStoreProductsSkuRoute = PortalStoreProductsSkuRouteImport.update({
   id: '/store/products/$sku',
   path: '/store/products/$sku',
@@ -223,10 +226,8 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/forbidden': typeof PortalForbiddenRoute
   '/login': typeof PortalLoginRoute
-  '/onboarding': typeof PortalOnboardingRoute
   '/profile': typeof PortalProfileRoute
   '/report': typeof PortalReportRoute
-  '/status': typeof PortalStatusRoute
   '/wallet': typeof PortalWalletRoute
   '/admin/api-clients': typeof AdminApiClientsRoute
   '/admin/audit': typeof AdminAuditRoute
@@ -234,21 +235,23 @@ export interface FileRoutesByFullPath {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/store': typeof AdminStoreRouteWithChildren
   '/admin/': typeof AdminIndexRoute
-  '/leaderboards/$board': typeof PortalLeaderboardsBoardRoute
+  '/azeroth/onboarding': typeof PortalAzerothOnboardingRoute
+  '/azeroth/status': typeof PortalAzerothStatusRoute
   '/admin/azeroth/online': typeof AdminAzerothOnlineRoute
   '/admin/store/$sku': typeof AdminStoreSkuRoute
   '/admin/store/orders': typeof AdminStoreOrdersRoute
   '/admin/store/wallets': typeof AdminStoreWalletsRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
-  '/characters/': typeof PortalCharactersIndexRoute
-  '/leaderboards/': typeof PortalLeaderboardsIndexRoute
   '/store/': typeof PortalStoreIndexRoute
   '/admin/store/': typeof AdminStoreIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
+  '/azeroth/leaderboards/$board': typeof PortalAzerothLeaderboardsBoardRoute
   '/store/products/$sku': typeof PortalStoreProductsSkuRoute
   '/admin/azeroth/accounts/$username': typeof AdminAzerothAccountsUsernameRoute
   '/admin/azeroth/characters/$name': typeof AdminAzerothCharactersNameRoute
   '/admin/azeroth/items/$entry': typeof AdminAzerothItemsEntryRoute
+  '/azeroth/characters/': typeof PortalAzerothCharactersIndexRoute
+  '/azeroth/leaderboards/': typeof PortalAzerothLeaderboardsIndexRoute
   '/admin/azeroth/accounts/': typeof AdminAzerothAccountsIndexRoute
   '/admin/azeroth/characters/': typeof AdminAzerothCharactersIndexRoute
   '/admin/azeroth/items/': typeof AdminAzerothItemsIndexRoute
@@ -256,10 +259,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/forbidden': typeof PortalForbiddenRoute
   '/login': typeof PortalLoginRoute
-  '/onboarding': typeof PortalOnboardingRoute
   '/profile': typeof PortalProfileRoute
   '/report': typeof PortalReportRoute
-  '/status': typeof PortalStatusRoute
   '/wallet': typeof PortalWalletRoute
   '/admin/api-clients': typeof AdminApiClientsRoute
   '/admin/audit': typeof AdminAuditRoute
@@ -267,21 +268,23 @@ export interface FileRoutesByTo {
   '/admin/roles': typeof AdminRolesRoute
   '/': typeof PortalIndexRoute
   '/admin': typeof AdminIndexRoute
-  '/leaderboards/$board': typeof PortalLeaderboardsBoardRoute
+  '/azeroth/onboarding': typeof PortalAzerothOnboardingRoute
+  '/azeroth/status': typeof PortalAzerothStatusRoute
   '/admin/azeroth/online': typeof AdminAzerothOnlineRoute
   '/admin/store/$sku': typeof AdminStoreSkuRoute
   '/admin/store/orders': typeof AdminStoreOrdersRoute
   '/admin/store/wallets': typeof AdminStoreWalletsRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
-  '/characters': typeof PortalCharactersIndexRoute
-  '/leaderboards': typeof PortalLeaderboardsIndexRoute
   '/store': typeof PortalStoreIndexRoute
   '/admin/store': typeof AdminStoreIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
+  '/azeroth/leaderboards/$board': typeof PortalAzerothLeaderboardsBoardRoute
   '/store/products/$sku': typeof PortalStoreProductsSkuRoute
   '/admin/azeroth/accounts/$username': typeof AdminAzerothAccountsUsernameRoute
   '/admin/azeroth/characters/$name': typeof AdminAzerothCharactersNameRoute
   '/admin/azeroth/items/$entry': typeof AdminAzerothItemsEntryRoute
+  '/azeroth/characters': typeof PortalAzerothCharactersIndexRoute
+  '/azeroth/leaderboards': typeof PortalAzerothLeaderboardsIndexRoute
   '/admin/azeroth/accounts': typeof AdminAzerothAccountsIndexRoute
   '/admin/azeroth/characters': typeof AdminAzerothCharactersIndexRoute
   '/admin/azeroth/items': typeof AdminAzerothItemsIndexRoute
@@ -292,10 +295,8 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/_portal/forbidden': typeof PortalForbiddenRoute
   '/_portal/login': typeof PortalLoginRoute
-  '/_portal/onboarding': typeof PortalOnboardingRoute
   '/_portal/profile': typeof PortalProfileRoute
   '/_portal/report': typeof PortalReportRoute
-  '/_portal/status': typeof PortalStatusRoute
   '/_portal/wallet': typeof PortalWalletRoute
   '/admin/api-clients': typeof AdminApiClientsRoute
   '/admin/audit': typeof AdminAuditRoute
@@ -304,21 +305,23 @@ export interface FileRoutesById {
   '/admin/store': typeof AdminStoreRouteWithChildren
   '/_portal/': typeof PortalIndexRoute
   '/admin/': typeof AdminIndexRoute
-  '/_portal/leaderboards/$board': typeof PortalLeaderboardsBoardRoute
+  '/_portal/azeroth/onboarding': typeof PortalAzerothOnboardingRoute
+  '/_portal/azeroth/status': typeof PortalAzerothStatusRoute
   '/admin/azeroth/online': typeof AdminAzerothOnlineRoute
   '/admin/store/$sku': typeof AdminStoreSkuRoute
   '/admin/store/orders': typeof AdminStoreOrdersRoute
   '/admin/store/wallets': typeof AdminStoreWalletsRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRoute
-  '/_portal/characters/': typeof PortalCharactersIndexRoute
-  '/_portal/leaderboards/': typeof PortalLeaderboardsIndexRoute
   '/_portal/store/': typeof PortalStoreIndexRoute
   '/admin/store/': typeof AdminStoreIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
+  '/_portal/azeroth/leaderboards/$board': typeof PortalAzerothLeaderboardsBoardRoute
   '/_portal/store/products/$sku': typeof PortalStoreProductsSkuRoute
   '/admin/azeroth/accounts/$username': typeof AdminAzerothAccountsUsernameRoute
   '/admin/azeroth/characters/$name': typeof AdminAzerothCharactersNameRoute
   '/admin/azeroth/items/$entry': typeof AdminAzerothItemsEntryRoute
+  '/_portal/azeroth/characters/': typeof PortalAzerothCharactersIndexRoute
+  '/_portal/azeroth/leaderboards/': typeof PortalAzerothLeaderboardsIndexRoute
   '/admin/azeroth/accounts/': typeof AdminAzerothAccountsIndexRoute
   '/admin/azeroth/characters/': typeof AdminAzerothCharactersIndexRoute
   '/admin/azeroth/items/': typeof AdminAzerothItemsIndexRoute
@@ -330,10 +333,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/forbidden'
     | '/login'
-    | '/onboarding'
     | '/profile'
     | '/report'
-    | '/status'
     | '/wallet'
     | '/admin/api-clients'
     | '/admin/audit'
@@ -341,21 +342,23 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/store'
     | '/admin/'
-    | '/leaderboards/$board'
+    | '/azeroth/onboarding'
+    | '/azeroth/status'
     | '/admin/azeroth/online'
     | '/admin/store/$sku'
     | '/admin/store/orders'
     | '/admin/store/wallets'
     | '/admin/users/$userId'
-    | '/characters/'
-    | '/leaderboards/'
     | '/store/'
     | '/admin/store/'
     | '/admin/users/'
+    | '/azeroth/leaderboards/$board'
     | '/store/products/$sku'
     | '/admin/azeroth/accounts/$username'
     | '/admin/azeroth/characters/$name'
     | '/admin/azeroth/items/$entry'
+    | '/azeroth/characters/'
+    | '/azeroth/leaderboards/'
     | '/admin/azeroth/accounts/'
     | '/admin/azeroth/characters/'
     | '/admin/azeroth/items/'
@@ -363,10 +366,8 @@ export interface FileRouteTypes {
   to:
     | '/forbidden'
     | '/login'
-    | '/onboarding'
     | '/profile'
     | '/report'
-    | '/status'
     | '/wallet'
     | '/admin/api-clients'
     | '/admin/audit'
@@ -374,21 +375,23 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/'
     | '/admin'
-    | '/leaderboards/$board'
+    | '/azeroth/onboarding'
+    | '/azeroth/status'
     | '/admin/azeroth/online'
     | '/admin/store/$sku'
     | '/admin/store/orders'
     | '/admin/store/wallets'
     | '/admin/users/$userId'
-    | '/characters'
-    | '/leaderboards'
     | '/store'
     | '/admin/store'
     | '/admin/users'
+    | '/azeroth/leaderboards/$board'
     | '/store/products/$sku'
     | '/admin/azeroth/accounts/$username'
     | '/admin/azeroth/characters/$name'
     | '/admin/azeroth/items/$entry'
+    | '/azeroth/characters'
+    | '/azeroth/leaderboards'
     | '/admin/azeroth/accounts'
     | '/admin/azeroth/characters'
     | '/admin/azeroth/items'
@@ -398,10 +401,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/_portal/forbidden'
     | '/_portal/login'
-    | '/_portal/onboarding'
     | '/_portal/profile'
     | '/_portal/report'
-    | '/_portal/status'
     | '/_portal/wallet'
     | '/admin/api-clients'
     | '/admin/audit'
@@ -410,21 +411,23 @@ export interface FileRouteTypes {
     | '/admin/store'
     | '/_portal/'
     | '/admin/'
-    | '/_portal/leaderboards/$board'
+    | '/_portal/azeroth/onboarding'
+    | '/_portal/azeroth/status'
     | '/admin/azeroth/online'
     | '/admin/store/$sku'
     | '/admin/store/orders'
     | '/admin/store/wallets'
     | '/admin/users/$userId'
-    | '/_portal/characters/'
-    | '/_portal/leaderboards/'
     | '/_portal/store/'
     | '/admin/store/'
     | '/admin/users/'
+    | '/_portal/azeroth/leaderboards/$board'
     | '/_portal/store/products/$sku'
     | '/admin/azeroth/accounts/$username'
     | '/admin/azeroth/characters/$name'
     | '/admin/azeroth/items/$entry'
+    | '/_portal/azeroth/characters/'
+    | '/_portal/azeroth/leaderboards/'
     | '/admin/azeroth/accounts/'
     | '/admin/azeroth/characters/'
     | '/admin/azeroth/items/'
@@ -472,13 +475,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalLoginRouteImport
       parentRoute: typeof PortalRoute
     }
-    '/_portal/onboarding': {
-      id: '/_portal/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof PortalOnboardingRouteImport
-      parentRoute: typeof PortalRoute
-    }
     '/_portal/profile': {
       id: '/_portal/profile'
       path: '/profile'
@@ -491,13 +487,6 @@ declare module '@tanstack/react-router' {
       path: '/report'
       fullPath: '/report'
       preLoaderRoute: typeof PortalReportRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/_portal/status': {
-      id: '/_portal/status'
-      path: '/status'
-      fullPath: '/status'
-      preLoaderRoute: typeof PortalStatusRouteImport
       parentRoute: typeof PortalRoute
     }
     '/_portal/wallet': {
@@ -549,25 +538,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStoreRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/_portal/characters/': {
-      id: '/_portal/characters/'
-      path: '/characters'
-      fullPath: '/characters/'
-      preLoaderRoute: typeof PortalCharactersIndexRouteImport
+    '/_portal/azeroth/onboarding': {
+      id: '/_portal/azeroth/onboarding'
+      path: '/azeroth/onboarding'
+      fullPath: '/azeroth/onboarding'
+      preLoaderRoute: typeof PortalAzerothOnboardingRouteImport
       parentRoute: typeof PortalRoute
     }
-    '/_portal/leaderboards/': {
-      id: '/_portal/leaderboards/'
-      path: '/leaderboards'
-      fullPath: '/leaderboards/'
-      preLoaderRoute: typeof PortalLeaderboardsIndexRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/_portal/leaderboards/$board': {
-      id: '/_portal/leaderboards/$board'
-      path: '/leaderboards/$board'
-      fullPath: '/leaderboards/$board'
-      preLoaderRoute: typeof PortalLeaderboardsBoardRouteImport
+    '/_portal/azeroth/status': {
+      id: '/_portal/azeroth/status'
+      path: '/azeroth/status'
+      fullPath: '/azeroth/status'
+      preLoaderRoute: typeof PortalAzerothStatusRouteImport
       parentRoute: typeof PortalRoute
     }
     '/_portal/store/': {
@@ -626,6 +608,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersUserIdRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/_portal/azeroth/characters/': {
+      id: '/_portal/azeroth/characters/'
+      path: '/azeroth/characters'
+      fullPath: '/azeroth/characters/'
+      preLoaderRoute: typeof PortalAzerothCharactersIndexRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/azeroth/leaderboards/': {
+      id: '/_portal/azeroth/leaderboards/'
+      path: '/azeroth/leaderboards'
+      fullPath: '/azeroth/leaderboards/'
+      preLoaderRoute: typeof PortalAzerothLeaderboardsIndexRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/azeroth/leaderboards/$board': {
+      id: '/_portal/azeroth/leaderboards/$board'
+      path: '/azeroth/leaderboards/$board'
+      fullPath: '/azeroth/leaderboards/$board'
+      preLoaderRoute: typeof PortalAzerothLeaderboardsBoardRouteImport
+      parentRoute: typeof PortalRoute
+    }
     '/_portal/store/products/$sku': {
       id: '/_portal/store/products/$sku'
       path: '/store/products/$sku'
@@ -681,33 +684,33 @@ declare module '@tanstack/react-router' {
 interface PortalRouteChildren {
   PortalForbiddenRoute: typeof PortalForbiddenRoute
   PortalLoginRoute: typeof PortalLoginRoute
-  PortalOnboardingRoute: typeof PortalOnboardingRoute
   PortalProfileRoute: typeof PortalProfileRoute
   PortalReportRoute: typeof PortalReportRoute
-  PortalStatusRoute: typeof PortalStatusRoute
   PortalWalletRoute: typeof PortalWalletRoute
   PortalIndexRoute: typeof PortalIndexRoute
-  PortalLeaderboardsBoardRoute: typeof PortalLeaderboardsBoardRoute
-  PortalCharactersIndexRoute: typeof PortalCharactersIndexRoute
-  PortalLeaderboardsIndexRoute: typeof PortalLeaderboardsIndexRoute
+  PortalAzerothOnboardingRoute: typeof PortalAzerothOnboardingRoute
+  PortalAzerothStatusRoute: typeof PortalAzerothStatusRoute
   PortalStoreIndexRoute: typeof PortalStoreIndexRoute
+  PortalAzerothLeaderboardsBoardRoute: typeof PortalAzerothLeaderboardsBoardRoute
   PortalStoreProductsSkuRoute: typeof PortalStoreProductsSkuRoute
+  PortalAzerothCharactersIndexRoute: typeof PortalAzerothCharactersIndexRoute
+  PortalAzerothLeaderboardsIndexRoute: typeof PortalAzerothLeaderboardsIndexRoute
 }
 
 const PortalRouteChildren: PortalRouteChildren = {
   PortalForbiddenRoute: PortalForbiddenRoute,
   PortalLoginRoute: PortalLoginRoute,
-  PortalOnboardingRoute: PortalOnboardingRoute,
   PortalProfileRoute: PortalProfileRoute,
   PortalReportRoute: PortalReportRoute,
-  PortalStatusRoute: PortalStatusRoute,
   PortalWalletRoute: PortalWalletRoute,
   PortalIndexRoute: PortalIndexRoute,
-  PortalLeaderboardsBoardRoute: PortalLeaderboardsBoardRoute,
-  PortalCharactersIndexRoute: PortalCharactersIndexRoute,
-  PortalLeaderboardsIndexRoute: PortalLeaderboardsIndexRoute,
+  PortalAzerothOnboardingRoute: PortalAzerothOnboardingRoute,
+  PortalAzerothStatusRoute: PortalAzerothStatusRoute,
   PortalStoreIndexRoute: PortalStoreIndexRoute,
+  PortalAzerothLeaderboardsBoardRoute: PortalAzerothLeaderboardsBoardRoute,
   PortalStoreProductsSkuRoute: PortalStoreProductsSkuRoute,
+  PortalAzerothCharactersIndexRoute: PortalAzerothCharactersIndexRoute,
+  PortalAzerothLeaderboardsIndexRoute: PortalAzerothLeaderboardsIndexRoute,
 }
 
 const PortalRouteWithChildren =

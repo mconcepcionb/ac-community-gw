@@ -43,7 +43,7 @@ export function ClaimAccountCard() {
       await verify.mutateAsync({ body: { account_username: accountUsername, code } });
       toast.success("Account linked");
       await queryClient.invalidateQueries({ queryKey: azerothMeAccountGetQueryKey() });
-      await navigate({ to: "/characters" });
+      await navigate({ to: "/azeroth/characters" });
     } catch (error) {
       report(error);
     }

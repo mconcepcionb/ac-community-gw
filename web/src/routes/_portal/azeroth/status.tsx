@@ -2,6 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { StatusPage } from "@/features/azeroth-info/status-page";
 
-export const Route = createFileRoute("/_portal/status")({
+export const Route = createFileRoute("/_portal/azeroth/status")({
   component: StatusPage,
 });

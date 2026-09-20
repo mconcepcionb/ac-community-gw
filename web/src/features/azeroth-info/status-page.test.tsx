@@ -27,7 +27,7 @@ function renderStatus() {
   const router = createRouter({
     routeTree,
     context: { queryClient },
-    history: createMemoryHistory({ initialEntries: ["/status"] }),
+    history: createMemoryHistory({ initialEntries: ["/azeroth/status"] }),
   });
 
   render(

@@ -46,7 +46,7 @@ export function OnboardingPage() {
       await mutation.mutateAsync({ body: values });
       toast.success("Account created and linked");
       await queryClient.invalidateQueries({ queryKey: azerothMeAccountGetQueryKey() });
-      await navigate({ to: "/characters" });
+      await navigate({ to: "/azeroth/characters" });
     } catch (error) {
       toast.error(isApiError(error) ? `${error.message} (${error.code})` : String(error));
     }
@@ -68,7 +68,9 @@ export function OnboardingPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => void navigate({ to: "/characters" })}>My characters</Button>
+            <Button onClick={() => void navigate({ to: "/azeroth/characters" })}>
+              My characters
+            </Button>
           </CardContent>
         </Card>
       ) : (

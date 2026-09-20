@@ -63,7 +63,7 @@ describe("MyCharactersPage", () => {
       ),
     );
 
-    renderAt("/characters");
+    renderAt("/azeroth/characters");
 
     expect(await screen.findByText("Thrall")).toBeInTheDocument();
     expect(screen.getByText("Shaman")).toBeInTheDocument();

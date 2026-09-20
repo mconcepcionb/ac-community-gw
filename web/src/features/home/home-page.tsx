@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
+import { Fragment } from "react";
 
 import {
   azerothMeAccountGetOptions,
@@ -7,6 +8,7 @@ import {
   storeOrdersListOptions,
   storeWalletGetOptions,
 } from "@/api";
+import { GAMES, type Game } from "@/app/games";
 import { PageHeader } from "@/components/common/page-header";
 import { PermissionGate } from "@/components/common/permission-gate";
 import { Button } from "@/components/ui/button";
@@ -23,31 +25,34 @@ export function HomePage() {
       />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <PermissionGate permission="azeroth.account.self">
-          <AccountCard />
-        </PermissionGate>
-        <PermissionGate permission="azeroth.character.self">
-          <CharactersCard />
-        </PermissionGate>
         <PermissionGate permission="gw.store.wallet.read">
           <WalletCard />
         </PermissionGate>
         <PermissionGate permission="gw.store.orders.read">
           <OrdersCard />
         </PermissionGate>
-        <PermissionGate permission="azeroth.info.public.read">
-          <StatusCard />
-        </PermissionGate>
       </div>
+
+      {GAMES.map((game) => (
+        <section key={game.id} className="mt-8">
+          <h2 className="mb-3 text-lg font-semibold">{game.label}</h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <PermissionGate permission="azeroth.account.self">
+              <AccountCard gameId={game.id} />
+            </PermissionGate>
+            <PermissionGate permission="azeroth.character.self">
+              <CharactersCard />
+            </PermissionGate>
+            <PermissionGate permission="azeroth.info.public.read">
+              <StatusCard />
+            </PermissionGate>
+          </div>
+        </section>
+      ))}
 
       <section className="mt-8">
         <h2 className="mb-3 text-lg font-semibold">Shortcuts</h2>
         <div className="flex flex-wrap gap-2">
-          <PermissionGate permission="azeroth.character.self">
-            <Button asChild variant="outline" size="sm">
-              <Link to="/characters">My characters</Link>
-            </Button>
-          </PermissionGate>
           <PermissionGate permission="gw.store.catalog.read">
             <Button asChild variant="outline" size="sm">
               <Link to="/store">Store</Link>
@@ -58,23 +63,32 @@ export function HomePage() {
               <Link to="/wallet">Wallet</Link>
             </Button>
           </PermissionGate>
-          <PermissionGate permission="azeroth.info.public.read">
-            <Button asChild variant="outline" size="sm">
-              <Link to="/status">Server status</Link>
-            </Button>
-          </PermissionGate>
           <PermissionGate permission="gw.report.create">
             <Button asChild variant="outline" size="sm">
               <Link to="/report">Report a player</Link>
             </Button>
           </PermissionGate>
+          {GAMES.map((game) => (
+            <Fragment key={game.id}>
+              <PermissionGate permission="azeroth.character.self">
+                <Button asChild variant="outline" size="sm">
+                  <Link to={`/${game.id}/characters`}>My characters</Link>
+                </Button>
+              </PermissionGate>
+              <PermissionGate permission="azeroth.info.public.read">
+                <Button asChild variant="outline" size="sm">
+                  <Link to={`/${game.id}/status`}>Server status</Link>
+                </Button>
+              </PermissionGate>
+            </Fragment>
+          ))}
         </div>
       </section>
     </div>
   );
 }
 
-function AccountCard() {
+function AccountCard({ gameId }: { gameId: Game["id"] }) {
   const query = useQuery(azerothMeAccountGetOptions());
 
   return (
@@ -83,7 +97,7 @@ function AccountCard() {
         <CardTitle>Game account</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2 text-sm">
-        {query.isPending ? <p className="text-muted-foreground">Loading…</p> : null}
+        {query.isPending ? <p className="text-muted-foreground">Loading.</p> : null}
         {query.isError ? <p className="text-muted-foreground">Unavailable.</p> : null}
         {query.data?.linked ? (
           <p>
@@ -94,7 +108,7 @@ function AccountCard() {
           <>
             <p className="text-muted-foreground">No game account linked.</p>
             <Button asChild size="sm">
-              <Link to="/onboarding">Link account</Link>
+              <Link to={`/${gameId}/onboarding`}>Link account</Link>
             </Button>
           </>
         ) : null}
@@ -113,7 +127,7 @@ function CharactersCard() {
         <CardTitle>Characters</CardTitle>
       </CardHeader>
       <CardContent className="text-sm">
-        {query.isPending ? <p className="text-muted-foreground">Loading…</p> : null}
+        {query.isPending ? <p className="text-muted-foreground">Loading.</p> : null}
         {query.isError ? <p className="text-muted-foreground">Unavailable.</p> : null}
         {query.data ? (
           <p>
@@ -135,7 +149,7 @@ function WalletCard() {
         <CardTitle>Points</CardTitle>
       </CardHeader>
       <CardContent className="text-sm">
-        {query.isPending ? <p className="text-muted-foreground">Loading…</p> : null}
+        {query.isPending ? <p className="text-muted-foreground">Loading.</p> : null}
         {query.isError ? <p className="text-muted-foreground">Unavailable.</p> : null}
         {query.data ? <p className="text-2xl font-semibold">{query.data.balance ?? 0}</p> : null}
       </CardContent>
@@ -153,14 +167,14 @@ function OrdersCard() {
         <CardTitle>Recent orders</CardTitle>
       </CardHeader>
       <CardContent className="space-y-1 text-sm">
-        {query.isPending ? <p className="text-muted-foreground">Loading…</p> : null}
+        {query.isPending ? <p className="text-muted-foreground">Loading.</p> : null}
         {query.isError ? <p className="text-muted-foreground">Unavailable.</p> : null}
         {query.data && orders.length === 0 ? (
           <p className="text-muted-foreground">No orders.</p>
         ) : null}
         {orders.map((order) => (
           <p key={order.order_id}>
-            {order.sku} — {order.status}
+            {order.sku} - {order.status}
           </p>
         ))}
       </CardContent>
@@ -177,7 +191,7 @@ function StatusCard() {
         <CardTitle>Server status</CardTitle>
       </CardHeader>
       <CardContent className="space-y-1 text-sm">
-        {query.isPending ? <p className="text-muted-foreground">Loading…</p> : null}
+        {query.isPending ? <p className="text-muted-foreground">Loading.</p> : null}
         {query.isError ? <p className="text-muted-foreground">Unavailable.</p> : null}
         {query.data ? (
           <>

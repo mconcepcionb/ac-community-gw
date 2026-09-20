@@ -40,7 +40,7 @@ describe("OnboardingPage", () => {
       http.get(accountUrl, () => HttpResponse.json({ linked: false })),
     );
 
-    renderAt("/onboarding");
+    renderAt("/azeroth/onboarding");
 
     expect(await screen.findByText("Create a new account")).toBeInTheDocument();
     expect(screen.getByText("I already have an account")).toBeInTheDocument();
@@ -61,7 +61,7 @@ describe("OnboardingPage", () => {
       ),
     );
 
-    renderAt("/onboarding");
+    renderAt("/azeroth/onboarding");
 
     expect(await screen.findByText("Account linked")).toBeInTheDocument();
   });

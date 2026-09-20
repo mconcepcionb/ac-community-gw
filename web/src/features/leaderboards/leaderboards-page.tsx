@@ -66,7 +66,7 @@ export function LeaderboardsPage({ board }: { board: string }) {
             variant={item.id === board ? "default" : "outline"}
             size="sm"
           >
-            <Link to="/leaderboards/$board" params={{ board: item.id }}>
+            <Link to="/azeroth/leaderboards/$board" params={{ board: item.id }}>
               {item.label}
             </Link>
           </Button>

@@ -21,7 +21,7 @@ plugins (and vice versa), which will not survive a second game.
 | Decide the `/public/*` surface ownership | implemented (005); game public data moved under `/azeroth/public/*`, gateway aggregator deferred |
 | Move the permission catalog out of `apikeys` | implemented (006) |
 | SPA console route and nav split (core vs per-game) | implemented (008) |
-| SPA portal route split (core vs per-game) | planned |
+| SPA portal route split (core vs per-game) | implemented (009) |
 | Split `azeroth-store` into a gateway `store` plugin | implemented (007) |
 
 ## Context

@@ -14,9 +14,12 @@ const meUrl = "http://localhost:8080/api/v1/me";
 const retiredPaths = [
   "/accounts",
   "/account-links",
+  "/characters",
   "/items",
   "/identity/users",
-  "/azeroth/status",
+  "/leaderboards",
+  "/onboarding",
+  "/status",
   "/store/products",
   "/store/wallet",
 ];

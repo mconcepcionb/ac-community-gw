@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { LeaderboardsPage } from "@/features/leaderboards/leaderboards-page";
 
-export const Route = createFileRoute("/_portal/leaderboards/$board")({
+export const Route = createFileRoute("/_portal/azeroth/leaderboards/$board")({
   component: LeaderboardRoute,
 });
 
