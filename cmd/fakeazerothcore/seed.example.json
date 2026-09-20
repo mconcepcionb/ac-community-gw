@@ -1,0 +1,15 @@
+{
+  "accounts": [
+    {
+      "username": "ADMIN",
+      "email": "admin@example.com",
+      "gm_level": 3
+    },
+    {
+      "username": "PLAYER",
+      "email": "player@example.com",
+      "gm_level": 0,
+      "banned": false
+    }
+  ]
+}

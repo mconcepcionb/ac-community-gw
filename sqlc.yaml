@@ -1,0 +1,47 @@
+version: "2"
+
+sql:
+  - engine: "postgresql"
+    schema: "migrations"
+    queries: "internal/plugins/identitydiscord/repository/queries.sql"
+    gen:
+      go:
+        package: "identitydiscordrepo"
+        out: "internal/plugins/identitydiscord/repository/generated"
+        sql_package: "database/sql"
+        emit_json_tags: false
+        emit_interface: false
+        emit_empty_slices: true
+        overrides:
+          - db_type: "uuid"
+            go_type: "github.com/google/uuid.UUID"
+
+  - engine: "postgresql"
+    schema: "migrations"
+    queries: "internal/plugins/azerothaccount/repository/queries.sql"
+    gen:
+      go:
+        package: "azerothaccountrepo"
+        out: "internal/plugins/azerothaccount/repository/generated"
+        sql_package: "database/sql"
+        emit_json_tags: false
+        emit_interface: false
+        emit_empty_slices: true
+        overrides:
+          - db_type: "uuid"
+            go_type: "github.com/google/uuid.UUID"
+
+  - engine: "postgresql"
+    schema: "migrations"
+    queries: "internal/plugins/azerothstore/repository/queries.sql"
+    gen:
+      go:
+        package: "azerothstorerepo"
+        out: "internal/plugins/azerothstore/repository/generated"
+        sql_package: "database/sql"
+        emit_json_tags: false
+        emit_interface: false
+        emit_empty_slices: true
+        overrides:
+          - db_type: "uuid"
+            go_type: "github.com/google/uuid.UUID"
