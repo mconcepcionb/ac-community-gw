@@ -213,7 +213,8 @@ export const zAzerothCharacterVisibilityResponse = z.object({
 });
 
 export const zAzerothCharactersResponse = z.object({
-    characters: z.array(zAzerothCharacter).optional()
+    characters: z.array(zAzerothCharacter).optional(),
+    total: z.int().optional()
 });
 
 export const zAzerothItemDamage = z.object({

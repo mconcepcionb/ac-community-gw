@@ -970,7 +970,7 @@ export const azerothCharactersListQueryKey = (options?: Options<AzerothCharacter
 /**
  * List characters
  *
- * Lists characters filtered by account (account_id or account username) with an optional name filter. Requires the azeroth.character.list permission.
+ * Lists characters, optionally filtered by account (account_id or account username) and by name. Returns the total number of matches. Requires the azeroth.character.list permission.
  */
 export const azerothCharactersListOptions = (options?: Options<AzerothCharactersListData>) => queryOptions<AzerothCharactersListResponse, AzerothCharactersListError, AzerothCharactersListResponse, ReturnType<typeof azerothCharactersListQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
@@ -990,7 +990,7 @@ export const azerothCharactersListInfiniteQueryKey = (options?: Options<AzerothC
 /**
  * List characters
  *
- * Lists characters filtered by account (account_id or account username) with an optional name filter. Requires the azeroth.character.list permission.
+ * Lists characters, optionally filtered by account (account_id or account username) and by name. Returns the total number of matches. Requires the azeroth.character.list permission.
  */
 export const azerothCharactersListInfiniteOptions = (options?: Options<AzerothCharactersListData>) => {
     const opts = infiniteQueryOptions<AzerothCharactersListResponse, AzerothCharactersListError, InfiniteData<AzerothCharactersListResponse>, QueryKey<Options<AzerothCharactersListData>>, number | Pick<QueryKey<Options<AzerothCharactersListData>>[0], 'body' | 'headers' | 'path' | 'query'>>(

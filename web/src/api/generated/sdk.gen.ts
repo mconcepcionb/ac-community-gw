@@ -378,7 +378,7 @@ export const azerothAnnounceSend = <ThrowOnError extends boolean = false>(option
 /**
  * List characters
  *
- * Lists characters filtered by account (account_id or account username) with an optional name filter. Requires the azeroth.character.list permission.
+ * Lists characters, optionally filtered by account (account_id or account username) and by name. Returns the total number of matches. Requires the azeroth.character.list permission.
  */
 export const azerothCharactersList = <ThrowOnError extends boolean = false>(options?: Options<AzerothCharactersListData, ThrowOnError>): RequestResult<AzerothCharactersListResponses, AzerothCharactersListErrors, ThrowOnError> => (options?.client ?? client).get<AzerothCharactersListResponses, AzerothCharactersListErrors, ThrowOnError>({ url: '/api/v1/azeroth/characters', ...options });
 

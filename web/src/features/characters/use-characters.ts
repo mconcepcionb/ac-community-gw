@@ -9,14 +9,13 @@ export interface CharactersQuery {
   offset?: number;
 }
 
-/** useCharacters lists characters for an account username. */
+/** useCharacters lists characters, optionally filtered by account and name. */
 export function useCharacters({ account, filter, limit = 100, offset = 0 }: CharactersQuery) {
-  return useQuery({
-    ...azerothCharactersListOptions({
+  return useQuery(
+    azerothCharactersListOptions({
       query: { account: account || undefined, filter: filter || undefined, limit, offset },
     }),
-    enabled: Boolean(account),
-  });
+  );
 }
 
 /** useCharacter fetches a single character by name. */

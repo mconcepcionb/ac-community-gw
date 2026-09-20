@@ -218,6 +218,7 @@ export type AzerothCharacterVisibilityResponse = {
 
 export type AzerothCharactersResponse = {
     characters?: Array<AzerothCharacter>;
+    total?: number;
 };
 
 export type AzerothItem = {

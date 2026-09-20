@@ -58,8 +58,11 @@ describe("CharactersPage", () => {
   it("lists characters for an account", async () => {
     server.use(
       authorized(),
+      http.get("http://localhost:8080/api/v1/azeroth/accounts", () =>
+        HttpResponse.json({ accounts: [{ id: 1, username: "ADMIN" }] }),
+      ),
       http.get("http://localhost:8080/api/v1/azeroth/characters", () =>
-        HttpResponse.json({ characters: [thrall] }),
+        HttpResponse.json({ characters: [thrall], total: 1 }),
       ),
     );
 
@@ -69,11 +72,16 @@ describe("CharactersPage", () => {
     expect(screen.getByText("Shaman")).toBeInTheDocument();
   });
 
-  it("prompts for an account when none is given", async () => {
-    server.use(authorized());
+  it("lists all characters when no account is given", async () => {
+    server.use(
+      authorized(),
+      http.get("http://localhost:8080/api/v1/azeroth/characters", () =>
+        HttpResponse.json({ characters: [thrall], total: 1 }),
+      ),
+    );
     renderAt("/admin/characters");
 
-    expect(await screen.findByText("Choose an account")).toBeInTheDocument();
+    expect(await screen.findByRole("link", { name: "Thrall" })).toBeInTheDocument();
   });
 });
 

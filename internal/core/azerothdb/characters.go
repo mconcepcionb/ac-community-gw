@@ -61,6 +61,9 @@ type CharacterQuery struct {
 // CharacterReader reads AzerothCore characters.
 type CharacterReader interface {
 	ListCharacters(ctx context.Context, query CharacterQuery) ([]Character, error)
+	// CountCharacters returns the number of characters matching the query,
+	// ignoring limit and offset.
+	CountCharacters(ctx context.Context, query CharacterQuery) (int, error)
 	// FindCharacter returns one character by name or ErrCharacterNotFound.
 	FindCharacter(ctx context.Context, name string) (Character, error)
 	// TopCharacters returns one leaderboard page ordered by the board metric.
@@ -79,6 +82,14 @@ func (u UnavailableCharacters) ListCharacters(context.Context, CharacterQuery) (
 		return nil, fmt.Errorf("%w: %v", ErrUnavailable, u.Err)
 	}
 	return nil, ErrUnavailable
+}
+
+// CountCharacters implements CharacterReader.
+func (u UnavailableCharacters) CountCharacters(context.Context, CharacterQuery) (int, error) {
+	if u.Err != nil {
+		return 0, fmt.Errorf("%w: %v", ErrUnavailable, u.Err)
+	}
+	return 0, ErrUnavailable
 }
 
 // FindCharacter implements CharacterReader.

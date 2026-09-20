@@ -58,12 +58,13 @@ type Character struct {
 // CharactersResponse is the body of the character listing endpoints.
 type CharactersResponse struct {
 	Characters []Character `json:"characters"`
+	Total      int         `json:"total"`
 } // @name AzerothCharactersResponse
 
 // handleListCharacters handles GET /api/v1/azeroth/characters.
 //
 //	@Summary		List characters
-//	@Description	Lists characters filtered by account (account_id or account username) with an optional name filter. Requires the azeroth.character.list permission.
+//	@Description	Lists characters, optionally filtered by account (account_id or account username) and by name. Returns the total number of matches. Requires the azeroth.character.list permission.
 //	@Tags			azeroth-character
 //	@ID				azeroth.characters.list
 //	@Produce		json
@@ -195,7 +196,8 @@ func (p *Plugin) accountQuery(r *http.Request) (azerothdb.CharacterQuery, error)
 		}
 		return azerothdb.CharacterQuery{AccountID: account.ID}, nil
 	}
-	return azerothdb.CharacterQuery{}, errMissingAccount
+	// No account filter: list every character.
+	return azerothdb.CharacterQuery{}, nil
 }
 
 func (p *Plugin) writeCharacters(w http.ResponseWriter, r *http.Request, query azerothdb.CharacterQuery) {
@@ -204,11 +206,16 @@ func (p *Plugin) writeCharacters(w http.ResponseWriter, r *http.Request, query a
 		httpapi.WriteError(w, r, errCharacterDBUnavailable)
 		return
 	}
+	total, err := p.characters.CountCharacters(r.Context(), query)
+	if err != nil {
+		httpapi.WriteError(w, r, errCharacterDBUnavailable)
+		return
+	}
 	items := make([]Character, 0, len(characters))
 	for _, character := range characters {
 		items = append(items, characterDTO(character))
 	}
-	httpapi.WriteJSON(w, http.StatusOK, CharactersResponse{Characters: items})
+	httpapi.WriteJSON(w, http.StatusOK, CharactersResponse{Characters: items, Total: total})
 }
 
 func writeCharacterError(w http.ResponseWriter, r *http.Request, err error) {

@@ -1,10 +1,10 @@
 import { getRouteApi, Link } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import type { AzerothCharacter } from "@/api";
+import { type AzerothCharacter, azerothAccountsList } from "@/api";
+import { Autocomplete, type AutocompleteOption } from "@/components/common/autocomplete";
 import { DataTable } from "@/components/common/data-table";
-import { EmptyState } from "@/components/common/empty-state";
 import { PageHeader } from "@/components/common/page-header";
 import { Pagination } from "@/components/common/pagination";
 import { StatusBadge } from "@/components/common/status-badge";
@@ -72,18 +72,35 @@ export function CharactersPage() {
 
   const query = useCharacters({ account: search.account, filter: search.filter, limit, offset });
   const characters = query.data?.characters ?? [];
+  const total = query.data?.total;
+
+  const loadAccounts = useCallback(async (value: string): Promise<AutocompleteOption[]> => {
+    try {
+      const response = await azerothAccountsList({ query: { filter: value, limit: 10 } });
+      return (response.data?.accounts ?? [])
+        .map((item) => item.username ?? "")
+        .filter((username) => username !== "")
+        .map((username) => ({ value: username, label: username }));
+    } catch {
+      return [];
+    }
+  }, []);
 
   return (
     <div className="mx-auto max-w-5xl p-8">
-      <PageHeader title="Characters" description="Characters of an AzerothCore account." />
+      <PageHeader
+        title="Characters"
+        description="Every AzerothCore character, filterable by account and name."
+      />
 
       <div className="mb-4 flex flex-wrap gap-3">
-        <Input
+        <Autocomplete
           className="max-w-xs"
-          placeholder="Account username"
-          aria-label="Account username"
           value={accountInput}
-          onChange={(event) => setAccountInput(event.target.value)}
+          onValueChange={setAccountInput}
+          loadOptions={loadAccounts}
+          ariaLabel="Account username"
+          placeholder="Account username"
         />
         <Input
           className="max-w-xs"
@@ -94,32 +111,25 @@ export function CharactersPage() {
         />
       </div>
 
-      {search.account ? (
-        <>
-          <DataTable
-            columns={columns}
-            data={characters}
-            loading={query.isPending}
-            error={query.isError ? query.error : undefined}
-            onRetry={() => void query.refetch()}
-            emptyMessage="No characters"
-          />
-          <Pagination
-            limit={limit}
-            offset={offset}
-            count={characters.length}
-            itemLabel="characters"
-            onOffsetChange={(next) =>
-              navigate({ search: { ...search, offset: next === 0 ? undefined : next } })
-            }
-          />
-        </>
-      ) : (
-        <EmptyState
-          title="Choose an account"
-          description="Enter an AzerothCore account username to list its characters."
-        />
-      )}
+      <DataTable
+        columns={columns}
+        data={characters}
+        loading={query.isPending}
+        error={query.isError ? query.error : undefined}
+        onRetry={() => void query.refetch()}
+        emptyMessage="No characters"
+      />
+
+      <Pagination
+        limit={limit}
+        offset={offset}
+        count={characters.length}
+        total={total}
+        itemLabel="characters"
+        onOffsetChange={(next) =>
+          navigate({ search: { ...search, offset: next === 0 ? undefined : next } })
+        }
+      />
     </div>
   );
 }

@@ -108,6 +108,15 @@ func (l *LazyCharacterStore) ListCharacters(ctx context.Context, query azerothdb
 	return reader.ListCharacters(ctx, query)
 }
 
+// CountCharacters implements azerothdb.CharacterReader.
+func (l *LazyCharacterStore) CountCharacters(ctx context.Context, query azerothdb.CharacterQuery) (int, error) {
+	reader, err := l.get()
+	if err != nil {
+		return 0, err
+	}
+	return reader.CountCharacters(ctx, query)
+}
+
 // FindCharacter implements azerothdb.CharacterReader.
 func (l *LazyCharacterStore) FindCharacter(ctx context.Context, name string) (azerothdb.Character, error) {
 	reader, err := l.get()

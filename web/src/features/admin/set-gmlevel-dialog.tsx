@@ -45,9 +45,7 @@ type FormValues = z.infer<typeof schema>;
 
 function levelValue(level: number): FormValues["level"] {
   const value = String(level);
-  return (levelValues as readonly string[]).includes(value)
-    ? (value as FormValues["level"])
-    : "0";
+  return (levelValues as readonly string[]).includes(value) ? (value as FormValues["level"]) : "0";
 }
 
 const levels = [

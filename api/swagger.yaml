@@ -382,6 +382,8 @@ components:
             $ref: '#/components/schemas/AzerothCharacter'
           type: array
           uniqueItems: false
+        total:
+          type: integer
       type: object
     AzerothItem:
       properties:
@@ -2871,8 +2873,9 @@ paths:
       - azeroth-admin
   /api/v1/azeroth/characters:
     get:
-      description: Lists characters filtered by account (account_id or account username)
-        with an optional name filter. Requires the azeroth.character.list permission.
+      description: Lists characters, optionally filtered by account (account_id or
+        account username) and by name. Returns the total number of matches. Requires
+        the azeroth.character.list permission.
       operationId: azeroth.characters.list
       parameters:
       - description: login account id
