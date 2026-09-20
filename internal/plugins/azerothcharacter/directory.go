@@ -14,6 +14,20 @@ type Directory interface {
 	// CharactersByUser resolves the user's linked account and lists its
 	// characters.
 	CharactersByUser(ctx context.Context, userID string) ([]azerothdb.Character, error)
+	// OnlineCharacters lists characters currently online.
+	OnlineCharacters(ctx context.Context, limit, offset int) ([]azerothdb.Character, error)
+}
+
+// OnlineCharacters implements Directory.
+func (p *Plugin) OnlineCharacters(ctx context.Context, limit, offset int) ([]azerothdb.Character, error) {
+	if p.characters == nil {
+		return nil, errCharacterDBNotConfigured
+	}
+	return p.characters.ListCharacters(ctx, azerothdb.CharacterQuery{
+		OnlineOnly: true,
+		Limit:      limit,
+		Offset:     offset,
+	})
 }
 
 // CharactersByUser implements Directory.

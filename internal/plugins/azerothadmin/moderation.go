@@ -20,6 +20,8 @@ var (
 		"empty_message", "message is required")
 	errCommandFailed = httpapi.NewAPIError(http.StatusBadGateway,
 		"command_failed", "AzerothCore rejected the command")
+	errOnlineUnavailable = httpapi.NewAPIError(http.StatusServiceUnavailable,
+		"online_unavailable", "the online list is unavailable")
 )
 
 // playerNamePattern keeps names safe to embed in the command string.
@@ -50,11 +52,6 @@ func (p *Plugin) unbanCharacter(ctx context.Context, name string) (string, error
 	return p.executor.Execute(ctx, fmt.Sprintf(".unban character %s", name))
 }
 
-// onlineList builds and executes `.account onlinelist`.
-func (p *Plugin) onlineList(ctx context.Context) (string, error) {
-	return p.executor.Execute(ctx, ".account onlinelist")
-}
-
 // announce builds and executes `.announce <message>`.
 func (p *Plugin) announce(ctx context.Context, message string) (string, error) {
 	return p.executor.Execute(ctx, fmt.Sprintf(".announce %s", message))
@@ -82,30 +79,125 @@ type AnnounceRequest struct {
 	Message string `json:"message"`
 } // @name AnnounceRequest
 
+// OnlinePlayer is one character currently online.
+type OnlinePlayer struct {
+	GUID      int64  `json:"guid"`
+	Name      string `json:"name"`
+	Level     int    `json:"level"`
+	Class     int    `json:"class"`
+	ClassName string `json:"class_name"`
+	Race      int    `json:"race"`
+	RaceName  string `json:"race_name"`
+	Guild     string `json:"guild"`
+	AccountID int64  `json:"account_id"`
+} // @name AzerothOnlinePlayer
+
 // OnlineListResponse is the body of GET /api/v1/azeroth/online.
 type OnlineListResponse struct {
-	Output string `json:"output"`
+	Players []OnlinePlayer `json:"players"`
 } // @name AzerothOnlineListResponse
 
 // handleOnlineList handles GET /api/v1/azeroth/online.
 //
 //	@Summary		List online players
-//	@Description	Runs the AzerothCore online list command. Requires the azeroth.admin.players.read permission.
+//	@Description	Lists characters currently online, read from the character database. Requires the azeroth.admin.players.read permission.
 //	@Tags			azeroth-admin
 //	@ID				azeroth.online.list
 //	@Produce		json
 //	@Success		200	{object}	OnlineListResponse
 //	@Failure		401	{object}	httpapi.ErrorResponse
 //	@Failure		403	{object}	httpapi.ErrorResponse
-//	@Failure		502	{object}	httpapi.ErrorResponse
+//	@Failure		503	{object}	httpapi.ErrorResponse
 //	@Router			/api/v1/azeroth/online [get]
 func (p *Plugin) handleOnlineList(w http.ResponseWriter, r *http.Request) {
-	output, err := p.onlineList(r.Context())
-	if err != nil {
-		httpapi.WriteError(w, r, errCommandFailed)
+	if p.registry == nil {
+		httpapi.WriteError(w, r, errOnlineUnavailable)
 		return
 	}
-	httpapi.WriteJSON(w, http.StatusOK, OnlineListResponse{Output: output})
+	value, err := p.registry.Resolve(characterDirectoryService)
+	if err != nil {
+		httpapi.WriteError(w, r, errOnlineUnavailable)
+		return
+	}
+	directory, ok := value.(characterDirectory)
+	if !ok {
+		httpapi.WriteError(w, r, errOnlineUnavailable)
+		return
+	}
+	characters, err := directory.OnlineCharacters(r.Context(), 200, 0)
+	if err != nil {
+		httpapi.WriteError(w, r, errOnlineUnavailable)
+		return
+	}
+	players := make([]OnlinePlayer, 0, len(characters))
+	for _, character := range characters {
+		players = append(players, OnlinePlayer{
+			GUID:      character.GUID,
+			Name:      character.Name,
+			Level:     character.Level,
+			Class:     character.Class,
+			ClassName: adminClassName(character.Class),
+			Race:      character.Race,
+			RaceName:  adminRaceName(character.Race),
+			Guild:     character.GuildName,
+			AccountID: character.AccountID,
+		})
+	}
+	httpapi.WriteJSON(w, http.StatusOK, OnlineListResponse{Players: players})
+}
+
+func adminClassName(class int) string {
+	switch class {
+	case 1:
+		return "Warrior"
+	case 2:
+		return "Paladin"
+	case 3:
+		return "Hunter"
+	case 4:
+		return "Rogue"
+	case 5:
+		return "Priest"
+	case 6:
+		return "Death Knight"
+	case 7:
+		return "Shaman"
+	case 8:
+		return "Mage"
+	case 9:
+		return "Warlock"
+	case 11:
+		return "Druid"
+	default:
+		return "Unknown"
+	}
+}
+
+func adminRaceName(race int) string {
+	switch race {
+	case 1:
+		return "Human"
+	case 2:
+		return "Orc"
+	case 3:
+		return "Dwarf"
+	case 4:
+		return "Night Elf"
+	case 5:
+		return "Undead"
+	case 6:
+		return "Tauren"
+	case 7:
+		return "Gnome"
+	case 8:
+		return "Troll"
+	case 10:
+		return "Blood Elf"
+	case 11:
+		return "Draenei"
+	default:
+		return "Unknown"
+	}
 }
 
 // handleKick handles POST /api/v1/azeroth/players/{name}/kick.

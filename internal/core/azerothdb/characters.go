@@ -63,8 +63,10 @@ type CharacterQuery struct {
 	AccountID int64
 	// Filter matches character names with a case-insensitive substring.
 	Filter string
-	Limit  int
-	Offset int
+	// OnlineOnly restricts the listing to characters currently online.
+	OnlineOnly bool
+	Limit      int
+	Offset     int
 }
 
 // CharacterReader reads AzerothCore characters.

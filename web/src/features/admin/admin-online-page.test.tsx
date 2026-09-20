@@ -11,6 +11,7 @@ import { server } from "@/test/msw";
 
 const meUrl = "http://localhost:8080/api/v1/me";
 const onlineUrl = "http://localhost:8080/api/v1/azeroth/online";
+const charactersUrl = "http://localhost:8080/api/v1/azeroth/characters";
 const kickUrl = "http://localhost:8080/api/v1/azeroth/players/Thrall/kick";
 const announceUrl = "http://localhost:8080/api/v1/azeroth/announce";
 
@@ -35,8 +36,10 @@ function renderPage() {
 describe("AdminOnlinePage", () => {
   beforeEach(() => {
     kickBody = undefined;
+    announceBody = undefined;
   });
-  it("kicks a player and sends an announcement", async () => {
+
+  it("lists online players, kicks one and sends an announcement", async () => {
     server.use(
       http.get(meUrl, () =>
         HttpResponse.json({
@@ -50,7 +53,24 @@ describe("AdminOnlinePage", () => {
           ],
         }),
       ),
-      http.get(onlineUrl, () => HttpResponse.json({ output: "Players online: 1\nThrall" })),
+      http.get(onlineUrl, () =>
+        HttpResponse.json({
+          players: [
+            {
+              guid: 1,
+              name: "Thrall",
+              level: 80,
+              class_name: "Shaman",
+              race_name: "Orc",
+              guild: "Horde",
+              account_id: 5,
+            },
+          ],
+        }),
+      ),
+      http.get(charactersUrl, () =>
+        HttpResponse.json({ characters: [{ guid: 1, name: "Thrall", class_name: "Shaman" }] }),
+      ),
       http.post(kickUrl, async ({ request }) => {
         kickBody = await request.json();
         return HttpResponse.json({ result: "kicked" });
@@ -62,11 +82,11 @@ describe("AdminOnlinePage", () => {
     );
 
     renderPage();
-    expect(await screen.findByText(/Players online/)).toBeInTheDocument();
+    expect(await screen.findByText("Thrall")).toBeInTheDocument();
 
     const user = userEvent.setup();
-    await user.type(screen.getByLabelText("Player name"), "Thrall");
-    await user.click(screen.getByRole("button", { name: "Kick" }));
+    await user.type(screen.getByLabelText("Player or character name"), "Thrall");
+    await user.click(screen.getAllByRole("button", { name: "Kick" })[0]);
     await user.type(await screen.findByLabelText("Reason (optional)"), "afk");
     await user.click(screen.getByRole("button", { name: "Confirm kick" }));
 

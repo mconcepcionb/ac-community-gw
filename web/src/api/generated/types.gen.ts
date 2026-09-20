@@ -329,7 +329,19 @@ export type AzerothMailItem = {
 };
 
 export type AzerothOnlineListResponse = {
-    output?: string;
+    players?: Array<AzerothOnlinePlayer>;
+};
+
+export type AzerothOnlinePlayer = {
+    account_id?: number;
+    class?: number;
+    class_name?: string;
+    guid?: number;
+    guild?: string;
+    level?: number;
+    name?: string;
+    race?: number;
+    race_name?: string;
 };
 
 export type AzerothSelfAccountRequest = {
@@ -3098,9 +3110,9 @@ export type AzerothOnlineListErrors = {
      */
     403: ErrorResponse;
     /**
-     * Bad Gateway
+     * Service Unavailable
      */
-    502: ErrorResponse;
+    503: ErrorResponse;
 };
 
 export type AzerothOnlineListError = AzerothOnlineListErrors[keyof AzerothOnlineListErrors];

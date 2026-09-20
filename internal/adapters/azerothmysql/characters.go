@@ -38,13 +38,15 @@ LEFT JOIN guild_member gm ON gm.guid = c.guid
 LEFT JOIN guild g ON g.guildid = gm.guildid
 WHERE (? = 0 OR c.account = ?)
   AND (? = '' OR c.name LIKE ?)
+  AND (? = 0 OR c.online = 1)
 ORDER BY c.level DESC, c.name ASC
 LIMIT ? OFFSET ?`
 
 const countCharactersQuery = `SELECT COUNT(*)
 FROM characters c
 WHERE (? = 0 OR c.account = ?)
-  AND (? = '' OR c.name LIKE ?)`
+  AND (? = '' OR c.name LIKE ?)
+  AND (? = 0 OR c.online = 1)`
 
 const findCharacterQuery = `SELECT ` + characterColumns + `
 FROM characters c
@@ -77,7 +79,7 @@ func (c *CharacterStore) ListCharacters(ctx context.Context, query azerothdb.Cha
 	pattern := "%" + escapeLike(filter) + "%"
 
 	rows, err := c.db.QueryContext(ctx, listCharactersQuery,
-		query.AccountID, query.AccountID, filter, pattern, limit, offset)
+		query.AccountID, query.AccountID, filter, pattern, boolFlag(query.OnlineOnly), limit, offset)
 	if err != nil {
 		return nil, fmt.Errorf("azerothmysql: list characters: %w", err)
 	}
@@ -103,10 +105,17 @@ func (c *CharacterStore) CountCharacters(ctx context.Context, query azerothdb.Ch
 	pattern := "%" + escapeLike(filter) + "%"
 	var total int
 	if err := c.db.QueryRowContext(ctx, countCharactersQuery,
-		query.AccountID, query.AccountID, filter, pattern).Scan(&total); err != nil {
+		query.AccountID, query.AccountID, filter, pattern, boolFlag(query.OnlineOnly)).Scan(&total); err != nil {
 		return 0, fmt.Errorf("azerothmysql: count characters: %w", err)
 	}
 	return total, nil
+}
+
+func boolFlag(value bool) int {
+	if value {
+		return 1
+	}
+	return 0
 }
 
 // FindCharacter implements azerothdb.CharacterReader.

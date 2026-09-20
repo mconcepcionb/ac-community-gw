@@ -1430,7 +1430,7 @@ export const azerothOnlineListQueryKey = (options?: Options<AzerothOnlineListDat
 /**
  * List online players
  *
- * Runs the AzerothCore online list command. Requires the azeroth.admin.players.read permission.
+ * Lists characters currently online, read from the character database. Requires the azeroth.admin.players.read permission.
  */
 export const azerothOnlineListOptions = (options?: Options<AzerothOnlineListData>) => queryOptions<AzerothOnlineListResponse2, AzerothOnlineListError, AzerothOnlineListResponse2, ReturnType<typeof azerothOnlineListQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {

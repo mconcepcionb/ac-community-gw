@@ -53,6 +53,7 @@ type userAdmin interface {
 // characterDirectory is the capability published by azeroth-character.
 type characterDirectory interface {
 	CharactersByUser(ctx context.Context, userID string) ([]azerothdb.Character, error)
+	OnlineCharacters(ctx context.Context, limit, offset int) ([]azerothdb.Character, error)
 }
 
 // storeAccount is the capability published by azeroth-store.

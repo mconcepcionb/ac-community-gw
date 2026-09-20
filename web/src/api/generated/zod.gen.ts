@@ -324,8 +324,20 @@ export const zAzerothMailItem = z.object({
     id: z.int().optional()
 });
 
+export const zAzerothOnlinePlayer = z.object({
+    account_id: z.int().optional(),
+    class: z.int().optional(),
+    class_name: z.string().optional(),
+    guid: z.int().optional(),
+    guild: z.string().optional(),
+    level: z.int().optional(),
+    name: z.string().optional(),
+    race: z.int().optional(),
+    race_name: z.string().optional()
+});
+
 export const zAzerothOnlineListResponse = z.object({
-    output: z.string().optional()
+    players: z.array(zAzerothOnlinePlayer).optional()
 });
 
 export const zAzerothSelfAccountRequest = z.object({

@@ -1,18 +1,21 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import {
+  type AzerothCharacter,
   azerothCharactersBanMutation,
+  azerothCharactersList,
   azerothCharactersUnbanMutation,
   azerothPlayersKickMutation,
   azerothPlayersMuteMutation,
   azerothPlayersUnmuteMutation,
 } from "@/api";
 import { isApiError } from "@/api/errors";
+import { Autocomplete, type AutocompleteOption } from "@/components/common/autocomplete";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
 import { TextField } from "@/components/common/form-controls";
 import { PermissionGate } from "@/components/common/permission-gate";
@@ -27,7 +30,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 
 function toastError(error: unknown) {
   toast.error(isApiError(error) ? `${error.message} (${error.code})` : String(error));
@@ -39,7 +41,7 @@ const muteSchema = z.object({
   reason: z.string().min(1, "Required"),
 });
 
-function KickDialog({ name }: { name: string }) {
+export function KickDialog({ name }: { name: string }) {
   const [open, setOpen] = useState(false);
   const form = useForm({ resolver: zodResolver(kickSchema), defaultValues: { reason: "" } });
   const mutation = useMutation(azerothPlayersKickMutation());
@@ -84,7 +86,7 @@ function KickDialog({ name }: { name: string }) {
   );
 }
 
-function MuteDialog({ name }: { name: string }) {
+export function MuteDialog({ name }: { name: string }) {
   const [open, setOpen] = useState(false);
   const form = useForm({
     resolver: zodResolver(muteSchema),
@@ -133,7 +135,7 @@ function MuteDialog({ name }: { name: string }) {
   );
 }
 
-function BanCharacterDialog({ name }: { name: string }) {
+export function BanCharacterDialog({ name }: { name: string }) {
   const [open, setOpen] = useState(false);
   const form = useForm({
     resolver: zodResolver(muteSchema),
@@ -182,7 +184,7 @@ function BanCharacterDialog({ name }: { name: string }) {
   );
 }
 
-function UnmuteButton({ name }: { name: string }) {
+export function UnmuteButton({ name }: { name: string }) {
   const mutation = useMutation(azerothPlayersUnmuteMutation());
   return (
     <ConfirmDialog
@@ -206,7 +208,7 @@ function UnmuteButton({ name }: { name: string }) {
   );
 }
 
-function UnbanCharacterButton({ name }: { name: string }) {
+export function UnbanCharacterButton({ name }: { name: string }) {
   const mutation = useMutation(azerothCharactersUnbanMutation());
   return (
     <ConfirmDialog
@@ -234,16 +236,31 @@ export function ModerationPanel() {
   const [name, setName] = useState("");
   const trimmed = name.trim();
 
+  const loadCharacters = useCallback(async (value: string): Promise<AutocompleteOption[]> => {
+    try {
+      const response = await azerothCharactersList({ query: { filter: value, limit: 10 } });
+      return (response.data?.characters ?? [])
+        .filter((item: AzerothCharacter) => Boolean(item.name))
+        .map((item: AzerothCharacter) => ({
+          value: item.name ?? "",
+          label: item.name ?? "",
+          description: item.class_name,
+        }));
+    } catch {
+      return [];
+    }
+  }, []);
+
   return (
     <div className="space-y-4">
-      <div className="max-w-sm">
-        <Input
-          placeholder="Player or character name"
-          aria-label="Player name"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-        />
-      </div>
+      <Autocomplete
+        className="max-w-sm"
+        value={name}
+        onValueChange={setName}
+        loadOptions={loadCharacters}
+        ariaLabel="Player or character name"
+        placeholder="Player or character name"
+      />
       <div className="flex flex-wrap gap-2">
         <PermissionGate permission="azeroth.admin.players.kick">
           <KickDialog name={trimmed} />

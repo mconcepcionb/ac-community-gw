@@ -553,7 +553,7 @@ export const azerothMeMailSend = <ThrowOnError extends boolean = false>(options:
 /**
  * List online players
  *
- * Runs the AzerothCore online list command. Requires the azeroth.admin.players.read permission.
+ * Lists characters currently online, read from the character database. Requires the azeroth.admin.players.read permission.
  */
 export const azerothOnlineList = <ThrowOnError extends boolean = false>(options?: Options<AzerothOnlineListData, ThrowOnError>): RequestResult<AzerothOnlineListResponses, AzerothOnlineListErrors, ThrowOnError> => (options?.client ?? client).get<AzerothOnlineListResponses, AzerothOnlineListErrors, ThrowOnError>({ url: '/api/v1/azeroth/online', ...options });
 

@@ -595,7 +595,31 @@ components:
       type: object
     AzerothOnlineListResponse:
       properties:
-        output:
+        players:
+          items:
+            $ref: '#/components/schemas/AzerothOnlinePlayer'
+          type: array
+          uniqueItems: false
+      type: object
+    AzerothOnlinePlayer:
+      properties:
+        account_id:
+          type: integer
+        class:
+          type: integer
+        class_name:
+          type: string
+        guid:
+          type: integer
+        guild:
+          type: string
+        level:
+          type: integer
+        name:
+          type: string
+        race:
+          type: integer
+        race_name:
           type: string
       type: object
     AzerothSelfAccountRequest:
@@ -3855,8 +3879,8 @@ paths:
       - azeroth-character
   /api/v1/azeroth/online:
     get:
-      description: Runs the AzerothCore online list command. Requires the azeroth.admin.players.read
-        permission.
+      description: Lists characters currently online, read from the character database.
+        Requires the azeroth.admin.players.read permission.
       operationId: azeroth.online.list
       responses:
         "200":
@@ -3877,12 +3901,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Forbidden
-        "502":
+        "503":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: Bad Gateway
+          description: Service Unavailable
       summary: List online players
       tags:
       - azeroth-admin

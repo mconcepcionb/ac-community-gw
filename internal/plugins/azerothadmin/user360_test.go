@@ -44,6 +44,10 @@ func (f fakeCharacterDirectory) CharactersByUser(context.Context, string) ([]aze
 	return f.characters, nil
 }
 
+func (f fakeCharacterDirectory) OnlineCharacters(context.Context, int, int) ([]azerothdb.Character, error) {
+	return f.characters, nil
+}
+
 type fakeStoreAccount struct {
 	balance int64
 	orders  []storeview.Order
