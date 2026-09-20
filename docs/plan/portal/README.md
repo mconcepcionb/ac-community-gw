@@ -12,11 +12,11 @@ horizons in incremental, always-green vertical slices.
 
 | Area | State |
 | --- | --- |
-| Two-surface shell, landing and navigation | planned |
-| Console: moderation, community, catalog/store, delivery, overview | planned |
-| Portal: dashboard, characters, storefront, wallet | planned |
-| Self-service onboarding (create/link and claim) | planned |
-| Retire legacy routes, docs and ADR | planned |
+| Two-surface shell, landing and navigation | implemented |
+| Console: moderation, community, catalog/store, delivery, overview | implemented |
+| Portal: dashboard, characters, storefront, wallet | implemented |
+| Self-service onboarding (create/link and claim) | implemented |
+| Retire legacy routes, docs and ADR | implemented |
 | Player reports and the unified moderation queue | planned |
 | Audit viewer, roles and Discord-role mapping admin | planned |
 | Leaderboards, public surface, API keys | planned |

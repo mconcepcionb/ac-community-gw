@@ -1,5 +1,9 @@
 # SPA frontend
 
+> Superseded for the frontend by [../portal/README.md](../portal/README.md) and
+> [ADR 0013](../../ADR/0013-decoupled-portal-and-console-surfaces.md). This plan
+> remains the historical record of how the single-surface SPA was built.
+
 ## Goal
 
 Replace the throwaway `web/index.html` test frontend with a production-grade SPA

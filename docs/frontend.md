@@ -3,6 +3,22 @@
 The SPA lives under `web/` and talks to the gateway over `/api/v1`. It is a
 React + TypeScript application built with Vite.
 
+## Surfaces
+
+The app has two surfaces on one origin, each a layout route owning its own
+navigation (`web/src/app/portal-layout.tsx`, `web/src/app/console-layout.tsx`):
+
+- **Portal** at `/` (`web/src/routes/_portal/`) - players: dashboard, profile,
+  onboarding, characters, storefront, wallet and status.
+- **Console** at `/admin/*` (`web/src/routes/admin/`) - staff: overview,
+  accounts, characters, users (360), items, store, orders, wallets and online
+  moderation.
+
+Landing is permission-driven: a user holding any console permission lands on
+`/admin`, everyone else on `/`. A portal-only user hitting `/admin` gets
+`/forbidden`. The two surfaces never share a navigation slot. See
+[ADR 0013](ADR/0013-decoupled-portal-and-console-surfaces.md).
+
 ## Toolchain
 
 | Concern | Choice |
@@ -27,13 +43,15 @@ web/
       client.ts          configured fetch client + ApiError interceptor
       errors.ts          ApiError, isApiError, isUnauthorized
       generated/         committed output of `task openapi:client`
-    app/                 providers, router, shell, nav
+    app/                 providers, router, layouts, nav, guards
     components/
       ui/                shadcn primitives
       common/            DataTable, states, dialogs, form controls
-    features/            one folder per domain (auth, identity, characters, …)
+    features/            one folder per domain (auth, characters, store, admin, …)
     hooks/               small shared hooks
     routes/              TanStack Router file-based routes
+      _portal/           player portal (pathless layout) at /
+      admin/             staff console at /admin
     test/                MSW server and setup
 ```
 
