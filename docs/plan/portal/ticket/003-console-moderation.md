@@ -2,13 +2,12 @@
 
 ## Goal
 
-Bring live moderation and account-level administration together in the console
-as one area.
+Bring live moderation and account-level administration together in the console.
 
 ## Context
 
-Today `/admin/online`, `/accounts` and `/admin/accounts` are separate pages.
-This ticket covers use cases G1, G2 and G3
+Today `/admin/online`, `/accounts` and `/admin/accounts` are separate. This
+ticket covers use cases G1, G2 and G3
 ([../../../use-cases.md](../../../use-cases.md)).
 
 ## Requirements
@@ -34,7 +33,6 @@ This ticket covers use cases G1, G2 and G3
   character-ban control.
 - Character ban uses `azeroth.admin.characters.ban`; account actions use
   `azeroth.admin.accounts.ban` / `.gmlevel`.
-- Every action is audited by the backend; no frontend audit work.
 
 ## Tests
 
@@ -42,4 +40,4 @@ This ticket covers use cases G1, G2 and G3
 
 ## Dependencies
 
-- 001.
+- 001, 002.

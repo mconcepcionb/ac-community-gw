@@ -58,12 +58,13 @@ Rules:
 | --- | --- | --- |
 | `/login` | Discord sign-in | Now |
 | `/` | Personal dashboard: account status, balance, characters, recent orders | Now |
-| `/onboarding` | Create a new game account or claim an existing one | Next |
-| `/characters`, `/characters/$name` | My characters and detail; self-mail | Now |
+| `/onboarding` | Create a new game account or claim an existing one | Now |
+| `/characters`, `/characters/$name` | My characters and detail; self-mail, board opt-in | Now |
 | `/store`, `/store/products/$sku` | Storefront and product detail | Now |
 | `/wallet` | Points balance and order history | Now |
 | `/status` | Server status | Now (public in Next) |
 | `/leaderboards`, `/leaderboards/$board` | Rankings | Next |
+| `/report` | Report a player | Next |
 | `/profile` | Discord profile, roles and permissions | Now |
 | `/events`, `/events/$slug` | Event list, signup, reminders | Vision |
 | `/news` | Public news feed | Vision |
@@ -284,6 +285,8 @@ compare and compete.
 - Each board paginates and highlights the signed-in user's own position.
 - Data reflects the backing databases and refreshes on a defined interval.
 - Board definitions are permission-gated and can be turned off individually.
+- I control, per character, whether it appears on public boards; the default is
+  off.
 
 **Sub-flows**: new; not in today's SPA.
 
@@ -313,6 +316,20 @@ not miss it.
 - Attendance and rewards are tracked and visible to the attendee.
 
 **Sub-flows**: new subsystem; depends on the events design.
+
+### P13 - Report a player (Next)
+
+*When* another player breaks the rules, *I want to* report them, *so* staff can
+act.
+
+**Acceptance criteria**
+
+- A signed-in player submits a report with a target, a category and a message.
+- Reports cannot be submitted anonymously and are rate-limited against spam.
+- The reporter can see their own submissions and their status.
+- Staff read and resolve reports from the moderation queue (G5).
+
+**Sub-flows**: new; feeds the moderation queue.
 
 ## Community / Discord manager
 
@@ -457,13 +474,14 @@ is dropped.
 
 **Acceptance criteria**
 
-- Aggregates items awaiting action: orders pending reconciliation, failed
-  deliveries, pending account claims and recent bans/mutes.
-- Each item shows enough context to decide and offers a one-click resolution
-  where safe.
+- One filterable list, sorted by age (no assignment or SLA workflow).
+- Aggregates: stuck store orders (pending, no delivery output), auto-reconciled
+  history, failed/refunded orders, pending account claims, recent bans/mutes and
+  player reports (P13).
+- On a stuck order, staff may refund or retry delivery then complete; each
+  requires confirmation and a reason.
 - Resolutions are idempotent and audited; resolving an item twice has no second
-  effect.
-- Filters by type, age and assignee.
+  effect, and the order state machine prevents a double refund.
 
 **Sub-flows**: surfaces the reconciliation path that today lives inside the
 order state machine (store.md).
@@ -540,7 +558,8 @@ credential, *so I can* call the API without a human session.
 
 **Acceptance criteria**
 
-- Create an API key scoped to a set of permissions; the secret is shown once.
+- Create an API key whose scopes are chosen from a generated list of registered
+  permissions; the secret is shown once.
 - Keys can be listed, rotated and revoked; last-used time is visible.
 - Requests are authorised by the same permission model as sessions.
 - Key lifecycle actions are audited.
@@ -596,7 +615,8 @@ account, *so I can* check quickly or on stream.
 
 **Acceptance criteria**
 
-- Online counts, peak, queue and uptime are visible unauthenticated.
+- Connected players, peak, queue and uptime are visible unauthenticated and
+  served from a short cache.
 - No personal or account data is exposed.
 - Public traffic is rate-limited separately from authenticated traffic.
 
@@ -609,8 +629,10 @@ I can* share or stream them.
 
 **Acceptance criteria**
 
-- The public boards expose the same rankings as P10, minus per-user highlighting.
+- The public boards show real character names, but only for characters whose
+  owner has opted in (P10).
 - Only display data is exposed; no account identifiers.
+- Public reads are cached and rate-limited separately.
 
 **Sub-flows**: public projection of P10.
 

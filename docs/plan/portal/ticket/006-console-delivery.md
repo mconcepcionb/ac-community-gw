@@ -6,8 +6,8 @@ Let staff search characters and deliver items or money in-game from the console.
 
 ## Context
 
-Today `/characters` and its mail form serve both staff and (intended) players.
-This ticket covers use case G4 and the staff half of P4/P5
+Today `/characters` and its mail form serve both audiences. This ticket covers
+use case G4 and the staff half of P4/P5
 ([../../../use-cases.md](../../../use-cases.md)).
 
 ## Requirements
@@ -17,7 +17,7 @@ This ticket covers use case G4 and the staff half of P4/P5
   subject and body and the command result shown.
 - Gate with `azeroth.character.list` and `azeroth.mail.send` for staff.
 - Remove the flat `/characters` route here; the portal character views arrive in
-  007.
+  009.
 
 ## Acceptance criteria
 
@@ -37,4 +37,4 @@ This ticket covers use case G4 and the staff half of P4/P5
 
 ## Dependencies
 
-- 001.
+- 001, 002.

@@ -7,7 +7,7 @@ remain, and record the decision and documentation.
 
 ## Context
 
-Once 002-008 have relocated every area, the old paths, the home card grid and the
+Once 003-010 have relocated every area, the old paths, the home card grid and the
 transitional nav are dead code.
 
 ## Requirements
@@ -41,4 +41,4 @@ transitional nav are dead code.
 
 ## Dependencies
 
-- 002-008.
+- 003-010.

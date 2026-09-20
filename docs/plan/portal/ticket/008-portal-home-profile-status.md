@@ -7,9 +7,8 @@ shell.
 
 ## Context
 
-Today the home is a static card grid (`web/src/features/home/home-page.tsx`) and
-`/profile` and `/azeroth/status` are flat routes. This ticket covers use cases
-P9 and P11 and the community-overview intent of C5
+Today the home is a static card grid and `/profile` and `/azeroth/status` are
+flat routes. This ticket covers use cases P9 and P11
 ([../../../use-cases.md](../../../use-cases.md)).
 
 ## Requirements
@@ -19,23 +18,23 @@ P9 and P11 and the community-overview intent of C5
   card.
 - `/profile` moves into the portal (P11): identity, roles and permissions.
 - `/status` moves into the portal (P9), authenticated for now; the public
-  variant arrives in 016.
+  variant arrives in 019.
 - Dashboard cards link into the portal use cases.
-- A user with console permissions also sees the console link (001).
+- A user with console permissions also sees the console link (002).
 
 ## Acceptance criteria
 
 - The dashboard composes existing endpoints and degrades per card when a source
   is unavailable.
 - A user without a linked account sees a prompt that routes to onboarding
-  (010/011) instead of an empty state.
+  (011/012) instead of an empty state.
 - Profile shows identity, roles and permissions; status shows parsed counts.
 - `task web:check` green.
 
 ## Implementation notes
 
-- Keep `/admin` (console overview) separate: the portal dashboard is personal,
-  the console overview is operational and lands with the console tickets.
+- Keep the console overview (007) separate: this dashboard is personal, that one
+  is operational.
 
 ## Tests
 
@@ -43,4 +42,4 @@ P9 and P11 and the community-overview intent of C5
 
 ## Dependencies
 
-- 001.
+- 001, 002.

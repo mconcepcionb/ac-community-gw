@@ -7,7 +7,7 @@ Let a signed-in user prove ownership of an existing game account and link it.
 ## Context
 
 This ticket covers use case P3 ([../../../use-cases.md](../../../use-cases.md))
-and extends the onboarding entry introduced in 010.
+and extends the onboarding entry from 011. It is a **Now** horizon ticket.
 
 ## Requirements
 
@@ -32,7 +32,7 @@ and extends the onboarding entry introduced in 010.
 - Delivery uses the in-game mail/command capability owned by `azeroth-character`
   or `azeroth-admin`; the claim owner plugin manages the code lifecycle.
 - Store only a hash of the code with its expiry.
-- One account per community user, consistent with 010.
+- One account per community user, consistent with 011.
 
 ## Tests
 
@@ -41,4 +41,4 @@ and extends the onboarding entry introduced in 010.
 
 ## Dependencies
 
-- 010. 012 surfaces pending claims in the queue.
+- 011. 015 surfaces pending claims in the queue.

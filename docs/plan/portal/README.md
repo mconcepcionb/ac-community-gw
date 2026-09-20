@@ -13,11 +13,12 @@ horizons in incremental, always-green vertical slices.
 | Area | State |
 | --- | --- |
 | Two-surface shell, landing and navigation | planned |
-| Console: moderation, community, catalog/store, delivery | planned |
+| Console: moderation, community, catalog/store, delivery, overview | planned |
 | Portal: dashboard, characters, storefront, wallet | planned |
+| Self-service onboarding (create/link and claim) | planned |
 | Retire legacy routes, docs and ADR | planned |
-| Self-service account create/link and claim | planned |
-| Console: queue, audit viewer, roles admin | planned |
+| Player reports and the unified moderation queue | planned |
+| Audit viewer, roles and Discord-role mapping admin | planned |
 | Leaderboards, public surface, API keys | planned |
 | Vision horizon (events, webhooks, widgets, metrics, hosted docs) | roadmap |
 
@@ -32,6 +33,9 @@ horizons in incremental, always-green vertical slices.
 - The current SPA is a flat list of resource pages at `/accounts`,
   `/account-links`, `/characters`, `/items`, `/identity/users`, `/admin/*`,
   `/store/*`, `/profile`, gated by the `/me` effective permissions.
+- Reconciliation already exists: `cmd/server/main.go` periodically calls
+  `ReconcilePendingOrders`, which completes pending orders whose delivery output
+  was persisted after a delivery succeeded.
 
 ## Scope
 
@@ -42,19 +46,19 @@ horizons in incremental, always-green vertical slices.
   storefront, purchase, wallet and orders.
 - Console features: live moderation, account ban/GM level, character ban,
   community users and 360 view, item catalog, catalog/store operations,
-  character mail delivery, announcements.
-- Next: self-service account creation and linking, claiming an existing account
-  with an in-game code, unified moderation/reconciliation queue, audit log
+  character mail delivery, announcements and an operations overview.
+- **Now onboarding**: creating and linking a new game account, and claiming an
+  existing one with an in-game code.
+- Next: player reports, the unified moderation/reconciliation queue, audit
   viewer, roles and Discord-role mapping administration, leaderboards, a public
   no-login surface and API keys.
 
 ## Out of scope
 
 - The **Vision** horizon: events calendar, webhooks, embeddable widgets, ops
-  metrics dashboard, hosted API docs. These are listed as a roadmap, not
-  ticketed.
+  metrics dashboard, hosted API docs, public news feed. Roadmap only.
 - Redirects or aliases for retired paths: paths are broken and replaced
-  (decision in [Design](#migration)).
+  (decision in [Migration](#migration)).
 - Player-earned points; points remain staff grants.
 - Character rename/customisation and a visual redesign beyond what the surfaces
   require.
@@ -74,17 +78,13 @@ horizons in incremental, always-green vertical slices.
 
 ### Migration
 
-- **Incremental, always-green**: ticket 001 introduces the shell; each following
-  ticket relocates one area or builds one portal feature. The app compiles,
+- **Incremental, always-green**: tickets 001-002 introduce the shell; each
+  following ticket relocates one area or builds one feature. The app compiles,
   tests and serves at every step.
 - **Retired paths are removed, not redirected** (decision). When an area moves,
   its old route is deleted and the tests and nav that referenced it are updated.
 - `task check` (Go) and `task web:check` (Biome + `tsc` + Vitest) must be green
   after every ticket; `task openapi:check` guards contract drift.
-- **Onboarding is a Next horizon.** The Now portal tickets (006-008) reference
-  `/onboarding`, which lands in 010. Until then an unlinked user sees a graceful
-  "account linking is coming" state, never a broken route or an empty screen;
-  010 replaces that placeholder.
 
 ### Backend gaps
 
@@ -93,24 +93,31 @@ delivered inside the vertical slice that needs it, not as a separate track.
 
 | Gap | Needed by |
 | --- | --- |
-| Self-scoped characters endpoint (ownership enforced) | 007 |
-| Self-mail endpoint enforcing character ownership | 007 |
-| Self-service create/link endpoint | 010 |
-| Claim-by-code endpoints and staff claim visibility | 011 |
-| Store reconciliation exposure for the queue | 012 |
-| Audit read capability and permission | 013 |
-| Role, permission and Discord-mapping administration | 014 |
-| Leaderboard queries per board | 015 |
-| Unauthenticated status/boards with a separate rate limit | 016 |
-| API-key authentication and management | 017 |
+| Self-scoped characters endpoint (ownership enforced) | 009 |
+| Self-mail endpoint enforcing character ownership | 009 |
+| Per-character public-board opt-in flag | 009, 019 |
+| Self-service create/link endpoint | 011 |
+| Claim-by-code endpoints and staff claim visibility | 012 |
+| Single admin user-360 aggregate endpoint | 004 |
+| Player report submission and storage | 014 |
+| Store reconciliation read plus manual refund/retry | 015 |
+| Audit read capability and permission | 016 |
+| Role, permission and Discord-mapping administration | 017 |
+| Leaderboard queries per board | 018 |
+| Unauthenticated status/boards, short cache, separate rate limit | 019 |
+| List-registered-permissions endpoint | 020 |
+| API-key authentication and management | 020 |
 
 ### Security
 
 - Self-service creation and claiming require **Discord guild membership** and are
-  rate-limited per user and per IP; both are audited. One game account per
-  community user.
-- The public surface exposes display data only, never account identifiers or
-  personal data.
+  rate-limited per user and per IP; both are audited. One account per user.
+- The public surface exposes **full status counts** and **leaderboards with
+  character names**, but only for characters whose owner has **opted in**;
+  public endpoints get a separate rate limit and a short cache.
+- Queue actions on stuck orders (**refund** or **retry**, each with a reason and
+  confirmation) are audited; the order state machine still prevents any double
+  transition.
 - Every mutation is audited; the UI mirrors, but never replaces, backend
   authorization.
 
@@ -118,37 +125,33 @@ delivered inside the vertical slice that needs it, not as a separate track.
 
 | Milestone | Horizon | Tickets |
 | --- | --- | --- |
-| A - Surfaces | Now | 001-009 |
-| B - Self-service onboarding | Next | 010-011 |
-| C - Staff depth | Next | 012-014 |
-| D - Growth and platform | Next | 015-017 |
+| A - Surfaces | Now | 001-010 |
+| B - Onboarding | Now | 011-012 |
+| C - Cleanup | Now | 013 |
+| D - Staff depth | Next | 014-017 |
+| E - Growth and platform | Next | 018-020 |
 | Vision | Vision | roadmap only |
 
 ### Dependency graph
 
 ```
-001 ─┬─ 002 ─ 009
-     ├─ 003 ─ 009
-     ├─ 004 ─ 009 ── 012
-     ├─ 005 ─ 009
-     ├─ 006 ─ 009
-     ├─ 007 ─ 009
-     ├─ 008 ─ 009
-     │
-     ├─ 010 ─ 011
-     ├─ 013
-     ├─ 014
-     └─ 015 ─ 016
-        └─ 017 (independent of 015)
+001 -> 002
+002 -> 003..010
+003..010 -> 013 (retire legacy routes)
+008, 009, 010 -> 011 (self-service) -> 012 (claim)
+008 -> 014 (player reports) -> 015 (queue)
+012 -> 015
+004 -> 016 (audit viewer)
+002 -> 017 (roles admin)
+008, 009 -> 018 (leaderboards) -> 019 (public surface)
+017 -> 020 (API keys)
 ```
 
-001 (the shell) unblocks everything. 009 depends on 002-008 having moved the
-areas. 016 depends on 015 (leaderboards) and 006 (status). 010 precedes 011
-because both extend onboarding.
-
-The graph omits a few secondary edges for readability: 012 also consumes pending
-claims from 011, 013 links from the 360 view of 003, and 016 reuses the status
-view from 006.
+001 introduces the route layouts and 002 the landing and navigation; together
+they unblock every other ticket. 013 retires the old routes only after 003-010
+have moved the areas. Onboarding (011-012) is Now and builds on the portal pages
+(008-010). Player reports (014) feed the queue (015), which also consumes account
+claims (012).
 
 ## Risks
 
@@ -156,42 +159,51 @@ view from 006.
 | --- | --- |
 | Breaking old paths annoys existing users | Deliberate decision; the shell and landing make the new IA discoverable, and the README documents the removal |
 | Two surfaces drift apart in styling | Both consume the same `components/ui` and `components/common` primitives; one shared shell header |
-| Permission scoping for players leaks staff data | Player endpoints are self-scoped server-side and covered by tests; portal never calls staff-only endpoints |
+| Player routes leak staff data | Player endpoints are self-scoped server-side and covered by tests; the 360 view uses a dedicated admin aggregate, never the player reads |
 | Self-service account creation abused | Discord guild membership plus per-user/per-IP rate limits; audited; one account per user |
-| New backend gaps balloon the vertical slices | Gaps are listed up front and kept minimal; anything larger is pushed to the Vision roadmap |
+| Public names / privacy | Boards show names only for opted-in characters; public endpoints are cached and rate-limited; no account identifiers |
+| Manual refund/retry loses money | Confirmation plus a mandatory reason; the SQL state machine prevents double refunds or completing a delivered order |
+| Player reports spammed | Reports require an authenticated account and are rate-limited; staff resolve from the queue |
 | Leaderboard queries overload the read-only DBs | Paginated queries, cached/refreshed on an interval, individually disableable |
+| New backend gaps balloon the vertical slices | Gaps are listed up front and kept minimal; anything larger is pushed to the Vision roadmap |
 | Contract drift across many new endpoints | `task openapi:check` in `task check` on every ticket |
 
 ## Tickets
 
 ### Milestone A - Surfaces (Now)
 
-1. [001-two-surface-shell.md](ticket/001-two-surface-shell.md) - portal and console shells, landing and navigation
-2. [002-console-moderation.md](ticket/002-console-moderation.md) - live moderation, account bans/GM level, character bans
-3. [003-console-community-360.md](ticket/003-console-community-360.md) - community users, links and the 360 view base
-4. [004-console-catalog-store.md](ticket/004-console-catalog-store.md) - item catalog and store operations
-5. [005-console-delivery.md](ticket/005-console-delivery.md) - character search and mail delivery
-6. [006-portal-home-profile-status.md](ticket/006-portal-home-profile-status.md) - portal dashboard, profile and status
-7. [007-portal-characters-mail.md](ticket/007-portal-characters-mail.md) - my characters and self-mail
-8. [008-portal-store.md](ticket/008-portal-store.md) - storefront, purchase, wallet and orders
-9. [009-retire-legacy-routes.md](ticket/009-retire-legacy-routes.md) - remove old routes, docs and ADR
+1. [001-two-surface-layouts.md](ticket/001-two-surface-layouts.md) - portal and console route layouts
+2. [002-landing-and-permission-nav.md](ticket/002-landing-and-permission-nav.md) - landing resolver, nav and forbidden state
+3. [003-console-moderation.md](ticket/003-console-moderation.md) - live moderation, account bans/GM level, character bans
+4. [004-console-community-360.md](ticket/004-console-community-360.md) - community users and the aggregate 360 view
+5. [005-console-catalog-store.md](ticket/005-console-catalog-store.md) - item catalog and store operations
+6. [006-console-delivery.md](ticket/006-console-delivery.md) - character search and mail delivery
+7. [007-console-overview.md](ticket/007-console-overview.md) - operations overview dashboard
+8. [008-portal-home-profile-status.md](ticket/008-portal-home-profile-status.md) - portal dashboard, profile and status
+9. [009-portal-characters-mail.md](ticket/009-portal-characters-mail.md) - my characters, self-mail and board opt-in
+10. [010-portal-store.md](ticket/010-portal-store.md) - storefront, purchase, wallet and orders
 
-### Milestone B - Self-service onboarding (Next)
+### Milestone B - Onboarding (Now)
 
-10. [010-self-service-account.md](ticket/010-self-service-account.md) - create and link a new game account
-11. [011-claim-existing-account.md](ticket/011-claim-existing-account.md) - claim an existing account with an in-game code
+11. [011-self-service-account.md](ticket/011-self-service-account.md) - create and link a new game account
+12. [012-claim-existing-account.md](ticket/012-claim-existing-account.md) - claim an existing account with an in-game code
 
-### Milestone C - Staff depth (Next)
+### Milestone C - Cleanup (Now)
 
-12. [012-moderation-queue.md](ticket/012-moderation-queue.md) - unified moderation and reconciliation queue
-13. [013-audit-log-viewer.md](ticket/013-audit-log-viewer.md) - audit log viewer and read permission
-14. [014-roles-permissions-admin.md](ticket/014-roles-permissions-admin.md) - roles and Discord-role mapping administration
+13. [013-retire-legacy-routes.md](ticket/013-retire-legacy-routes.md) - remove old routes, docs and ADR
 
-### Milestone D - Growth and platform (Next)
+### Milestone D - Staff depth (Next)
 
-15. [015-leaderboards.md](ticket/015-leaderboards.md) - progression, wealth, playtime and PvP boards
-16. [016-public-surface.md](ticket/016-public-surface.md) - no-login status and leaderboards
-17. [017-api-keys.md](ticket/017-api-keys.md) - API keys and service accounts
+14. [014-player-reports.md](ticket/014-player-reports.md) - player report submission
+15. [015-moderation-queue.md](ticket/015-moderation-queue.md) - unified moderation and reconciliation queue
+16. [016-audit-log-viewer.md](ticket/016-audit-log-viewer.md) - audit log viewer and read permission
+17. [017-roles-permissions-admin.md](ticket/017-roles-permissions-admin.md) - roles and Discord-role mapping administration
+
+### Milestone E - Growth and platform (Next)
+
+18. [018-leaderboards.md](ticket/018-leaderboards.md) - progression, wealth, playtime and PvP boards
+19. [019-public-surface.md](ticket/019-public-surface.md) - no-login status and leaderboards
+20. [020-api-keys.md](ticket/020-api-keys.md) - API keys and service accounts
 
 ## Vision roadmap
 

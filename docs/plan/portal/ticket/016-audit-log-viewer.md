@@ -13,7 +13,7 @@ A1 and supports G6 and O5 ([../../../use-cases.md](../../../use-cases.md)).
 
 - Backend: an audit read capability and a read permission, with paginated,
   filterable queries by actor, target, action and time range.
-- Console `/admin/audit`: a search UI, read-only, linked from the 360 view (003).
+- Console `/admin/audit`: a search UI, read-only, linked from the 360 view (004).
 - A read-only staff role can open the console and this page without action
   controls (O5).
 - Entries never contain secrets, tokens or passwords.
@@ -28,7 +28,7 @@ A1 and supports G6 and O5 ([../../../use-cases.md](../../../use-cases.md)).
 ## Implementation notes
 
 - Add the audit read permission to the registry and grant it to an auditor role
-  (role administration proper lands in 014).
+  (role administration proper lands in 017).
 - Redaction is enforced server-side; the SPA renders what it receives.
 
 ## Tests
@@ -37,4 +37,4 @@ A1 and supports G6 and O5 ([../../../use-cases.md](../../../use-cases.md)).
 
 ## Dependencies
 
-- 001, 003.
+- 002, 004.

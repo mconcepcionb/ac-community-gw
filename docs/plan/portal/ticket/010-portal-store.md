@@ -31,7 +31,7 @@ admin-oriented. This ticket covers use cases P6, P7 and P8
 
 ## Implementation notes
 
-- Share the item render component with the console store (004).
+- Share the item render component with the console store (005).
 - The purchase dialog exists; adapt it to the portal and the onboarding
   prerequisite.
 
@@ -42,4 +42,5 @@ admin-oriented. This ticket covers use cases P6, P7 and P8
 
 ## Dependencies
 
-- 001. 007 provides owned-character selection; 010/011 handle unlinked users.
+- 001, 002. 009 provides owned-character selection; 011/012 handle unlinked
+  users.

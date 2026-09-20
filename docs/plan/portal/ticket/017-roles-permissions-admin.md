@@ -38,4 +38,4 @@ from the database on an interval. This ticket covers use case C4
 
 ## Dependencies
 
-- 001. Relates to 013 (auditor role) and 017 (API-key scopes).
+- 001, 002. Relates to 016 (auditor role) and 020 (API-key scopes).

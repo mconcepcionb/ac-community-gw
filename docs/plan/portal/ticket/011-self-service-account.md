@@ -9,7 +9,8 @@ flow.
 
 Linking is admin-only today. This ticket covers use case P2
 ([../../../use-cases.md](../../../use-cases.md)), guarded by Discord guild
-membership and rate limits.
+membership and rate limits. It is a **Now** horizon ticket, so players can
+complete onboarding before the Next-horizon features build on it.
 
 ## Requirements
 
@@ -19,7 +20,7 @@ membership and rate limits.
   - Rate-limited per user and per IP.
   - Audited.
 - Portal `/onboarding`: offer "create a new account" or "I already have one"
-  (011).
+  (012).
 - Creation takes a self-chosen username and password valid under AzerothCore
   rules; no generated credentials, nothing shown once.
 - Inline, retryable errors for taken username, weak password and world
@@ -40,7 +41,7 @@ membership and rate limits.
   ownership is implied by creation.
 - Guild membership is already available: the Discord adapter requests the
   `guilds.members.read` scope and exposes the configured `ACGW_DISCORD_GUILD_ID`
-  member lookup. Reuse it rather than adding a new integration.
+  member lookup (`internal/adapters/discord/client.go`). Reuse it.
 - Use typed application commands; never expose a raw AzerothCore command.
 
 ## Tests
@@ -50,4 +51,4 @@ membership and rate limits.
 
 ## Dependencies
 
-- 001; 006/007 provide the landing. 011 shares the onboarding entry.
+- 001, 002, 008-010. 012 shares the onboarding entry.

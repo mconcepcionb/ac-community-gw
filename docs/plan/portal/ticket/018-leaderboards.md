@@ -2,13 +2,14 @@
 
 ## Goal
 
-Give players rankings for character progression, wealth, playtime and
-PvP/arena.
+Give players rankings for character progression, wealth, playtime and PvP/arena.
 
 ## Context
 
 This ticket covers use case P10 ([../../../use-cases.md](../../../use-cases.md))
-and needs new read-only queries against the character DB.
+and needs new read-only queries against the character DB. The character schema
+already exposes `level`, `money`, `totaltime` and `arenaPoints`
+(`scripts/mysql/init/02_acore_characters.sql`).
 
 ## Requirements
 
@@ -18,24 +19,27 @@ and needs new read-only queries against the character DB.
   disableable.
 - Portal `/leaderboards` and `/leaderboards/$board`: paginate and highlight the
   signed-in user's own position.
+- Boards include only characters whose owner has opted in (flag from 009).
 - Board definitions are permission-gated.
 
 ## Acceptance criteria
 
 - Each board paginates and highlights the current user when present.
+- A character without the opt-in flag never appears on a board.
 - An unavailable or disabled board is hidden gracefully.
 - Queries are bounded and cached so the read-only database is not overloaded.
 - `task check`, `task openapi:check` and `task web:check` green.
 
 ## Implementation notes
 
-- The character schema already exposes `level`, `money`, `totaltime` and
-  `arenaPoints`, so each board can be derived without schema changes.
+- Derive each board from existing columns; no schema changes.
+- The opt-in filter is applied server-side before ranking is exposed.
 
 ## Tests
 
-- Go tests for ordering, pagination and disable; RTL + MSW for the boards.
+- Go tests for ordering, pagination, opt-in filtering and disable; RTL + MSW for
+  the boards.
 
 ## Dependencies
 
-- 001, 006. 016 exposes the public projection.
+- 001, 002, 008. 009 provides the opt-in flag; 019 exposes the public projection.
