@@ -1118,14 +1118,14 @@ export type IdentityAdminDiscordMappingsUpsertResponses = {
 
 export type IdentityAdminDiscordMappingsUpsertResponse = IdentityAdminDiscordMappingsUpsertResponses[keyof IdentityAdminDiscordMappingsUpsertResponses];
 
-export type ApikeysPermissionsListData = {
+export type GatewayAdminPermissionsListData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/api/v1/admin/permissions';
 };
 
-export type ApikeysPermissionsListErrors = {
+export type GatewayAdminPermissionsListErrors = {
     /**
      * Unauthorized
      */
@@ -1136,16 +1136,16 @@ export type ApikeysPermissionsListErrors = {
     403: ErrorResponse;
 };
 
-export type ApikeysPermissionsListError = ApikeysPermissionsListErrors[keyof ApikeysPermissionsListErrors];
+export type GatewayAdminPermissionsListError = GatewayAdminPermissionsListErrors[keyof GatewayAdminPermissionsListErrors];
 
-export type ApikeysPermissionsListResponses = {
+export type GatewayAdminPermissionsListResponses = {
     /**
      * OK
      */
     200: ApiPermissionsResponse;
 };
 
-export type ApikeysPermissionsListResponse = ApikeysPermissionsListResponses[keyof ApikeysPermissionsListResponses];
+export type GatewayAdminPermissionsListResponse = GatewayAdminPermissionsListResponses[keyof GatewayAdminPermissionsListResponses];
 
 export type ReportsListData = {
     body?: never;

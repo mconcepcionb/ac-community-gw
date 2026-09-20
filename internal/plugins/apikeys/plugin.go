@@ -31,9 +31,8 @@ type Config struct {
 
 // Plugin implements plugins.Plugin.
 type Plugin struct {
-	store    Store
-	audit    audit.Recorder
-	registry *plugins.Registry
+	store Store
+	audit audit.Recorder
 }
 
 // New creates the apikeys plugin.
@@ -55,9 +54,6 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 			return err
 		}
 	}
-	p.registry = reg
-	reg.Mux.Handle("GET /api/v1/admin/permissions",
-		reg.RequirePermission(PermissionManage, http.HandlerFunc(p.handlePermissions)))
 	reg.Mux.Handle("GET /api/v1/admin/api-keys",
 		reg.RequirePermission(PermissionManage, http.HandlerFunc(p.handleList)))
 	reg.Mux.Handle("POST /api/v1/admin/api-keys",

@@ -6,9 +6,9 @@ import {
   apikeysCreateMutation,
   apikeysListOptions,
   apikeysListQueryKey,
-  apikeysPermissionsListOptions,
   apikeysRevokeMutation,
   apikeysRotateMutation,
+  gatewayAdminPermissionsListOptions,
 } from "@/api";
 import { isApiError } from "@/api/errors";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 export function AdminApiClientsPage() {
   const queryClient = useQueryClient();
   const keys = useQuery(apikeysListOptions());
-  const permissions = useQuery(apikeysPermissionsListOptions());
+  const permissions = useQuery(gatewayAdminPermissionsListOptions());
   const [name, setName] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [secret, setSecret] = useState("");

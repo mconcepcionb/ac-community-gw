@@ -23,18 +23,6 @@ var (
 		"invalid_api_key", "name and at least one permission are required")
 )
 
-// Permission describes a registered permission for the scope picker.
-type Permission struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Owner       string `json:"owner"`
-} // @name ApiPermission
-
-// PermissionsResponse is the body of GET /api/v1/admin/permissions.
-type PermissionsResponse struct {
-	Permissions []Permission `json:"permissions"`
-} // @name ApiPermissionsResponse
-
 // APIKey is the JSON representation of an issued key (no secret).
 type APIKey struct {
 	ID          string   `json:"id"`
@@ -61,34 +49,6 @@ type APIKeySecretResponse struct {
 	Key    APIKey `json:"key"`
 	Secret string `json:"secret"`
 } // @name ApiKeySecretResponse
-
-// handlePermissions handles GET /api/v1/admin/permissions.
-//
-//	@Summary		List registered permissions
-//	@Description	Returns every permission registered by the plugins, for the API key scope picker. Requires the gw.apikeys.manage permission.
-//	@Tags			apikeys
-//	@ID				apikeys.permissions.list
-//	@Produce		json
-//	@Success		200	{object}	PermissionsResponse
-//	@Failure		401	{object}	httpapi.ErrorResponse
-//	@Failure		403	{object}	httpapi.ErrorResponse
-//	@Router			/api/v1/admin/permissions [get]
-func (p *Plugin) handlePermissions(w http.ResponseWriter, r *http.Request) {
-	if p.registry == nil {
-		httpapi.WriteError(w, r, errKeysUnavailable)
-		return
-	}
-	defs := p.registry.Permissions.Definitions()
-	items := make([]Permission, 0, len(defs))
-	for _, def := range defs {
-		items = append(items, Permission{
-			Name:        string(def.Name),
-			Description: def.Description,
-			Owner:       def.Owner,
-		})
-	}
-	httpapi.WriteJSON(w, http.StatusOK, PermissionsResponse{Permissions: items})
-}
 
 // handleList handles GET /api/v1/admin/api-keys.
 //

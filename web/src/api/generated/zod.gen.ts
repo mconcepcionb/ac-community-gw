@@ -714,7 +714,7 @@ export const zIdentityAdminDiscordMappingsUpsertResponse = z.void();
 /**
  * OK
  */
-export const zApikeysPermissionsListResponse = zApiPermissionsResponse;
+export const zGatewayAdminPermissionsListResponse = zApiPermissionsResponse;
 
 export const zReportsListQuery = z.object({
     status: z.string().optional(),

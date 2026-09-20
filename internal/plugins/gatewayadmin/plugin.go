@@ -12,6 +12,7 @@ import (
 
 	"github.com/mconcepcionb/ac-community-gw/internal/core/audit"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/azerothdb"
+	"github.com/mconcepcionb/ac-community-gw/internal/core/permissions"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/plugins"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/services"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/storeview"
@@ -64,6 +65,8 @@ type Plugin struct {
 	// registry resolves cross-plugin capabilities on demand so the aggregates
 	// do not depend on plugin registration order.
 	registry *services.Registry
+	// permissionRegistry serves the registered permission catalog.
+	permissionRegistry *permissions.Registry
 }
 
 // New creates the gateway admin plugin.
@@ -86,10 +89,13 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		}
 	}
 	p.registry = reg.Services
+	p.permissionRegistry = reg.Permissions
 
 	reg.Mux.Handle("GET /api/v1/admin/users/{id}",
 		reg.RequirePermission(permissionUserRead, http.HandlerFunc(p.handleUser360)))
 	reg.Mux.Handle("GET /api/v1/admin/audit",
 		reg.RequirePermission(PermissionAuditRead, http.HandlerFunc(p.handleAuditLog)))
+	reg.Mux.Handle("GET /api/v1/admin/permissions",
+		reg.RequirePermission(permissionAPIKeysManage, http.HandlerFunc(p.handlePermissions)))
 	return nil
 }

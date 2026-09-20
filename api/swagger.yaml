@@ -1630,7 +1630,7 @@ paths:
     get:
       description: Returns every permission registered by the plugins, for the API
         key scope picker. Requires the gw.apikeys.manage permission.
-      operationId: apikeys.permissions.list
+      operationId: gateway.admin.permissions.list
       responses:
         "200":
           content:
@@ -1652,7 +1652,7 @@ paths:
           description: Forbidden
       summary: List registered permissions
       tags:
-      - apikeys
+      - gateway-admin
   /api/v1/admin/reports:
     get:
       description: Lists every report, newest first, optionally filtered by status.

@@ -10,6 +10,9 @@ const (
 	// community user 360 view. It is owned by identity-discord; this plugin only
 	// enforces it on its aggregate route.
 	permissionUserRead permissions.Permission = "gw.identity.user.read"
+	// permissionAPIKeysManage is the gateway-generic permission that gates the
+	// permission catalog. It is owned by apikeys; this plugin only enforces it.
+	permissionAPIKeysManage permissions.Permission = "gw.apikeys.manage"
 )
 
 func permissionDefs() []permissions.Definition {
