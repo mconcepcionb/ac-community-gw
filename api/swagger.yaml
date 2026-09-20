@@ -322,6 +322,22 @@ components:
         output:
           type: string
       type: object
+    AzerothSelfAccountRequest:
+      properties:
+        password:
+          type: string
+        username:
+          type: string
+      type: object
+    AzerothSelfAccountResponse:
+      properties:
+        account_id:
+          type: integer
+        account_username:
+          type: string
+        linked:
+          type: boolean
+      type: object
     AzerothSendMailRequest:
       properties:
         body:
@@ -1937,6 +1953,103 @@ paths:
       summary: Send in-game mail
       tags:
       - azeroth-character
+  /api/v1/azeroth/me/account:
+    get:
+      description: Returns whether the authenticated user has linked a game account.
+        Requires the azeroth.account.self permission.
+      operationId: azeroth.me.account.get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothSelfAccountResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: My linked account
+      tags:
+      - azeroth-account
+    post:
+      description: Creates a game account with the provided credentials and links
+        it to the authenticated user. One account per user. Requires the azeroth.account.self
+        permission.
+      operationId: azeroth.me.account.create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AzerothSelfAccountRequest'
+        description: self-chosen credentials
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothSelfAccountResponse'
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Conflict
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Create and link my account
+      tags:
+      - azeroth-account
   /api/v1/azeroth/me/characters:
     get:
       description: Lists the characters of the authenticated user's linked account.

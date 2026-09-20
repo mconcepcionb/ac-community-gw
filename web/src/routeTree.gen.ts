@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as PortalIndexRouteImport } from './routes/_portal/index'
 import { Route as PortalForbiddenRouteImport } from './routes/_portal/forbidden'
 import { Route as PortalLoginRouteImport } from './routes/_portal/login'
+import { Route as PortalOnboardingRouteImport } from './routes/_portal/onboarding'
 import { Route as PortalProfileRouteImport } from './routes/_portal/profile'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAccountsRouteImport } from './routes/admin/accounts'
@@ -55,6 +56,11 @@ const PortalForbiddenRoute = PortalForbiddenRouteImport.update({
 const PortalLoginRoute = PortalLoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalOnboardingRoute = PortalOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => PortalRoute,
 } as any)
 const PortalProfileRoute = PortalProfileRouteImport.update({
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/forbidden': typeof PortalForbiddenRoute
   '/login': typeof PortalLoginRoute
+  '/onboarding': typeof PortalOnboardingRoute
   '/profile': typeof PortalProfileRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/online': typeof AdminOnlineRoute
@@ -175,6 +182,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/forbidden': typeof PortalForbiddenRoute
   '/login': typeof PortalLoginRoute
+  '/onboarding': typeof PortalOnboardingRoute
   '/profile': typeof PortalProfileRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/online': typeof AdminOnlineRoute
@@ -200,6 +208,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/_portal/forbidden': typeof PortalForbiddenRoute
   '/_portal/login': typeof PortalLoginRoute
+  '/_portal/onboarding': typeof PortalOnboardingRoute
   '/_portal/profile': typeof PortalProfileRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/online': typeof AdminOnlineRoute
@@ -227,6 +236,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/forbidden'
     | '/login'
+    | '/onboarding'
     | '/profile'
     | '/admin/accounts'
     | '/admin/online'
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
   to:
     | '/forbidden'
     | '/login'
+    | '/onboarding'
     | '/profile'
     | '/admin/accounts'
     | '/admin/online'
@@ -273,6 +284,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/_portal/forbidden'
     | '/_portal/login'
+    | '/_portal/onboarding'
     | '/_portal/profile'
     | '/admin/accounts'
     | '/admin/online'
@@ -334,6 +346,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof PortalLoginRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/onboarding': {
+      id: '/_portal/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof PortalOnboardingRouteImport
       parentRoute: typeof PortalRoute
     }
     '/_portal/profile': {
@@ -468,6 +487,7 @@ declare module '@tanstack/react-router' {
 interface PortalRouteChildren {
   PortalForbiddenRoute: typeof PortalForbiddenRoute
   PortalLoginRoute: typeof PortalLoginRoute
+  PortalOnboardingRoute: typeof PortalOnboardingRoute
   PortalProfileRoute: typeof PortalProfileRoute
   PortalIndexRoute: typeof PortalIndexRoute
   PortalAzerothStatusRoute: typeof PortalAzerothStatusRoute
@@ -478,6 +498,7 @@ interface PortalRouteChildren {
 const PortalRouteChildren: PortalRouteChildren = {
   PortalForbiddenRoute: PortalForbiddenRoute,
   PortalLoginRoute: PortalLoginRoute,
+  PortalOnboardingRoute: PortalOnboardingRoute,
   PortalProfileRoute: PortalProfileRoute,
   PortalIndexRoute: PortalIndexRoute,
   PortalAzerothStatusRoute: PortalAzerothStatusRoute,

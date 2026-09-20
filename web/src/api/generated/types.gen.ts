@@ -176,6 +176,17 @@ export type AzerothOnlineListResponse = {
     output?: string;
 };
 
+export type AzerothSelfAccountRequest = {
+    password?: string;
+    username?: string;
+};
+
+export type AzerothSelfAccountResponse = {
+    account_id?: number;
+    account_username?: string;
+    linked?: boolean;
+};
+
 export type AzerothSendMailRequest = {
     body?: string;
     character?: string;
@@ -1493,6 +1504,91 @@ export type AzerothMailSendResponses = {
 };
 
 export type AzerothMailSendResponse = AzerothMailSendResponses[keyof AzerothMailSendResponses];
+
+export type AzerothMeAccountGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/azeroth/me/account';
+};
+
+export type AzerothMeAccountGetErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothMeAccountGetError = AzerothMeAccountGetErrors[keyof AzerothMeAccountGetErrors];
+
+export type AzerothMeAccountGetResponses = {
+    /**
+     * OK
+     */
+    200: AzerothSelfAccountResponse;
+};
+
+export type AzerothMeAccountGetResponse = AzerothMeAccountGetResponses[keyof AzerothMeAccountGetResponses];
+
+export type AzerothMeAccountCreateData = {
+    /**
+     * self-chosen credentials
+     */
+    body: AzerothSelfAccountRequest;
+    path?: never;
+    query?: never;
+    url: '/api/v1/azeroth/me/account';
+};
+
+export type AzerothMeAccountCreateErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Conflict
+     */
+    409: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Bad Gateway
+     */
+    502: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothMeAccountCreateError = AzerothMeAccountCreateErrors[keyof AzerothMeAccountCreateErrors];
+
+export type AzerothMeAccountCreateResponses = {
+    /**
+     * Created
+     */
+    201: AzerothSelfAccountResponse;
+};
+
+export type AzerothMeAccountCreateResponse = AzerothMeAccountCreateResponses[keyof AzerothMeAccountCreateResponses];
 
 export type AzerothMeCharactersListData = {
     body?: never;

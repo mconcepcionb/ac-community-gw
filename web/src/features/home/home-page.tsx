@@ -10,6 +10,11 @@ const sections = [
     to: "/azeroth/status",
   },
   {
+    title: "Game account",
+    description: "Create and link your game account.",
+    to: "/onboarding",
+  },
+  {
     title: "Admin accounts",
     description: "Ban, unban and set GM levels.",
     to: "/admin/accounts",

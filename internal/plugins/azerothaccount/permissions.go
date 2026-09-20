@@ -11,6 +11,8 @@ const (
 	PermissionAccountList permissions.Permission = "azeroth.account.list"
 	// PermissionAccountLink allows creating and removing user/account links.
 	PermissionAccountLink permissions.Permission = "azeroth.account.link"
+	// PermissionAccountSelf allows a user to create and link their own account.
+	PermissionAccountSelf permissions.Permission = "azeroth.account.self"
 )
 
 func permissionDefs() []permissions.Definition {
@@ -33,6 +35,11 @@ func permissionDefs() []permissions.Definition {
 		{
 			Name:        PermissionAccountLink,
 			Description: "Create and remove community user / AzerothCore account links",
+			Owner:       Name,
+		},
+		{
+			Name:        PermissionAccountSelf,
+			Description: "Create and link your own AzerothCore account",
 			Owner:       Name,
 		},
 	}

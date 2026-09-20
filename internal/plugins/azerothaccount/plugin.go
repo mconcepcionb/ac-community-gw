@@ -127,6 +127,12 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 	reg.Mux.Handle("DELETE /api/v1/azeroth/account-links/{user_id}",
 		reg.RequirePermission(PermissionAccountLink, http.HandlerFunc(p.handleDeleteLink)))
 
+	reg.Mux.Handle("GET /api/v1/azeroth/me/account",
+		reg.RequirePermission(PermissionAccountSelf, http.HandlerFunc(p.handleMyAccount)))
+	reg.Mux.Handle("POST /api/v1/azeroth/me/account",
+		rateLimit(reg, reg.RequirePermission(PermissionAccountSelf,
+			http.HandlerFunc(p.handleCreateMyAccount))))
+
 	return services.Provide[AccountDirectory](reg.Services, ServiceAccountDirectory, p)
 }
 

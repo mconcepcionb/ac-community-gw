@@ -174,6 +174,17 @@ export const zAzerothOnlineListResponse = z.object({
     output: z.string().optional()
 });
 
+export const zAzerothSelfAccountRequest = z.object({
+    password: z.string().optional(),
+    username: z.string().optional()
+});
+
+export const zAzerothSelfAccountResponse = z.object({
+    account_id: z.int().optional(),
+    account_username: z.string().optional(),
+    linked: z.boolean().optional()
+});
+
 export const zAzerothSendMailRequest = z.object({
     body: z.string().optional(),
     character: z.string().optional(),
@@ -621,6 +632,21 @@ export const zAzerothMailSendBody = zAzerothSendMailRequest;
  * OK
  */
 export const zAzerothMailSendResponse = zAzerothSendMailResponse;
+
+/**
+ * OK
+ */
+export const zAzerothMeAccountGetResponse = zAzerothSelfAccountResponse;
+
+/**
+ * self-chosen credentials
+ */
+export const zAzerothMeAccountCreateBody = zAzerothSelfAccountRequest;
+
+/**
+ * Created
+ */
+export const zAzerothMeAccountCreateResponse = zAzerothSelfAccountResponse;
 
 export const zAzerothMeCharactersListQuery = z.object({
     filter: z.string().optional(),
