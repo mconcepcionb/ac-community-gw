@@ -27,6 +27,19 @@ const Name = "identity-discord"
 // ServiceUserDirectory is the capability published to resolve community users.
 const ServiceUserDirectory = "identity.user.directory"
 
+// ServiceUserAdmin is the staff-facing capability published to read community
+// users and their roles.
+const ServiceUserAdmin = "identity.user.admin"
+
+// UserAdmin is the cross-plugin capability published by this plugin for staff
+// reads.
+type UserAdmin interface {
+	// UserByID returns the community user's Discord profile.
+	UserByID(ctx context.Context, userID uuid.UUID) (userdir.User, error)
+	// Roles returns the internal roles assigned to the user.
+	Roles(ctx context.Context, userID uuid.UUID) ([]string, error)
+}
+
 var (
 	errDiscordNotConfigured = httpapi.NewAPIError(http.StatusServiceUnavailable,
 		"discord_not_configured", "Discord authentication is not configured")
@@ -157,6 +170,9 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 	if err := services.Provide[userdir.Directory](reg.Services, ServiceUserDirectory, p); err != nil {
 		return err
 	}
+	if err := services.Provide[UserAdmin](reg.Services, ServiceUserAdmin, p); err != nil {
+		return err
+	}
 
 	reg.Mux.Handle("GET /api/v1/auth/discord/login", rateLimit(reg, http.HandlerFunc(p.handleLogin)))
 	reg.Mux.Handle("GET /api/v1/auth/discord/callback", rateLimit(reg, http.HandlerFunc(p.handleCallback)))
@@ -190,6 +206,22 @@ func (p *Plugin) ListUsers(ctx context.Context, filter string, limit, offset int
 		return nil, errIdentityStorageUnavailable
 	}
 	return p.repo.ListUsers(ctx, filter, limit, offset)
+}
+
+// UserByID implements UserAdmin.
+func (p *Plugin) UserByID(ctx context.Context, userID uuid.UUID) (userdir.User, error) {
+	if p.repo == nil {
+		return userdir.User{}, errIdentityStorageUnavailable
+	}
+	return p.repo.UserProfile(ctx, userID)
+}
+
+// Roles implements UserAdmin.
+func (p *Plugin) Roles(ctx context.Context, userID uuid.UUID) ([]string, error) {
+	if p.repo == nil {
+		return nil, errIdentityStorageUnavailable
+	}
+	return p.repo.UserRoles(ctx, userID)
 }
 
 // rateLimit wraps a handler with the core rate limiter when one is provided.

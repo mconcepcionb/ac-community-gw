@@ -4,6 +4,42 @@ export type ClientOptions = {
     baseUrl: `${string}://${string}` | (string & {});
 };
 
+export type AdminUser = {
+    account_id?: number;
+    account_username?: string;
+    avatar?: string;
+    characters?: Array<AdminUserCharacter>;
+    created_at?: string;
+    discord_id?: string;
+    display_name?: string;
+    global_name?: string;
+    orders?: Array<AdminUserOrder>;
+    roles?: Array<string>;
+    user_id?: string;
+    username?: string;
+    wallet?: number;
+};
+
+export type AdminUserCharacter = {
+    class?: number;
+    guid?: number;
+    guild?: string;
+    level?: number;
+    money?: number;
+    name?: string;
+    online?: boolean;
+    race?: number;
+};
+
+export type AdminUserOrder = {
+    character?: string;
+    created_at?: string;
+    order_id?: string;
+    points?: number;
+    sku?: string;
+    status?: string;
+};
+
 export type AnnounceRequest = {
     message?: string;
 };
@@ -327,6 +363,52 @@ export type User = {
     user_id?: string;
     username?: string;
 };
+
+export type AzerothAdminUsersGetData = {
+    body?: never;
+    path: {
+        /**
+         * community user UUID
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/users/{id}';
+};
+
+export type AzerothAdminUsersGetErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothAdminUsersGetError = AzerothAdminUsersGetErrors[keyof AzerothAdminUsersGetErrors];
+
+export type AzerothAdminUsersGetResponses = {
+    /**
+     * OK
+     */
+    200: AdminUser;
+};
+
+export type AzerothAdminUsersGetResponse = AzerothAdminUsersGetResponses[keyof AzerothAdminUsersGetResponses];
 
 export type AuthDiscordCallbackData = {
     body?: never;

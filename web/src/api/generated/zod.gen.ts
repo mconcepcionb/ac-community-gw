@@ -2,6 +2,42 @@
 
 import * as z from 'zod';
 
+export const zAdminUserCharacter = z.object({
+    class: z.int().optional(),
+    guid: z.int().optional(),
+    guild: z.string().optional(),
+    level: z.int().optional(),
+    money: z.int().optional(),
+    name: z.string().optional(),
+    online: z.boolean().optional(),
+    race: z.int().optional()
+});
+
+export const zAdminUserOrder = z.object({
+    character: z.string().optional(),
+    created_at: z.string().optional(),
+    order_id: z.string().optional(),
+    points: z.int().optional(),
+    sku: z.string().optional(),
+    status: z.string().optional()
+});
+
+export const zAdminUser = z.object({
+    account_id: z.int().optional(),
+    account_username: z.string().optional(),
+    avatar: z.string().optional(),
+    characters: z.array(zAdminUserCharacter).optional(),
+    created_at: z.string().optional(),
+    discord_id: z.string().optional(),
+    display_name: z.string().optional(),
+    global_name: z.string().optional(),
+    orders: z.array(zAdminUserOrder).optional(),
+    roles: z.array(z.string()).optional(),
+    user_id: z.string().optional(),
+    username: z.string().optional(),
+    wallet: z.int().optional()
+});
+
 export const zAnnounceRequest = z.object({
     message: z.string().optional()
 });
@@ -323,6 +359,15 @@ export const zUser = z.object({
 export const zListUsersResponse = z.object({
     users: z.array(zUser).optional()
 });
+
+export const zAzerothAdminUsersGetPath = z.object({
+    id: z.string()
+});
+
+/**
+ * OK
+ */
+export const zAzerothAdminUsersGetResponse = zAdminUser;
 
 export const zAuthDiscordCallbackQuery = z.object({
     code: z.string(),

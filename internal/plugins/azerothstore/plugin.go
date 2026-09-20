@@ -126,5 +126,5 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		reg.RequirePermission(PermissionPurchase, http.HandlerFunc(p.handlePurchase)))
 	reg.Mux.Handle("POST /api/v1/store/wallets/grant",
 		reg.RequirePermission(PermissionAdminWallets, http.HandlerFunc(p.handleGrant)))
-	return nil
+	return services.Provide[AccountView](reg.Services, AccountService, p)
 }

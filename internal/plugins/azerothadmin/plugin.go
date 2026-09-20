@@ -9,10 +9,16 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/google/uuid"
+
 	"github.com/mconcepcionb/ac-community-gw/internal/core/audit"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/azerothcore"
+	"github.com/mconcepcionb/ac-community-gw/internal/core/azerothdb"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/commands"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/plugins"
+	"github.com/mconcepcionb/ac-community-gw/internal/core/services"
+	"github.com/mconcepcionb/ac-community-gw/internal/core/storeview"
+	"github.com/mconcepcionb/ac-community-gw/internal/core/userdir"
 )
 
 // Name is the stable plugin name.
@@ -25,10 +31,43 @@ const (
 	CommandSetGMLevel   = "account.set-gmlevel"
 )
 
+// Capabilities consumed from other plugins.
+const (
+	accountDirectoryService   = "azeroth.account.directory"
+	identityUserAdminService  = "identity.user.admin"
+	characterDirectoryService = "azeroth.character.directory"
+	storeAccountService       = "azeroth.store.account"
+)
+
+// accountDirectory is the capability published by azeroth-account.
+type accountDirectory interface {
+	LinkedAccount(ctx context.Context, userID string) (username string, accountID *int64, err error)
+}
+
+// userAdmin is the staff-facing capability published by identity-discord.
+type userAdmin interface {
+	UserByID(ctx context.Context, userID uuid.UUID) (userdir.User, error)
+	Roles(ctx context.Context, userID uuid.UUID) ([]string, error)
+}
+
+// characterDirectory is the capability published by azeroth-character.
+type characterDirectory interface {
+	CharactersByUser(ctx context.Context, userID string) ([]azerothdb.Character, error)
+}
+
+// storeAccount is the capability published by azeroth-store.
+type storeAccount interface {
+	Wallet(ctx context.Context, userID uuid.UUID) (int64, error)
+	Orders(ctx context.Context, userID uuid.UUID, limit, offset int) ([]storeview.Order, error)
+}
+
 // Plugin implements plugins.Plugin.
 type Plugin struct {
 	executor azerothcore.CommandExecutor
 	audit    audit.Recorder
+	// registry resolves cross-plugin capabilities on demand so the aggregate
+	// does not depend on plugin registration order.
+	registry *services.Registry
 }
 
 // Option customizes a Plugin at construction time.
@@ -62,6 +101,9 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 			return err
 		}
 	}
+
+	p.registry = reg.Services
+
 	if err := commands.RegisterTyped(reg.Commands, CommandBanAccount, p.banAccount); err != nil {
 		return err
 	}
@@ -93,6 +135,8 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		reg.RequirePermission(PermissionAdminCharactersBan, http.HandlerFunc(p.handleUnbanCharacter)))
 	reg.Mux.Handle("POST /api/v1/azeroth/announce",
 		reg.RequirePermission(PermissionAdminAnnounce, http.HandlerFunc(p.handleAnnounce)))
+	reg.Mux.Handle("GET /api/v1/admin/users/{id}",
+		reg.RequirePermission(PermissionAdminUsersRead, http.HandlerFunc(p.handleUser360)))
 	return nil
 }
 
