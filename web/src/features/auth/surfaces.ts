@@ -16,6 +16,7 @@ export const CONSOLE_PERMISSIONS = [
   "azeroth.admin.players.mute",
   "azeroth.admin.characters.ban",
   "azeroth.admin.announce",
+  "azeroth.character.list",
   "azeroth.item.list",
   "store.admin.products",
   "store.admin.wallets",

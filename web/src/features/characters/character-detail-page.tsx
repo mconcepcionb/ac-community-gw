@@ -1,10 +1,12 @@
+import type { ReactNode } from "react";
+
 import { ErrorState } from "@/components/common/error-state";
 import { LoadingState } from "@/components/common/loading-state";
 import { PageHeader } from "@/components/common/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCharacter } from "./use-characters";
 
-export function CharacterDetailPage({ name }: { name: string }) {
+export function CharacterDetailPage({ name, actions }: { name: string; actions?: ReactNode }) {
   const query = useCharacter(name);
 
   if (query.isPending) {
@@ -34,7 +36,11 @@ export function CharacterDetailPage({ name }: { name: string }) {
 
   return (
     <div className="mx-auto max-w-5xl p-8">
-      <PageHeader title={character?.name ?? name} description="Character detail." />
+      <PageHeader
+        title={character?.name ?? name}
+        description="Character detail."
+        actions={actions}
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {fields.map((field) => (

@@ -1,8 +1,9 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { createMemoryHistory, createRouter, RouterProvider } from "@tanstack/react-router";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { HttpResponse, http } from "msw";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { createQueryClient } from "@/app/query-client";
 import { routeTree } from "@/routeTree.gen";
@@ -10,14 +11,9 @@ import { server } from "@/test/msw";
 
 const meUrl = "http://localhost:8080/api/v1/me";
 
-function authorized() {
+function authorized(permissions: string[] = ["azeroth.character.list"]) {
   return http.get(meUrl, () =>
-    HttpResponse.json({
-      user_id: "u1",
-      discord_id: "1",
-      roles: [],
-      permissions: ["azeroth.character.list"],
-    }),
+    HttpResponse.json({ user_id: "u1", discord_id: "1", roles: [], permissions }),
   );
 }
 
@@ -52,7 +48,13 @@ const thrall = {
   logout_time: null,
 };
 
+let banBody: unknown;
+
 describe("CharactersPage", () => {
+  beforeEach(() => {
+    banBody = undefined;
+  });
+
   it("lists characters for an account", async () => {
     server.use(
       authorized(),
@@ -61,7 +63,7 @@ describe("CharactersPage", () => {
       ),
     );
 
-    renderAt("/characters?account=ADMIN");
+    renderAt("/admin/characters?account=ADMIN");
 
     expect(await screen.findByRole("link", { name: "Thrall" })).toBeInTheDocument();
     expect(screen.getByText("Shaman")).toBeInTheDocument();
@@ -69,13 +71,17 @@ describe("CharactersPage", () => {
 
   it("prompts for an account when none is given", async () => {
     server.use(authorized());
-    renderAt("/characters");
+    renderAt("/admin/characters");
 
     expect(await screen.findByText("Choose an account")).toBeInTheDocument();
   });
 });
 
 describe("CharacterDetailPage", () => {
+  beforeEach(() => {
+    banBody = undefined;
+  });
+
   it("renders the character detail", async () => {
     server.use(
       authorized(),
@@ -84,9 +90,36 @@ describe("CharacterDetailPage", () => {
       ),
     );
 
-    renderAt("/characters/Thrall");
+    renderAt("/admin/characters/Thrall");
 
     expect(await screen.findByText("80")).toBeInTheDocument();
     expect(screen.getByText("Shaman")).toBeInTheDocument();
+  });
+
+  it("bans a character", async () => {
+    server.use(
+      authorized(["azeroth.character.list", "azeroth.admin.characters.ban"]),
+      http.get("http://localhost:8080/api/v1/azeroth/characters/Thrall", () =>
+        HttpResponse.json(thrall),
+      ),
+      http.post(
+        "http://localhost:8080/api/v1/azeroth/characters/Thrall/ban",
+        async ({ request }) => {
+          banBody = await request.json();
+          return HttpResponse.json({ result: "banned" });
+        },
+      ),
+    );
+
+    renderAt("/admin/characters/Thrall");
+    expect(await screen.findByText("80")).toBeInTheDocument();
+
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: "Ban" }));
+    await user.type(await screen.findByLabelText("Reason"), "cheating");
+    await user.click(screen.getByRole("button", { name: "Confirm ban" }));
+
+    await waitFor(() => expect(banBody).toBeDefined());
+    expect(banBody).toMatchObject({ duration: "1d", reason: "cheating" });
   });
 });

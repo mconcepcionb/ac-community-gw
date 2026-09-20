@@ -1,17 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { RequireAuth } from "@/features/auth/require-auth";
+import { CharacterBanActions } from "@/features/admin/character-ban-actions";
 import { CharacterDetailPage } from "@/features/characters/character-detail-page";
 
-export const Route = createFileRoute("/_portal/characters/$name")({
+export const Route = createFileRoute("/admin/characters/$name")({
   component: CharacterRoute,
 });
 
 function CharacterRoute() {
   const { name } = Route.useParams();
-  return (
-    <RequireAuth>
-      <CharacterDetailPage name={name} />
-    </RequireAuth>
-  );
+  return <CharacterDetailPage name={name} actions={<CharacterBanActions name={name} />} />;
 }

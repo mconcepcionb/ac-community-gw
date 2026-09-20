@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { RequireAuth } from "@/features/auth/require-auth";
 import { CharactersPage } from "@/features/characters/characters-page";
 
 interface CharactersSearch {
@@ -10,7 +9,7 @@ interface CharactersSearch {
   offset?: number;
 }
 
-export const Route = createFileRoute("/_portal/characters/")({
+export const Route = createFileRoute("/admin/characters/")({
   validateSearch: (search: Record<string, unknown>): CharactersSearch => ({
     account:
       typeof search.account === "string" && search.account !== "" ? search.account : undefined,
@@ -18,13 +17,5 @@ export const Route = createFileRoute("/_portal/characters/")({
     limit: typeof search.limit === "number" ? search.limit : undefined,
     offset: typeof search.offset === "number" ? search.offset : undefined,
   }),
-  component: CharactersRoute,
+  component: CharactersPage,
 });
-
-function CharactersRoute() {
-  return (
-    <RequireAuth>
-      <CharactersPage />
-    </RequireAuth>
-  );
-}

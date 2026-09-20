@@ -5,6 +5,7 @@ import { SessionMenu } from "@/features/auth/session-menu";
 const links = [
   { to: "/admin", label: "Overview", exact: true },
   { to: "/admin/accounts", label: "Accounts", exact: false },
+  { to: "/admin/characters", label: "Characters", exact: false },
   { to: "/admin/online", label: "Online", exact: false },
 ] as const;
 

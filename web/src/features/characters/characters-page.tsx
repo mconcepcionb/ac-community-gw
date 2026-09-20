@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useCharacters } from "./use-characters";
 
-const route = getRouteApi("/_portal/characters/");
+const route = getRouteApi("/admin/characters/");
 
 const columns: ColumnDef<AzerothCharacter, unknown>[] = [
   {
@@ -19,7 +19,7 @@ const columns: ColumnDef<AzerothCharacter, unknown>[] = [
     header: "Name",
     cell: ({ row }) => (
       <Link
-        to="/characters/$name"
+        to="/admin/characters/$name"
         params={{ name: row.original.name ?? "" }}
         className="text-blue-400 underline"
       >

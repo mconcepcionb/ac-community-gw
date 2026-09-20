@@ -15,11 +15,6 @@ const sections = [
     to: "/identity/users",
   },
   {
-    title: "Characters",
-    description: "Browse characters and open a detail view.",
-    to: "/characters",
-  },
-  {
     title: "Items",
     description: "Search the AzerothCore item catalog.",
     to: "/items",
