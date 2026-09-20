@@ -83,6 +83,34 @@ export type AnnounceRequest = {
     message?: string;
 };
 
+export type ApiKey = {
+    created_at?: string;
+    id?: string;
+    key_prefix?: string;
+    last_used_at?: string;
+    name?: string;
+    permissions?: Array<string>;
+};
+
+export type ApiKeySecretResponse = {
+    key?: ApiKey;
+    secret?: string;
+};
+
+export type ApiKeysResponse = {
+    keys?: Array<ApiKey>;
+};
+
+export type ApiPermission = {
+    description?: string;
+    name?: string;
+    owner?: string;
+};
+
+export type ApiPermissionsResponse = {
+    permissions?: Array<ApiPermission>;
+};
+
 export type AzerothAccount = {
     ban_reason?: string;
     banned?: boolean;
@@ -341,6 +369,11 @@ export type CreateAccountRequest = {
     username?: string;
 };
 
+export type CreateApiKeyRequest = {
+    name?: string;
+    permissions?: Array<string>;
+};
+
 export type CreateLinkRequest = {
     account_username?: string;
     discord_id?: string;
@@ -526,6 +559,171 @@ export type AzerothAdminAccountClaimsListResponses = {
 
 export type AzerothAdminAccountClaimsListResponse = AzerothAdminAccountClaimsListResponses[keyof AzerothAdminAccountClaimsListResponses];
 
+export type ApikeysListData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/admin/api-keys';
+};
+
+export type ApikeysListErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type ApikeysListError = ApikeysListErrors[keyof ApikeysListErrors];
+
+export type ApikeysListResponses = {
+    /**
+     * OK
+     */
+    200: ApiKeysResponse;
+};
+
+export type ApikeysListResponse = ApikeysListResponses[keyof ApikeysListResponses];
+
+export type ApikeysCreateData = {
+    /**
+     * name and scopes
+     */
+    body: CreateApiKeyRequest;
+    path?: never;
+    query?: never;
+    url: '/api/v1/admin/api-keys';
+};
+
+export type ApikeysCreateErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type ApikeysCreateError = ApikeysCreateErrors[keyof ApikeysCreateErrors];
+
+export type ApikeysCreateResponses = {
+    /**
+     * Created
+     */
+    201: ApiKeySecretResponse;
+};
+
+export type ApikeysCreateResponse = ApikeysCreateResponses[keyof ApikeysCreateResponses];
+
+export type ApikeysRevokeData = {
+    body?: never;
+    path: {
+        /**
+         * key id
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/api-keys/{id}';
+};
+
+export type ApikeysRevokeErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type ApikeysRevokeError = ApikeysRevokeErrors[keyof ApikeysRevokeErrors];
+
+export type ApikeysRevokeResponses = {
+    /**
+     * Revoked
+     */
+    204: void;
+};
+
+export type ApikeysRevokeResponse = ApikeysRevokeResponses[keyof ApikeysRevokeResponses];
+
+export type ApikeysRotateData = {
+    body?: never;
+    path: {
+        /**
+         * key id
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/api-keys/{id}/rotate';
+};
+
+export type ApikeysRotateErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type ApikeysRotateError = ApikeysRotateErrors[keyof ApikeysRotateErrors];
+
+export type ApikeysRotateResponses = {
+    /**
+     * OK
+     */
+    200: ApiKeySecretResponse;
+};
+
+export type ApikeysRotateResponse = ApikeysRotateResponses[keyof ApikeysRotateResponses];
+
 export type AzerothAdminAuditListData = {
     body?: never;
     path?: never;
@@ -674,6 +872,35 @@ export type IdentityAdminDiscordMappingsUpsertResponses = {
 };
 
 export type IdentityAdminDiscordMappingsUpsertResponse = IdentityAdminDiscordMappingsUpsertResponses[keyof IdentityAdminDiscordMappingsUpsertResponses];
+
+export type ApikeysPermissionsListData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/admin/permissions';
+};
+
+export type ApikeysPermissionsListErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+};
+
+export type ApikeysPermissionsListError = ApikeysPermissionsListErrors[keyof ApikeysPermissionsListErrors];
+
+export type ApikeysPermissionsListResponses = {
+    /**
+     * OK
+     */
+    200: ApiPermissionsResponse;
+};
+
+export type ApikeysPermissionsListResponse = ApikeysPermissionsListResponses[keyof ApikeysPermissionsListResponses];
 
 export type ReportsListData = {
     body?: never;

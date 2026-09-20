@@ -148,6 +148,56 @@ components:
         message:
           type: string
       type: object
+    ApiKey:
+      properties:
+        created_at:
+          type: string
+        id:
+          type: string
+        key_prefix:
+          type: string
+        last_used_at:
+          type: string
+        name:
+          type: string
+        permissions:
+          items:
+            type: string
+          type: array
+          uniqueItems: false
+      type: object
+    ApiKeySecretResponse:
+      properties:
+        key:
+          $ref: '#/components/schemas/ApiKey'
+        secret:
+          type: string
+      type: object
+    ApiKeysResponse:
+      properties:
+        keys:
+          items:
+            $ref: '#/components/schemas/ApiKey'
+          type: array
+          uniqueItems: false
+      type: object
+    ApiPermission:
+      properties:
+        description:
+          type: string
+        name:
+          type: string
+        owner:
+          type: string
+      type: object
+    ApiPermissionsResponse:
+      properties:
+        permissions:
+          items:
+            $ref: '#/components/schemas/ApiPermission'
+          type: array
+          uniqueItems: false
+      type: object
     AzerothAccount:
       properties:
         ban_reason:
@@ -595,6 +645,16 @@ components:
         username:
           type: string
       type: object
+    CreateApiKeyRequest:
+      properties:
+        name:
+          type: string
+        permissions:
+          items:
+            type: string
+          type: array
+          uniqueItems: false
+      type: object
     CreateLinkRequest:
       properties:
         account_username:
@@ -891,6 +951,182 @@ paths:
       summary: List account claims
       tags:
       - azeroth-account
+  /api/v1/admin/api-keys:
+    get:
+      description: Lists every API key (without secrets). Requires the apikeys.manage
+        permission.
+      operationId: apikeys.list
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeysResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List API keys
+      tags:
+      - apikeys
+    post:
+      description: Issues a scoped API key. The secret is returned once. Requires
+        the apikeys.manage permission.
+      operationId: apikeys.create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApiKeyRequest'
+        description: name and scopes
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeySecretResponse'
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Create an API key
+      tags:
+      - apikeys
+  /api/v1/admin/api-keys/{id}:
+    delete:
+      description: Deletes an API key immediately. Requires the apikeys.manage permission.
+      operationId: apikeys.revoke
+      parameters:
+      - description: key id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Revoked
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Revoke an API key
+      tags:
+      - apikeys
+  /api/v1/admin/api-keys/{id}/rotate:
+    post:
+      description: Issues a new secret for a key. Requires the apikeys.manage permission.
+      operationId: apikeys.rotate
+      parameters:
+      - description: key id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeySecretResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Rotate an API key
+      tags:
+      - apikeys
   /api/v1/admin/audit:
     get:
       description: Lists audit entries, newest first, filterable by actor, target,
@@ -1052,6 +1288,33 @@ paths:
       summary: Map a Discord role to an internal role
       tags:
       - identity
+  /api/v1/admin/permissions:
+    get:
+      description: Returns every permission registered by the plugins, for the API
+        key scope picker. Requires the apikeys.manage permission.
+      operationId: apikeys.permissions.list
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiPermissionsResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+      summary: List registered permissions
+      tags:
+      - apikeys
   /api/v1/admin/reports:
     get:
       description: Lists every report, newest first, optionally filtered by status.

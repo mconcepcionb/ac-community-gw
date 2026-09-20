@@ -2,7 +2,7 @@
 // versions:
 //   sqlc v1.31.1
 
-package azerothaccountrepo
+package apikeysrepo
 
 import (
 	"database/sql"

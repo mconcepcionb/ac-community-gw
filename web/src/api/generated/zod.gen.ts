@@ -81,6 +81,34 @@ export const zAnnounceRequest = z.object({
     message: z.string().optional()
 });
 
+export const zApiKey = z.object({
+    created_at: z.string().optional(),
+    id: z.string().optional(),
+    key_prefix: z.string().optional(),
+    last_used_at: z.string().optional(),
+    name: z.string().optional(),
+    permissions: z.array(z.string()).optional()
+});
+
+export const zApiKeySecretResponse = z.object({
+    key: zApiKey.optional(),
+    secret: z.string().optional()
+});
+
+export const zApiKeysResponse = z.object({
+    keys: z.array(zApiKey).optional()
+});
+
+export const zApiPermission = z.object({
+    description: z.string().optional(),
+    name: z.string().optional(),
+    owner: z.string().optional()
+});
+
+export const zApiPermissionsResponse = z.object({
+    permissions: z.array(zApiPermission).optional()
+});
+
 export const zAzerothAccount = z.object({
     ban_reason: z.string().optional(),
     banned: z.boolean().optional(),
@@ -339,6 +367,11 @@ export const zCreateAccountRequest = z.object({
     username: z.string().optional()
 });
 
+export const zCreateApiKeyRequest = z.object({
+    name: z.string().optional(),
+    permissions: z.array(z.string()).optional()
+});
+
 export const zCreateLinkRequest = z.object({
     account_username: z.string().optional(),
     discord_id: z.string().optional(),
@@ -494,6 +527,39 @@ export const zListUsersResponse = z.object({
  */
 export const zAzerothAdminAccountClaimsListResponse = zAzerothAdminClaimsResponse;
 
+/**
+ * OK
+ */
+export const zApikeysListResponse = zApiKeysResponse;
+
+/**
+ * name and scopes
+ */
+export const zApikeysCreateBody = zCreateApiKeyRequest;
+
+/**
+ * Created
+ */
+export const zApikeysCreateResponse = zApiKeySecretResponse;
+
+export const zApikeysRevokePath = z.object({
+    id: z.string()
+});
+
+/**
+ * Revoked
+ */
+export const zApikeysRevokeResponse = z.void();
+
+export const zApikeysRotatePath = z.object({
+    id: z.string()
+});
+
+/**
+ * OK
+ */
+export const zApikeysRotateResponse = zApiKeySecretResponse;
+
 export const zAzerothAdminAuditListQuery = z.object({
     actor: z.string().optional(),
     target: z.string().optional(),
@@ -531,6 +597,11 @@ export const zIdentityAdminDiscordMappingsUpsertPath = z.object({
  * Mapped
  */
 export const zIdentityAdminDiscordMappingsUpsertResponse = z.void();
+
+/**
+ * OK
+ */
+export const zApikeysPermissionsListResponse = zApiPermissionsResponse;
 
 export const zReportsListQuery = z.object({
     status: z.string().optional(),

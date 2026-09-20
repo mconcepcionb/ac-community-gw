@@ -33,6 +33,8 @@ import (
 	"github.com/mconcepcionb/ac-community-gw/internal/core/persistence"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/plugins"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/services"
+	"github.com/mconcepcionb/ac-community-gw/internal/plugins/apikeys"
+	apikeysrepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/apikeys/repository"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothaccount"
 	azerothaccountrepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothaccount/repository"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothadmin"
@@ -129,6 +131,7 @@ func run() error {
 	var storeRepo azerothstore.Store
 	var characterVisibility azerothcharacter.VisibilityStore
 	var reportsStore reports.Store
+	var apiKeyStore *apikeysrepo.Store
 	if database != nil {
 		identityRepo = repository.New(database.SQL())
 		sessionStore = identityRepo
@@ -138,6 +141,7 @@ func run() error {
 		storeRepo = azerothstorerepo.New(database.SQL())
 		characterVisibility = azerothcharacterrepo.New(database.SQL())
 		reportsStore = reportsrepo.New(database.SQL())
+		apiKeyStore = apikeysrepo.New(database.SQL())
 	}
 	if storeRepo != nil {
 		go runStoreReconciliation(ctx, storeRepo, logger)
@@ -211,6 +215,11 @@ func run() error {
 		auditReader = auditStore
 	}
 
+	var apiKeyAuth auth.APIKeyAuthenticator
+	if apiKeyStore != nil {
+		apiKeyAuth = apiKeyStore
+	}
+
 	server := httpapi.New(httpapi.Dependencies{
 		Config:      cfg,
 		Logger:      logger,
@@ -220,6 +229,7 @@ func run() error {
 		Audit:       auditRecorder,
 		Readiness:   readiness,
 		Metrics:     metricRegistry,
+		APIKeys:     apiKeyAuth,
 	})
 
 	registry := &plugins.Registry{
@@ -275,6 +285,14 @@ func run() error {
 	}))
 	manager.Add(reports.New(reports.Config{
 		Store: reportsStore,
+		Audit: auditRecorder,
+	}))
+	var apiKeyPluginStore apikeys.Store
+	if apiKeyStore != nil {
+		apiKeyPluginStore = apiKeyStore
+	}
+	manager.Add(apikeys.New(apikeys.Config{
+		Store: apiKeyPluginStore,
 		Audit: auditRecorder,
 	}))
 

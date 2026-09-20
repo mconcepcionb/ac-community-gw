@@ -22,6 +22,16 @@ type AccountClaim struct {
 	UpdatedAt       time.Time
 }
 
+type ApiKey struct {
+	ID          uuid.UUID
+	Name        string
+	KeyPrefix   string
+	KeyHash     string
+	Permissions string
+	CreatedAt   time.Time
+	LastUsedAt  sql.NullTime
+}
+
 type AuditLog struct {
 	ID             int64
 	OccurredAt     time.Time

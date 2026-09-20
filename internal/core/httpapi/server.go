@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/mconcepcionb/ac-community-gw/internal/core/audit"
@@ -25,6 +26,8 @@ type Dependencies struct {
 	Audit       audit.Recorder
 	Readiness   *persistence.Registry
 	Metrics     *metrics.Registry
+	// APIKeys resolves service credentials when no session is present.
+	APIKeys auth.APIKeyAuthenticator
 }
 
 // Server owns the HTTP mux and lifecycle.
@@ -37,6 +40,7 @@ type Server struct {
 	audit       audit.Recorder
 	readiness   *persistence.Registry
 	metrics     *metrics.Registry
+	apiKeys     auth.APIKeyAuthenticator
 	mux         *http.ServeMux
 }
 
@@ -55,6 +59,7 @@ func New(deps Dependencies) *Server {
 		audit:       deps.Audit,
 		readiness:   deps.Readiness,
 		metrics:     metricRegistry,
+		apiKeys:     deps.APIKeys,
 		mux:         http.NewServeMux(),
 	}
 	if s.audit == nil {
@@ -72,16 +77,24 @@ func (s *Server) Mux() *http.ServeMux {
 	return s.mux
 }
 
-// RequireAuth resolves the session and stores the principal in the context.
+// RequireAuth resolves the session (or an API key) and stores the principal.
 func (s *Server) RequireAuth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		token := s.sessions.TokenFromRequest(r)
-		principal, err := s.sessions.Resolve(r.Context(), token)
-		if err != nil {
-			WriteError(w, r, ErrUnauthorized)
-			return
+		if token := s.sessions.TokenFromRequest(r); token != "" {
+			if principal, err := s.sessions.Resolve(r.Context(), token); err == nil {
+				next.ServeHTTP(w, r.WithContext(auth.WithPrincipal(r.Context(), principal)))
+				return
+			}
 		}
-		next.ServeHTTP(w, r.WithContext(auth.WithPrincipal(r.Context(), principal)))
+		if s.apiKeys != nil {
+			if raw := bearerToken(r); raw != "" {
+				if principal, ok := s.apiKeys.Authenticate(r.Context(), raw); ok {
+					next.ServeHTTP(w, r.WithContext(auth.WithPrincipal(r.Context(), principal)))
+					return
+				}
+			}
+		}
+		WriteError(w, r, ErrUnauthorized)
 	})
 }
 
@@ -93,12 +106,31 @@ func (s *Server) RequirePermission(permission permissions.Permission, next http.
 			WriteError(w, r, ErrUnauthorized)
 			return
 		}
-		if !s.authorizer.Can(toRoles(principal.Roles), permission) {
+		if !s.authorizer.Can(toRoles(principal.Roles), permission) &&
+			!hasPermission(principal.Permissions, permission) {
 			WriteError(w, r, ErrForbidden)
 			return
 		}
 		next.ServeHTTP(w, r)
 	}))
+}
+
+func bearerToken(r *http.Request) string {
+	header := r.Header.Get("Authorization")
+	const prefix = "Bearer "
+	if len(header) <= len(prefix) || !strings.EqualFold(header[:len(prefix)], prefix) {
+		return ""
+	}
+	return strings.TrimSpace(header[len(prefix):])
+}
+
+func hasPermission(permissionsList []string, permission permissions.Permission) bool {
+	for _, granted := range permissionsList {
+		if granted == string(permission) {
+			return true
+		}
+	}
+	return false
 }
 
 // Handler returns the fully wrapped HTTP handler. Access logging wraps the

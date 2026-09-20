@@ -17,6 +17,14 @@ type Principal struct {
 	UserID    uuid.UUID
 	DiscordID string
 	Roles     []string
+	// Permissions carries explicit scopes for service credentials (API keys).
+	// Interactive users derive permissions from their roles instead.
+	Permissions []string
+}
+
+// APIKeyAuthenticator resolves a raw API key to a principal.
+type APIKeyAuthenticator interface {
+	Authenticate(ctx context.Context, rawKey string) (Principal, bool)
 }
 
 type principalKey struct{}

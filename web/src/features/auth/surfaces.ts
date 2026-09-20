@@ -27,6 +27,7 @@ export const CONSOLE_PERMISSIONS = [
   "audit.read",
   "report.read",
   "identity.roles.manage",
+  "apikeys.manage",
 ] as const;
 
 /** hasAnyConsolePermission reports whether the principal may open the console. */

@@ -10,6 +10,7 @@ const links = [
   { to: "/admin/moderation", label: "Moderation", exact: false },
   { to: "/admin/audit", label: "Audit", exact: false },
   { to: "/admin/roles", label: "Roles", exact: false },
+  { to: "/admin/api-clients", label: "API", exact: false },
   { to: "/admin/online", label: "Online", exact: false },
   { to: "/admin/items", label: "Items", exact: false },
   { to: "/admin/store", label: "Store", exact: false },
