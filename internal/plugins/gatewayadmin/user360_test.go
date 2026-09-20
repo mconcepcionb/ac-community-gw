@@ -1,4 +1,4 @@
-package azerothadmin
+package gatewayadmin
 
 import (
 	"context"
@@ -44,10 +44,6 @@ func (f fakeCharacterDirectory) CharactersByUser(context.Context, string) ([]aze
 	return f.characters, nil
 }
 
-func (f fakeCharacterDirectory) OnlineCharacters(context.Context, int, int) ([]azerothdb.Character, error) {
-	return f.characters, nil
-}
-
 type fakeStoreAccount struct {
 	balance int64
 	orders  []storeview.Order
@@ -62,7 +58,7 @@ func (f fakeStoreAccount) Orders(context.Context, uuid.UUID, int, int) ([]storev
 func TestHandleUser360(t *testing.T) {
 	userID := uuid.New()
 	accountID := int64(42)
-	plugin := New(&fakeExecutor{})
+	plugin := New(Config{})
 	registry := services.NewRegistry()
 	publish := func(name string, value any) {
 		if err := registry.Publish(name, value); err != nil {
@@ -118,7 +114,7 @@ func TestHandleUser360(t *testing.T) {
 }
 
 func TestHandleUser360InvalidID(t *testing.T) {
-	plugin := New(&fakeExecutor{})
+	plugin := New(Config{})
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/admin/users/nope", nil)
 	req.SetPathValue("id", "nope")
 	rec := httptest.NewRecorder()

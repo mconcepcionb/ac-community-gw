@@ -1560,7 +1560,7 @@ export type StoreAdminOrdersRetryResponses = {
 
 export type StoreAdminOrdersRetryResponse = StoreAdminOrdersRetryResponses[keyof StoreAdminOrdersRetryResponses];
 
-export type AzerothAdminUsersGetData = {
+export type GatewayAdminUsersGetData = {
     body?: never;
     path: {
         /**
@@ -1572,7 +1572,7 @@ export type AzerothAdminUsersGetData = {
     url: '/api/v1/admin/users/{id}';
 };
 
-export type AzerothAdminUsersGetErrors = {
+export type GatewayAdminUsersGetErrors = {
     /**
      * Unauthorized
      */
@@ -1595,16 +1595,16 @@ export type AzerothAdminUsersGetErrors = {
     503: ErrorResponse;
 };
 
-export type AzerothAdminUsersGetError = AzerothAdminUsersGetErrors[keyof AzerothAdminUsersGetErrors];
+export type GatewayAdminUsersGetError = GatewayAdminUsersGetErrors[keyof GatewayAdminUsersGetErrors];
 
-export type AzerothAdminUsersGetResponses = {
+export type GatewayAdminUsersGetResponses = {
     /**
      * OK
      */
     200: AdminUser;
 };
 
-export type AzerothAdminUsersGetResponse = AzerothAdminUsersGetResponses[keyof AzerothAdminUsersGetResponses];
+export type GatewayAdminUsersGetResponse = GatewayAdminUsersGetResponses[keyof GatewayAdminUsersGetResponses];
 
 export type AuthDiscordCallbackData = {
     body?: never;

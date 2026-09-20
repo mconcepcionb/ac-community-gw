@@ -1,4 +1,4 @@
-package azerothadmin
+package gatewayadmin
 
 import (
 	"net/http"
@@ -63,8 +63,8 @@ type AdminUser struct {
 //
 //	@Summary		Community user 360 view
 //	@Description	Returns the profile, roles, linked account, characters, wallet and recent orders for a community user. Requires the gw.identity.user.read permission.
-//	@Tags			azeroth-admin
-//	@ID				azeroth.admin.users.get
+//	@Tags			gateway-admin
+//	@ID				gateway.admin.users.get
 //	@Produce		json
 //	@Param			id	path	string	true	"community user UUID"
 //	@Success		200	{object}	AdminUser

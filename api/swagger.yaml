@@ -2127,7 +2127,7 @@ paths:
       description: Returns the profile, roles, linked account, characters, wallet
         and recent orders for a community user. Requires the gw.identity.user.read
         permission.
-      operationId: azeroth.admin.users.get
+      operationId: gateway.admin.users.get
       parameters:
       - description: community user UUID
         in: path
@@ -2174,7 +2174,7 @@ paths:
           description: Service Unavailable
       summary: Community user 360 view
       tags:
-      - azeroth-admin
+      - gateway-admin
   /api/v1/auth/discord/callback:
     get:
       description: Consumes the single-use state, exchanges the code, provisions the

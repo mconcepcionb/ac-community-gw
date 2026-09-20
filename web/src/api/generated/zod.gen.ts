@@ -808,14 +808,14 @@ export const zStoreAdminOrdersRetryPath = z.object({
  */
 export const zStoreAdminOrdersRetryResponse = zStoreOrder;
 
-export const zAzerothAdminUsersGetPath = z.object({
+export const zGatewayAdminUsersGetPath = z.object({
     id: z.string()
 });
 
 /**
  * OK
  */
-export const zAzerothAdminUsersGetResponse = zAdminUser;
+export const zGatewayAdminUsersGetResponse = zAdminUser;
 
 export const zAuthDiscordCallbackQuery = z.object({
     code: z.string(),

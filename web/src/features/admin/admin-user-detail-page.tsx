@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 
-import { azerothAdminUsersGetOptions, azerothAdminUsersGetQueryKey } from "@/api";
+import { gatewayAdminUsersGetOptions, gatewayAdminUsersGetQueryKey } from "@/api";
 import { ErrorState } from "@/components/common/error-state";
 import { LoadingState } from "@/components/common/loading-state";
 import { PageHeader } from "@/components/common/page-header";
@@ -14,7 +14,7 @@ import { DeleteLinkButton } from "@/features/account-links/delete-link-button";
 /** AdminUserDetailPage is the staff 360 view of a community user. */
 export function AdminUserDetailPage({ userId }: { userId: string }) {
   const queryClient = useQueryClient();
-  const query = useQuery(azerothAdminUsersGetOptions({ path: { id: userId } }));
+  const query = useQuery(gatewayAdminUsersGetOptions({ path: { id: userId } }));
 
   if (query.isPending) {
     return <LoadingState label="Loading user…" />;
@@ -36,7 +36,7 @@ export function AdminUserDetailPage({ userId }: { userId: string }) {
 
   const invalidate = () =>
     queryClient.invalidateQueries({
-      queryKey: azerothAdminUsersGetQueryKey({ path: { id: userId } }),
+      queryKey: gatewayAdminUsersGetQueryKey({ path: { id: userId } }),
     });
 
   const fields = [
