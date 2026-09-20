@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import type { User } from "@/api";
 import { DataTable } from "@/components/common/data-table";
 import { PageHeader } from "@/components/common/page-header";
-import { Button } from "@/components/ui/button";
+import { Pagination } from "@/components/common/pagination";
 import { Input } from "@/components/ui/input";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useUsers } from "./use-users";
@@ -77,29 +77,15 @@ export function UsersPage() {
         emptyMessage="No users"
       />
 
-      <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-        <span>
-          Showing {users.length === 0 ? 0 : offset + 1}–{offset + users.length}
-        </span>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={offset === 0}
-            onClick={() => navigate({ search: { ...search, offset: Math.max(0, offset - limit) } })}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={users.length < limit}
-            onClick={() => navigate({ search: { ...search, offset: offset + limit } })}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+      <Pagination
+        limit={limit}
+        offset={offset}
+        count={users.length}
+        itemLabel="users"
+        onOffsetChange={(next) =>
+          navigate({ search: { ...search, offset: next === 0 ? undefined : next } })
+        }
+      />
     </div>
   );
 }

@@ -5,6 +5,8 @@ import type { AzerothCharacter } from "@/api";
 import { DataTable } from "@/components/common/data-table";
 import { EmptyState } from "@/components/common/empty-state";
 import { PageHeader } from "@/components/common/page-header";
+import { RowActions } from "@/components/common/row-actions";
+import { StatusBadge } from "@/components/common/status-badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
@@ -55,7 +57,11 @@ export function MyCharactersPage() {
       {
         accessorKey: "online",
         header: "Online",
-        cell: ({ row }) => (row.original.online ? "yes" : "no"),
+        cell: ({ row }) => (
+          <StatusBadge tone={row.original.online ? "positive" : "neutral"}>
+            {row.original.online ? "Online" : "Offline"}
+          </StatusBadge>
+        ),
       },
       {
         id: "actions",
@@ -63,7 +69,7 @@ export function MyCharactersPage() {
         cell: ({ row }) => {
           const name = row.original.name ?? "";
           return (
-            <div className="flex flex-wrap gap-2">
+            <RowActions>
               {visibility.isError ? null : (
                 <VisibilityToggle name={name} publicFlag={flags[name] ?? false} />
               )}
@@ -75,7 +81,7 @@ export function MyCharactersPage() {
                   </Button>
                 }
               />
-            </div>
+            </RowActions>
           );
         },
       },

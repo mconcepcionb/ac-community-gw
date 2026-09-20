@@ -6,7 +6,8 @@ import type { AzerothCharacter } from "@/api";
 import { DataTable } from "@/components/common/data-table";
 import { EmptyState } from "@/components/common/empty-state";
 import { PageHeader } from "@/components/common/page-header";
-import { Button } from "@/components/ui/button";
+import { Pagination } from "@/components/common/pagination";
+import { StatusBadge } from "@/components/common/status-badge";
 import { Input } from "@/components/ui/input";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useCharacters } from "./use-characters";
@@ -34,7 +35,11 @@ const columns: ColumnDef<AzerothCharacter, unknown>[] = [
   {
     accessorKey: "online",
     header: "Online",
-    cell: ({ row }) => (row.original.online ? "yes" : "no"),
+    cell: ({ row }) => (
+      <StatusBadge tone={row.original.online ? "positive" : "neutral"}>
+        {row.original.online ? "Online" : "Offline"}
+      </StatusBadge>
+    ),
   },
   { accessorKey: "logout_time", header: "Last logout" },
 ];
@@ -99,31 +104,15 @@ export function CharactersPage() {
             onRetry={() => void query.refetch()}
             emptyMessage="No characters"
           />
-          <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-            <span>
-              Showing {characters.length === 0 ? 0 : offset + 1}–{offset + characters.length}
-            </span>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={offset === 0}
-                onClick={() =>
-                  navigate({ search: { ...search, offset: Math.max(0, offset - limit) } })
-                }
-              >
-                Previous
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={characters.length < limit}
-                onClick={() => navigate({ search: { ...search, offset: offset + limit } })}
-              >
-                Next
-              </Button>
-            </div>
-          </div>
+          <Pagination
+            limit={limit}
+            offset={offset}
+            count={characters.length}
+            itemLabel="characters"
+            onOffsetChange={(next) =>
+              navigate({ search: { ...search, offset: next === 0 ? undefined : next } })
+            }
+          />
         </>
       ) : (
         <EmptyState

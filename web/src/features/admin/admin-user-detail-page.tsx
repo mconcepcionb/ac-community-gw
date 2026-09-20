@@ -5,6 +5,7 @@ import { azerothAdminUsersGetOptions, azerothAdminUsersGetQueryKey } from "@/api
 import { ErrorState } from "@/components/common/error-state";
 import { LoadingState } from "@/components/common/loading-state";
 import { PageHeader } from "@/components/common/page-header";
+import { StatusBadge } from "@/components/common/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreateLinkDialog } from "@/features/account-links/create-link-dialog";
@@ -131,7 +132,11 @@ export function AdminUserDetailPage({ userId }: { userId: string }) {
                     <td className="px-3 py-2">{character.class}</td>
                     <td className="px-3 py-2">{character.race}</td>
                     <td className="px-3 py-2">{character.guild || "—"}</td>
-                    <td className="px-3 py-2">{character.online ? "yes" : "no"}</td>
+                    <td className="px-3 py-2">
+                      <StatusBadge tone={character.online ? "positive" : "neutral"}>
+                        {character.online ? "Online" : "Offline"}
+                      </StatusBadge>
+                    </td>
                     <td className="px-3 py-2">{character.money}</td>
                   </tr>
                 ))}

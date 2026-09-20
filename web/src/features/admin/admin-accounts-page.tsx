@@ -5,7 +5,10 @@ import { useEffect, useState } from "react";
 import type { AzerothAccount } from "@/api";
 import { DataTable } from "@/components/common/data-table";
 import { PageHeader } from "@/components/common/page-header";
+import { Pagination } from "@/components/common/pagination";
 import { PermissionGate } from "@/components/common/permission-gate";
+import { RowActions } from "@/components/common/row-actions";
+import { StatusBadge } from "@/components/common/status-badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CreateAccountDialog } from "@/features/accounts/create-account-dialog";
@@ -27,12 +30,20 @@ const columns: ColumnDef<AzerothAccount, unknown>[] = [
   {
     accessorKey: "online",
     header: "Online",
-    cell: ({ row }) => (row.original.online ? "yes" : "no"),
+    cell: ({ row }) => (
+      <StatusBadge tone={row.original.online ? "positive" : "neutral"}>
+        {row.original.online ? "Online" : "Offline"}
+      </StatusBadge>
+    ),
   },
   {
     accessorKey: "banned",
     header: "Banned",
-    cell: ({ row }) => (row.original.banned ? "yes" : "no"),
+    cell: ({ row }) => (
+      <StatusBadge tone={row.original.banned ? "negative" : "positive"}>
+        {row.original.banned ? "Banned" : "Active"}
+      </StatusBadge>
+    ),
   },
   { accessorKey: "last_login", header: "Last login" },
   {
@@ -41,7 +52,7 @@ const columns: ColumnDef<AzerothAccount, unknown>[] = [
     cell: ({ row }) => {
       const username = row.original.username ?? "";
       return (
-        <div className="flex flex-wrap gap-2">
+        <RowActions>
           <PermissionGate permission="azeroth.account.manage">
             <SetPasswordDialog
               username={username}
@@ -62,22 +73,25 @@ const columns: ColumnDef<AzerothAccount, unknown>[] = [
             />
           </PermissionGate>
           <PermissionGate permission="azeroth.admin.accounts.ban">
-            <BanAccountDialog
-              username={username}
-              trigger={
-                <Button variant="outline" size="sm">
-                  Ban
-                </Button>
-              }
-            />
-            <UnbanAccountButton
-              username={username}
-              trigger={
-                <Button variant="outline" size="sm">
-                  Unban
-                </Button>
-              }
-            />
+            {row.original.banned ? (
+              <UnbanAccountButton
+                username={username}
+                trigger={
+                  <Button variant="outline" size="sm">
+                    Unban
+                  </Button>
+                }
+              />
+            ) : (
+              <BanAccountDialog
+                username={username}
+                trigger={
+                  <Button variant="outline" size="sm">
+                    Ban
+                  </Button>
+                }
+              />
+            )}
           </PermissionGate>
           <PermissionGate permission="azeroth.admin.accounts.gmlevel">
             <SetGmLevelDialog
@@ -89,7 +103,7 @@ const columns: ColumnDef<AzerothAccount, unknown>[] = [
               }
             />
           </PermissionGate>
-        </div>
+        </RowActions>
       );
     },
   },
@@ -147,29 +161,15 @@ export function AdminAccountsPage() {
         emptyMessage="No accounts"
       />
 
-      <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-        <span>
-          Showing {accounts.length === 0 ? 0 : offset + 1}–{offset + accounts.length}
-        </span>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={offset === 0}
-            onClick={() => navigate({ search: { ...search, offset: Math.max(0, offset - limit) } })}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={accounts.length < limit}
-            onClick={() => navigate({ search: { ...search, offset: offset + limit } })}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+      <Pagination
+        limit={limit}
+        offset={offset}
+        count={accounts.length}
+        itemLabel="accounts"
+        onOffsetChange={(next) =>
+          navigate({ search: { ...search, offset: next === 0 ? undefined : next } })
+        }
+      />
     </div>
   );
 }

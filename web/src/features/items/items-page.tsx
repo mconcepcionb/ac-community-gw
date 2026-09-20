@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import type { AzerothItem } from "@/api";
 import { DataTable } from "@/components/common/data-table";
 import { PageHeader } from "@/components/common/page-header";
-import { Button } from "@/components/ui/button";
+import { Pagination } from "@/components/common/pagination";
 import { Input } from "@/components/ui/input";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useItems } from "./use-items";
@@ -104,29 +104,15 @@ export function ItemsPage() {
         emptyMessage="No items"
       />
 
-      <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-        <span>
-          Showing {items.length === 0 ? 0 : offset + 1}–{offset + items.length}
-        </span>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={offset === 0}
-            onClick={() => navigate({ search: { ...search, offset: Math.max(0, offset - limit) } })}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={items.length < limit}
-            onClick={() => navigate({ search: { ...search, offset: offset + limit } })}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+      <Pagination
+        limit={limit}
+        offset={offset}
+        count={items.length}
+        itemLabel="items"
+        onOffsetChange={(next) =>
+          navigate({ search: { ...search, offset: next === 0 ? undefined : next } })
+        }
+      />
     </div>
   );
 }
