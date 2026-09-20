@@ -2,7 +2,7 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 import { RequireAuth } from "@/features/auth/require-auth";
 
-export const Route = createFileRoute("/store/products")({
+export const Route = createFileRoute("/_portal/store/products")({
   component: StoreProductsLayout,
 });
 

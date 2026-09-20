@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useItems } from "./use-items";
 
-const route = getRouteApi("/items/");
+const route = getRouteApi("/_portal/items/");
 
 const columns: ColumnDef<AzerothItem, unknown>[] = [
   {

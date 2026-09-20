@@ -14,7 +14,7 @@ import { SetEmailDialog } from "./set-email-dialog";
 import { SetPasswordDialog } from "./set-password-dialog";
 import { useAccounts } from "./use-accounts";
 
-const route = getRouteApi("/accounts");
+const route = getRouteApi("/_portal/accounts");
 
 const columns: ColumnDef<AzerothAccount, unknown>[] = [
   { accessorKey: "id", header: "ID" },

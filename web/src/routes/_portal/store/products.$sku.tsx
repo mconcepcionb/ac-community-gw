@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { ProductDetailPage } from "@/features/store/product-detail-page";
 
-export const Route = createFileRoute("/store/products/$sku")({
+export const Route = createFileRoute("/_portal/store/products/$sku")({
   component: ProductRoute,
 });
 

@@ -9,213 +9,241 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AccountLinksRouteImport } from './routes/account-links'
-import { Route as AccountsRouteImport } from './routes/accounts'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as AccountLinksIndexRouteImport } from './routes/account-links.index'
-import { Route as AccountLinksUserIdRouteImport } from './routes/account-links.$userId'
+import { Route as PortalRouteImport } from './routes/_portal'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as PortalIndexRouteImport } from './routes/_portal/index'
+import { Route as PortalAccountLinksRouteImport } from './routes/_portal/account-links'
+import { Route as PortalAccountsRouteImport } from './routes/_portal/accounts'
+import { Route as PortalLoginRouteImport } from './routes/_portal/login'
+import { Route as PortalProfileRouteImport } from './routes/_portal/profile'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAccountsRouteImport } from './routes/admin/accounts'
 import { Route as AdminOnlineRouteImport } from './routes/admin/online'
-import { Route as AzerothStatusRouteImport } from './routes/azeroth/status'
-import { Route as CharactersIndexRouteImport } from './routes/characters/index'
-import { Route as CharactersNameRouteImport } from './routes/characters/$name'
-import { Route as IdentityUsersRouteImport } from './routes/identity/users'
-import { Route as ItemsIndexRouteImport } from './routes/items/index'
-import { Route as ItemsEntryRouteImport } from './routes/items/$entry'
-import { Route as StoreProductsRouteImport } from './routes/store/products'
-import { Route as StoreWalletRouteImport } from './routes/store/wallet'
-import { Route as IdentityUsersIndexRouteImport } from './routes/identity/users.index'
-import { Route as StoreProductsIndexRouteImport } from './routes/store/products.index'
-import { Route as StoreProductsSkuRouteImport } from './routes/store/products.$sku'
-import { Route as IdentityUsersUserIdCharactersRouteImport } from './routes/identity/users.$userId.characters'
+import { Route as PortalAccountLinksIndexRouteImport } from './routes/_portal/account-links.index'
+import { Route as PortalAccountLinksUserIdRouteImport } from './routes/_portal/account-links.$userId'
+import { Route as PortalAzerothStatusRouteImport } from './routes/_portal/azeroth/status'
+import { Route as PortalCharactersIndexRouteImport } from './routes/_portal/characters/index'
+import { Route as PortalCharactersNameRouteImport } from './routes/_portal/characters/$name'
+import { Route as PortalIdentityUsersRouteImport } from './routes/_portal/identity/users'
+import { Route as PortalItemsIndexRouteImport } from './routes/_portal/items/index'
+import { Route as PortalItemsEntryRouteImport } from './routes/_portal/items/$entry'
+import { Route as PortalStoreProductsRouteImport } from './routes/_portal/store/products'
+import { Route as PortalStoreWalletRouteImport } from './routes/_portal/store/wallet'
+import { Route as PortalIdentityUsersIndexRouteImport } from './routes/_portal/identity/users.index'
+import { Route as PortalStoreProductsIndexRouteImport } from './routes/_portal/store/products.index'
+import { Route as PortalStoreProductsSkuRouteImport } from './routes/_portal/store/products.$sku'
+import { Route as PortalIdentityUsersUserIdCharactersRouteImport } from './routes/_portal/identity/users.$userId.characters'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const PortalRoute = PortalRouteImport.update({
+  id: '/_portal',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AccountLinksRoute = AccountLinksRouteImport.update({
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalIndexRoute = PortalIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalAccountLinksRoute = PortalAccountLinksRouteImport.update({
   id: '/account-links',
   path: '/account-links',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PortalRoute,
 } as any)
-const AccountsRoute = AccountsRouteImport.update({
+const PortalAccountsRoute = PortalAccountsRouteImport.update({
   id: '/accounts',
   path: '/accounts',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PortalRoute,
 } as any)
-const LoginRoute = LoginRouteImport.update({
+const PortalLoginRoute = PortalLoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PortalRoute,
 } as any)
-const ProfileRoute = ProfileRouteImport.update({
+const PortalProfileRoute = PortalProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PortalRoute,
 } as any)
-const AccountLinksIndexRoute = AccountLinksIndexRouteImport.update({
+const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AccountLinksRoute,
-} as any)
-const AccountLinksUserIdRoute = AccountLinksUserIdRouteImport.update({
-  id: '/$userId',
-  path: '/$userId',
-  getParentRoute: () => AccountLinksRoute,
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminAccountsRoute = AdminAccountsRouteImport.update({
-  id: '/admin/accounts',
-  path: '/admin/accounts',
-  getParentRoute: () => rootRouteImport,
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminOnlineRoute = AdminOnlineRouteImport.update({
-  id: '/admin/online',
-  path: '/admin/online',
-  getParentRoute: () => rootRouteImport,
+  id: '/online',
+  path: '/online',
+  getParentRoute: () => AdminRoute,
 } as any)
-const AzerothStatusRoute = AzerothStatusRouteImport.update({
+const PortalAccountLinksIndexRoute = PortalAccountLinksIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalAccountLinksRoute,
+} as any)
+const PortalAccountLinksUserIdRoute =
+  PortalAccountLinksUserIdRouteImport.update({
+    id: '/$userId',
+    path: '/$userId',
+    getParentRoute: () => PortalAccountLinksRoute,
+  } as any)
+const PortalAzerothStatusRoute = PortalAzerothStatusRouteImport.update({
   id: '/azeroth/status',
   path: '/azeroth/status',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PortalRoute,
 } as any)
-const CharactersIndexRoute = CharactersIndexRouteImport.update({
+const PortalCharactersIndexRoute = PortalCharactersIndexRouteImport.update({
   id: '/characters/',
   path: '/characters/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PortalRoute,
 } as any)
-const CharactersNameRoute = CharactersNameRouteImport.update({
+const PortalCharactersNameRoute = PortalCharactersNameRouteImport.update({
   id: '/characters/$name',
   path: '/characters/$name',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PortalRoute,
 } as any)
-const IdentityUsersRoute = IdentityUsersRouteImport.update({
+const PortalIdentityUsersRoute = PortalIdentityUsersRouteImport.update({
   id: '/identity/users',
   path: '/identity/users',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PortalRoute,
 } as any)
-const ItemsIndexRoute = ItemsIndexRouteImport.update({
+const PortalItemsIndexRoute = PortalItemsIndexRouteImport.update({
   id: '/items/',
   path: '/items/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PortalRoute,
 } as any)
-const ItemsEntryRoute = ItemsEntryRouteImport.update({
+const PortalItemsEntryRoute = PortalItemsEntryRouteImport.update({
   id: '/items/$entry',
   path: '/items/$entry',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PortalRoute,
 } as any)
-const StoreProductsRoute = StoreProductsRouteImport.update({
+const PortalStoreProductsRoute = PortalStoreProductsRouteImport.update({
   id: '/store/products',
   path: '/store/products',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PortalRoute,
 } as any)
-const StoreWalletRoute = StoreWalletRouteImport.update({
+const PortalStoreWalletRoute = PortalStoreWalletRouteImport.update({
   id: '/store/wallet',
   path: '/store/wallet',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PortalRoute,
 } as any)
-const IdentityUsersIndexRoute = IdentityUsersIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => IdentityUsersRoute,
-} as any)
-const StoreProductsIndexRoute = StoreProductsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => StoreProductsRoute,
-} as any)
-const StoreProductsSkuRoute = StoreProductsSkuRouteImport.update({
+const PortalIdentityUsersIndexRoute =
+  PortalIdentityUsersIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => PortalIdentityUsersRoute,
+  } as any)
+const PortalStoreProductsIndexRoute =
+  PortalStoreProductsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => PortalStoreProductsRoute,
+  } as any)
+const PortalStoreProductsSkuRoute = PortalStoreProductsSkuRouteImport.update({
   id: '/$sku',
   path: '/$sku',
-  getParentRoute: () => StoreProductsRoute,
+  getParentRoute: () => PortalStoreProductsRoute,
 } as any)
-const IdentityUsersUserIdCharactersRoute =
-  IdentityUsersUserIdCharactersRouteImport.update({
+const PortalIdentityUsersUserIdCharactersRoute =
+  PortalIdentityUsersUserIdCharactersRouteImport.update({
     id: '/$userId/characters',
     path: '/$userId/characters',
-    getParentRoute: () => IdentityUsersRoute,
+    getParentRoute: () => PortalIdentityUsersRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/account-links': typeof AccountLinksRouteWithChildren
-  '/accounts': typeof AccountsRoute
-  '/login': typeof LoginRoute
-  '/profile': typeof ProfileRoute
-  '/account-links/$userId': typeof AccountLinksUserIdRoute
+  '/': typeof PortalIndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/account-links': typeof PortalAccountLinksRouteWithChildren
+  '/accounts': typeof PortalAccountsRoute
+  '/login': typeof PortalLoginRoute
+  '/profile': typeof PortalProfileRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/online': typeof AdminOnlineRoute
-  '/azeroth/status': typeof AzerothStatusRoute
-  '/characters/$name': typeof CharactersNameRoute
-  '/identity/users': typeof IdentityUsersRouteWithChildren
-  '/items/$entry': typeof ItemsEntryRoute
-  '/store/products': typeof StoreProductsRouteWithChildren
-  '/store/wallet': typeof StoreWalletRoute
-  '/account-links/': typeof AccountLinksIndexRoute
-  '/characters/': typeof CharactersIndexRoute
-  '/items/': typeof ItemsIndexRoute
-  '/store/products/$sku': typeof StoreProductsSkuRoute
-  '/identity/users/': typeof IdentityUsersIndexRoute
-  '/store/products/': typeof StoreProductsIndexRoute
-  '/identity/users/$userId/characters': typeof IdentityUsersUserIdCharactersRoute
+  '/admin/': typeof AdminIndexRoute
+  '/account-links/$userId': typeof PortalAccountLinksUserIdRoute
+  '/azeroth/status': typeof PortalAzerothStatusRoute
+  '/characters/$name': typeof PortalCharactersNameRoute
+  '/identity/users': typeof PortalIdentityUsersRouteWithChildren
+  '/items/$entry': typeof PortalItemsEntryRoute
+  '/store/products': typeof PortalStoreProductsRouteWithChildren
+  '/store/wallet': typeof PortalStoreWalletRoute
+  '/account-links/': typeof PortalAccountLinksIndexRoute
+  '/characters/': typeof PortalCharactersIndexRoute
+  '/items/': typeof PortalItemsIndexRoute
+  '/store/products/$sku': typeof PortalStoreProductsSkuRoute
+  '/identity/users/': typeof PortalIdentityUsersIndexRoute
+  '/store/products/': typeof PortalStoreProductsIndexRoute
+  '/identity/users/$userId/characters': typeof PortalIdentityUsersUserIdCharactersRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/accounts': typeof AccountsRoute
-  '/login': typeof LoginRoute
-  '/profile': typeof ProfileRoute
-  '/account-links/$userId': typeof AccountLinksUserIdRoute
+  '/accounts': typeof PortalAccountsRoute
+  '/login': typeof PortalLoginRoute
+  '/profile': typeof PortalProfileRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/online': typeof AdminOnlineRoute
-  '/azeroth/status': typeof AzerothStatusRoute
-  '/characters/$name': typeof CharactersNameRoute
-  '/items/$entry': typeof ItemsEntryRoute
-  '/store/wallet': typeof StoreWalletRoute
-  '/account-links': typeof AccountLinksIndexRoute
-  '/characters': typeof CharactersIndexRoute
-  '/items': typeof ItemsIndexRoute
-  '/store/products/$sku': typeof StoreProductsSkuRoute
-  '/identity/users': typeof IdentityUsersIndexRoute
-  '/store/products': typeof StoreProductsIndexRoute
-  '/identity/users/$userId/characters': typeof IdentityUsersUserIdCharactersRoute
+  '/': typeof PortalIndexRoute
+  '/admin': typeof AdminIndexRoute
+  '/account-links/$userId': typeof PortalAccountLinksUserIdRoute
+  '/azeroth/status': typeof PortalAzerothStatusRoute
+  '/characters/$name': typeof PortalCharactersNameRoute
+  '/items/$entry': typeof PortalItemsEntryRoute
+  '/store/wallet': typeof PortalStoreWalletRoute
+  '/account-links': typeof PortalAccountLinksIndexRoute
+  '/characters': typeof PortalCharactersIndexRoute
+  '/items': typeof PortalItemsIndexRoute
+  '/store/products/$sku': typeof PortalStoreProductsSkuRoute
+  '/identity/users': typeof PortalIdentityUsersIndexRoute
+  '/store/products': typeof PortalStoreProductsIndexRoute
+  '/identity/users/$userId/characters': typeof PortalIdentityUsersUserIdCharactersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/account-links': typeof AccountLinksRouteWithChildren
-  '/accounts': typeof AccountsRoute
-  '/login': typeof LoginRoute
-  '/profile': typeof ProfileRoute
-  '/account-links/$userId': typeof AccountLinksUserIdRoute
+  '/_portal': typeof PortalRouteWithChildren
+  '/admin': typeof AdminRouteWithChildren
+  '/_portal/account-links': typeof PortalAccountLinksRouteWithChildren
+  '/_portal/accounts': typeof PortalAccountsRoute
+  '/_portal/login': typeof PortalLoginRoute
+  '/_portal/profile': typeof PortalProfileRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/online': typeof AdminOnlineRoute
-  '/azeroth/status': typeof AzerothStatusRoute
-  '/characters/$name': typeof CharactersNameRoute
-  '/identity/users': typeof IdentityUsersRouteWithChildren
-  '/items/$entry': typeof ItemsEntryRoute
-  '/store/products': typeof StoreProductsRouteWithChildren
-  '/store/wallet': typeof StoreWalletRoute
-  '/account-links/': typeof AccountLinksIndexRoute
-  '/characters/': typeof CharactersIndexRoute
-  '/items/': typeof ItemsIndexRoute
-  '/store/products/$sku': typeof StoreProductsSkuRoute
-  '/identity/users/': typeof IdentityUsersIndexRoute
-  '/store/products/': typeof StoreProductsIndexRoute
-  '/identity/users/$userId/characters': typeof IdentityUsersUserIdCharactersRoute
+  '/_portal/': typeof PortalIndexRoute
+  '/admin/': typeof AdminIndexRoute
+  '/_portal/account-links/$userId': typeof PortalAccountLinksUserIdRoute
+  '/_portal/azeroth/status': typeof PortalAzerothStatusRoute
+  '/_portal/characters/$name': typeof PortalCharactersNameRoute
+  '/_portal/identity/users': typeof PortalIdentityUsersRouteWithChildren
+  '/_portal/items/$entry': typeof PortalItemsEntryRoute
+  '/_portal/store/products': typeof PortalStoreProductsRouteWithChildren
+  '/_portal/store/wallet': typeof PortalStoreWalletRoute
+  '/_portal/account-links/': typeof PortalAccountLinksIndexRoute
+  '/_portal/characters/': typeof PortalCharactersIndexRoute
+  '/_portal/items/': typeof PortalItemsIndexRoute
+  '/_portal/store/products/$sku': typeof PortalStoreProductsSkuRoute
+  '/_portal/identity/users/': typeof PortalIdentityUsersIndexRoute
+  '/_portal/store/products/': typeof PortalStoreProductsIndexRoute
+  '/_portal/identity/users/$userId/characters': typeof PortalIdentityUsersUserIdCharactersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/account-links'
     | '/accounts'
     | '/login'
     | '/profile'
-    | '/account-links/$userId'
     | '/admin/accounts'
     | '/admin/online'
+    | '/admin/'
+    | '/account-links/$userId'
     | '/azeroth/status'
     | '/characters/$name'
     | '/identity/users'
@@ -231,13 +259,14 @@ export interface FileRouteTypes {
     | '/identity/users/$userId/characters'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/accounts'
     | '/login'
     | '/profile'
-    | '/account-links/$userId'
     | '/admin/accounts'
     | '/admin/online'
+    | '/'
+    | '/admin'
+    | '/account-links/$userId'
     | '/azeroth/status'
     | '/characters/$name'
     | '/items/$entry'
@@ -251,257 +280,302 @@ export interface FileRouteTypes {
     | '/identity/users/$userId/characters'
   id:
     | '__root__'
-    | '/'
-    | '/account-links'
-    | '/accounts'
-    | '/login'
-    | '/profile'
-    | '/account-links/$userId'
+    | '/_portal'
+    | '/admin'
+    | '/_portal/account-links'
+    | '/_portal/accounts'
+    | '/_portal/login'
+    | '/_portal/profile'
     | '/admin/accounts'
     | '/admin/online'
-    | '/azeroth/status'
-    | '/characters/$name'
-    | '/identity/users'
-    | '/items/$entry'
-    | '/store/products'
-    | '/store/wallet'
-    | '/account-links/'
-    | '/characters/'
-    | '/items/'
-    | '/store/products/$sku'
-    | '/identity/users/'
-    | '/store/products/'
-    | '/identity/users/$userId/characters'
+    | '/_portal/'
+    | '/admin/'
+    | '/_portal/account-links/$userId'
+    | '/_portal/azeroth/status'
+    | '/_portal/characters/$name'
+    | '/_portal/identity/users'
+    | '/_portal/items/$entry'
+    | '/_portal/store/products'
+    | '/_portal/store/wallet'
+    | '/_portal/account-links/'
+    | '/_portal/characters/'
+    | '/_portal/items/'
+    | '/_portal/store/products/$sku'
+    | '/_portal/identity/users/'
+    | '/_portal/store/products/'
+    | '/_portal/identity/users/$userId/characters'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AccountLinksRoute: typeof AccountLinksRouteWithChildren
-  AccountsRoute: typeof AccountsRoute
-  LoginRoute: typeof LoginRoute
-  ProfileRoute: typeof ProfileRoute
-  AdminAccountsRoute: typeof AdminAccountsRoute
-  AdminOnlineRoute: typeof AdminOnlineRoute
-  AzerothStatusRoute: typeof AzerothStatusRoute
-  CharactersNameRoute: typeof CharactersNameRoute
-  IdentityUsersRoute: typeof IdentityUsersRouteWithChildren
-  ItemsEntryRoute: typeof ItemsEntryRoute
-  StoreProductsRoute: typeof StoreProductsRouteWithChildren
-  StoreWalletRoute: typeof StoreWalletRoute
-  CharactersIndexRoute: typeof CharactersIndexRoute
-  ItemsIndexRoute: typeof ItemsIndexRoute
+  PortalRoute: typeof PortalRouteWithChildren
+  AdminRoute: typeof AdminRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_portal': {
+      id: '/_portal'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_portal/': {
+      id: '/_portal/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PortalIndexRouteImport
+      parentRoute: typeof PortalRoute
     }
-    '/account-links': {
-      id: '/account-links'
+    '/_portal/account-links': {
+      id: '/_portal/account-links'
       path: '/account-links'
       fullPath: '/account-links'
-      preLoaderRoute: typeof AccountLinksRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PortalAccountLinksRouteImport
+      parentRoute: typeof PortalRoute
     }
-    '/accounts': {
-      id: '/accounts'
+    '/_portal/accounts': {
+      id: '/_portal/accounts'
       path: '/accounts'
       fullPath: '/accounts'
-      preLoaderRoute: typeof AccountsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PortalAccountsRouteImport
+      parentRoute: typeof PortalRoute
     }
-    '/login': {
-      id: '/login'
+    '/_portal/login': {
+      id: '/_portal/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PortalLoginRouteImport
+      parentRoute: typeof PortalRoute
     }
-    '/profile': {
-      id: '/profile'
+    '/_portal/profile': {
+      id: '/_portal/profile'
       path: '/profile'
       fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PortalProfileRouteImport
+      parentRoute: typeof PortalRoute
     }
-    '/account-links/': {
-      id: '/account-links/'
+    '/admin/': {
+      id: '/admin/'
       path: '/'
-      fullPath: '/account-links/'
-      preLoaderRoute: typeof AccountLinksIndexRouteImport
-      parentRoute: typeof AccountLinksRoute
-    }
-    '/account-links/$userId': {
-      id: '/account-links/$userId'
-      path: '/$userId'
-      fullPath: '/account-links/$userId'
-      preLoaderRoute: typeof AccountLinksUserIdRouteImport
-      parentRoute: typeof AccountLinksRoute
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/accounts': {
       id: '/admin/accounts'
-      path: '/admin/accounts'
+      path: '/accounts'
       fullPath: '/admin/accounts'
       preLoaderRoute: typeof AdminAccountsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/online': {
       id: '/admin/online'
-      path: '/admin/online'
+      path: '/online'
       fullPath: '/admin/online'
       preLoaderRoute: typeof AdminOnlineRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
-    '/azeroth/status': {
-      id: '/azeroth/status'
+    '/_portal/account-links/': {
+      id: '/_portal/account-links/'
+      path: '/'
+      fullPath: '/account-links/'
+      preLoaderRoute: typeof PortalAccountLinksIndexRouteImport
+      parentRoute: typeof PortalAccountLinksRoute
+    }
+    '/_portal/account-links/$userId': {
+      id: '/_portal/account-links/$userId'
+      path: '/$userId'
+      fullPath: '/account-links/$userId'
+      preLoaderRoute: typeof PortalAccountLinksUserIdRouteImport
+      parentRoute: typeof PortalAccountLinksRoute
+    }
+    '/_portal/azeroth/status': {
+      id: '/_portal/azeroth/status'
       path: '/azeroth/status'
       fullPath: '/azeroth/status'
-      preLoaderRoute: typeof AzerothStatusRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PortalAzerothStatusRouteImport
+      parentRoute: typeof PortalRoute
     }
-    '/characters/': {
-      id: '/characters/'
+    '/_portal/characters/': {
+      id: '/_portal/characters/'
       path: '/characters'
       fullPath: '/characters/'
-      preLoaderRoute: typeof CharactersIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PortalCharactersIndexRouteImport
+      parentRoute: typeof PortalRoute
     }
-    '/characters/$name': {
-      id: '/characters/$name'
+    '/_portal/characters/$name': {
+      id: '/_portal/characters/$name'
       path: '/characters/$name'
       fullPath: '/characters/$name'
-      preLoaderRoute: typeof CharactersNameRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PortalCharactersNameRouteImport
+      parentRoute: typeof PortalRoute
     }
-    '/identity/users': {
-      id: '/identity/users'
+    '/_portal/identity/users': {
+      id: '/_portal/identity/users'
       path: '/identity/users'
       fullPath: '/identity/users'
-      preLoaderRoute: typeof IdentityUsersRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PortalIdentityUsersRouteImport
+      parentRoute: typeof PortalRoute
     }
-    '/items/': {
-      id: '/items/'
+    '/_portal/items/': {
+      id: '/_portal/items/'
       path: '/items'
       fullPath: '/items/'
-      preLoaderRoute: typeof ItemsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PortalItemsIndexRouteImport
+      parentRoute: typeof PortalRoute
     }
-    '/items/$entry': {
-      id: '/items/$entry'
+    '/_portal/items/$entry': {
+      id: '/_portal/items/$entry'
       path: '/items/$entry'
       fullPath: '/items/$entry'
-      preLoaderRoute: typeof ItemsEntryRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PortalItemsEntryRouteImport
+      parentRoute: typeof PortalRoute
     }
-    '/store/products': {
-      id: '/store/products'
+    '/_portal/store/products': {
+      id: '/_portal/store/products'
       path: '/store/products'
       fullPath: '/store/products'
-      preLoaderRoute: typeof StoreProductsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PortalStoreProductsRouteImport
+      parentRoute: typeof PortalRoute
     }
-    '/store/wallet': {
-      id: '/store/wallet'
+    '/_portal/store/wallet': {
+      id: '/_portal/store/wallet'
       path: '/store/wallet'
       fullPath: '/store/wallet'
-      preLoaderRoute: typeof StoreWalletRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PortalStoreWalletRouteImport
+      parentRoute: typeof PortalRoute
     }
-    '/identity/users/': {
-      id: '/identity/users/'
+    '/_portal/identity/users/': {
+      id: '/_portal/identity/users/'
       path: '/'
       fullPath: '/identity/users/'
-      preLoaderRoute: typeof IdentityUsersIndexRouteImport
-      parentRoute: typeof IdentityUsersRoute
+      preLoaderRoute: typeof PortalIdentityUsersIndexRouteImport
+      parentRoute: typeof PortalIdentityUsersRoute
     }
-    '/store/products/': {
-      id: '/store/products/'
+    '/_portal/store/products/': {
+      id: '/_portal/store/products/'
       path: '/'
       fullPath: '/store/products/'
-      preLoaderRoute: typeof StoreProductsIndexRouteImport
-      parentRoute: typeof StoreProductsRoute
+      preLoaderRoute: typeof PortalStoreProductsIndexRouteImport
+      parentRoute: typeof PortalStoreProductsRoute
     }
-    '/store/products/$sku': {
-      id: '/store/products/$sku'
+    '/_portal/store/products/$sku': {
+      id: '/_portal/store/products/$sku'
       path: '/$sku'
       fullPath: '/store/products/$sku'
-      preLoaderRoute: typeof StoreProductsSkuRouteImport
-      parentRoute: typeof StoreProductsRoute
+      preLoaderRoute: typeof PortalStoreProductsSkuRouteImport
+      parentRoute: typeof PortalStoreProductsRoute
     }
-    '/identity/users/$userId/characters': {
-      id: '/identity/users/$userId/characters'
+    '/_portal/identity/users/$userId/characters': {
+      id: '/_portal/identity/users/$userId/characters'
       path: '/$userId/characters'
       fullPath: '/identity/users/$userId/characters'
-      preLoaderRoute: typeof IdentityUsersUserIdCharactersRouteImport
-      parentRoute: typeof IdentityUsersRoute
+      preLoaderRoute: typeof PortalIdentityUsersUserIdCharactersRouteImport
+      parentRoute: typeof PortalIdentityUsersRoute
     }
   }
 }
 
-interface AccountLinksRouteChildren {
-  AccountLinksUserIdRoute: typeof AccountLinksUserIdRoute
-  AccountLinksIndexRoute: typeof AccountLinksIndexRoute
+interface PortalAccountLinksRouteChildren {
+  PortalAccountLinksUserIdRoute: typeof PortalAccountLinksUserIdRoute
+  PortalAccountLinksIndexRoute: typeof PortalAccountLinksIndexRoute
 }
 
-const AccountLinksRouteChildren: AccountLinksRouteChildren = {
-  AccountLinksUserIdRoute: AccountLinksUserIdRoute,
-  AccountLinksIndexRoute: AccountLinksIndexRoute,
+const PortalAccountLinksRouteChildren: PortalAccountLinksRouteChildren = {
+  PortalAccountLinksUserIdRoute: PortalAccountLinksUserIdRoute,
+  PortalAccountLinksIndexRoute: PortalAccountLinksIndexRoute,
 }
 
-const AccountLinksRouteWithChildren = AccountLinksRoute._addFileChildren(
-  AccountLinksRouteChildren,
-)
+const PortalAccountLinksRouteWithChildren =
+  PortalAccountLinksRoute._addFileChildren(PortalAccountLinksRouteChildren)
 
-interface IdentityUsersRouteChildren {
-  IdentityUsersIndexRoute: typeof IdentityUsersIndexRoute
-  IdentityUsersUserIdCharactersRoute: typeof IdentityUsersUserIdCharactersRoute
+interface PortalIdentityUsersRouteChildren {
+  PortalIdentityUsersIndexRoute: typeof PortalIdentityUsersIndexRoute
+  PortalIdentityUsersUserIdCharactersRoute: typeof PortalIdentityUsersUserIdCharactersRoute
 }
 
-const IdentityUsersRouteChildren: IdentityUsersRouteChildren = {
-  IdentityUsersIndexRoute: IdentityUsersIndexRoute,
-  IdentityUsersUserIdCharactersRoute: IdentityUsersUserIdCharactersRoute,
+const PortalIdentityUsersRouteChildren: PortalIdentityUsersRouteChildren = {
+  PortalIdentityUsersIndexRoute: PortalIdentityUsersIndexRoute,
+  PortalIdentityUsersUserIdCharactersRoute:
+    PortalIdentityUsersUserIdCharactersRoute,
 }
 
-const IdentityUsersRouteWithChildren = IdentityUsersRoute._addFileChildren(
-  IdentityUsersRouteChildren,
-)
+const PortalIdentityUsersRouteWithChildren =
+  PortalIdentityUsersRoute._addFileChildren(PortalIdentityUsersRouteChildren)
 
-interface StoreProductsRouteChildren {
-  StoreProductsSkuRoute: typeof StoreProductsSkuRoute
-  StoreProductsIndexRoute: typeof StoreProductsIndexRoute
+interface PortalStoreProductsRouteChildren {
+  PortalStoreProductsSkuRoute: typeof PortalStoreProductsSkuRoute
+  PortalStoreProductsIndexRoute: typeof PortalStoreProductsIndexRoute
 }
 
-const StoreProductsRouteChildren: StoreProductsRouteChildren = {
-  StoreProductsSkuRoute: StoreProductsSkuRoute,
-  StoreProductsIndexRoute: StoreProductsIndexRoute,
+const PortalStoreProductsRouteChildren: PortalStoreProductsRouteChildren = {
+  PortalStoreProductsSkuRoute: PortalStoreProductsSkuRoute,
+  PortalStoreProductsIndexRoute: PortalStoreProductsIndexRoute,
 }
 
-const StoreProductsRouteWithChildren = StoreProductsRoute._addFileChildren(
-  StoreProductsRouteChildren,
-)
+const PortalStoreProductsRouteWithChildren =
+  PortalStoreProductsRoute._addFileChildren(PortalStoreProductsRouteChildren)
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AccountLinksRoute: AccountLinksRouteWithChildren,
-  AccountsRoute: AccountsRoute,
-  LoginRoute: LoginRoute,
-  ProfileRoute: ProfileRoute,
+interface PortalRouteChildren {
+  PortalAccountLinksRoute: typeof PortalAccountLinksRouteWithChildren
+  PortalAccountsRoute: typeof PortalAccountsRoute
+  PortalLoginRoute: typeof PortalLoginRoute
+  PortalProfileRoute: typeof PortalProfileRoute
+  PortalIndexRoute: typeof PortalIndexRoute
+  PortalAzerothStatusRoute: typeof PortalAzerothStatusRoute
+  PortalCharactersNameRoute: typeof PortalCharactersNameRoute
+  PortalIdentityUsersRoute: typeof PortalIdentityUsersRouteWithChildren
+  PortalItemsEntryRoute: typeof PortalItemsEntryRoute
+  PortalStoreProductsRoute: typeof PortalStoreProductsRouteWithChildren
+  PortalStoreWalletRoute: typeof PortalStoreWalletRoute
+  PortalCharactersIndexRoute: typeof PortalCharactersIndexRoute
+  PortalItemsIndexRoute: typeof PortalItemsIndexRoute
+}
+
+const PortalRouteChildren: PortalRouteChildren = {
+  PortalAccountLinksRoute: PortalAccountLinksRouteWithChildren,
+  PortalAccountsRoute: PortalAccountsRoute,
+  PortalLoginRoute: PortalLoginRoute,
+  PortalProfileRoute: PortalProfileRoute,
+  PortalIndexRoute: PortalIndexRoute,
+  PortalAzerothStatusRoute: PortalAzerothStatusRoute,
+  PortalCharactersNameRoute: PortalCharactersNameRoute,
+  PortalIdentityUsersRoute: PortalIdentityUsersRouteWithChildren,
+  PortalItemsEntryRoute: PortalItemsEntryRoute,
+  PortalStoreProductsRoute: PortalStoreProductsRouteWithChildren,
+  PortalStoreWalletRoute: PortalStoreWalletRoute,
+  PortalCharactersIndexRoute: PortalCharactersIndexRoute,
+  PortalItemsIndexRoute: PortalItemsIndexRoute,
+}
+
+const PortalRouteWithChildren =
+  PortalRoute._addFileChildren(PortalRouteChildren)
+
+interface AdminRouteChildren {
+  AdminAccountsRoute: typeof AdminAccountsRoute
+  AdminOnlineRoute: typeof AdminOnlineRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
   AdminAccountsRoute: AdminAccountsRoute,
   AdminOnlineRoute: AdminOnlineRoute,
-  AzerothStatusRoute: AzerothStatusRoute,
-  CharactersNameRoute: CharactersNameRoute,
-  IdentityUsersRoute: IdentityUsersRouteWithChildren,
-  ItemsEntryRoute: ItemsEntryRoute,
-  StoreProductsRoute: StoreProductsRouteWithChildren,
-  StoreWalletRoute: StoreWalletRoute,
-  CharactersIndexRoute: CharactersIndexRoute,
-  ItemsIndexRoute: ItemsIndexRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  PortalRoute: PortalRouteWithChildren,
+  AdminRoute: AdminRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

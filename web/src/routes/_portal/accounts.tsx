@@ -1,29 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
-
+import { AccountsPage } from "@/features/accounts/accounts-page";
 import { RequireAuth } from "@/features/auth/require-auth";
-import { ItemsPage } from "@/features/items/items-page";
 
-interface ItemsSearch {
+interface AccountsSearch {
   filter?: string;
-  class?: number;
   limit?: number;
   offset?: number;
 }
 
-export const Route = createFileRoute("/items/")({
-  validateSearch: (search: Record<string, unknown>): ItemsSearch => ({
+export const Route = createFileRoute("/_portal/accounts")({
+  validateSearch: (search: Record<string, unknown>): AccountsSearch => ({
     filter: typeof search.filter === "string" && search.filter !== "" ? search.filter : undefined,
-    class: typeof search.class === "number" ? search.class : undefined,
     limit: typeof search.limit === "number" ? search.limit : undefined,
     offset: typeof search.offset === "number" ? search.offset : undefined,
   }),
-  component: ItemsRoute,
+  component: AccountsRoute,
 });
 
-function ItemsRoute() {
+function AccountsRoute() {
   return (
     <RequireAuth>
-      <ItemsPage />
+      <AccountsPage />
     </RequireAuth>
   );
 }

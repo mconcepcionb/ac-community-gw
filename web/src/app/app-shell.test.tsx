@@ -6,22 +6,33 @@ import { describe, expect, it } from "vitest";
 import { routeTree } from "@/routeTree.gen";
 import { createQueryClient } from "./query-client";
 
-describe("app shell", () => {
-  it("renders the root layout with header, outlet and footer at /", async () => {
-    const queryClient = createQueryClient();
-    const router = createRouter({
-      routeTree,
-      context: { queryClient },
-      history: createMemoryHistory({ initialEntries: ["/"] }),
-    });
+function renderAt(path: string) {
+  const queryClient = createQueryClient();
+  const router = createRouter({
+    routeTree,
+    context: { queryClient },
+    history: createMemoryHistory({ initialEntries: [path] }),
+  });
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>,
-    );
+  render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>,
+  );
+}
+
+describe("app shell", () => {
+  it("renders the portal layout at /", async () => {
+    renderAt("/");
 
     expect(await screen.findByText("Community users")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "ac-community-gw" })).toBeInTheDocument();
+  });
+
+  it("renders the console layout at /admin", async () => {
+    renderAt("/admin");
+
+    expect(await screen.findByText("Operations console")).toBeInTheDocument();
+    expect(screen.getByText("console")).toBeInTheDocument();
   });
 });

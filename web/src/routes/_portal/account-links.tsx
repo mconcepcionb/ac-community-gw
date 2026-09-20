@@ -2,7 +2,7 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 import { RequireAuth } from "@/features/auth/require-auth";
 
-export const Route = createFileRoute("/account-links")({
+export const Route = createFileRoute("/_portal/account-links")({
   component: AccountLinksLayout,
 });
 

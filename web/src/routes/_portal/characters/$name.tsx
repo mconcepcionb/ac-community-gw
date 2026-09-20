@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { RequireAuth } from "@/features/auth/require-auth";
 import { CharacterDetailPage } from "@/features/characters/character-detail-page";
 
-export const Route = createFileRoute("/characters/$name")({
+export const Route = createFileRoute("/_portal/characters/$name")({
   component: CharacterRoute,
 });
 

@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { isSafeReturnTo, login } from "@/features/auth/actions";
 import { useSession } from "@/features/auth/use-session";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/_portal/login")({
   validateSearch: (search: Record<string, unknown>): { return_to?: string } => ({
     return_to: typeof search.return_to === "string" ? search.return_to : undefined,
   }),

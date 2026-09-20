@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useCharacters } from "./use-characters";
 
-const route = getRouteApi("/characters/");
+const route = getRouteApi("/_portal/characters/");
 
 const columns: ColumnDef<AzerothCharacter, unknown>[] = [
   {

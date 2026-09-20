@@ -8,7 +8,7 @@ interface UsersSearch {
   offset?: number;
 }
 
-export const Route = createFileRoute("/identity/users/")({
+export const Route = createFileRoute("/_portal/identity/users/")({
   validateSearch: (search: Record<string, unknown>): UsersSearch => ({
     filter: typeof search.filter === "string" && search.filter !== "" ? search.filter : undefined,
     limit: typeof search.limit === "number" ? search.limit : undefined,

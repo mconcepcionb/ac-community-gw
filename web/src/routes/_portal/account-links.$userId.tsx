@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { AccountLinkDetailPage } from "@/features/account-links/account-link-detail-page";
 
-export const Route = createFileRoute("/account-links/$userId")({
+export const Route = createFileRoute("/_portal/account-links/$userId")({
   component: AccountLinkRoute,
 });
 

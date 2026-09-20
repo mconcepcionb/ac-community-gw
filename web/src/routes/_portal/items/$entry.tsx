@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { RequireAuth } from "@/features/auth/require-auth";
 import { ItemDetailPage } from "@/features/items/item-detail-page";
 
-export const Route = createFileRoute("/items/$entry")({
+export const Route = createFileRoute("/_portal/items/$entry")({
   component: ItemRoute,
 });
 

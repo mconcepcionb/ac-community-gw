@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useUsers } from "./use-users";
 
-const route = getRouteApi("/identity/users/");
+const route = getRouteApi("/_portal/identity/users/");
 
 const columns: ColumnDef<User, unknown>[] = [
   { accessorKey: "username", header: "Username" },
