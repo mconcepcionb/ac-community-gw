@@ -384,42 +384,27 @@ func newDiscordProvider(cfg *config.Config) (auth.DiscordProvider, error) {
 	})
 }
 
-func newAccountReader(cfg *config.Config, logger *slog.Logger) (azerothdb.AccountReader, func(), error) {
+func newAccountReader(cfg *config.Config, _ *slog.Logger) (azerothdb.AccountReader, func(), error) {
 	if cfg.Azeroth.LoginDBDSN == "" {
 		return nil, nil, nil
 	}
-	client, err := azerothmysql.New(azerothmysql.Config{DSN: cfg.Azeroth.LoginDBDSN})
-	if err != nil {
-		logger.Warn("azeroth login database unavailable; account listing will report an error", "error", err)
-		return azerothdb.Unavailable{Err: err}, nil, nil
-	}
-	logger.Info("azeroth login database connected")
-	return client, func() { _ = client.Close() }, nil
+	reader := azerothmysql.NewLazyAccountReader(azerothmysql.Config{DSN: cfg.Azeroth.LoginDBDSN})
+	return reader, func() { _ = reader.Close() }, nil
 }
 
-func newCharacterReader(cfg *config.Config, logger *slog.Logger) (azerothdb.CharacterReader, func(), error) {
+func newCharacterReader(cfg *config.Config, _ *slog.Logger) (azerothdb.CharacterReader, func(), error) {
 	if cfg.Azeroth.CharacterDBDSN == "" {
 		return nil, nil, nil
 	}
-	store, err := azerothmysql.NewCharacterStore(azerothmysql.Config{DSN: cfg.Azeroth.CharacterDBDSN})
-	if err != nil {
-		logger.Warn("azeroth character database unavailable; character reads will report an error", "error", err)
-		return azerothdb.UnavailableCharacters{Err: err}, nil, nil
-	}
-	logger.Info("azeroth character database connected")
+	store := azerothmysql.NewLazyCharacterStore(azerothmysql.Config{DSN: cfg.Azeroth.CharacterDBDSN})
 	return store, func() { _ = store.Close() }, nil
 }
 
-func newItemReader(cfg *config.Config, logger *slog.Logger) (azerothdb.ItemReader, func(), error) {
+func newItemReader(cfg *config.Config, _ *slog.Logger) (azerothdb.ItemReader, func(), error) {
 	if cfg.Azeroth.WorldDBDSN == "" {
 		return nil, nil, nil
 	}
-	store, err := azerothmysql.NewItemStore(azerothmysql.Config{DSN: cfg.Azeroth.WorldDBDSN})
-	if err != nil {
-		logger.Warn("azeroth world database unavailable; item catalog will report an error", "error", err)
-		return azerothdb.UnavailableItems{Err: err}, nil, nil
-	}
-	logger.Info("azeroth world database connected")
+	store := azerothmysql.NewLazyItemStore(azerothmysql.Config{DSN: cfg.Azeroth.WorldDBDSN})
 	return store, func() { _ = store.Close() }, nil
 }
 
