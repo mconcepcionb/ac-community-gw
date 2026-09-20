@@ -3266,6 +3266,78 @@ export type AzerothPlayersUnmuteResponses = {
 
 export type AzerothPlayersUnmuteResponse = AzerothPlayersUnmuteResponses[keyof AzerothPlayersUnmuteResponses];
 
+export type AzerothPublicLeaderboardsGetData = {
+    body?: never;
+    path: {
+        /**
+         * board: progression, wealth, playtime or pvp
+         */
+        board: string;
+    };
+    query?: {
+        /**
+         * page size
+         */
+        limit?: number;
+        /**
+         * page offset
+         */
+        offset?: number;
+    };
+    url: '/api/v1/azeroth/public/leaderboards/{board}';
+};
+
+export type AzerothPublicLeaderboardsGetErrors = {
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothPublicLeaderboardsGetError = AzerothPublicLeaderboardsGetErrors[keyof AzerothPublicLeaderboardsGetErrors];
+
+export type AzerothPublicLeaderboardsGetResponses = {
+    /**
+     * OK
+     */
+    200: AzerothLeaderboardResponse;
+};
+
+export type AzerothPublicLeaderboardsGetResponse = AzerothPublicLeaderboardsGetResponses[keyof AzerothPublicLeaderboardsGetResponses];
+
+export type AzerothPublicStatusData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/azeroth/public/status';
+};
+
+export type AzerothPublicStatusErrors = {
+    /**
+     * Bad Gateway
+     */
+    502: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothPublicStatusError = AzerothPublicStatusErrors[keyof AzerothPublicStatusErrors];
+
+export type AzerothPublicStatusResponses = {
+    /**
+     * OK
+     */
+    200: AzerothStatusResponse;
+};
+
+export type AzerothPublicStatusResponse = AzerothPublicStatusResponses[keyof AzerothPublicStatusResponses];
+
 export type AzerothUserCharactersListData = {
     body?: never;
     path: {
@@ -3403,78 +3475,6 @@ export type AuthMeResponses = {
 };
 
 export type AuthMeResponse = AuthMeResponses[keyof AuthMeResponses];
-
-export type AzerothPublicLeaderboardsGetData = {
-    body?: never;
-    path: {
-        /**
-         * board: progression, wealth, playtime or pvp
-         */
-        board: string;
-    };
-    query?: {
-        /**
-         * page size
-         */
-        limit?: number;
-        /**
-         * page offset
-         */
-        offset?: number;
-    };
-    url: '/api/v1/public/leaderboards/{board}';
-};
-
-export type AzerothPublicLeaderboardsGetErrors = {
-    /**
-     * Not Found
-     */
-    404: ErrorResponse;
-    /**
-     * Service Unavailable
-     */
-    503: ErrorResponse;
-};
-
-export type AzerothPublicLeaderboardsGetError = AzerothPublicLeaderboardsGetErrors[keyof AzerothPublicLeaderboardsGetErrors];
-
-export type AzerothPublicLeaderboardsGetResponses = {
-    /**
-     * OK
-     */
-    200: AzerothLeaderboardResponse;
-};
-
-export type AzerothPublicLeaderboardsGetResponse = AzerothPublicLeaderboardsGetResponses[keyof AzerothPublicLeaderboardsGetResponses];
-
-export type AzerothPublicStatusData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/api/v1/public/status';
-};
-
-export type AzerothPublicStatusErrors = {
-    /**
-     * Bad Gateway
-     */
-    502: ErrorResponse;
-    /**
-     * Service Unavailable
-     */
-    503: ErrorResponse;
-};
-
-export type AzerothPublicStatusError = AzerothPublicStatusErrors[keyof AzerothPublicStatusErrors];
-
-export type AzerothPublicStatusResponses = {
-    /**
-     * OK
-     */
-    200: AzerothStatusResponse;
-};
-
-export type AzerothPublicStatusResponse = AzerothPublicStatusResponses[keyof AzerothPublicStatusResponses];
 
 export type ReportsCreateData = {
     /**

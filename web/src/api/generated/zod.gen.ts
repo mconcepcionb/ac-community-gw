@@ -1186,6 +1186,25 @@ export const zAzerothPlayersUnmutePath = z.object({
  */
 export const zAzerothPlayersUnmuteResponse = zCommandResult;
 
+export const zAzerothPublicLeaderboardsGetPath = z.object({
+    board: z.string()
+});
+
+export const zAzerothPublicLeaderboardsGetQuery = z.object({
+    limit: z.int().optional().default(25),
+    offset: z.int().optional().default(0)
+});
+
+/**
+ * OK
+ */
+export const zAzerothPublicLeaderboardsGetResponse = zAzerothLeaderboardResponse;
+
+/**
+ * OK
+ */
+export const zAzerothPublicStatusResponse = zAzerothStatusResponse;
+
 export const zAzerothUserCharactersListPath = z.object({
     user_id: z.string()
 });
@@ -1216,25 +1235,6 @@ export const zIdentityUsersListResponse = zListUsersResponse;
  * OK
  */
 export const zAuthMeResponse = zMeResponse;
-
-export const zAzerothPublicLeaderboardsGetPath = z.object({
-    board: z.string()
-});
-
-export const zAzerothPublicLeaderboardsGetQuery = z.object({
-    limit: z.int().optional().default(25),
-    offset: z.int().optional().default(0)
-});
-
-/**
- * OK
- */
-export const zAzerothPublicLeaderboardsGetResponse = zAzerothLeaderboardResponse;
-
-/**
- * OK
- */
-export const zAzerothPublicStatusResponse = zAzerothStatusResponse;
 
 /**
  * report

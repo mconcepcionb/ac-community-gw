@@ -593,6 +593,20 @@ export const azerothPlayersMute = <ThrowOnError extends boolean = false>(options
 export const azerothPlayersUnmute = <ThrowOnError extends boolean = false>(options: Options<AzerothPlayersUnmuteData, ThrowOnError>): RequestResult<AzerothPlayersUnmuteResponses, AzerothPlayersUnmuteErrors, ThrowOnError> => (options.client ?? client).post<AzerothPlayersUnmuteResponses, AzerothPlayersUnmuteErrors, ThrowOnError>({ url: '/api/v1/azeroth/players/{name}/unmute', ...options });
 
 /**
+ * Public character leaderboard
+ *
+ * Ranks opted-in characters without authentication. Cached briefly and rate-limited per IP.
+ */
+export const azerothPublicLeaderboardsGet = <ThrowOnError extends boolean = false>(options: Options<AzerothPublicLeaderboardsGetData, ThrowOnError>): RequestResult<AzerothPublicLeaderboardsGetResponses, AzerothPublicLeaderboardsGetErrors, ThrowOnError> => (options.client ?? client).get<AzerothPublicLeaderboardsGetResponses, AzerothPublicLeaderboardsGetErrors, ThrowOnError>({ url: '/api/v1/azeroth/public/leaderboards/{board}', ...options });
+
+/**
+ * Public server status
+ *
+ * Reports connected players, peak, queue and uptime without authentication. Cached briefly and rate-limited per IP.
+ */
+export const azerothPublicStatus = <ThrowOnError extends boolean = false>(options?: Options<AzerothPublicStatusData, ThrowOnError>): RequestResult<AzerothPublicStatusResponses, AzerothPublicStatusErrors, ThrowOnError> => (options?.client ?? client).get<AzerothPublicStatusResponses, AzerothPublicStatusErrors, ThrowOnError>({ url: '/api/v1/azeroth/public/status', ...options });
+
+/**
  * List a community user's characters
  *
  * Resolves the user's linked AzerothCore account and lists its characters. Requires the azeroth.character.list permission.
@@ -612,20 +626,6 @@ export const identityUsersList = <ThrowOnError extends boolean = false>(options?
  * Returns the authenticated community user with their Discord profile, internal roles and effective permissions.
  */
 export const authMe = <ThrowOnError extends boolean = false>(options?: Options<AuthMeData, ThrowOnError>): RequestResult<AuthMeResponses, AuthMeErrors, ThrowOnError> => (options?.client ?? client).get<AuthMeResponses, AuthMeErrors, ThrowOnError>({ url: '/api/v1/me', ...options });
-
-/**
- * Public character leaderboard
- *
- * Ranks opted-in characters without authentication. Cached briefly and rate-limited per IP.
- */
-export const azerothPublicLeaderboardsGet = <ThrowOnError extends boolean = false>(options: Options<AzerothPublicLeaderboardsGetData, ThrowOnError>): RequestResult<AzerothPublicLeaderboardsGetResponses, AzerothPublicLeaderboardsGetErrors, ThrowOnError> => (options.client ?? client).get<AzerothPublicLeaderboardsGetResponses, AzerothPublicLeaderboardsGetErrors, ThrowOnError>({ url: '/api/v1/public/leaderboards/{board}', ...options });
-
-/**
- * Public server status
- *
- * Reports connected players, peak, queue and uptime without authentication. Cached briefly and rate-limited per IP.
- */
-export const azerothPublicStatus = <ThrowOnError extends boolean = false>(options?: Options<AzerothPublicStatusData, ThrowOnError>): RequestResult<AzerothPublicStatusResponses, AzerothPublicStatusErrors, ThrowOnError> => (options?.client ?? client).get<AzerothPublicStatusResponses, AzerothPublicStatusErrors, ThrowOnError>({ url: '/api/v1/public/status', ...options });
 
 /**
  * Submit a report

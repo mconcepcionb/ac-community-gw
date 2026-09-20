@@ -4072,6 +4072,79 @@ paths:
       summary: Unmute a player
       tags:
       - azeroth-admin
+  /api/v1/azeroth/public/leaderboards/{board}:
+    get:
+      description: Ranks opted-in characters without authentication. Cached briefly
+        and rate-limited per IP.
+      operationId: azeroth.public.leaderboards.get
+      parameters:
+      - description: 'board: progression, wealth, playtime or pvp'
+        in: path
+        name: board
+        required: true
+        schema:
+          type: string
+      - description: page size
+        in: query
+        name: limit
+        schema:
+          default: 25
+          type: integer
+      - description: page offset
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothLeaderboardResponse'
+          description: OK
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Public character leaderboard
+      tags:
+      - azeroth-character
+  /api/v1/azeroth/public/status:
+    get:
+      description: Reports connected players, peak, queue and uptime without authentication.
+        Cached briefly and rate-limited per IP.
+      operationId: azeroth.public.status
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothStatusResponse'
+          description: OK
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Public server status
+      tags:
+      - azeroth-info
   /api/v1/azeroth/users/{user_id}/characters:
     get:
       description: Resolves the user's linked AzerothCore account and lists its characters.
@@ -4225,79 +4298,6 @@ paths:
       summary: Current principal
       tags:
       - auth
-  /api/v1/public/leaderboards/{board}:
-    get:
-      description: Ranks opted-in characters without authentication. Cached briefly
-        and rate-limited per IP.
-      operationId: azeroth.public.leaderboards.get
-      parameters:
-      - description: 'board: progression, wealth, playtime or pvp'
-        in: path
-        name: board
-        required: true
-        schema:
-          type: string
-      - description: page size
-        in: query
-        name: limit
-        schema:
-          default: 25
-          type: integer
-      - description: page offset
-        in: query
-        name: offset
-        schema:
-          default: 0
-          type: integer
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AzerothLeaderboardResponse'
-          description: OK
-        "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Not Found
-        "503":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Service Unavailable
-      summary: Public character leaderboard
-      tags:
-      - azeroth-character
-  /api/v1/public/status:
-    get:
-      description: Reports connected players, peak, queue and uptime without authentication.
-        Cached briefly and rate-limited per IP.
-      operationId: azeroth.public.status
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AzerothStatusResponse'
-          description: OK
-        "502":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Bad Gateway
-        "503":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Service Unavailable
-      summary: Public server status
-      tags:
-      - azeroth-info
   /api/v1/reports:
     post:
       description: Reports another player. Requires the gw.report.create permission.

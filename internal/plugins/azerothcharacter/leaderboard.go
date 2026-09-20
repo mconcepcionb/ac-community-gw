@@ -66,7 +66,7 @@ func (p *Plugin) handleLeaderboard(w http.ResponseWriter, r *http.Request) {
 	httpapi.WriteJSON(w, http.StatusOK, response)
 }
 
-// handlePublicLeaderboard handles GET /api/v1/public/leaderboards/{board}.
+// handlePublicLeaderboard handles GET /api/v1/azeroth/public/leaderboards/{board}.
 //
 //	@Summary		Public character leaderboard
 //	@Description	Ranks opted-in characters without authentication. Cached briefly and rate-limited per IP.
@@ -79,7 +79,7 @@ func (p *Plugin) handleLeaderboard(w http.ResponseWriter, r *http.Request) {
 //	@Success		200	{object}	LeaderboardResponse
 //	@Failure		404	{object}	httpapi.ErrorResponse
 //	@Failure		503	{object}	httpapi.ErrorResponse
-//	@Router			/api/v1/public/leaderboards/{board} [get]
+//	@Router			/api/v1/azeroth/public/leaderboards/{board} [get]
 func (p *Plugin) handlePublicLeaderboard(w http.ResponseWriter, r *http.Request) {
 	board := strings.TrimSpace(r.PathValue("board"))
 	if !azerothdb.ValidLeaderboard(board) {

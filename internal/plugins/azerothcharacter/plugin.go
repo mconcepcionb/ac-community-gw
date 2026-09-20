@@ -108,7 +108,7 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		reg.RequirePermission(PermissionCharacterSelf, http.HandlerFunc(p.handleSetVisibility)))
 	reg.Mux.Handle("GET /api/v1/azeroth/leaderboards/{board}",
 		reg.RequirePermission(PermissionLeaderboardRead, http.HandlerFunc(p.handleLeaderboard)))
-	reg.Mux.Handle("GET /api/v1/public/leaderboards/{board}",
+	reg.Mux.Handle("GET /api/v1/azeroth/public/leaderboards/{board}",
 		rateLimit(reg, http.HandlerFunc(p.handlePublicLeaderboard)))
 	if err := services.Provide[Directory](reg.Services, DirectoryService, p); err != nil {
 		return err

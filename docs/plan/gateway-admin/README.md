@@ -18,7 +18,7 @@ plugins (and vice versa), which will not survive a second game.
 | Move community user 360 into the gateway plugin | implemented (002) |
 | Move the audit viewer and `gw.audit.read` | implemented (001, 003) |
 | Correct game routes wrongly under `/admin` | implemented (004) |
-| Decide the `/public/*` surface ownership | planned |
+| Decide the `/public/*` surface ownership | implemented (005); game public data moved under `/azeroth/public/*`, gateway aggregator deferred |
 | Move the permission catalog out of `apikeys` | planned |
 | SPA console route and nav split (core vs per-game) | planned |
 | SPA portal route split (core vs per-game) | planned |

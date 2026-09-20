@@ -66,12 +66,12 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 	}
 	reg.Mux.Handle("GET /api/v1/azeroth/info/status",
 		reg.RequirePermission(PermissionInfoPublicRead, http.HandlerFunc(p.handleStatus)))
-	reg.Mux.Handle("GET /api/v1/public/status",
+	reg.Mux.Handle("GET /api/v1/azeroth/public/status",
 		rateLimit(reg, http.HandlerFunc(p.handlePublicStatus)))
 	return nil
 }
 
-// handlePublicStatus handles GET /api/v1/public/status.
+// handlePublicStatus handles GET /api/v1/azeroth/public/status.
 //
 //	@Summary		Public server status
 //	@Description	Reports connected players, peak, queue and uptime without authentication. Cached briefly and rate-limited per IP.
@@ -81,7 +81,7 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 //	@Success		200	{object}	StatusResponse
 //	@Failure		502	{object}	httpapi.ErrorResponse
 //	@Failure		503	{object}	httpapi.ErrorResponse
-//	@Router			/api/v1/public/status [get]
+//	@Router			/api/v1/azeroth/public/status [get]
 func (p *Plugin) handlePublicStatus(w http.ResponseWriter, r *http.Request) {
 	if cached, ok := p.statusCache.Get("status"); ok {
 		httpapi.WriteJSON(w, http.StatusOK, cached)

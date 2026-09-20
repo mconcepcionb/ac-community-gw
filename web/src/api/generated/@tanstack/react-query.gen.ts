@@ -1502,6 +1502,78 @@ export const azerothPlayersUnmuteMutation = (options?: Partial<Options<AzerothPl
     return mutationOptions;
 };
 
+export const azerothPublicLeaderboardsGetQueryKey = (options: Options<AzerothPublicLeaderboardsGetData>) => createQueryKey('azerothPublicLeaderboardsGet', options);
+
+/**
+ * Public character leaderboard
+ *
+ * Ranks opted-in characters without authentication. Cached briefly and rate-limited per IP.
+ */
+export const azerothPublicLeaderboardsGetOptions = (options: Options<AzerothPublicLeaderboardsGetData>) => queryOptions<AzerothPublicLeaderboardsGetResponse, AzerothPublicLeaderboardsGetError, AzerothPublicLeaderboardsGetResponse, ReturnType<typeof azerothPublicLeaderboardsGetQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await azerothPublicLeaderboardsGet({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: azerothPublicLeaderboardsGetQueryKey(options)
+});
+
+export const azerothPublicLeaderboardsGetInfiniteQueryKey = (options: Options<AzerothPublicLeaderboardsGetData>): QueryKey<Options<AzerothPublicLeaderboardsGetData>> => createQueryKey('azerothPublicLeaderboardsGet', options, true);
+
+/**
+ * Public character leaderboard
+ *
+ * Ranks opted-in characters without authentication. Cached briefly and rate-limited per IP.
+ */
+export const azerothPublicLeaderboardsGetInfiniteOptions = (options: Options<AzerothPublicLeaderboardsGetData>) => {
+    const opts = infiniteQueryOptions<AzerothPublicLeaderboardsGetResponse, AzerothPublicLeaderboardsGetError, InfiniteData<AzerothPublicLeaderboardsGetResponse>, QueryKey<Options<AzerothPublicLeaderboardsGetData>>, number | Pick<QueryKey<Options<AzerothPublicLeaderboardsGetData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
+    // @ts-ignore
+    {
+        queryFn: async ({ pageParam, queryKey, signal }) => {
+            // @ts-ignore
+            const page: Pick<QueryKey<Options<AzerothPublicLeaderboardsGetData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
+                query: {
+                    offset: pageParam
+                }
+            };
+            const params = createInfiniteParams(queryKey, page);
+            const { data } = await azerothPublicLeaderboardsGet({
+                ...options,
+                ...params,
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: azerothPublicLeaderboardsGetInfiniteQueryKey(options)
+    });
+    return opts as Omit<typeof opts, 'initialData'>;
+};
+
+export const azerothPublicStatusQueryKey = (options?: Options<AzerothPublicStatusData>) => createQueryKey('azerothPublicStatus', options);
+
+/**
+ * Public server status
+ *
+ * Reports connected players, peak, queue and uptime without authentication. Cached briefly and rate-limited per IP.
+ */
+export const azerothPublicStatusOptions = (options?: Options<AzerothPublicStatusData>) => queryOptions<AzerothPublicStatusResponse, AzerothPublicStatusError, AzerothPublicStatusResponse, ReturnType<typeof azerothPublicStatusQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await azerothPublicStatus({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: azerothPublicStatusQueryKey(options)
+});
+
 export const azerothUserCharactersListQueryKey = (options: Options<AzerothUserCharactersListData>) => createQueryKey('azerothUserCharactersList', options);
 
 /**
@@ -1624,78 +1696,6 @@ export const authMeOptions = (options?: Options<AuthMeData>) => queryOptions<Aut
         return data;
     },
     queryKey: authMeQueryKey(options)
-});
-
-export const azerothPublicLeaderboardsGetQueryKey = (options: Options<AzerothPublicLeaderboardsGetData>) => createQueryKey('azerothPublicLeaderboardsGet', options);
-
-/**
- * Public character leaderboard
- *
- * Ranks opted-in characters without authentication. Cached briefly and rate-limited per IP.
- */
-export const azerothPublicLeaderboardsGetOptions = (options: Options<AzerothPublicLeaderboardsGetData>) => queryOptions<AzerothPublicLeaderboardsGetResponse, AzerothPublicLeaderboardsGetError, AzerothPublicLeaderboardsGetResponse, ReturnType<typeof azerothPublicLeaderboardsGetQueryKey>>({
-    queryFn: async ({ queryKey, signal }) => {
-        const { data } = await azerothPublicLeaderboardsGet({
-            ...options,
-            ...queryKey[0],
-            signal,
-            throwOnError: true
-        });
-        return data;
-    },
-    queryKey: azerothPublicLeaderboardsGetQueryKey(options)
-});
-
-export const azerothPublicLeaderboardsGetInfiniteQueryKey = (options: Options<AzerothPublicLeaderboardsGetData>): QueryKey<Options<AzerothPublicLeaderboardsGetData>> => createQueryKey('azerothPublicLeaderboardsGet', options, true);
-
-/**
- * Public character leaderboard
- *
- * Ranks opted-in characters without authentication. Cached briefly and rate-limited per IP.
- */
-export const azerothPublicLeaderboardsGetInfiniteOptions = (options: Options<AzerothPublicLeaderboardsGetData>) => {
-    const opts = infiniteQueryOptions<AzerothPublicLeaderboardsGetResponse, AzerothPublicLeaderboardsGetError, InfiniteData<AzerothPublicLeaderboardsGetResponse>, QueryKey<Options<AzerothPublicLeaderboardsGetData>>, number | Pick<QueryKey<Options<AzerothPublicLeaderboardsGetData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
-    // @ts-ignore
-    {
-        queryFn: async ({ pageParam, queryKey, signal }) => {
-            // @ts-ignore
-            const page: Pick<QueryKey<Options<AzerothPublicLeaderboardsGetData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
-                query: {
-                    offset: pageParam
-                }
-            };
-            const params = createInfiniteParams(queryKey, page);
-            const { data } = await azerothPublicLeaderboardsGet({
-                ...options,
-                ...params,
-                signal,
-                throwOnError: true
-            });
-            return data;
-        },
-        queryKey: azerothPublicLeaderboardsGetInfiniteQueryKey(options)
-    });
-    return opts as Omit<typeof opts, 'initialData'>;
-};
-
-export const azerothPublicStatusQueryKey = (options?: Options<AzerothPublicStatusData>) => createQueryKey('azerothPublicStatus', options);
-
-/**
- * Public server status
- *
- * Reports connected players, peak, queue and uptime without authentication. Cached briefly and rate-limited per IP.
- */
-export const azerothPublicStatusOptions = (options?: Options<AzerothPublicStatusData>) => queryOptions<AzerothPublicStatusResponse, AzerothPublicStatusError, AzerothPublicStatusResponse, ReturnType<typeof azerothPublicStatusQueryKey>>({
-    queryFn: async ({ queryKey, signal }) => {
-        const { data } = await azerothPublicStatus({
-            ...options,
-            ...queryKey[0],
-            signal,
-            throwOnError: true
-        });
-        return data;
-    },
-    queryKey: azerothPublicStatusQueryKey(options)
 });
 
 /**
