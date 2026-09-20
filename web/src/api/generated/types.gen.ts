@@ -599,39 +599,6 @@ export type User = {
     username?: string;
 };
 
-export type AzerothAdminAccountClaimsListData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/api/v1/admin/account-claims';
-};
-
-export type AzerothAdminAccountClaimsListErrors = {
-    /**
-     * Unauthorized
-     */
-    401: ErrorResponse;
-    /**
-     * Forbidden
-     */
-    403: ErrorResponse;
-    /**
-     * Service Unavailable
-     */
-    503: ErrorResponse;
-};
-
-export type AzerothAdminAccountClaimsListError = AzerothAdminAccountClaimsListErrors[keyof AzerothAdminAccountClaimsListErrors];
-
-export type AzerothAdminAccountClaimsListResponses = {
-    /**
-     * OK
-     */
-    200: AzerothAdminClaimsResponse;
-};
-
-export type AzerothAdminAccountClaimsListResponse = AzerothAdminAccountClaimsListResponses[keyof AzerothAdminAccountClaimsListResponses];
-
 export type AdminNotesListData = {
     body?: never;
     path?: never;
@@ -1063,59 +1030,6 @@ export type GatewayAdminAuditListResponses = {
 };
 
 export type GatewayAdminAuditListResponse = GatewayAdminAuditListResponses[keyof GatewayAdminAuditListResponses];
-
-export type AzerothAdminCharactersMailData = {
-    /**
-     * delivery request
-     */
-    body: AzerothSendMailRequest;
-    path: {
-        /**
-         * character name
-         */
-        name: string;
-    };
-    query?: never;
-    url: '/api/v1/admin/characters/{name}/mail';
-};
-
-export type AzerothAdminCharactersMailErrors = {
-    /**
-     * Bad Request
-     */
-    400: ErrorResponse;
-    /**
-     * Unauthorized
-     */
-    401: ErrorResponse;
-    /**
-     * Forbidden
-     */
-    403: ErrorResponse;
-    /**
-     * Not Found
-     */
-    404: ErrorResponse;
-    /**
-     * Unprocessable Entity
-     */
-    422: ErrorResponse;
-    /**
-     * Bad Gateway
-     */
-    502: ErrorResponse;
-};
-
-export type AzerothAdminCharactersMailError = AzerothAdminCharactersMailErrors[keyof AzerothAdminCharactersMailErrors];
-
-export type AzerothAdminCharactersMailResponses = {
-    /**
-     * OK
-     */
-    200: AzerothSendMailResponse;
-};
-
-export type AzerothAdminCharactersMailResponse = AzerothAdminCharactersMailResponses[keyof AzerothAdminCharactersMailResponses];
 
 export type IdentityAdminDiscordMappingsDeleteData = {
     body?: never;
@@ -2252,6 +2166,92 @@ export type AzerothAccountsUnbanResponses = {
 };
 
 export type AzerothAccountsUnbanResponse = AzerothAccountsUnbanResponses[keyof AzerothAccountsUnbanResponses];
+
+export type AzerothAdminAccountClaimsListData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/azeroth/admin/account-claims';
+};
+
+export type AzerothAdminAccountClaimsListErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothAdminAccountClaimsListError = AzerothAdminAccountClaimsListErrors[keyof AzerothAdminAccountClaimsListErrors];
+
+export type AzerothAdminAccountClaimsListResponses = {
+    /**
+     * OK
+     */
+    200: AzerothAdminClaimsResponse;
+};
+
+export type AzerothAdminAccountClaimsListResponse = AzerothAdminAccountClaimsListResponses[keyof AzerothAdminAccountClaimsListResponses];
+
+export type AzerothAdminCharactersMailData = {
+    /**
+     * delivery request
+     */
+    body: AzerothSendMailRequest;
+    path: {
+        /**
+         * character name
+         */
+        name: string;
+    };
+    query?: never;
+    url: '/api/v1/azeroth/admin/characters/{name}/mail';
+};
+
+export type AzerothAdminCharactersMailErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Bad Gateway
+     */
+    502: ErrorResponse;
+};
+
+export type AzerothAdminCharactersMailError = AzerothAdminCharactersMailErrors[keyof AzerothAdminCharactersMailErrors];
+
+export type AzerothAdminCharactersMailResponses = {
+    /**
+     * OK
+     */
+    200: AzerothSendMailResponse;
+};
+
+export type AzerothAdminCharactersMailResponse = AzerothAdminCharactersMailResponses[keyof AzerothAdminCharactersMailResponses];
 
 export type AzerothAnnounceSendData = {
     /**

@@ -155,7 +155,7 @@ describe("CharacterDetailPage", () => {
       ),
       ...detailHandlers(),
       http.post(
-        "http://localhost:8080/api/v1/admin/characters/Thrall/mail",
+        "http://localhost:8080/api/v1/azeroth/admin/characters/Thrall/mail",
         async ({ request }) => {
           mailBody = await request.json();
           return HttpResponse.json({ recipient: "Thrall", results: ["sent"] });

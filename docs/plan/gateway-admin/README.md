@@ -17,7 +17,7 @@ plugins (and vice versa), which will not survive a second game.
 | Gateway admin plugin (skeleton, wiring, ownership) | implemented (001) |
 | Move community user 360 into the gateway plugin | implemented (002) |
 | Move the audit viewer and `gw.audit.read` | implemented (001, 003) |
-| Correct game routes wrongly under `/admin` | planned |
+| Correct game routes wrongly under `/admin` | implemented (004) |
 | Decide the `/public/*` surface ownership | planned |
 | Move the permission catalog out of `apikeys` | planned |
 | SPA console route and nav split (core vs per-game) | planned |

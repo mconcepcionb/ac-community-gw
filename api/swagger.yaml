@@ -1052,39 +1052,6 @@ info:
   version: "1.0"
 openapi: 3.1.0
 paths:
-  /api/v1/admin/account-claims:
-    get:
-      description: Lists pending account claims (without the code hash). Requires
-        the azeroth.admin.claims.read permission.
-      operationId: azeroth.admin.account_claims.list
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AzerothAdminClaimsResponse'
-          description: OK
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Unauthorized
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Forbidden
-        "503":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Service Unavailable
-      summary: List account claims
-      tags:
-      - azeroth-account
   /api/v1/admin/annotations:
     get:
       description: Lists the staff annotations of one target, newest first. Requires
@@ -1569,71 +1536,6 @@ paths:
       summary: Read the audit log
       tags:
       - gateway-admin
-  /api/v1/admin/characters/{name}/mail:
-    post:
-      description: Delivers items and/or money to any character. Requires the azeroth.admin.mail.send
-        permission.
-      operationId: azeroth.admin.characters.mail
-      parameters:
-      - description: character name
-        in: path
-        name: name
-        required: true
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AzerothSendMailRequest'
-        description: delivery request
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AzerothSendMailResponse'
-          description: OK
-        "400":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Bad Request
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Unauthorized
-        "403":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Forbidden
-        "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Not Found
-        "422":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Unprocessable Entity
-        "502":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Bad Gateway
-      summary: Send in-game mail as staff
-      tags:
-      - azeroth-character
   /api/v1/admin/discord-role-mappings/{discord_role_id}:
     delete:
       description: Removes a Discord role mapping. Requires the gw.identity.roles.manage
@@ -2906,6 +2808,104 @@ paths:
       summary: Unban an account
       tags:
       - azeroth-admin
+  /api/v1/azeroth/admin/account-claims:
+    get:
+      description: Lists pending account claims (without the code hash). Requires
+        the azeroth.admin.claims.read permission.
+      operationId: azeroth.admin.account_claims.list
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothAdminClaimsResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List account claims
+      tags:
+      - azeroth-account
+  /api/v1/azeroth/admin/characters/{name}/mail:
+    post:
+      description: Delivers items and/or money to any character. Requires the azeroth.admin.mail.send
+        permission.
+      operationId: azeroth.admin.characters.mail
+      parameters:
+      - description: character name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AzerothSendMailRequest'
+        description: delivery request
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothSendMailResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Send in-game mail as staff
+      tags:
+      - azeroth-character
   /api/v1/azeroth/announce:
     post:
       description: Sends a server-wide announcement. Requires the azeroth.admin.announce

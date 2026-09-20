@@ -39,26 +39,6 @@ const createQueryKey = <TOptions extends Options>(id: string, options?: TOptions
     return [params];
 };
 
-export const azerothAdminAccountClaimsListQueryKey = (options?: Options<AzerothAdminAccountClaimsListData>) => createQueryKey('azerothAdminAccountClaimsList', options);
-
-/**
- * List account claims
- *
- * Lists pending account claims (without the code hash). Requires the azeroth.admin.claims.read permission.
- */
-export const azerothAdminAccountClaimsListOptions = (options?: Options<AzerothAdminAccountClaimsListData>) => queryOptions<AzerothAdminAccountClaimsListResponse, AzerothAdminAccountClaimsListError, AzerothAdminAccountClaimsListResponse, ReturnType<typeof azerothAdminAccountClaimsListQueryKey>>({
-    queryFn: async ({ queryKey, signal }) => {
-        const { data } = await azerothAdminAccountClaimsList({
-            ...options,
-            ...queryKey[0],
-            signal,
-            throwOnError: true
-        });
-        return data;
-    },
-    queryKey: azerothAdminAccountClaimsListQueryKey(options)
-});
-
 export const adminNotesListQueryKey = (options: Options<AdminNotesListData>) => createQueryKey('adminNotesList', options);
 
 /**
@@ -324,25 +304,6 @@ export const gatewayAdminAuditListInfiniteOptions = (options?: Options<GatewayAd
         queryKey: gatewayAdminAuditListInfiniteQueryKey(options)
     });
     return opts as Omit<typeof opts, 'initialData'>;
-};
-
-/**
- * Send in-game mail as staff
- *
- * Delivers items and/or money to any character. Requires the azeroth.admin.mail.send permission.
- */
-export const azerothAdminCharactersMailMutation = (options?: Partial<Options<AzerothAdminCharactersMailData>>): UseMutationOptions<AzerothAdminCharactersMailResponse, AzerothAdminCharactersMailError, Options<AzerothAdminCharactersMailData>> => {
-    const mutationOptions: UseMutationOptions<AzerothAdminCharactersMailResponse, AzerothAdminCharactersMailError, Options<AzerothAdminCharactersMailData>> = {
-        mutationFn: async (fnOptions) => {
-            const { data } = await azerothAdminCharactersMail({
-                ...options,
-                ...fnOptions,
-                throwOnError: true
-            });
-            return data;
-        }
-    };
-    return mutationOptions;
 };
 
 /**
@@ -936,6 +897,45 @@ export const azerothAccountsUnbanMutation = (options?: Partial<Options<AzerothAc
     const mutationOptions: UseMutationOptions<AzerothAccountsUnbanResponse, AzerothAccountsUnbanError, Options<AzerothAccountsUnbanData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await azerothAccountsUnban({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const azerothAdminAccountClaimsListQueryKey = (options?: Options<AzerothAdminAccountClaimsListData>) => createQueryKey('azerothAdminAccountClaimsList', options);
+
+/**
+ * List account claims
+ *
+ * Lists pending account claims (without the code hash). Requires the azeroth.admin.claims.read permission.
+ */
+export const azerothAdminAccountClaimsListOptions = (options?: Options<AzerothAdminAccountClaimsListData>) => queryOptions<AzerothAdminAccountClaimsListResponse, AzerothAdminAccountClaimsListError, AzerothAdminAccountClaimsListResponse, ReturnType<typeof azerothAdminAccountClaimsListQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await azerothAdminAccountClaimsList({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: azerothAdminAccountClaimsListQueryKey(options)
+});
+
+/**
+ * Send in-game mail as staff
+ *
+ * Delivers items and/or money to any character. Requires the azeroth.admin.mail.send permission.
+ */
+export const azerothAdminCharactersMailMutation = (options?: Partial<Options<AzerothAdminCharactersMailData>>): UseMutationOptions<AzerothAdminCharactersMailResponse, AzerothAdminCharactersMailError, Options<AzerothAdminCharactersMailData>> => {
+    const mutationOptions: UseMutationOptions<AzerothAdminCharactersMailResponse, AzerothAdminCharactersMailError, Options<AzerothAdminCharactersMailData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await azerothAdminCharactersMail({
                 ...options,
                 ...fnOptions,
                 throwOnError: true

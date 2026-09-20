@@ -96,7 +96,7 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		reg.RequirePermission(PermissionCharacterList, http.HandlerFunc(p.handleListUserCharacters)))
 	reg.Mux.Handle("POST /api/v1/azeroth/mail",
 		reg.RequirePermission(PermissionMailSend, http.HandlerFunc(p.handleSendMail)))
-	reg.Mux.Handle("POST /api/v1/admin/characters/{name}/mail",
+	reg.Mux.Handle("POST /api/v1/azeroth/admin/characters/{name}/mail",
 		reg.RequirePermission(PermissionAdminMailSend, http.HandlerFunc(p.handleAdminMail)))
 	reg.Mux.Handle("GET /api/v1/azeroth/me/characters",
 		reg.RequirePermission(PermissionCharacterSelf, http.HandlerFunc(p.handleMyCharacters)))

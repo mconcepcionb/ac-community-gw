@@ -297,12 +297,12 @@ type AdminClaim struct {
 	Attempts        int    `json:"attempts"`
 } // @name AzerothAdminClaim
 
-// AdminClaimsResponse is the body of GET /api/v1/admin/account-claims.
+// AdminClaimsResponse is the body of GET /api/v1/azeroth/admin/account-claims.
 type AdminClaimsResponse struct {
 	Claims []AdminClaim `json:"claims"`
 } // @name AzerothAdminClaimsResponse
 
-// handleListClaims handles GET /api/v1/admin/account-claims.
+// handleListClaims handles GET /api/v1/azeroth/admin/account-claims.
 //
 //	@Summary		List account claims
 //	@Description	Lists pending account claims (without the code hash). Requires the azeroth.admin.claims.read permission.
@@ -313,7 +313,7 @@ type AdminClaimsResponse struct {
 //	@Failure		401	{object}	httpapi.ErrorResponse
 //	@Failure		403	{object}	httpapi.ErrorResponse
 //	@Failure		503	{object}	httpapi.ErrorResponse
-//	@Router			/api/v1/admin/account-claims [get]
+//	@Router			/api/v1/azeroth/admin/account-claims [get]
 func (p *Plugin) handleListClaims(w http.ResponseWriter, r *http.Request) {
 	if p.claims == nil {
 		httpapi.WriteError(w, r, errClaimUnavailable)

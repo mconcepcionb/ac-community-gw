@@ -593,11 +593,6 @@ export const zListUsersResponse = z.object({
     users: z.array(zUser).optional()
 });
 
-/**
- * OK
- */
-export const zAzerothAdminAccountClaimsListResponse = zAzerothAdminClaimsResponse;
-
 export const zAdminNotesListQuery = z.object({
     target_type: z.string(),
     target_id: z.string(),
@@ -692,20 +687,6 @@ export const zGatewayAdminAuditListQuery = z.object({
  * OK
  */
 export const zGatewayAdminAuditListResponse = zAdminAuditResponse;
-
-/**
- * delivery request
- */
-export const zAzerothAdminCharactersMailBody = zAzerothSendMailRequest;
-
-export const zAzerothAdminCharactersMailPath = z.object({
-    name: z.string()
-});
-
-/**
- * OK
- */
-export const zAzerothAdminCharactersMailResponse = zAzerothSendMailResponse;
 
 export const zIdentityAdminDiscordMappingsDeletePath = z.object({
     discord_role_id: z.string()
@@ -963,6 +944,25 @@ export const zAzerothAccountsUnbanPath = z.object({
  * OK
  */
 export const zAzerothAccountsUnbanResponse = zCommandResult;
+
+/**
+ * OK
+ */
+export const zAzerothAdminAccountClaimsListResponse = zAzerothAdminClaimsResponse;
+
+/**
+ * delivery request
+ */
+export const zAzerothAdminCharactersMailBody = zAzerothSendMailRequest;
+
+export const zAzerothAdminCharactersMailPath = z.object({
+    name: z.string()
+});
+
+/**
+ * OK
+ */
+export const zAzerothAdminCharactersMailResponse = zAzerothSendMailResponse;
 
 /**
  * announcement

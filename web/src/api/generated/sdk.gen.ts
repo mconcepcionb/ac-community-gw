@@ -19,13 +19,6 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 };
 
 /**
- * List account claims
- *
- * Lists pending account claims (without the code hash). Requires the azeroth.admin.claims.read permission.
- */
-export const azerothAdminAccountClaimsList = <ThrowOnError extends boolean = false>(options?: Options<AzerothAdminAccountClaimsListData, ThrowOnError>): RequestResult<AzerothAdminAccountClaimsListResponses, AzerothAdminAccountClaimsListErrors, ThrowOnError> => (options?.client ?? client).get<AzerothAdminAccountClaimsListResponses, AzerothAdminAccountClaimsListErrors, ThrowOnError>({ url: '/api/v1/admin/account-claims', ...options });
-
-/**
  * List annotations
  *
  * Lists the staff annotations of one target, newest first. Requires gw.notes.read.
@@ -108,20 +101,6 @@ export const apikeysRotate = <ThrowOnError extends boolean = false>(options: Opt
  * Lists audit entries, newest first, filterable by actor, target, action and time range. Requires the gw.audit.read permission.
  */
 export const gatewayAdminAuditList = <ThrowOnError extends boolean = false>(options?: Options<GatewayAdminAuditListData, ThrowOnError>): RequestResult<GatewayAdminAuditListResponses, GatewayAdminAuditListErrors, ThrowOnError> => (options?.client ?? client).get<GatewayAdminAuditListResponses, GatewayAdminAuditListErrors, ThrowOnError>({ url: '/api/v1/admin/audit', ...options });
-
-/**
- * Send in-game mail as staff
- *
- * Delivers items and/or money to any character. Requires the azeroth.admin.mail.send permission.
- */
-export const azerothAdminCharactersMail = <ThrowOnError extends boolean = false>(options: Options<AzerothAdminCharactersMailData, ThrowOnError>): RequestResult<AzerothAdminCharactersMailResponses, AzerothAdminCharactersMailErrors, ThrowOnError> => (options.client ?? client).post<AzerothAdminCharactersMailResponses, AzerothAdminCharactersMailErrors, ThrowOnError>({
-    url: '/api/v1/admin/characters/{name}/mail',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
 
 /**
  * Delete a Discord role mapping
@@ -367,6 +346,27 @@ export const azerothAccountsSetPassword = <ThrowOnError extends boolean = false>
  * Lifts the ban on an AzerothCore account. Requires the azeroth.admin.accounts.ban permission.
  */
 export const azerothAccountsUnban = <ThrowOnError extends boolean = false>(options: Options<AzerothAccountsUnbanData, ThrowOnError>): RequestResult<AzerothAccountsUnbanResponses, AzerothAccountsUnbanErrors, ThrowOnError> => (options.client ?? client).post<AzerothAccountsUnbanResponses, AzerothAccountsUnbanErrors, ThrowOnError>({ url: '/api/v1/azeroth/accounts/{username}/unban', ...options });
+
+/**
+ * List account claims
+ *
+ * Lists pending account claims (without the code hash). Requires the azeroth.admin.claims.read permission.
+ */
+export const azerothAdminAccountClaimsList = <ThrowOnError extends boolean = false>(options?: Options<AzerothAdminAccountClaimsListData, ThrowOnError>): RequestResult<AzerothAdminAccountClaimsListResponses, AzerothAdminAccountClaimsListErrors, ThrowOnError> => (options?.client ?? client).get<AzerothAdminAccountClaimsListResponses, AzerothAdminAccountClaimsListErrors, ThrowOnError>({ url: '/api/v1/azeroth/admin/account-claims', ...options });
+
+/**
+ * Send in-game mail as staff
+ *
+ * Delivers items and/or money to any character. Requires the azeroth.admin.mail.send permission.
+ */
+export const azerothAdminCharactersMail = <ThrowOnError extends boolean = false>(options: Options<AzerothAdminCharactersMailData, ThrowOnError>): RequestResult<AzerothAdminCharactersMailResponses, AzerothAdminCharactersMailErrors, ThrowOnError> => (options.client ?? client).post<AzerothAdminCharactersMailResponses, AzerothAdminCharactersMailErrors, ThrowOnError>({
+    url: '/api/v1/azeroth/admin/characters/{name}/mail',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Broadcast an announcement

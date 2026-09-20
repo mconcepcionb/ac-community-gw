@@ -118,7 +118,7 @@ func (p *Plugin) handleSendMail(w http.ResponseWriter, r *http.Request) {
 	httpapi.WriteJSON(w, http.StatusOK, SendMailResponse{Recipient: recipient, Results: results})
 }
 
-// handleAdminMail handles POST /api/v1/admin/characters/{name}/mail. It sends
+// handleAdminMail handles POST /api/v1/azeroth/admin/characters/{name}/mail. It sends
 // mail to any character without an ownership check.
 //
 //	@Summary		Send in-game mail as staff
@@ -136,7 +136,7 @@ func (p *Plugin) handleSendMail(w http.ResponseWriter, r *http.Request) {
 //	@Failure		404	{object}	httpapi.ErrorResponse
 //	@Failure		422	{object}	httpapi.ErrorResponse
 //	@Failure		502	{object}	httpapi.ErrorResponse
-//	@Router			/api/v1/admin/characters/{name}/mail [post]
+//	@Router			/api/v1/azeroth/admin/characters/{name}/mail [post]
 func (p *Plugin) handleAdminMail(w http.ResponseWriter, r *http.Request) {
 	var req SendMailRequest
 	if err := httpapi.DecodeJSON(r, &req); err != nil {

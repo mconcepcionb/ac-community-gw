@@ -71,7 +71,7 @@ func TestAdminMailBypassesOwnership(t *testing.T) {
 		Characters: &fakeCharacters{characters: []azerothdb.Character{{Name: "Thrall", AccountID: 5}}},
 	})
 
-	req := httptest.NewRequest(http.MethodPost, "/api/v1/admin/characters/Thrall/mail",
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/azeroth/admin/characters/Thrall/mail",
 		strings.NewReader(`{"money":100}`))
 	req.SetPathValue("name", "Thrall")
 	rec := httptest.NewRecorder()
@@ -89,7 +89,7 @@ func TestAdminMailRejectsUnknownCharacter(t *testing.T) {
 	executor := &fakeExecutor{result: "should not run"}
 	plugin := New(Config{Executor: executor, Characters: &fakeCharacters{}})
 
-	req := httptest.NewRequest(http.MethodPost, "/api/v1/admin/characters/Ghost/mail",
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/azeroth/admin/characters/Ghost/mail",
 		strings.NewReader(`{"money":100}`))
 	req.SetPathValue("name", "Ghost")
 	rec := httptest.NewRecorder()
