@@ -72,6 +72,17 @@ export type AzerothAccountsResponse = {
     accounts?: Array<AzerothAccount>;
 };
 
+export type AzerothAdminClaim = {
+    account_username?: string;
+    attempts?: number;
+    expires_at?: string;
+    user_id?: string;
+};
+
+export type AzerothAdminClaimsResponse = {
+    claims?: Array<AzerothAdminClaim>;
+};
+
 export type AzerothCharacter = {
     class?: number;
     class_name?: string;
@@ -402,6 +413,10 @@ export type StorePurchaseRequest = {
     sku?: string;
 };
 
+export type StoreResolveOrderRequest = {
+    reason?: string;
+};
+
 export type StoreWalletResponse = {
     balance?: number;
     user_id?: string;
@@ -421,6 +436,39 @@ export type User = {
     user_id?: string;
     username?: string;
 };
+
+export type AzerothAdminAccountClaimsListData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/admin/account-claims';
+};
+
+export type AzerothAdminAccountClaimsListErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothAdminAccountClaimsListError = AzerothAdminAccountClaimsListErrors[keyof AzerothAdminAccountClaimsListErrors];
+
+export type AzerothAdminAccountClaimsListResponses = {
+    /**
+     * OK
+     */
+    200: AzerothAdminClaimsResponse;
+};
+
+export type AzerothAdminAccountClaimsListResponse = AzerothAdminAccountClaimsListResponses[keyof AzerothAdminAccountClaimsListResponses];
 
 export type ReportsListData = {
     body?: never;
@@ -559,6 +607,113 @@ export type StoreAdminOrdersListResponses = {
 };
 
 export type StoreAdminOrdersListResponse = StoreAdminOrdersListResponses[keyof StoreAdminOrdersListResponses];
+
+export type StoreAdminOrdersRefundData = {
+    /**
+     * reason
+     */
+    body?: StoreResolveOrderRequest;
+    path: {
+        /**
+         * order id
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/store/orders/{id}/refund';
+};
+
+export type StoreAdminOrdersRefundErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Conflict
+     */
+    409: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type StoreAdminOrdersRefundError = StoreAdminOrdersRefundErrors[keyof StoreAdminOrdersRefundErrors];
+
+export type StoreAdminOrdersRefundResponses = {
+    /**
+     * OK
+     */
+    200: StoreOrder;
+};
+
+export type StoreAdminOrdersRefundResponse = StoreAdminOrdersRefundResponses[keyof StoreAdminOrdersRefundResponses];
+
+export type StoreAdminOrdersRetryData = {
+    body?: never;
+    path: {
+        /**
+         * order id
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/store/orders/{id}/retry';
+};
+
+export type StoreAdminOrdersRetryErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Conflict
+     */
+    409: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Bad Gateway
+     */
+    502: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type StoreAdminOrdersRetryError = StoreAdminOrdersRetryErrors[keyof StoreAdminOrdersRetryErrors];
+
+export type StoreAdminOrdersRetryResponses = {
+    /**
+     * OK
+     */
+    200: StoreOrder;
+};
+
+export type StoreAdminOrdersRetryResponse = StoreAdminOrdersRetryResponses[keyof StoreAdminOrdersRetryResponses];
 
 export type AzerothAdminUsersGetData = {
     body?: never;

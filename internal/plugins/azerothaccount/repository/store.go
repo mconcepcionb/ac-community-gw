@@ -117,6 +117,22 @@ func (s *Store) DeleteClaim(ctx context.Context, userID uuid.UUID) error {
 	return s.q.DeleteAccountClaim(ctx, userID)
 }
 
+// ListClaims lists pending claims, newest first.
+func (s *Store) ListClaims(ctx context.Context, limit, offset int) ([]domain.Claim, error) {
+	rows, err := s.q.ListAccountClaims(ctx, azerothaccountrepo.ListAccountClaimsParams{
+		Limit:  int32(limit),
+		Offset: int32(offset),
+	})
+	if err != nil {
+		return nil, fmt.Errorf("repository: list claims: %w", err)
+	}
+	claims := make([]domain.Claim, 0, len(rows))
+	for _, row := range rows {
+		claims = append(claims, toClaim(row))
+	}
+	return claims, nil
+}
+
 func toClaim(row azerothaccountrepo.AccountClaim) domain.Claim {
 	return domain.Claim{
 		UserID:          row.UserID,

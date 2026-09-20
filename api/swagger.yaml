@@ -132,6 +132,25 @@ components:
           type: array
           uniqueItems: false
       type: object
+    AzerothAdminClaim:
+      properties:
+        account_username:
+          type: string
+        attempts:
+          type: integer
+        expires_at:
+          type: string
+        user_id:
+          type: string
+      type: object
+    AzerothAdminClaimsResponse:
+      properties:
+        claims:
+          items:
+            $ref: '#/components/schemas/AzerothAdminClaim'
+          type: array
+          uniqueItems: false
+      type: object
     AzerothCharacter:
       properties:
         class:
@@ -695,6 +714,11 @@ components:
         sku:
           type: string
       type: object
+    StoreResolveOrderRequest:
+      properties:
+        reason:
+          type: string
+      type: object
     StoreWalletResponse:
       properties:
         balance:
@@ -737,6 +761,39 @@ info:
   version: "1.0"
 openapi: 3.1.0
 paths:
+  /api/v1/admin/account-claims:
+    get:
+      description: Lists pending account claims (without the code hash). Requires
+        the azeroth.admin.claims.read permission.
+      operationId: azeroth.admin.account_claims.list
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothAdminClaimsResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List account claims
+      tags:
+      - azeroth-account
   /api/v1/admin/reports:
     get:
       description: Lists every report, newest first, optionally filtered by status.
@@ -888,6 +945,134 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Service Unavailable
       summary: List all orders
+      tags:
+      - store
+  /api/v1/admin/store/orders/{id}/refund:
+    post:
+      description: Marks a pending order failed and refunds its points. Requires the
+        store.admin.orders.resolve permission.
+      operationId: store.admin.orders.refund
+      parameters:
+      - description: order id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreResolveOrderRequest'
+        description: reason
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreOrder'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Conflict
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Refund a stuck order
+      tags:
+      - store
+  /api/v1/admin/store/orders/{id}/retry:
+    post:
+      description: Re-delivers a pending order's reward and completes it. Requires
+        the store.admin.orders.resolve permission.
+      operationId: store.admin.orders.retry
+      parameters:
+      - description: order id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreOrder'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Conflict
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Retry a stuck order
       tags:
       - store
   /api/v1/admin/users/{id}:

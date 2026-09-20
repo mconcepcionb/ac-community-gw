@@ -143,6 +143,8 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 	reg.Mux.Handle("POST /api/v1/azeroth/me/account/claim/verify",
 		rateLimit(reg, reg.RequirePermission(PermissionAccountSelf,
 			http.HandlerFunc(p.handleVerifyClaim))))
+	reg.Mux.Handle("GET /api/v1/admin/account-claims",
+		reg.RequirePermission(PermissionAdminClaimsRead, http.HandlerFunc(p.handleListClaims)))
 
 	return services.Provide[AccountDirectory](reg.Services, ServiceAccountDirectory, p)
 }

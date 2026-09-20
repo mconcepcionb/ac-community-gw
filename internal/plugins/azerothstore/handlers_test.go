@@ -149,6 +149,14 @@ func (f *fakeStore) AdminOrders(_ context.Context, status string, _, _ int) ([]d
 	return out, nil
 }
 
+func (f *fakeStore) OrderByID(_ context.Context, id uuid.UUID) (domain.Order, error) {
+	order, ok := f.orders[id]
+	if !ok {
+		return domain.Order{}, domain.ErrOrderNotFound
+	}
+	return order, nil
+}
+
 type fakeDelivery struct {
 	err  error
 	last delivery.Request

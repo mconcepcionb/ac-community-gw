@@ -37,6 +37,7 @@ type ClaimStore interface {
 	GetClaim(ctx context.Context, userID uuid.UUID) (domain.Claim, error)
 	IncrementClaimAttempts(ctx context.Context, userID uuid.UUID) (domain.Claim, error)
 	DeleteClaim(ctx context.Context, userID uuid.UUID) error
+	ListClaims(ctx context.Context, limit, offset int) ([]domain.Claim, error)
 }
 
 var (
@@ -286,4 +287,51 @@ func generateClaimCode() (string, error) {
 func hashCode(code string) string {
 	sum := sha256.Sum256([]byte(code))
 	return hex.EncodeToString(sum[:])
+}
+
+// AdminClaim is a pending claim without the secret hash.
+type AdminClaim struct {
+	UserID          string `json:"user_id"`
+	AccountUsername string `json:"account_username"`
+	ExpiresAt       string `json:"expires_at"`
+	Attempts        int    `json:"attempts"`
+} // @name AzerothAdminClaim
+
+// AdminClaimsResponse is the body of GET /api/v1/admin/account-claims.
+type AdminClaimsResponse struct {
+	Claims []AdminClaim `json:"claims"`
+} // @name AzerothAdminClaimsResponse
+
+// handleListClaims handles GET /api/v1/admin/account-claims.
+//
+//	@Summary		List account claims
+//	@Description	Lists pending account claims (without the code hash). Requires the azeroth.admin.claims.read permission.
+//	@Tags			azeroth-account
+//	@ID				azeroth.admin.account_claims.list
+//	@Produce		json
+//	@Success		200	{object}	AdminClaimsResponse
+//	@Failure		401	{object}	httpapi.ErrorResponse
+//	@Failure		403	{object}	httpapi.ErrorResponse
+//	@Failure		503	{object}	httpapi.ErrorResponse
+//	@Router			/api/v1/admin/account-claims [get]
+func (p *Plugin) handleListClaims(w http.ResponseWriter, r *http.Request) {
+	if p.claims == nil {
+		httpapi.WriteError(w, r, errClaimUnavailable)
+		return
+	}
+	claims, err := p.claims.ListClaims(r.Context(), 50, 0)
+	if err != nil {
+		httpapi.WriteError(w, r, errClaimUnavailable)
+		return
+	}
+	items := make([]AdminClaim, 0, len(claims))
+	for _, claim := range claims {
+		items = append(items, AdminClaim{
+			UserID:          claim.UserID.String(),
+			AccountUsername: claim.AccountUsername,
+			ExpiresAt:       claim.ExpiresAt.UTC().Format(time.RFC3339),
+			Attempts:        claim.Attempts,
+		})
+	}
+	httpapi.WriteJSON(w, http.StatusOK, AdminClaimsResponse{Claims: items})
 }

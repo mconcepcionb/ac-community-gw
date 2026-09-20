@@ -21,6 +21,10 @@ export const CONSOLE_PERMISSIONS = [
   "azeroth.item.list",
   "store.admin.products",
   "store.admin.wallets",
+  "store.admin.orders.read",
+  "store.admin.orders.resolve",
+  "azeroth.admin.claims.read",
+  "report.read",
 ] as const;
 
 /** hasAnyConsolePermission reports whether the principal may open the console. */

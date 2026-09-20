@@ -21,6 +21,7 @@ import { Route as PortalStatusRouteImport } from './routes/_portal/status'
 import { Route as PortalWalletRouteImport } from './routes/_portal/wallet'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAccountsRouteImport } from './routes/admin/accounts'
+import { Route as AdminModerationRouteImport } from './routes/admin/moderation'
 import { Route as AdminOnlineRouteImport } from './routes/admin/online'
 import { Route as AdminStoreRouteImport } from './routes/admin/store'
 import { Route as PortalCharactersIndexRouteImport } from './routes/_portal/characters/index'
@@ -94,6 +95,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminAccountsRoute = AdminAccountsRouteImport.update({
   id: '/accounts',
   path: '/accounts',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminModerationRoute = AdminModerationRouteImport.update({
+  id: '/moderation',
+  path: '/moderation',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminOnlineRoute = AdminOnlineRouteImport.update({
@@ -183,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/status': typeof PortalStatusRoute
   '/wallet': typeof PortalWalletRoute
   '/admin/accounts': typeof AdminAccountsRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/admin/online': typeof AdminOnlineRoute
   '/admin/store': typeof AdminStoreRouteWithChildren
   '/admin/': typeof AdminIndexRoute
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/status': typeof PortalStatusRoute
   '/wallet': typeof PortalWalletRoute
   '/admin/accounts': typeof AdminAccountsRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/admin/online': typeof AdminOnlineRoute
   '/': typeof PortalIndexRoute
   '/admin': typeof AdminIndexRoute
@@ -238,6 +246,7 @@ export interface FileRoutesById {
   '/_portal/status': typeof PortalStatusRoute
   '/_portal/wallet': typeof PortalWalletRoute
   '/admin/accounts': typeof AdminAccountsRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/admin/online': typeof AdminOnlineRoute
   '/admin/store': typeof AdminStoreRouteWithChildren
   '/_portal/': typeof PortalIndexRoute
@@ -269,6 +278,7 @@ export interface FileRouteTypes {
     | '/status'
     | '/wallet'
     | '/admin/accounts'
+    | '/admin/moderation'
     | '/admin/online'
     | '/admin/store'
     | '/admin/'
@@ -295,6 +305,7 @@ export interface FileRouteTypes {
     | '/status'
     | '/wallet'
     | '/admin/accounts'
+    | '/admin/moderation'
     | '/admin/online'
     | '/'
     | '/admin'
@@ -323,6 +334,7 @@ export interface FileRouteTypes {
     | '/_portal/status'
     | '/_portal/wallet'
     | '/admin/accounts'
+    | '/admin/moderation'
     | '/admin/online'
     | '/admin/store'
     | '/_portal/'
@@ -431,6 +443,13 @@ declare module '@tanstack/react-router' {
       path: '/accounts'
       fullPath: '/admin/accounts'
       preLoaderRoute: typeof AdminAccountsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/moderation': {
+      id: '/admin/moderation'
+      path: '/moderation'
+      fullPath: '/admin/moderation'
+      preLoaderRoute: typeof AdminModerationRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/online': {
@@ -592,6 +611,7 @@ const AdminStoreRouteWithChildren = AdminStoreRoute._addFileChildren(
 
 interface AdminRouteChildren {
   AdminAccountsRoute: typeof AdminAccountsRoute
+  AdminModerationRoute: typeof AdminModerationRoute
   AdminOnlineRoute: typeof AdminOnlineRoute
   AdminStoreRoute: typeof AdminStoreRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
@@ -605,6 +625,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAccountsRoute: AdminAccountsRoute,
+  AdminModerationRoute: AdminModerationRoute,
   AdminOnlineRoute: AdminOnlineRoute,
   AdminStoreRoute: AdminStoreRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,

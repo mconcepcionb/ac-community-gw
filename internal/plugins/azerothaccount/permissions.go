@@ -13,6 +13,8 @@ const (
 	PermissionAccountLink permissions.Permission = "azeroth.account.link"
 	// PermissionAccountSelf allows a user to create and link their own account.
 	PermissionAccountSelf permissions.Permission = "azeroth.account.self"
+	// PermissionAdminClaimsRead allows staff to list pending account claims.
+	PermissionAdminClaimsRead permissions.Permission = "azeroth.admin.claims.read"
 )
 
 func permissionDefs() []permissions.Definition {
@@ -40,6 +42,11 @@ func permissionDefs() []permissions.Definition {
 		{
 			Name:        PermissionAccountSelf,
 			Description: "Create and link your own AzerothCore account",
+			Owner:       Name,
+		},
+		{
+			Name:        PermissionAdminClaimsRead,
+			Description: "List pending account claims",
 			Owner:       Name,
 		},
 	}

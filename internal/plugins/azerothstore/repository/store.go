@@ -422,6 +422,18 @@ func (s *Store) AdminOrders(ctx context.Context, status string, limit, offset in
 	return orders, nil
 }
 
+// OrderByID returns an order or domain.ErrOrderNotFound.
+func (s *Store) OrderByID(ctx context.Context, id uuid.UUID) (domain.Order, error) {
+	row, err := s.q.GetOrder(ctx, id)
+	if errors.Is(err, sql.ErrNoRows) {
+		return domain.Order{}, domain.ErrOrderNotFound
+	}
+	if err != nil {
+		return domain.Order{}, fmt.Errorf("repository: get order: %w", err)
+	}
+	return toOrder(row), nil
+}
+
 func (s *Store) productWithItems(ctx context.Context, row azerothstorerepo.StoreProduct) (domain.Product, error) {
 	items, err := s.q.ListProductItems(ctx, row.ID)
 	if err != nil {

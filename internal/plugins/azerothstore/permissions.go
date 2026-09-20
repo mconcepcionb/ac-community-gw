@@ -17,6 +17,8 @@ const (
 	PermissionAdminProducts permissions.Permission = "store.admin.products"
 	// PermissionAdminOrdersRead allows reading every order.
 	PermissionAdminOrdersRead permissions.Permission = "store.admin.orders.read"
+	// PermissionAdminOrdersResolve allows refunding or retrying stuck orders.
+	PermissionAdminOrdersResolve permissions.Permission = "store.admin.orders.resolve"
 )
 
 func permissionDefs() []permissions.Definition {
@@ -54,6 +56,11 @@ func permissionDefs() []permissions.Definition {
 		{
 			Name:        PermissionAdminOrdersRead,
 			Description: "Read every store order",
+			Owner:       Name,
+		},
+		{
+			Name:        PermissionAdminOrdersResolve,
+			Description: "Refund or retry stuck store orders",
 			Owner:       Name,
 		},
 	}

@@ -38,3 +38,6 @@ RETURNING *;
 
 -- name: DeleteAccountClaim :exec
 DELETE FROM account_claims WHERE user_id = $1;
+
+-- name: ListAccountClaims :many
+SELECT * FROM account_claims ORDER BY created_at DESC LIMIT $1 OFFSET $2;

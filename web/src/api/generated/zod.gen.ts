@@ -70,6 +70,17 @@ export const zAzerothAccountsResponse = z.object({
     accounts: z.array(zAzerothAccount).optional()
 });
 
+export const zAzerothAdminClaim = z.object({
+    account_username: z.string().optional(),
+    attempts: z.int().optional(),
+    expires_at: z.string().optional(),
+    user_id: z.string().optional()
+});
+
+export const zAzerothAdminClaimsResponse = z.object({
+    claims: z.array(zAzerothAdminClaim).optional()
+});
+
 export const zAzerothCharacter = z.object({
     class: z.int().optional(),
     class_name: z.string().optional(),
@@ -394,6 +405,10 @@ export const zStorePurchaseRequest = z.object({
     sku: z.string().optional()
 });
 
+export const zStoreResolveOrderRequest = z.object({
+    reason: z.string().optional()
+});
+
 export const zStoreWalletResponse = z.object({
     balance: z.int().optional(),
     user_id: z.string().optional()
@@ -417,6 +432,11 @@ export const zUser = z.object({
 export const zListUsersResponse = z.object({
     users: z.array(zUser).optional()
 });
+
+/**
+ * OK
+ */
+export const zAzerothAdminAccountClaimsListResponse = zAzerothAdminClaimsResponse;
 
 export const zReportsListQuery = z.object({
     status: z.string().optional(),
@@ -448,6 +468,29 @@ export const zStoreAdminOrdersListQuery = z.object({
  * OK
  */
 export const zStoreAdminOrdersListResponse = zStoreOrdersResponse;
+
+/**
+ * reason
+ */
+export const zStoreAdminOrdersRefundBody = zStoreResolveOrderRequest;
+
+export const zStoreAdminOrdersRefundPath = z.object({
+    id: z.string()
+});
+
+/**
+ * OK
+ */
+export const zStoreAdminOrdersRefundResponse = zStoreOrder;
+
+export const zStoreAdminOrdersRetryPath = z.object({
+    id: z.string()
+});
+
+/**
+ * OK
+ */
+export const zStoreAdminOrdersRetryResponse = zStoreOrder;
 
 export const zAzerothAdminUsersGetPath = z.object({
     id: z.string()

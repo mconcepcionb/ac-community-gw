@@ -89,6 +89,46 @@ func (q *Queries) IncrementAccountClaimAttempts(ctx context.Context, userID uuid
 	return i, err
 }
 
+const listAccountClaims = `-- name: ListAccountClaims :many
+SELECT user_id, account_username, code_hash, expires_at, attempts, created_at, updated_at FROM account_claims ORDER BY created_at DESC LIMIT $1 OFFSET $2
+`
+
+type ListAccountClaimsParams struct {
+	Limit  int32
+	Offset int32
+}
+
+func (q *Queries) ListAccountClaims(ctx context.Context, arg ListAccountClaimsParams) ([]AccountClaim, error) {
+	rows, err := q.db.QueryContext(ctx, listAccountClaims, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []AccountClaim{}
+	for rows.Next() {
+		var i AccountClaim
+		if err := rows.Scan(
+			&i.UserID,
+			&i.AccountUsername,
+			&i.CodeHash,
+			&i.ExpiresAt,
+			&i.Attempts,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listAccountLinks = `-- name: ListAccountLinks :many
 SELECT user_id, account_username, account_id, linked_at, updated_at FROM azeroth_account_links ORDER BY linked_at DESC
 `
