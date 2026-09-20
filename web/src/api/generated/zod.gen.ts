@@ -30,6 +30,7 @@ export const zAdminAuditEntry = z.object({
     action: z.string().optional(),
     actor_discord_id: z.string().optional(),
     actor_id: z.string().optional(),
+    metadata: z.record(z.string(), z.unknown()).optional(),
     occurred_at: z.string().optional(),
     permission: z.string().optional(),
     request_id: z.string().optional(),
@@ -632,6 +633,8 @@ export const zApikeysRotateResponse = zApiKeySecretResponse;
 export const zAzerothAdminAuditListQuery = z.object({
     actor: z.string().optional(),
     target: z.string().optional(),
+    target_type: z.string().optional(),
+    target_id: z.string().optional(),
     action: z.string().optional(),
     since: z.string().optional(),
     until: z.string().optional(),

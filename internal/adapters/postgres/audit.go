@@ -76,6 +76,14 @@ func (s *AuditStore) List(
 		args = append(args, filter.Target)
 		conditions = append(conditions, fmt.Sprintf("target_id ILIKE '%%' || $%d || '%%'", len(args)))
 	}
+	if filter.TargetType != "" {
+		args = append(args, filter.TargetType)
+		conditions = append(conditions, fmt.Sprintf("target_type = $%d", len(args)))
+	}
+	if filter.TargetID != "" {
+		args = append(args, filter.TargetID)
+		conditions = append(conditions, fmt.Sprintf("target_id = $%d", len(args)))
+	}
 	if filter.Action != "" {
 		args = append(args, filter.Action)
 		conditions = append(conditions, fmt.Sprintf("action ILIKE '%%' || $%d || '%%'", len(args)))

@@ -47,6 +47,11 @@ type ListFilter struct {
 	ActorID string
 	// Target matches target_id (case-insensitive substring).
 	Target string
+	// TargetType matches target_type exactly (for example "account").
+	TargetType string
+	// TargetID matches target_id exactly. Pair it with TargetType for the
+	// per-entity history query.
+	TargetID string
 	// Action matches the action (case-insensitive substring).
 	Action string
 	// Since and Until bound occurred_at (inclusive); zero means unbounded.

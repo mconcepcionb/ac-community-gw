@@ -14,15 +14,16 @@ var errAuditUnavailable = httpapi.NewAPIError(http.StatusServiceUnavailable,
 
 // AuditEntry is one audit log row in the viewer.
 type AuditEntry struct {
-	OccurredAt     string `json:"occurred_at"`
-	ActorID        string `json:"actor_id,omitempty"`
-	ActorDiscordID string `json:"actor_discord_id,omitempty"`
-	Action         string `json:"action"`
-	Permission     string `json:"permission,omitempty"`
-	TargetType     string `json:"target_type,omitempty"`
-	TargetID       string `json:"target_id,omitempty"`
-	Result         string `json:"result"`
-	RequestID      string `json:"request_id,omitempty"`
+	OccurredAt     string         `json:"occurred_at"`
+	ActorID        string         `json:"actor_id,omitempty"`
+	ActorDiscordID string         `json:"actor_discord_id,omitempty"`
+	Action         string         `json:"action"`
+	Permission     string         `json:"permission,omitempty"`
+	TargetType     string         `json:"target_type,omitempty"`
+	TargetID       string         `json:"target_id,omitempty"`
+	Result         string         `json:"result"`
+	RequestID      string         `json:"request_id,omitempty"`
+	Metadata       map[string]any `json:"metadata,omitempty"`
 } // @name AdminAuditEntry
 
 // AuditResponse is the body of GET /api/v1/admin/audit.
@@ -37,9 +38,11 @@ type AuditResponse struct {
 //	@Tags			azeroth-admin
 //	@ID				azeroth.admin.audit.list
 //	@Produce		json
-//	@Param			actor	query	string	false	"actor community user id"
-//	@Param			target	query	string	false	"target id substring"
-//	@Param			action	query	string	false	"action substring"
+//	@Param			actor		query	string	false	"actor community user id"
+//	@Param			target		query	string	false	"target id substring"
+//	@Param			target_type	query	string	false	"target type exact match (account, character, user, role)"
+//	@Param			target_id	query	string	false	"target id exact match"
+//	@Param			action		query	string	false	"action substring"
 //	@Param			since	query	string	false	"RFC3339 lower bound"
 //	@Param			until	query	string	false	"RFC3339 upper bound"
 //	@Param			limit	query	int		false	"page size"	default(50)
@@ -56,9 +59,11 @@ func (p *Plugin) handleAuditLog(w http.ResponseWriter, r *http.Request) {
 	}
 	query := r.URL.Query()
 	filter := audit.ListFilter{
-		ActorID: query.Get("actor"),
-		Target:  query.Get("target"),
-		Action:  query.Get("action"),
+		ActorID:    query.Get("actor"),
+		Target:     query.Get("target"),
+		TargetType: query.Get("target_type"),
+		TargetID:   query.Get("target_id"),
+		Action:     query.Get("action"),
 	}
 	if since, err := time.Parse(time.RFC3339, query.Get("since")); err == nil {
 		filter.Since = since
@@ -88,6 +93,9 @@ func auditDTO(entry audit.Entry) AuditEntry {
 		TargetID:       entry.TargetID,
 		Result:         string(entry.Result),
 		RequestID:      entry.RequestID,
+	}
+	if len(entry.Metadata) > 0 {
+		dto.Metadata = entry.Metadata
 	}
 	if entry.ActorID.String() != "00000000-0000-0000-0000-000000000000" {
 		dto.ActorID = entry.ActorID.String()

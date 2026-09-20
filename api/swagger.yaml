@@ -52,6 +52,9 @@ components:
           type: string
         actor_id:
           type: string
+        metadata:
+          additionalProperties: {}
+          type: object
         occurred_at:
           type: string
         permission:
@@ -1406,6 +1409,16 @@ paths:
       - description: target id substring
         in: query
         name: target
+        schema:
+          type: string
+      - description: target type exact match (account, character, user, role)
+        in: query
+        name: target_type
+        schema:
+          type: string
+      - description: target id exact match
+        in: query
+        name: target_id
         schema:
           type: string
       - description: action substring

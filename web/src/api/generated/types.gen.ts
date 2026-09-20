@@ -32,6 +32,9 @@ export type AdminAuditEntry = {
     action?: string;
     actor_discord_id?: string;
     actor_id?: string;
+    metadata?: {
+        [key: string]: unknown;
+    };
     occurred_at?: string;
     permission?: string;
     request_id?: string;
@@ -957,6 +960,14 @@ export type AzerothAdminAuditListData = {
          * target id substring
          */
         target?: string;
+        /**
+         * target type exact match (account, character, user, role)
+         */
+        target_type?: string;
+        /**
+         * target id exact match
+         */
+        target_id?: string;
         /**
          * action substring
          */
