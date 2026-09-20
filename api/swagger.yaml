@@ -1917,6 +1917,121 @@ paths:
       summary: Send in-game mail
       tags:
       - azeroth-character
+  /api/v1/azeroth/me/characters:
+    get:
+      description: Lists the characters of the authenticated user's linked account.
+        Requires the azeroth.character.self permission.
+      operationId: azeroth.me.characters.list
+      parameters:
+      - description: character name filter
+        in: query
+        name: filter
+        schema:
+          type: string
+      - description: page size
+        in: query
+        name: limit
+        schema:
+          default: 100
+          type: integer
+      - description: page offset
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothCharactersResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List my characters
+      tags:
+      - azeroth-character
+  /api/v1/azeroth/me/mail:
+    post:
+      description: Delivers items and/or money to a character owned by the authenticated
+        user's linked account. Requires the azeroth.mail.self permission.
+      operationId: azeroth.me.mail.send
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AzerothSendMailRequest'
+        description: delivery request
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothSendMailResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "502":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Gateway
+      summary: Mail my character
+      tags:
+      - azeroth-character
   /api/v1/azeroth/online:
     get:
       description: Runs the AzerothCore online list command. Requires the azeroth.admin.players.read

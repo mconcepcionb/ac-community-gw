@@ -81,6 +81,10 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		reg.RequirePermission(PermissionCharacterList, http.HandlerFunc(p.handleListUserCharacters)))
 	reg.Mux.Handle("POST /api/v1/azeroth/mail",
 		reg.RequirePermission(PermissionMailSend, http.HandlerFunc(p.handleSendMail)))
+	reg.Mux.Handle("GET /api/v1/azeroth/me/characters",
+		reg.RequirePermission(PermissionCharacterSelf, http.HandlerFunc(p.handleMyCharacters)))
+	reg.Mux.Handle("POST /api/v1/azeroth/me/mail",
+		reg.RequirePermission(PermissionMailSelf, http.HandlerFunc(p.handleMyMail)))
 	if err := services.Provide[Directory](reg.Services, DirectoryService, p); err != nil {
 		return err
 	}

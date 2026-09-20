@@ -21,6 +21,11 @@ export function AppNav() {
           Status
         </Link>
       </PermissionGate>
+      <PermissionGate permission="azeroth.character.self">
+        <Link to="/characters" className={linkClass} activeProps={{ className: "text-foreground" }}>
+          Characters
+        </Link>
+      </PermissionGate>
       <PermissionGate permission="store.wallet.read">
         <Link
           to="/store/wallet"

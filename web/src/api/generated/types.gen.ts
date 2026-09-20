@@ -1481,6 +1481,104 @@ export type AzerothMailSendResponses = {
 
 export type AzerothMailSendResponse = AzerothMailSendResponses[keyof AzerothMailSendResponses];
 
+export type AzerothMeCharactersListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * character name filter
+         */
+        filter?: string;
+        /**
+         * page size
+         */
+        limit?: number;
+        /**
+         * page offset
+         */
+        offset?: number;
+    };
+    url: '/api/v1/azeroth/me/characters';
+};
+
+export type AzerothMeCharactersListErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothMeCharactersListError = AzerothMeCharactersListErrors[keyof AzerothMeCharactersListErrors];
+
+export type AzerothMeCharactersListResponses = {
+    /**
+     * OK
+     */
+    200: AzerothCharactersResponse;
+};
+
+export type AzerothMeCharactersListResponse = AzerothMeCharactersListResponses[keyof AzerothMeCharactersListResponses];
+
+export type AzerothMeMailSendData = {
+    /**
+     * delivery request
+     */
+    body: AzerothSendMailRequest;
+    path?: never;
+    query?: never;
+    url: '/api/v1/azeroth/me/mail';
+};
+
+export type AzerothMeMailSendErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Bad Gateway
+     */
+    502: ErrorResponse;
+};
+
+export type AzerothMeMailSendError = AzerothMeMailSendErrors[keyof AzerothMeMailSendErrors];
+
+export type AzerothMeMailSendResponses = {
+    /**
+     * OK
+     */
+    200: AzerothSendMailResponse;
+};
+
+export type AzerothMeMailSendResponse = AzerothMeMailSendResponses[keyof AzerothMeMailSendResponses];
+
 export type AzerothOnlineListData = {
     body?: never;
     path?: never;

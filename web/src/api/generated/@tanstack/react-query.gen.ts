@@ -3,8 +3,8 @@
 import { type InfiniteData, infiniteQueryOptions, queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { authDiscordCallback, authDiscordLogin, authLogout, authMe, azerothAccountLinksCreate, azerothAccountLinksDelete, azerothAccountLinksGet, azerothAccountLinksList, azerothAccountsBan, azerothAccountsCreate, azerothAccountsList, azerothAccountsSetEmail, azerothAccountsSetGmlevel, azerothAccountsSetPassword, azerothAccountsUnban, azerothAdminUsersGet, azerothAnnounceSend, azerothCharactersBan, azerothCharactersGet, azerothCharactersList, azerothCharactersUnban, azerothInfoStatus, azerothItemsGet, azerothItemsList, azerothMailSend, azerothOnlineList, azerothPlayersKick, azerothPlayersMute, azerothPlayersUnmute, azerothUserCharactersList, identityUsersList, operationsHealth, operationsReady, type Options, storeAdminOrdersList, storeOrdersCreate, storeOrdersList, storeProductsCreate, storeProductsDelete, storeProductsGet, storeProductsList, storeProductsUpdate, storeWalletGet, storeWalletsGrant } from '../sdk.gen';
-import type { AuthDiscordCallbackData, AuthDiscordCallbackError, AuthDiscordCallbackResponse, AuthDiscordLoginData, AuthDiscordLoginError, AuthLogoutData, AuthLogoutError, AuthLogoutResponse, AuthMeData, AuthMeError, AuthMeResponse, AzerothAccountLinksCreateData, AzerothAccountLinksCreateError, AzerothAccountLinksCreateResponse, AzerothAccountLinksDeleteData, AzerothAccountLinksDeleteError, AzerothAccountLinksDeleteResponse, AzerothAccountLinksGetData, AzerothAccountLinksGetError, AzerothAccountLinksGetResponse, AzerothAccountLinksListData, AzerothAccountLinksListError, AzerothAccountLinksListResponse, AzerothAccountsBanData, AzerothAccountsBanError, AzerothAccountsBanResponse, AzerothAccountsCreateData, AzerothAccountsCreateError, AzerothAccountsCreateResponse, AzerothAccountsListData, AzerothAccountsListError, AzerothAccountsListResponse, AzerothAccountsSetEmailData, AzerothAccountsSetEmailError, AzerothAccountsSetEmailResponse, AzerothAccountsSetGmlevelData, AzerothAccountsSetGmlevelError, AzerothAccountsSetGmlevelResponse, AzerothAccountsSetPasswordData, AzerothAccountsSetPasswordError, AzerothAccountsSetPasswordResponse, AzerothAccountsUnbanData, AzerothAccountsUnbanError, AzerothAccountsUnbanResponse, AzerothAdminUsersGetData, AzerothAdminUsersGetError, AzerothAdminUsersGetResponse, AzerothAnnounceSendData, AzerothAnnounceSendError, AzerothAnnounceSendResponse, AzerothCharactersBanData, AzerothCharactersBanError, AzerothCharactersBanResponse, AzerothCharactersGetData, AzerothCharactersGetError, AzerothCharactersGetResponse, AzerothCharactersListData, AzerothCharactersListError, AzerothCharactersListResponse, AzerothCharactersUnbanData, AzerothCharactersUnbanError, AzerothCharactersUnbanResponse, AzerothInfoStatusData, AzerothInfoStatusError, AzerothInfoStatusResponse, AzerothItemsGetData, AzerothItemsGetError, AzerothItemsGetResponse, AzerothItemsListData, AzerothItemsListError, AzerothItemsListResponse, AzerothMailSendData, AzerothMailSendError, AzerothMailSendResponse, AzerothOnlineListData, AzerothOnlineListError, AzerothOnlineListResponse2, AzerothPlayersKickData, AzerothPlayersKickError, AzerothPlayersKickResponse, AzerothPlayersMuteData, AzerothPlayersMuteError, AzerothPlayersMuteResponse, AzerothPlayersUnmuteData, AzerothPlayersUnmuteError, AzerothPlayersUnmuteResponse, AzerothUserCharactersListData, AzerothUserCharactersListError, AzerothUserCharactersListResponse, IdentityUsersListData, IdentityUsersListError, IdentityUsersListResponse, OperationsHealthData, OperationsHealthError, OperationsHealthResponse, OperationsReadyData, OperationsReadyError, OperationsReadyResponse, StoreAdminOrdersListData, StoreAdminOrdersListError, StoreAdminOrdersListResponse, StoreOrdersCreateData, StoreOrdersCreateError, StoreOrdersCreateResponse, StoreOrdersListData, StoreOrdersListError, StoreOrdersListResponse, StoreProductsCreateData, StoreProductsCreateError, StoreProductsCreateResponse, StoreProductsDeleteData, StoreProductsDeleteError, StoreProductsDeleteResponse, StoreProductsGetData, StoreProductsGetError, StoreProductsGetResponse, StoreProductsListData, StoreProductsListError, StoreProductsListResponse, StoreProductsUpdateData, StoreProductsUpdateError, StoreProductsUpdateResponse, StoreWalletGetData, StoreWalletGetError, StoreWalletGetResponse, StoreWalletsGrantData, StoreWalletsGrantError, StoreWalletsGrantResponse } from '../types.gen';
+import { authDiscordCallback, authDiscordLogin, authLogout, authMe, azerothAccountLinksCreate, azerothAccountLinksDelete, azerothAccountLinksGet, azerothAccountLinksList, azerothAccountsBan, azerothAccountsCreate, azerothAccountsList, azerothAccountsSetEmail, azerothAccountsSetGmlevel, azerothAccountsSetPassword, azerothAccountsUnban, azerothAdminUsersGet, azerothAnnounceSend, azerothCharactersBan, azerothCharactersGet, azerothCharactersList, azerothCharactersUnban, azerothInfoStatus, azerothItemsGet, azerothItemsList, azerothMailSend, azerothMeCharactersList, azerothMeMailSend, azerothOnlineList, azerothPlayersKick, azerothPlayersMute, azerothPlayersUnmute, azerothUserCharactersList, identityUsersList, operationsHealth, operationsReady, type Options, storeAdminOrdersList, storeOrdersCreate, storeOrdersList, storeProductsCreate, storeProductsDelete, storeProductsGet, storeProductsList, storeProductsUpdate, storeWalletGet, storeWalletsGrant } from '../sdk.gen';
+import type { AuthDiscordCallbackData, AuthDiscordCallbackError, AuthDiscordCallbackResponse, AuthDiscordLoginData, AuthDiscordLoginError, AuthLogoutData, AuthLogoutError, AuthLogoutResponse, AuthMeData, AuthMeError, AuthMeResponse, AzerothAccountLinksCreateData, AzerothAccountLinksCreateError, AzerothAccountLinksCreateResponse, AzerothAccountLinksDeleteData, AzerothAccountLinksDeleteError, AzerothAccountLinksDeleteResponse, AzerothAccountLinksGetData, AzerothAccountLinksGetError, AzerothAccountLinksGetResponse, AzerothAccountLinksListData, AzerothAccountLinksListError, AzerothAccountLinksListResponse, AzerothAccountsBanData, AzerothAccountsBanError, AzerothAccountsBanResponse, AzerothAccountsCreateData, AzerothAccountsCreateError, AzerothAccountsCreateResponse, AzerothAccountsListData, AzerothAccountsListError, AzerothAccountsListResponse, AzerothAccountsSetEmailData, AzerothAccountsSetEmailError, AzerothAccountsSetEmailResponse, AzerothAccountsSetGmlevelData, AzerothAccountsSetGmlevelError, AzerothAccountsSetGmlevelResponse, AzerothAccountsSetPasswordData, AzerothAccountsSetPasswordError, AzerothAccountsSetPasswordResponse, AzerothAccountsUnbanData, AzerothAccountsUnbanError, AzerothAccountsUnbanResponse, AzerothAdminUsersGetData, AzerothAdminUsersGetError, AzerothAdminUsersGetResponse, AzerothAnnounceSendData, AzerothAnnounceSendError, AzerothAnnounceSendResponse, AzerothCharactersBanData, AzerothCharactersBanError, AzerothCharactersBanResponse, AzerothCharactersGetData, AzerothCharactersGetError, AzerothCharactersGetResponse, AzerothCharactersListData, AzerothCharactersListError, AzerothCharactersListResponse, AzerothCharactersUnbanData, AzerothCharactersUnbanError, AzerothCharactersUnbanResponse, AzerothInfoStatusData, AzerothInfoStatusError, AzerothInfoStatusResponse, AzerothItemsGetData, AzerothItemsGetError, AzerothItemsGetResponse, AzerothItemsListData, AzerothItemsListError, AzerothItemsListResponse, AzerothMailSendData, AzerothMailSendError, AzerothMailSendResponse, AzerothMeCharactersListData, AzerothMeCharactersListError, AzerothMeCharactersListResponse, AzerothMeMailSendData, AzerothMeMailSendError, AzerothMeMailSendResponse, AzerothOnlineListData, AzerothOnlineListError, AzerothOnlineListResponse2, AzerothPlayersKickData, AzerothPlayersKickError, AzerothPlayersKickResponse, AzerothPlayersMuteData, AzerothPlayersMuteError, AzerothPlayersMuteResponse, AzerothPlayersUnmuteData, AzerothPlayersUnmuteError, AzerothPlayersUnmuteResponse, AzerothUserCharactersListData, AzerothUserCharactersListError, AzerothUserCharactersListResponse, IdentityUsersListData, IdentityUsersListError, IdentityUsersListResponse, OperationsHealthData, OperationsHealthError, OperationsHealthResponse, OperationsReadyData, OperationsReadyError, OperationsReadyResponse, StoreAdminOrdersListData, StoreAdminOrdersListError, StoreAdminOrdersListResponse, StoreOrdersCreateData, StoreOrdersCreateError, StoreOrdersCreateResponse, StoreOrdersListData, StoreOrdersListError, StoreOrdersListResponse, StoreProductsCreateData, StoreProductsCreateError, StoreProductsCreateResponse, StoreProductsDeleteData, StoreProductsDeleteError, StoreProductsDeleteResponse, StoreProductsGetData, StoreProductsGetError, StoreProductsGetResponse, StoreProductsListData, StoreProductsListError, StoreProductsListResponse, StoreProductsUpdateData, StoreProductsUpdateError, StoreProductsUpdateResponse, StoreWalletGetData, StoreWalletGetError, StoreWalletGetResponse, StoreWalletsGrantData, StoreWalletsGrantError, StoreWalletsGrantResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -673,6 +673,77 @@ export const azerothMailSendMutation = (options?: Partial<Options<AzerothMailSen
     const mutationOptions: UseMutationOptions<AzerothMailSendResponse, AzerothMailSendError, Options<AzerothMailSendData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await azerothMailSend({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const azerothMeCharactersListQueryKey = (options?: Options<AzerothMeCharactersListData>) => createQueryKey('azerothMeCharactersList', options);
+
+/**
+ * List my characters
+ *
+ * Lists the characters of the authenticated user's linked account. Requires the azeroth.character.self permission.
+ */
+export const azerothMeCharactersListOptions = (options?: Options<AzerothMeCharactersListData>) => queryOptions<AzerothMeCharactersListResponse, AzerothMeCharactersListError, AzerothMeCharactersListResponse, ReturnType<typeof azerothMeCharactersListQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await azerothMeCharactersList({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: azerothMeCharactersListQueryKey(options)
+});
+
+export const azerothMeCharactersListInfiniteQueryKey = (options?: Options<AzerothMeCharactersListData>): QueryKey<Options<AzerothMeCharactersListData>> => createQueryKey('azerothMeCharactersList', options, true);
+
+/**
+ * List my characters
+ *
+ * Lists the characters of the authenticated user's linked account. Requires the azeroth.character.self permission.
+ */
+export const azerothMeCharactersListInfiniteOptions = (options?: Options<AzerothMeCharactersListData>) => {
+    const opts = infiniteQueryOptions<AzerothMeCharactersListResponse, AzerothMeCharactersListError, InfiniteData<AzerothMeCharactersListResponse>, QueryKey<Options<AzerothMeCharactersListData>>, number | Pick<QueryKey<Options<AzerothMeCharactersListData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
+    // @ts-ignore
+    {
+        queryFn: async ({ pageParam, queryKey, signal }) => {
+            // @ts-ignore
+            const page: Pick<QueryKey<Options<AzerothMeCharactersListData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
+                query: {
+                    offset: pageParam
+                }
+            };
+            const params = createInfiniteParams(queryKey, page);
+            const { data } = await azerothMeCharactersList({
+                ...options,
+                ...params,
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: azerothMeCharactersListInfiniteQueryKey(options)
+    });
+    return opts as Omit<typeof opts, 'initialData'>;
+};
+
+/**
+ * Mail my character
+ *
+ * Delivers items and/or money to a character owned by the authenticated user's linked account. Requires the azeroth.mail.self permission.
+ */
+export const azerothMeMailSendMutation = (options?: Partial<Options<AzerothMeMailSendData>>): UseMutationOptions<AzerothMeMailSendResponse, AzerothMeMailSendError, Options<AzerothMeMailSendData>> => {
+    const mutationOptions: UseMutationOptions<AzerothMeMailSendResponse, AzerothMeMailSendError, Options<AzerothMeMailSendData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await azerothMeMailSend({
                 ...options,
                 ...fnOptions,
                 throwOnError: true

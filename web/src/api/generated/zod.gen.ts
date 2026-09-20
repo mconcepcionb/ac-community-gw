@@ -609,6 +609,27 @@ export const zAzerothMailSendBody = zAzerothSendMailRequest;
  */
 export const zAzerothMailSendResponse = zAzerothSendMailResponse;
 
+export const zAzerothMeCharactersListQuery = z.object({
+    filter: z.string().optional(),
+    limit: z.int().optional().default(100),
+    offset: z.int().optional().default(0)
+});
+
+/**
+ * OK
+ */
+export const zAzerothMeCharactersListResponse = zAzerothCharactersResponse;
+
+/**
+ * delivery request
+ */
+export const zAzerothMeMailSendBody = zAzerothSendMailRequest;
+
+/**
+ * OK
+ */
+export const zAzerothMeMailSendResponse = zAzerothSendMailResponse;
+
 /**
  * OK
  */
