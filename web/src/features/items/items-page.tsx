@@ -11,7 +11,7 @@ import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { ItemNameWithTooltip } from "./item-tooltip";
 import { useItems } from "./use-items";
 
-const route = getRouteApi("/admin/items/");
+const route = getRouteApi("/admin/azeroth/items/");
 
 const columns: ColumnDef<AzerothItem, unknown>[] = [
   {
@@ -19,7 +19,7 @@ const columns: ColumnDef<AzerothItem, unknown>[] = [
     header: "Entry",
     cell: ({ row }) => (
       <Link
-        to="/admin/items/$entry"
+        to="/admin/azeroth/items/$entry"
         params={{ entry: String(row.original.entry ?? 0) }}
         className="text-blue-400 underline"
       >

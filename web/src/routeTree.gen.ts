@@ -23,19 +23,13 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminApiClientsRouteImport } from './routes/admin/api-clients'
 import { Route as AdminAuditRouteImport } from './routes/admin/audit'
 import { Route as AdminModerationRouteImport } from './routes/admin/moderation'
-import { Route as AdminOnlineRouteImport } from './routes/admin/online'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminStoreRouteImport } from './routes/admin/store'
 import { Route as PortalCharactersIndexRouteImport } from './routes/_portal/characters/index'
 import { Route as PortalLeaderboardsIndexRouteImport } from './routes/_portal/leaderboards/index'
 import { Route as PortalLeaderboardsBoardRouteImport } from './routes/_portal/leaderboards/$board'
 import { Route as PortalStoreIndexRouteImport } from './routes/_portal/store/index'
-import { Route as AdminAccountsIndexRouteImport } from './routes/admin/accounts/index'
-import { Route as AdminAccountsUsernameRouteImport } from './routes/admin/accounts/$username'
-import { Route as AdminCharactersIndexRouteImport } from './routes/admin/characters/index'
-import { Route as AdminCharactersNameRouteImport } from './routes/admin/characters/$name'
-import { Route as AdminItemsIndexRouteImport } from './routes/admin/items/index'
-import { Route as AdminItemsEntryRouteImport } from './routes/admin/items/$entry'
+import { Route as AdminAzerothOnlineRouteImport } from './routes/admin/azeroth/online'
 import { Route as AdminStoreIndexRouteImport } from './routes/admin/store/index'
 import { Route as AdminStoreSkuRouteImport } from './routes/admin/store/$sku'
 import { Route as AdminStoreOrdersRouteImport } from './routes/admin/store/orders'
@@ -43,6 +37,12 @@ import { Route as AdminStoreWalletsRouteImport } from './routes/admin/store/wall
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminUsersUserIdRouteImport } from './routes/admin/users/$userId'
 import { Route as PortalStoreProductsSkuRouteImport } from './routes/_portal/store/products.$sku'
+import { Route as AdminAzerothAccountsIndexRouteImport } from './routes/admin/azeroth/accounts/index'
+import { Route as AdminAzerothAccountsUsernameRouteImport } from './routes/admin/azeroth/accounts/$username'
+import { Route as AdminAzerothCharactersIndexRouteImport } from './routes/admin/azeroth/characters/index'
+import { Route as AdminAzerothCharactersNameRouteImport } from './routes/admin/azeroth/characters/$name'
+import { Route as AdminAzerothItemsIndexRouteImport } from './routes/admin/azeroth/items/index'
+import { Route as AdminAzerothItemsEntryRouteImport } from './routes/admin/azeroth/items/$entry'
 
 const PortalRoute = PortalRouteImport.update({
   id: '/_portal',
@@ -113,11 +113,6 @@ const AdminModerationRoute = AdminModerationRouteImport.update({
   path: '/moderation',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminOnlineRoute = AdminOnlineRouteImport.update({
-  id: '/online',
-  path: '/online',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminRolesRoute = AdminRolesRouteImport.update({
   id: '/roles',
   path: '/roles',
@@ -148,34 +143,9 @@ const PortalStoreIndexRoute = PortalStoreIndexRouteImport.update({
   path: '/store/',
   getParentRoute: () => PortalRoute,
 } as any)
-const AdminAccountsIndexRoute = AdminAccountsIndexRouteImport.update({
-  id: '/accounts/',
-  path: '/accounts/',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminAccountsUsernameRoute = AdminAccountsUsernameRouteImport.update({
-  id: '/accounts/$username',
-  path: '/accounts/$username',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminCharactersIndexRoute = AdminCharactersIndexRouteImport.update({
-  id: '/characters/',
-  path: '/characters/',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminCharactersNameRoute = AdminCharactersNameRouteImport.update({
-  id: '/characters/$name',
-  path: '/characters/$name',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminItemsIndexRoute = AdminItemsIndexRouteImport.update({
-  id: '/items/',
-  path: '/items/',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminItemsEntryRoute = AdminItemsEntryRouteImport.update({
-  id: '/items/$entry',
-  path: '/items/$entry',
+const AdminAzerothOnlineRoute = AdminAzerothOnlineRouteImport.update({
+  id: '/azeroth/online',
+  path: '/azeroth/online',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminStoreIndexRoute = AdminStoreIndexRouteImport.update({
@@ -213,6 +183,40 @@ const PortalStoreProductsSkuRoute = PortalStoreProductsSkuRouteImport.update({
   path: '/store/products/$sku',
   getParentRoute: () => PortalRoute,
 } as any)
+const AdminAzerothAccountsIndexRoute =
+  AdminAzerothAccountsIndexRouteImport.update({
+    id: '/azeroth/accounts/',
+    path: '/azeroth/accounts/',
+    getParentRoute: () => AdminRoute,
+  } as any)
+const AdminAzerothAccountsUsernameRoute =
+  AdminAzerothAccountsUsernameRouteImport.update({
+    id: '/azeroth/accounts/$username',
+    path: '/azeroth/accounts/$username',
+    getParentRoute: () => AdminRoute,
+  } as any)
+const AdminAzerothCharactersIndexRoute =
+  AdminAzerothCharactersIndexRouteImport.update({
+    id: '/azeroth/characters/',
+    path: '/azeroth/characters/',
+    getParentRoute: () => AdminRoute,
+  } as any)
+const AdminAzerothCharactersNameRoute =
+  AdminAzerothCharactersNameRouteImport.update({
+    id: '/azeroth/characters/$name',
+    path: '/azeroth/characters/$name',
+    getParentRoute: () => AdminRoute,
+  } as any)
+const AdminAzerothItemsIndexRoute = AdminAzerothItemsIndexRouteImport.update({
+  id: '/azeroth/items/',
+  path: '/azeroth/items/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAzerothItemsEntryRoute = AdminAzerothItemsEntryRouteImport.update({
+  id: '/azeroth/items/$entry',
+  path: '/azeroth/items/$entry',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PortalIndexRoute
@@ -227,14 +231,11 @@ export interface FileRoutesByFullPath {
   '/admin/api-clients': typeof AdminApiClientsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/moderation': typeof AdminModerationRoute
-  '/admin/online': typeof AdminOnlineRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/store': typeof AdminStoreRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/leaderboards/$board': typeof PortalLeaderboardsBoardRoute
-  '/admin/accounts/$username': typeof AdminAccountsUsernameRoute
-  '/admin/characters/$name': typeof AdminCharactersNameRoute
-  '/admin/items/$entry': typeof AdminItemsEntryRoute
+  '/admin/azeroth/online': typeof AdminAzerothOnlineRoute
   '/admin/store/$sku': typeof AdminStoreSkuRoute
   '/admin/store/orders': typeof AdminStoreOrdersRoute
   '/admin/store/wallets': typeof AdminStoreWalletsRoute
@@ -242,12 +243,15 @@ export interface FileRoutesByFullPath {
   '/characters/': typeof PortalCharactersIndexRoute
   '/leaderboards/': typeof PortalLeaderboardsIndexRoute
   '/store/': typeof PortalStoreIndexRoute
-  '/admin/accounts/': typeof AdminAccountsIndexRoute
-  '/admin/characters/': typeof AdminCharactersIndexRoute
-  '/admin/items/': typeof AdminItemsIndexRoute
   '/admin/store/': typeof AdminStoreIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/store/products/$sku': typeof PortalStoreProductsSkuRoute
+  '/admin/azeroth/accounts/$username': typeof AdminAzerothAccountsUsernameRoute
+  '/admin/azeroth/characters/$name': typeof AdminAzerothCharactersNameRoute
+  '/admin/azeroth/items/$entry': typeof AdminAzerothItemsEntryRoute
+  '/admin/azeroth/accounts/': typeof AdminAzerothAccountsIndexRoute
+  '/admin/azeroth/characters/': typeof AdminAzerothCharactersIndexRoute
+  '/admin/azeroth/items/': typeof AdminAzerothItemsIndexRoute
 }
 export interface FileRoutesByTo {
   '/forbidden': typeof PortalForbiddenRoute
@@ -260,14 +264,11 @@ export interface FileRoutesByTo {
   '/admin/api-clients': typeof AdminApiClientsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/moderation': typeof AdminModerationRoute
-  '/admin/online': typeof AdminOnlineRoute
   '/admin/roles': typeof AdminRolesRoute
   '/': typeof PortalIndexRoute
   '/admin': typeof AdminIndexRoute
   '/leaderboards/$board': typeof PortalLeaderboardsBoardRoute
-  '/admin/accounts/$username': typeof AdminAccountsUsernameRoute
-  '/admin/characters/$name': typeof AdminCharactersNameRoute
-  '/admin/items/$entry': typeof AdminItemsEntryRoute
+  '/admin/azeroth/online': typeof AdminAzerothOnlineRoute
   '/admin/store/$sku': typeof AdminStoreSkuRoute
   '/admin/store/orders': typeof AdminStoreOrdersRoute
   '/admin/store/wallets': typeof AdminStoreWalletsRoute
@@ -275,12 +276,15 @@ export interface FileRoutesByTo {
   '/characters': typeof PortalCharactersIndexRoute
   '/leaderboards': typeof PortalLeaderboardsIndexRoute
   '/store': typeof PortalStoreIndexRoute
-  '/admin/accounts': typeof AdminAccountsIndexRoute
-  '/admin/characters': typeof AdminCharactersIndexRoute
-  '/admin/items': typeof AdminItemsIndexRoute
   '/admin/store': typeof AdminStoreIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/store/products/$sku': typeof PortalStoreProductsSkuRoute
+  '/admin/azeroth/accounts/$username': typeof AdminAzerothAccountsUsernameRoute
+  '/admin/azeroth/characters/$name': typeof AdminAzerothCharactersNameRoute
+  '/admin/azeroth/items/$entry': typeof AdminAzerothItemsEntryRoute
+  '/admin/azeroth/accounts': typeof AdminAzerothAccountsIndexRoute
+  '/admin/azeroth/characters': typeof AdminAzerothCharactersIndexRoute
+  '/admin/azeroth/items': typeof AdminAzerothItemsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -296,15 +300,12 @@ export interface FileRoutesById {
   '/admin/api-clients': typeof AdminApiClientsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/moderation': typeof AdminModerationRoute
-  '/admin/online': typeof AdminOnlineRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/store': typeof AdminStoreRouteWithChildren
   '/_portal/': typeof PortalIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/_portal/leaderboards/$board': typeof PortalLeaderboardsBoardRoute
-  '/admin/accounts/$username': typeof AdminAccountsUsernameRoute
-  '/admin/characters/$name': typeof AdminCharactersNameRoute
-  '/admin/items/$entry': typeof AdminItemsEntryRoute
+  '/admin/azeroth/online': typeof AdminAzerothOnlineRoute
   '/admin/store/$sku': typeof AdminStoreSkuRoute
   '/admin/store/orders': typeof AdminStoreOrdersRoute
   '/admin/store/wallets': typeof AdminStoreWalletsRoute
@@ -312,12 +313,15 @@ export interface FileRoutesById {
   '/_portal/characters/': typeof PortalCharactersIndexRoute
   '/_portal/leaderboards/': typeof PortalLeaderboardsIndexRoute
   '/_portal/store/': typeof PortalStoreIndexRoute
-  '/admin/accounts/': typeof AdminAccountsIndexRoute
-  '/admin/characters/': typeof AdminCharactersIndexRoute
-  '/admin/items/': typeof AdminItemsIndexRoute
   '/admin/store/': typeof AdminStoreIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/_portal/store/products/$sku': typeof PortalStoreProductsSkuRoute
+  '/admin/azeroth/accounts/$username': typeof AdminAzerothAccountsUsernameRoute
+  '/admin/azeroth/characters/$name': typeof AdminAzerothCharactersNameRoute
+  '/admin/azeroth/items/$entry': typeof AdminAzerothItemsEntryRoute
+  '/admin/azeroth/accounts/': typeof AdminAzerothAccountsIndexRoute
+  '/admin/azeroth/characters/': typeof AdminAzerothCharactersIndexRoute
+  '/admin/azeroth/items/': typeof AdminAzerothItemsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -334,14 +338,11 @@ export interface FileRouteTypes {
     | '/admin/api-clients'
     | '/admin/audit'
     | '/admin/moderation'
-    | '/admin/online'
     | '/admin/roles'
     | '/admin/store'
     | '/admin/'
     | '/leaderboards/$board'
-    | '/admin/accounts/$username'
-    | '/admin/characters/$name'
-    | '/admin/items/$entry'
+    | '/admin/azeroth/online'
     | '/admin/store/$sku'
     | '/admin/store/orders'
     | '/admin/store/wallets'
@@ -349,12 +350,15 @@ export interface FileRouteTypes {
     | '/characters/'
     | '/leaderboards/'
     | '/store/'
-    | '/admin/accounts/'
-    | '/admin/characters/'
-    | '/admin/items/'
     | '/admin/store/'
     | '/admin/users/'
     | '/store/products/$sku'
+    | '/admin/azeroth/accounts/$username'
+    | '/admin/azeroth/characters/$name'
+    | '/admin/azeroth/items/$entry'
+    | '/admin/azeroth/accounts/'
+    | '/admin/azeroth/characters/'
+    | '/admin/azeroth/items/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forbidden'
@@ -367,14 +371,11 @@ export interface FileRouteTypes {
     | '/admin/api-clients'
     | '/admin/audit'
     | '/admin/moderation'
-    | '/admin/online'
     | '/admin/roles'
     | '/'
     | '/admin'
     | '/leaderboards/$board'
-    | '/admin/accounts/$username'
-    | '/admin/characters/$name'
-    | '/admin/items/$entry'
+    | '/admin/azeroth/online'
     | '/admin/store/$sku'
     | '/admin/store/orders'
     | '/admin/store/wallets'
@@ -382,12 +383,15 @@ export interface FileRouteTypes {
     | '/characters'
     | '/leaderboards'
     | '/store'
-    | '/admin/accounts'
-    | '/admin/characters'
-    | '/admin/items'
     | '/admin/store'
     | '/admin/users'
     | '/store/products/$sku'
+    | '/admin/azeroth/accounts/$username'
+    | '/admin/azeroth/characters/$name'
+    | '/admin/azeroth/items/$entry'
+    | '/admin/azeroth/accounts'
+    | '/admin/azeroth/characters'
+    | '/admin/azeroth/items'
   id:
     | '__root__'
     | '/_portal'
@@ -402,15 +406,12 @@ export interface FileRouteTypes {
     | '/admin/api-clients'
     | '/admin/audit'
     | '/admin/moderation'
-    | '/admin/online'
     | '/admin/roles'
     | '/admin/store'
     | '/_portal/'
     | '/admin/'
     | '/_portal/leaderboards/$board'
-    | '/admin/accounts/$username'
-    | '/admin/characters/$name'
-    | '/admin/items/$entry'
+    | '/admin/azeroth/online'
     | '/admin/store/$sku'
     | '/admin/store/orders'
     | '/admin/store/wallets'
@@ -418,12 +419,15 @@ export interface FileRouteTypes {
     | '/_portal/characters/'
     | '/_portal/leaderboards/'
     | '/_portal/store/'
-    | '/admin/accounts/'
-    | '/admin/characters/'
-    | '/admin/items/'
     | '/admin/store/'
     | '/admin/users/'
     | '/_portal/store/products/$sku'
+    | '/admin/azeroth/accounts/$username'
+    | '/admin/azeroth/characters/$name'
+    | '/admin/azeroth/items/$entry'
+    | '/admin/azeroth/accounts/'
+    | '/admin/azeroth/characters/'
+    | '/admin/azeroth/items/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -531,13 +535,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminModerationRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/online': {
-      id: '/admin/online'
-      path: '/online'
-      fullPath: '/admin/online'
-      preLoaderRoute: typeof AdminOnlineRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/roles': {
       id: '/admin/roles'
       path: '/roles'
@@ -580,46 +577,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalStoreIndexRouteImport
       parentRoute: typeof PortalRoute
     }
-    '/admin/accounts/': {
-      id: '/admin/accounts/'
-      path: '/accounts'
-      fullPath: '/admin/accounts/'
-      preLoaderRoute: typeof AdminAccountsIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/accounts/$username': {
-      id: '/admin/accounts/$username'
-      path: '/accounts/$username'
-      fullPath: '/admin/accounts/$username'
-      preLoaderRoute: typeof AdminAccountsUsernameRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/characters/': {
-      id: '/admin/characters/'
-      path: '/characters'
-      fullPath: '/admin/characters/'
-      preLoaderRoute: typeof AdminCharactersIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/characters/$name': {
-      id: '/admin/characters/$name'
-      path: '/characters/$name'
-      fullPath: '/admin/characters/$name'
-      preLoaderRoute: typeof AdminCharactersNameRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/items/': {
-      id: '/admin/items/'
-      path: '/items'
-      fullPath: '/admin/items/'
-      preLoaderRoute: typeof AdminItemsIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/items/$entry': {
-      id: '/admin/items/$entry'
-      path: '/items/$entry'
-      fullPath: '/admin/items/$entry'
-      preLoaderRoute: typeof AdminItemsEntryRouteImport
+    '/admin/azeroth/online': {
+      id: '/admin/azeroth/online'
+      path: '/azeroth/online'
+      fullPath: '/admin/azeroth/online'
+      preLoaderRoute: typeof AdminAzerothOnlineRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/store/': {
@@ -670,6 +632,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/store/products/$sku'
       preLoaderRoute: typeof PortalStoreProductsSkuRouteImport
       parentRoute: typeof PortalRoute
+    }
+    '/admin/azeroth/accounts/': {
+      id: '/admin/azeroth/accounts/'
+      path: '/azeroth/accounts'
+      fullPath: '/admin/azeroth/accounts/'
+      preLoaderRoute: typeof AdminAzerothAccountsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/azeroth/accounts/$username': {
+      id: '/admin/azeroth/accounts/$username'
+      path: '/azeroth/accounts/$username'
+      fullPath: '/admin/azeroth/accounts/$username'
+      preLoaderRoute: typeof AdminAzerothAccountsUsernameRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/azeroth/characters/': {
+      id: '/admin/azeroth/characters/'
+      path: '/azeroth/characters'
+      fullPath: '/admin/azeroth/characters/'
+      preLoaderRoute: typeof AdminAzerothCharactersIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/azeroth/characters/$name': {
+      id: '/admin/azeroth/characters/$name'
+      path: '/azeroth/characters/$name'
+      fullPath: '/admin/azeroth/characters/$name'
+      preLoaderRoute: typeof AdminAzerothCharactersNameRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/azeroth/items/': {
+      id: '/admin/azeroth/items/'
+      path: '/azeroth/items'
+      fullPath: '/admin/azeroth/items/'
+      preLoaderRoute: typeof AdminAzerothItemsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/azeroth/items/$entry': {
+      id: '/admin/azeroth/items/$entry'
+      path: '/azeroth/items/$entry'
+      fullPath: '/admin/azeroth/items/$entry'
+      preLoaderRoute: typeof AdminAzerothItemsEntryRouteImport
+      parentRoute: typeof AdminRoute
     }
   }
 }
@@ -731,36 +735,36 @@ interface AdminRouteChildren {
   AdminApiClientsRoute: typeof AdminApiClientsRoute
   AdminAuditRoute: typeof AdminAuditRoute
   AdminModerationRoute: typeof AdminModerationRoute
-  AdminOnlineRoute: typeof AdminOnlineRoute
   AdminRolesRoute: typeof AdminRolesRoute
   AdminStoreRoute: typeof AdminStoreRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
-  AdminAccountsUsernameRoute: typeof AdminAccountsUsernameRoute
-  AdminCharactersNameRoute: typeof AdminCharactersNameRoute
-  AdminItemsEntryRoute: typeof AdminItemsEntryRoute
+  AdminAzerothOnlineRoute: typeof AdminAzerothOnlineRoute
   AdminUsersUserIdRoute: typeof AdminUsersUserIdRoute
-  AdminAccountsIndexRoute: typeof AdminAccountsIndexRoute
-  AdminCharactersIndexRoute: typeof AdminCharactersIndexRoute
-  AdminItemsIndexRoute: typeof AdminItemsIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
+  AdminAzerothAccountsUsernameRoute: typeof AdminAzerothAccountsUsernameRoute
+  AdminAzerothCharactersNameRoute: typeof AdminAzerothCharactersNameRoute
+  AdminAzerothItemsEntryRoute: typeof AdminAzerothItemsEntryRoute
+  AdminAzerothAccountsIndexRoute: typeof AdminAzerothAccountsIndexRoute
+  AdminAzerothCharactersIndexRoute: typeof AdminAzerothCharactersIndexRoute
+  AdminAzerothItemsIndexRoute: typeof AdminAzerothItemsIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminApiClientsRoute: AdminApiClientsRoute,
   AdminAuditRoute: AdminAuditRoute,
   AdminModerationRoute: AdminModerationRoute,
-  AdminOnlineRoute: AdminOnlineRoute,
   AdminRolesRoute: AdminRolesRoute,
   AdminStoreRoute: AdminStoreRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
-  AdminAccountsUsernameRoute: AdminAccountsUsernameRoute,
-  AdminCharactersNameRoute: AdminCharactersNameRoute,
-  AdminItemsEntryRoute: AdminItemsEntryRoute,
+  AdminAzerothOnlineRoute: AdminAzerothOnlineRoute,
   AdminUsersUserIdRoute: AdminUsersUserIdRoute,
-  AdminAccountsIndexRoute: AdminAccountsIndexRoute,
-  AdminCharactersIndexRoute: AdminCharactersIndexRoute,
-  AdminItemsIndexRoute: AdminItemsIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
+  AdminAzerothAccountsUsernameRoute: AdminAzerothAccountsUsernameRoute,
+  AdminAzerothCharactersNameRoute: AdminAzerothCharactersNameRoute,
+  AdminAzerothItemsEntryRoute: AdminAzerothItemsEntryRoute,
+  AdminAzerothAccountsIndexRoute: AdminAzerothAccountsIndexRoute,
+  AdminAzerothCharactersIndexRoute: AdminAzerothCharactersIndexRoute,
+  AdminAzerothItemsIndexRoute: AdminAzerothItemsIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

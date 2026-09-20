@@ -2,18 +2,22 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 
 import { storeAdminOrdersListOptions } from "@/api";
+import { GAMES } from "@/app/games";
 import { PageHeader } from "@/components/common/page-header";
 import { PermissionGate } from "@/components/common/permission-gate";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAzerothStatus } from "@/features/azeroth-info/use-status";
 
-const links = [
-  { to: "/admin/accounts", label: "Accounts", permission: "azeroth.account.list" },
-  { to: "/admin/characters", label: "Characters", permission: "azeroth.character.list" },
+const coreLinks = [
   { to: "/admin/users", label: "Community users", permission: "gw.identity.user.read" },
-  { to: "/admin/items", label: "Items", permission: "azeroth.item.list" },
   { to: "/admin/store", label: "Store", permission: "gw.store.admin.products" },
-  { to: "/admin/online", label: "Online players", permission: "azeroth.admin.players.read" },
+] as const;
+
+const gameSections = [
+  { segment: "accounts", label: "Accounts", permission: "azeroth.account.list" },
+  { segment: "characters", label: "Characters", permission: "azeroth.character.list" },
+  { segment: "items", label: "Items", permission: "azeroth.item.list" },
+  { segment: "online", label: "Online players", permission: "azeroth.admin.players.read" },
 ] as const;
 
 /** AdminOverviewPage is the staff operations overview. */
@@ -34,7 +38,7 @@ export function AdminOverviewPage() {
       <section className="mt-8">
         <h2 className="mb-3 text-lg font-semibold">Areas</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {links.map((link) => (
+          {coreLinks.map((link) => (
             <PermissionGate key={link.to} permission={link.permission}>
               <Link to={link.to} className="block">
                 <Card className="h-full transition-colors hover:border-foreground/30">
@@ -46,6 +50,26 @@ export function AdminOverviewPage() {
             </PermissionGate>
           ))}
         </div>
+        {GAMES.map((game) => (
+          <div key={game.id} className="mt-6">
+            <h3 className="mb-3 text-sm font-medium uppercase tracking-wide text-muted-foreground">
+              {game.label}
+            </h3>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {gameSections.map((section) => (
+                <PermissionGate key={section.segment} permission={section.permission}>
+                  <Link to={`/admin/${game.id}/${section.segment}`} className="block">
+                    <Card className="h-full transition-colors hover:border-foreground/30">
+                      <CardHeader>
+                        <CardTitle>{section.label}</CardTitle>
+                      </CardHeader>
+                    </Card>
+                  </Link>
+                </PermissionGate>
+              ))}
+            </div>
+          </div>
+        ))}
       </section>
     </div>
   );

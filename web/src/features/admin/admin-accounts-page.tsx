@@ -20,7 +20,7 @@ import { BanAccountDialog } from "./ban-account-dialog";
 import { SetGmLevelDialog } from "./set-gmlevel-dialog";
 import { UnbanAccountButton } from "./unban-account-button";
 
-const route = getRouteApi("/admin/accounts/");
+const route = getRouteApi("/admin/azeroth/accounts/");
 
 const gmLevelLabels = ["Player", "Moderator", "Game Master", "Administrator", "Console"];
 
@@ -31,7 +31,7 @@ const columns: ColumnDef<AzerothAccount, unknown>[] = [
     header: "Username",
     cell: ({ row }) => (
       <Link
-        to="/admin/accounts/$username"
+        to="/admin/azeroth/accounts/$username"
         params={{ username: row.original.username ?? "" }}
         className="text-blue-400 underline"
       >

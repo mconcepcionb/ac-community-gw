@@ -9,7 +9,7 @@ interface ItemsSearch {
   offset?: number;
 }
 
-export const Route = createFileRoute("/admin/items/")({
+export const Route = createFileRoute("/admin/azeroth/items/")({
   validateSearch: (search: Record<string, unknown>): ItemsSearch => ({
     filter: typeof search.filter === "string" && search.filter !== "" ? search.filter : undefined,
     class: typeof search.class === "number" ? search.class : undefined,

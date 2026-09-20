@@ -152,7 +152,7 @@ function AccountCharacters({ username }: { username: string }) {
                 <tr key={character.guid} className="border-b border-border/50 last:border-0">
                   <td className="px-3 py-2">
                     <Link
-                      to="/admin/characters/$name"
+                      to="/admin/azeroth/characters/$name"
                       params={{ name: character.name ?? "" }}
                       className="text-blue-400 underline"
                     >

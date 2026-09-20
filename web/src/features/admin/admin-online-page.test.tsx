@@ -23,7 +23,7 @@ function renderPage() {
   const router = createRouter({
     routeTree,
     context: { queryClient },
-    history: createMemoryHistory({ initialEntries: ["/admin/online"] }),
+    history: createMemoryHistory({ initialEntries: ["/admin/azeroth/online"] }),
   });
 
   render(

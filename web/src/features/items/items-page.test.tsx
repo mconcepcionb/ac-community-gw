@@ -63,7 +63,7 @@ describe("ItemsPage", () => {
       ),
     );
 
-    renderAt("/admin/items");
+    renderAt("/admin/azeroth/items");
 
     expect(await screen.findByRole("link", { name: "19019" })).toBeInTheDocument();
     expect(screen.getByText("Thunderfury")).toBeInTheDocument();
@@ -79,7 +79,7 @@ describe("ItemDetailPage", () => {
       ),
     );
 
-    renderAt("/admin/items/19019");
+    renderAt("/admin/azeroth/items/19019");
 
     expect((await screen.findAllByText("Thunderfury")).length).toBeGreaterThan(0);
     expect(screen.getByText("Legendary")).toBeInTheDocument();

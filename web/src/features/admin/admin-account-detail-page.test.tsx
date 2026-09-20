@@ -19,7 +19,7 @@ function renderDetail() {
   const router = createRouter({
     routeTree,
     context: { queryClient },
-    history: createMemoryHistory({ initialEntries: ["/admin/accounts/ADMIN"] }),
+    history: createMemoryHistory({ initialEntries: ["/admin/azeroth/accounts/ADMIN"] }),
   });
 
   render(

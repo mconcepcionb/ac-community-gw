@@ -52,7 +52,7 @@ function Equipment({ equipment }: { equipment: AzerothEquipmentSlot[] }) {
           </span>
           <span>
             <Link
-              to="/admin/items/$entry"
+              to="/admin/azeroth/items/$entry"
               params={{ entry: String(slot.entry) }}
               className="text-blue-400 underline"
             >

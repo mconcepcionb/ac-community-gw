@@ -7,7 +7,7 @@ interface AdminAccountsSearch {
   offset?: number;
 }
 
-export const Route = createFileRoute("/admin/accounts/")({
+export const Route = createFileRoute("/admin/azeroth/accounts/")({
   validateSearch: (search: Record<string, unknown>): AdminAccountsSearch => ({
     filter: typeof search.filter === "string" && search.filter !== "" ? search.filter : undefined,
     limit: typeof search.limit === "number" ? search.limit : undefined,

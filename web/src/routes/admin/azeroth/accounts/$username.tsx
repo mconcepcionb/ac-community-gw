@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { AdminAccountDetailPage } from "@/features/admin/admin-account-detail-page";
 
-export const Route = createFileRoute("/admin/accounts/$username")({
+export const Route = createFileRoute("/admin/azeroth/accounts/$username")({
   component: AccountRoute,
 });
 

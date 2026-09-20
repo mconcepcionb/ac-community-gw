@@ -68,7 +68,7 @@ describe("CharactersPage", () => {
       ),
     );
 
-    renderAt("/admin/characters?account=ADMIN");
+    renderAt("/admin/azeroth/characters?account=ADMIN");
 
     expect(await screen.findByRole("link", { name: "Thrall" })).toBeInTheDocument();
     expect(screen.getByText("Shaman")).toBeInTheDocument();
@@ -81,7 +81,7 @@ describe("CharactersPage", () => {
         HttpResponse.json({ characters: [thrall], total: 1 }),
       ),
     );
-    renderAt("/admin/characters");
+    renderAt("/admin/azeroth/characters");
 
     expect(await screen.findByRole("link", { name: "Thrall" })).toBeInTheDocument();
   });
@@ -113,7 +113,7 @@ describe("CharacterDetailPage", () => {
       ...detailHandlers(),
     );
 
-    renderAt("/admin/characters/Thrall");
+    renderAt("/admin/azeroth/characters/Thrall");
 
     expect(await screen.findByText("80")).toBeInTheDocument();
     expect(screen.getByText("Shaman")).toBeInTheDocument();
@@ -135,7 +135,7 @@ describe("CharacterDetailPage", () => {
       ),
     );
 
-    renderAt("/admin/characters/Thrall");
+    renderAt("/admin/azeroth/characters/Thrall");
     expect(await screen.findByText("80")).toBeInTheDocument();
 
     const user = userEvent.setup();
@@ -163,7 +163,7 @@ describe("CharacterDetailPage", () => {
       ),
     );
 
-    renderAt("/admin/characters/Thrall");
+    renderAt("/admin/azeroth/characters/Thrall");
     expect(await screen.findByText("80")).toBeInTheDocument();
 
     const user = userEvent.setup();

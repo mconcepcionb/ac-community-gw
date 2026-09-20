@@ -9,7 +9,7 @@ interface CharactersSearch {
   offset?: number;
 }
 
-export const Route = createFileRoute("/admin/characters/")({
+export const Route = createFileRoute("/admin/azeroth/characters/")({
   validateSearch: (search: Record<string, unknown>): CharactersSearch => ({
     account:
       typeof search.account === "string" && search.account !== "" ? search.account : undefined,

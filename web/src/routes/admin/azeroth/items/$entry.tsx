@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { ItemDetailPage } from "@/features/items/item-detail-page";
 
-export const Route = createFileRoute("/admin/items/$entry")({
+export const Route = createFileRoute("/admin/azeroth/items/$entry")({
   component: ItemRoute,
 });
 
