@@ -16,14 +16,14 @@ This plan is a review-and-fix pass over the areas called out by staff:
 | Area | State |
 | --- | --- |
 | Review of current console and backend | done |
-| Shared console primitives (status badges, row actions, pagination, autocomplete) | planned |
-| Admin annotations and per-entity logs | planned |
-| Accounts: detail page, claim status, unified moderation controls | planned |
-| Characters: global browse, superset detail, admin mail | planned |
-| Users: consistent read permission | planned |
-| Roles: mappings tab + permission matrix | planned |
-| Online: structured list and autocomplete | planned |
-| Items: in-game-style tooltips and icons | planned (investigation) |
+| Shared console primitives (status badges, row actions, pagination, autocomplete) | implemented (001) |
+| Admin annotations and per-entity logs | implemented (002, 003) |
+| Accounts: detail page, claim status, unified moderation controls | implemented (005, 006) |
+| Characters: global browse, superset detail, admin mail | implemented (007, 008) |
+| Users: consistent read permission | implemented (004) |
+| Roles: mappings tab + permission matrix | implemented (009) |
+| Online: structured list and autocomplete | implemented (010) |
+| Items: in-game-style tooltips | implemented (011); icons deferred (no `displayid` -> icon source) |
 
 ## Context
 
