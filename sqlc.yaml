@@ -45,3 +45,18 @@ sql:
         overrides:
           - db_type: "uuid"
             go_type: "github.com/google/uuid.UUID"
+
+  - engine: "postgresql"
+    schema: "migrations"
+    queries: "internal/plugins/azerothcharacter/repository/queries.sql"
+    gen:
+      go:
+        package: "azerothcharacterrepo"
+        out: "internal/plugins/azerothcharacter/repository/generated"
+        sql_package: "database/sql"
+        emit_json_tags: false
+        emit_interface: false
+        emit_empty_slices: true
+        overrides:
+          - db_type: "uuid"
+            go_type: "github.com/google/uuid.UUID"

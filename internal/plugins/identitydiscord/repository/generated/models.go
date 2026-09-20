@@ -34,6 +34,13 @@ type AzerothAccountLink struct {
 	UpdatedAt       time.Time
 }
 
+type CharacterVisibility struct {
+	CharacterName string
+	UserID        uuid.UUID
+	Public        bool
+	UpdatedAt     time.Time
+}
+
 type CommunityUser struct {
 	ID            uuid.UUID
 	DiscordID     string

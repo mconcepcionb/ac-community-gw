@@ -37,6 +37,7 @@ import (
 	azerothaccountrepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothaccount/repository"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothadmin"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothcharacter"
+	azerothcharacterrepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothcharacter/repository"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothinfo"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothitem"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore"
@@ -123,11 +124,13 @@ func run() error {
 	var identityRepo *repository.Store
 	var accountLinks azerothaccount.LinkStore
 	var storeRepo azerothstore.Store
+	var characterVisibility azerothcharacter.VisibilityStore
 	if database != nil {
 		identityRepo = repository.New(database.SQL())
 		sessionStore = identityRepo
 		accountLinks = azerothaccountrepo.New(database.SQL())
 		storeRepo = azerothstorerepo.New(database.SQL())
+		characterVisibility = azerothcharacterrepo.New(database.SQL())
 	}
 	if storeRepo != nil {
 		go runStoreReconciliation(ctx, storeRepo, logger)
@@ -243,6 +246,7 @@ func run() error {
 		Characters: characterReader,
 		Accounts:   accountReader,
 		Audit:      auditRecorder,
+		Visibility: characterVisibility,
 	}))
 	manager.Add(azerothadmin.New(executor, azerothadmin.WithAudit(auditRecorder)))
 	manager.Add(azerothinfo.New(executor))

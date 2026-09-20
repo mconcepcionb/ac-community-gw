@@ -161,6 +161,21 @@ components:
         total_time:
           type: integer
       type: object
+    AzerothCharacterVisibility:
+      properties:
+        name:
+          type: string
+        public:
+          type: boolean
+      type: object
+    AzerothCharacterVisibilityResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/AzerothCharacterVisibility'
+          type: array
+          uniqueItems: false
+      type: object
     AzerothCharactersResponse:
       properties:
         characters:
@@ -332,6 +347,11 @@ components:
             type: string
           type: array
           uniqueItems: false
+      type: object
+    AzerothSetVisibilityRequest:
+      properties:
+        public:
+          type: boolean
       type: object
     AzerothStatusResponse:
       properties:
@@ -1972,6 +1992,98 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Service Unavailable
       summary: List my characters
+      tags:
+      - azeroth-character
+  /api/v1/azeroth/me/characters/{name}/visibility:
+    put:
+      description: Toggles whether a character owned by the user appears on public
+        boards. Requires the azeroth.character.self permission.
+      operationId: azeroth.me.characters.visibility.set
+      parameters:
+      - description: character name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AzerothSetVisibilityRequest'
+        description: visibility
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothCharacterVisibility'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+      summary: Set my character visibility
+      tags:
+      - azeroth-character
+  /api/v1/azeroth/me/characters/visibility:
+    get:
+      description: Returns the public-board visibility flag for each of the user's
+        characters. Requires the azeroth.character.self permission.
+      operationId: azeroth.me.characters.visibility.list
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AzerothCharacterVisibilityResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List my character visibility
       tags:
       - azeroth-character
   /api/v1/azeroth/me/mail:

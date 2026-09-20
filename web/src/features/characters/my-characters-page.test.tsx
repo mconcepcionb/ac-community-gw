@@ -58,11 +58,15 @@ describe("MyCharactersPage", () => {
           ],
         }),
       ),
+      http.get(`${myCharactersUrl}/visibility`, () =>
+        HttpResponse.json({ items: [{ name: "Thrall", public: true }] }),
+      ),
     );
 
     renderAt("/characters");
 
     expect(await screen.findByText("Thrall")).toBeInTheDocument();
     expect(screen.getByText("Shaman")).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "Public" })).toBeInTheDocument();
   });
 });

@@ -31,6 +31,7 @@ type Config struct {
 	Characters azerothdb.CharacterReader
 	Accounts   azerothdb.AccountReader
 	Audit      audit.Recorder
+	Visibility VisibilityStore
 }
 
 // Plugin implements plugins.Plugin.
@@ -40,6 +41,7 @@ type Plugin struct {
 	accounts   azerothdb.AccountReader
 	audit      audit.Recorder
 	directory  accountDirectory
+	visibility VisibilityStore
 }
 
 // New creates the azeroth-character plugin.
@@ -53,6 +55,7 @@ func New(cfg Config) *Plugin {
 		characters: cfg.Characters,
 		accounts:   cfg.Accounts,
 		audit:      recorder,
+		visibility: cfg.Visibility,
 	}
 }
 
@@ -85,6 +88,10 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		reg.RequirePermission(PermissionCharacterSelf, http.HandlerFunc(p.handleMyCharacters)))
 	reg.Mux.Handle("POST /api/v1/azeroth/me/mail",
 		reg.RequirePermission(PermissionMailSelf, http.HandlerFunc(p.handleMyMail)))
+	reg.Mux.Handle("GET /api/v1/azeroth/me/characters/visibility",
+		reg.RequirePermission(PermissionCharacterSelf, http.HandlerFunc(p.handleListVisibility)))
+	reg.Mux.Handle("PUT /api/v1/azeroth/me/characters/{name}/visibility",
+		reg.RequirePermission(PermissionCharacterSelf, http.HandlerFunc(p.handleSetVisibility)))
 	if err := services.Provide[Directory](reg.Services, DirectoryService, p); err != nil {
 		return err
 	}

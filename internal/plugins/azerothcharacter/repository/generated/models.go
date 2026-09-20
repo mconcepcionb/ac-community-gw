@@ -2,7 +2,7 @@
 // versions:
 //   sqlc v1.31.1
 
-package azerothaccountrepo
+package azerothcharacterrepo
 
 import (
 	"database/sql"

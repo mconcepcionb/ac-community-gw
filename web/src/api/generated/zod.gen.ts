@@ -86,6 +86,15 @@ export const zAzerothCharacter = z.object({
     total_time: z.int().optional()
 });
 
+export const zAzerothCharacterVisibility = z.object({
+    name: z.string().optional(),
+    public: z.boolean().optional()
+});
+
+export const zAzerothCharacterVisibilityResponse = z.object({
+    items: z.array(zAzerothCharacterVisibility).optional()
+});
+
 export const zAzerothCharactersResponse = z.object({
     characters: z.array(zAzerothCharacter).optional()
 });
@@ -176,6 +185,10 @@ export const zAzerothSendMailRequest = z.object({
 export const zAzerothSendMailResponse = z.object({
     recipient: z.string().optional(),
     results: z.array(z.string()).optional()
+});
+
+export const zAzerothSetVisibilityRequest = z.object({
+    public: z.boolean().optional()
 });
 
 export const zAzerothStatusResponse = z.object({
@@ -619,6 +632,25 @@ export const zAzerothMeCharactersListQuery = z.object({
  * OK
  */
 export const zAzerothMeCharactersListResponse = zAzerothCharactersResponse;
+
+/**
+ * visibility
+ */
+export const zAzerothMeCharactersVisibilitySetBody = zAzerothSetVisibilityRequest;
+
+export const zAzerothMeCharactersVisibilitySetPath = z.object({
+    name: z.string()
+});
+
+/**
+ * OK
+ */
+export const zAzerothMeCharactersVisibilitySetResponse = zAzerothCharacterVisibility;
+
+/**
+ * OK
+ */
+export const zAzerothMeCharactersVisibilityListResponse = zAzerothCharacterVisibilityResponse;
 
 /**
  * delivery request

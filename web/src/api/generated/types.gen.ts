@@ -88,6 +88,15 @@ export type AzerothCharacter = {
     total_time?: number;
 };
 
+export type AzerothCharacterVisibility = {
+    name?: string;
+    public?: boolean;
+};
+
+export type AzerothCharacterVisibilityResponse = {
+    items?: Array<AzerothCharacterVisibility>;
+};
+
 export type AzerothCharactersResponse = {
     characters?: Array<AzerothCharacter>;
 };
@@ -178,6 +187,10 @@ export type AzerothSendMailRequest = {
 export type AzerothSendMailResponse = {
     recipient?: string;
     results?: Array<string>;
+};
+
+export type AzerothSetVisibilityRequest = {
+    public?: boolean;
 };
 
 export type AzerothStatusResponse = {
@@ -1530,6 +1543,88 @@ export type AzerothMeCharactersListResponses = {
 };
 
 export type AzerothMeCharactersListResponse = AzerothMeCharactersListResponses[keyof AzerothMeCharactersListResponses];
+
+export type AzerothMeCharactersVisibilitySetData = {
+    /**
+     * visibility
+     */
+    body: AzerothSetVisibilityRequest;
+    path: {
+        /**
+         * character name
+         */
+        name: string;
+    };
+    query?: never;
+    url: '/api/v1/azeroth/me/characters/{name}/visibility';
+};
+
+export type AzerothMeCharactersVisibilitySetErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+};
+
+export type AzerothMeCharactersVisibilitySetError = AzerothMeCharactersVisibilitySetErrors[keyof AzerothMeCharactersVisibilitySetErrors];
+
+export type AzerothMeCharactersVisibilitySetResponses = {
+    /**
+     * OK
+     */
+    200: AzerothCharacterVisibility;
+};
+
+export type AzerothMeCharactersVisibilitySetResponse = AzerothMeCharactersVisibilitySetResponses[keyof AzerothMeCharactersVisibilitySetResponses];
+
+export type AzerothMeCharactersVisibilityListData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/azeroth/me/characters/visibility';
+};
+
+export type AzerothMeCharactersVisibilityListErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AzerothMeCharactersVisibilityListError = AzerothMeCharactersVisibilityListErrors[keyof AzerothMeCharactersVisibilityListErrors];
+
+export type AzerothMeCharactersVisibilityListResponses = {
+    /**
+     * OK
+     */
+    200: AzerothCharacterVisibilityResponse;
+};
+
+export type AzerothMeCharactersVisibilityListResponse = AzerothMeCharactersVisibilityListResponses[keyof AzerothMeCharactersVisibilityListResponses];
 
 export type AzerothMeMailSendData = {
     /**
