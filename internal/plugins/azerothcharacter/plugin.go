@@ -14,6 +14,7 @@ import (
 	"github.com/mconcepcionb/ac-community-gw/internal/core/notice"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/plugins"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/services"
+	"github.com/mconcepcionb/ac-community-gw/internal/core/ttlcache"
 )
 
 // Name is the stable plugin name.
@@ -45,6 +46,7 @@ type Plugin struct {
 	directory    accountDirectory
 	visibility   VisibilityStore
 	noticeItemID int
+	boardCache   *ttlcache.Cache[LeaderboardResponse]
 }
 
 // New creates the azeroth-character plugin.
@@ -60,6 +62,7 @@ func New(cfg Config) *Plugin {
 		audit:        recorder,
 		visibility:   cfg.Visibility,
 		noticeItemID: cfg.NoticeItemID,
+		boardCache:   ttlcache.New[LeaderboardResponse](publicBoardCacheTTL),
 	}
 }
 
@@ -98,6 +101,8 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		reg.RequirePermission(PermissionCharacterSelf, http.HandlerFunc(p.handleSetVisibility)))
 	reg.Mux.Handle("GET /api/v1/azeroth/leaderboards/{board}",
 		reg.RequirePermission(PermissionLeaderboardRead, http.HandlerFunc(p.handleLeaderboard)))
+	reg.Mux.Handle("GET /api/v1/public/leaderboards/{board}",
+		rateLimit(reg, http.HandlerFunc(p.handlePublicLeaderboard)))
 	if err := services.Provide[Directory](reg.Services, DirectoryService, p); err != nil {
 		return err
 	}

@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { azerothInfoStatusOptions } from "@/api";
+import { azerothPublicStatusOptions } from "@/api";
 
-/** useAzerothStatus fetches the AzerothCore server status snapshot. */
+/** useAzerothStatus fetches the public AzerothCore server status snapshot. */
 export function useAzerothStatus() {
-  return useQuery({ ...azerothInfoStatusOptions(), retry: false });
+  return useQuery({ ...azerothPublicStatusOptions(), retry: false });
 }

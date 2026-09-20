@@ -5,12 +5,17 @@ package azerothinfo
 import (
 	"context"
 	"net/http"
+	"time"
 
 	"github.com/mconcepcionb/ac-community-gw/internal/core/azerothcore"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/httpapi"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/plugins"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/services"
+	"github.com/mconcepcionb/ac-community-gw/internal/core/ttlcache"
 )
+
+// publicCacheTTL bounds how stale a public status response may be.
+const publicCacheTTL = 15 * time.Second
 
 // Name is the stable plugin name.
 const Name = "azeroth-info"
@@ -37,12 +42,13 @@ type ServerInfoService interface {
 
 // Plugin implements plugins.Plugin.
 type Plugin struct {
-	executor azerothcore.CommandExecutor
+	executor    azerothcore.CommandExecutor
+	statusCache *ttlcache.Cache[StatusResponse]
 }
 
 // New creates the azeroth-info plugin.
 func New(executor azerothcore.CommandExecutor) *Plugin {
-	return &Plugin{executor: executor}
+	return &Plugin{executor: executor, statusCache: ttlcache.New[StatusResponse](publicCacheTTL)}
 }
 
 // Name implements plugins.Plugin.
@@ -60,7 +66,50 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 	}
 	reg.Mux.Handle("GET /api/v1/azeroth/info/status",
 		reg.RequirePermission(PermissionInfoPublicRead, http.HandlerFunc(p.handleStatus)))
+	reg.Mux.Handle("GET /api/v1/public/status",
+		rateLimit(reg, http.HandlerFunc(p.handlePublicStatus)))
 	return nil
+}
+
+// handlePublicStatus handles GET /api/v1/public/status.
+//
+//	@Summary		Public server status
+//	@Description	Reports connected players, peak, queue and uptime without authentication. Cached briefly and rate-limited per IP.
+//	@Tags			azeroth-info
+//	@ID				azeroth.public.status
+//	@Produce		json
+//	@Success		200	{object}	StatusResponse
+//	@Failure		502	{object}	httpapi.ErrorResponse
+//	@Failure		503	{object}	httpapi.ErrorResponse
+//	@Router			/api/v1/public/status [get]
+func (p *Plugin) handlePublicStatus(w http.ResponseWriter, r *http.Request) {
+	if cached, ok := p.statusCache.Get("status"); ok {
+		httpapi.WriteJSON(w, http.StatusOK, cached)
+		return
+	}
+	info, err := p.Status(r.Context())
+	if err != nil {
+		httpapi.WriteError(w, r, httpapi.ErrBadGateway)
+		return
+	}
+	response := StatusResponse{
+		Output:            info.Output,
+		Version:           info.Version,
+		ConnectedPlayers:  info.ConnectedPlayers,
+		CharactersInWorld: info.CharactersInWorld,
+		ConnectionPeak:    info.ConnectionPeak,
+		Queue:             info.Queue,
+		Uptime:            info.Uptime,
+	}
+	p.statusCache.Set("status", response)
+	httpapi.WriteJSON(w, http.StatusOK, response)
+}
+
+func rateLimit(reg *plugins.Registry, next http.Handler) http.Handler {
+	if reg.RateLimit == nil {
+		return next
+	}
+	return reg.RateLimit(next)
 }
 
 // Status implements ServerInfoService.

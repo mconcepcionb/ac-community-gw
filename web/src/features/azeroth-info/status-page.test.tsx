@@ -9,7 +9,7 @@ import { routeTree } from "@/routeTree.gen";
 import { server } from "@/test/msw";
 
 const meUrl = "http://localhost:8080/api/v1/me";
-const statusUrl = "http://localhost:8080/api/v1/azeroth/info/status";
+const statusUrl = "http://localhost:8080/api/v1/public/status";
 
 function authorized() {
   return http.get(meUrl, () =>

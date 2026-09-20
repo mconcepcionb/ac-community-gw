@@ -1,12 +1,19 @@
 package azerothcharacter
 
 import (
+	"context"
+	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/mconcepcionb/ac-community-gw/internal/core/azerothdb"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/httpapi"
+	"github.com/mconcepcionb/ac-community-gw/internal/core/plugins"
 )
+
+// publicBoardCacheTTL bounds how stale a public board response may be.
+const publicBoardCacheTTL = 15 * time.Second
 
 var (
 	errLeaderboardUnknown = httpapi.NewAPIError(http.StatusNotFound,
@@ -28,7 +35,7 @@ type LeaderboardEntry struct {
 	ArenaPoints int    `json:"arena_points"`
 } // @name AzerothLeaderboardEntry
 
-// LeaderboardResponse is the body of GET /api/v1/azeroth/leaderboards/{board}.
+// LeaderboardResponse is the body of the leaderboard endpoints.
 type LeaderboardResponse struct {
 	Board   string             `json:"board"`
 	Entries []LeaderboardEntry `json:"entries"`
@@ -51,46 +58,77 @@ type LeaderboardResponse struct {
 //	@Failure		503	{object}	httpapi.ErrorResponse
 //	@Router			/api/v1/azeroth/leaderboards/{board} [get]
 func (p *Plugin) handleLeaderboard(w http.ResponseWriter, r *http.Request) {
+	response, err := p.buildLeaderboard(r.Context(), r.PathValue("board"), r)
+	if err != nil {
+		httpapi.WriteError(w, r, err)
+		return
+	}
+	httpapi.WriteJSON(w, http.StatusOK, response)
+}
+
+// handlePublicLeaderboard handles GET /api/v1/public/leaderboards/{board}.
+//
+//	@Summary		Public character leaderboard
+//	@Description	Ranks opted-in characters without authentication. Cached briefly and rate-limited per IP.
+//	@Tags			azeroth-character
+//	@ID				azeroth.public.leaderboards.get
+//	@Produce		json
+//	@Param			board	path	string	true	"board: progression, wealth, playtime or pvp"
+//	@Param			limit	query	int		false	"page size"	default(25)
+//	@Param			offset	query	int		false	"page offset"	default(0)
+//	@Success		200	{object}	LeaderboardResponse
+//	@Failure		404	{object}	httpapi.ErrorResponse
+//	@Failure		503	{object}	httpapi.ErrorResponse
+//	@Router			/api/v1/public/leaderboards/{board} [get]
+func (p *Plugin) handlePublicLeaderboard(w http.ResponseWriter, r *http.Request) {
 	board := strings.TrimSpace(r.PathValue("board"))
 	if !azerothdb.ValidLeaderboard(board) {
 		httpapi.WriteError(w, r, errLeaderboardUnknown)
 		return
 	}
-	if p.characters == nil {
-		httpapi.WriteError(w, r, errCharacterDBNotConfigured)
+	limit, offset := boardWindow(r)
+	key := fmt.Sprintf("%s:%d:%d", board, limit, offset)
+	if cached, ok := p.boardCache.Get(key); ok {
+		httpapi.WriteJSON(w, http.StatusOK, cached)
 		return
+	}
+	response, err := p.buildLeaderboard(r.Context(), board, r)
+	if err != nil {
+		httpapi.WriteError(w, r, err)
+		return
+	}
+	p.boardCache.Set(key, response)
+	httpapi.WriteJSON(w, http.StatusOK, response)
+}
+
+func (p *Plugin) buildLeaderboard(
+	ctx context.Context,
+	board string,
+	r *http.Request,
+) (LeaderboardResponse, error) {
+	board = strings.TrimSpace(board)
+	if !azerothdb.ValidLeaderboard(board) {
+		return LeaderboardResponse{}, errLeaderboardUnknown
+	}
+	if p.characters == nil {
+		return LeaderboardResponse{}, errCharacterDBNotConfigured
 	}
 	if p.visibility == nil {
-		httpapi.WriteError(w, r, errVisibilityUnavailable)
-		return
+		return LeaderboardResponse{}, errVisibilityUnavailable
 	}
-	public, err := p.visibility.PublicNames(r.Context())
+	public, err := p.visibility.PublicNames(ctx)
 	if err != nil {
-		httpapi.WriteError(w, r, errLeaderboardUnavailable)
-		return
+		return LeaderboardResponse{}, errLeaderboardUnavailable
 	}
 	allowed := make(map[string]bool, len(public))
 	for _, name := range public {
 		allowed[name] = true
 	}
 
-	limit := intParam(r, "limit", 25)
-	if limit <= 0 {
-		limit = 25
-	}
-	if limit > 100 {
-		limit = 100
-	}
-	offset := intParam(r, "offset", 0)
-	if offset < 0 {
-		offset = 0
-	}
-	window := offset + limit + 100
-
-	characters, err := p.characters.TopCharacters(r.Context(), board, window, 0)
+	limit, offset := boardWindow(r)
+	characters, err := p.characters.TopCharacters(ctx, board, offset+limit+100, 0)
 	if err != nil {
-		httpapi.WriteError(w, r, errCharacterDBUnavailable)
-		return
+		return LeaderboardResponse{}, errCharacterDBUnavailable
 	}
 	filtered := make([]azerothdb.Character, 0, len(characters))
 	for _, character := range characters {
@@ -122,5 +160,27 @@ func (p *Plugin) handleLeaderboard(w http.ResponseWriter, r *http.Request) {
 			ArenaPoints: character.ArenaPoints,
 		})
 	}
-	httpapi.WriteJSON(w, http.StatusOK, LeaderboardResponse{Board: board, Entries: entries})
+	return LeaderboardResponse{Board: board, Entries: entries}, nil
+}
+
+func boardWindow(r *http.Request) (limit, offset int) {
+	limit = intParam(r, "limit", 25)
+	if limit <= 0 {
+		limit = 25
+	}
+	if limit > 100 {
+		limit = 100
+	}
+	offset = intParam(r, "offset", 0)
+	if offset < 0 {
+		offset = 0
+	}
+	return limit, offset
+}
+
+func rateLimit(reg *plugins.Registry, next http.Handler) http.Handler {
+	if reg.RateLimit == nil {
+		return next
+	}
+	return reg.RateLimit(next)
 }

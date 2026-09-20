@@ -1015,6 +1015,25 @@ export const zIdentityUsersListResponse = zListUsersResponse;
  */
 export const zAuthMeResponse = zMeResponse;
 
+export const zAzerothPublicLeaderboardsGetPath = z.object({
+    board: z.string()
+});
+
+export const zAzerothPublicLeaderboardsGetQuery = z.object({
+    limit: z.int().optional().default(25),
+    offset: z.int().optional().default(0)
+});
+
+/**
+ * OK
+ */
+export const zAzerothPublicLeaderboardsGetResponse = zAzerothLeaderboardResponse;
+
+/**
+ * OK
+ */
+export const zAzerothPublicStatusResponse = zAzerothStatusResponse;
+
 /**
  * report
  */

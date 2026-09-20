@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 
-import { azerothLeaderboardsGetOptions } from "@/api";
+import { azerothPublicLeaderboardsGetOptions } from "@/api";
 import { LoadingState } from "@/components/common/loading-state";
 import { PageHeader } from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
@@ -37,7 +37,7 @@ function metric(
 export function LeaderboardsPage({ board }: { board: string }) {
   const [page, setPage] = useState(0);
   const query = useQuery(
-    azerothLeaderboardsGetOptions({
+    azerothPublicLeaderboardsGetOptions({
       path: { board },
       query: { limit: PAGE_SIZE, offset: page * PAGE_SIZE },
     }),
