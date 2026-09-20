@@ -25,11 +25,6 @@ const sections = [
     to: "/items",
   },
   {
-    title: "Accounts",
-    description: "List and manage AzerothCore login accounts.",
-    to: "/accounts",
-  },
-  {
     title: "Account links",
     description: "Community users linked to game accounts.",
     to: "/account-links",

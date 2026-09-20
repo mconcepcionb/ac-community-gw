@@ -14,6 +14,7 @@ const accountsUrl = "http://localhost:8080/api/v1/azeroth/accounts";
 const banUrl = "http://localhost:8080/api/v1/azeroth/accounts/ADMIN/ban";
 
 let banBody: unknown;
+let createBody: unknown;
 
 function renderPage() {
   const queryClient = createQueryClient();
@@ -30,25 +31,67 @@ function renderPage() {
   );
 }
 
+function mockSession(permissions: string[]) {
+  server.use(
+    http.get(meUrl, () =>
+      HttpResponse.json({ user_id: "u1", discord_id: "1", roles: [], permissions }),
+    ),
+  );
+}
+
+function mockAccounts() {
+  server.use(
+    http.get(accountsUrl, () =>
+      HttpResponse.json({
+        accounts: [
+          {
+            id: 1,
+            username: "ADMIN",
+            email: "admin@example.test",
+            gm_level: 3,
+            online: false,
+            banned: false,
+            last_login: null,
+          },
+        ],
+      }),
+    ),
+  );
+}
+
 describe("AdminAccountsPage", () => {
   beforeEach(() => {
     banBody = undefined;
+    createBody = undefined;
   });
-  it("lists accounts and bans one", async () => {
+
+  it("lists accounts and creates one", async () => {
+    mockSession(["azeroth.account.list", "azeroth.account.manage"]);
+    mockAccounts();
     server.use(
-      http.get(meUrl, () =>
-        HttpResponse.json({
-          user_id: "u1",
-          discord_id: "1",
-          roles: [],
-          permissions: ["azeroth.account.list", "azeroth.admin.accounts.ban"],
-        }),
-      ),
-      http.get(accountsUrl, () =>
-        HttpResponse.json({
-          accounts: [{ id: 1, username: "ADMIN", gm_level: 3, online: false, banned: false }],
-        }),
-      ),
+      http.post(accountsUrl, async ({ request }) => {
+        createBody = await request.json();
+        return HttpResponse.json({ result: "Account created" });
+      }),
+    );
+
+    renderPage();
+    expect(await screen.findByText("ADMIN")).toBeInTheDocument();
+
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: "Create account" }));
+    await user.type(await screen.findByLabelText("Username"), "NEWUSER");
+    await user.type(screen.getByLabelText("Password"), "secret");
+    await user.click(screen.getByRole("button", { name: "Create" }));
+
+    await waitFor(() => expect(createBody).toBeDefined());
+    expect(createBody).toMatchObject({ username: "NEWUSER", password: "secret" });
+  });
+
+  it("bans an account", async () => {
+    mockSession(["azeroth.account.list", "azeroth.admin.accounts.ban"]);
+    mockAccounts();
+    server.use(
       http.post(banUrl, async ({ request }) => {
         banBody = await request.json();
         return HttpResponse.json({ result: "banned" });

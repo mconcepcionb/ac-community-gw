@@ -13,7 +13,6 @@ import { Route as PortalRouteImport } from './routes/_portal'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as PortalIndexRouteImport } from './routes/_portal/index'
 import { Route as PortalAccountLinksRouteImport } from './routes/_portal/account-links'
-import { Route as PortalAccountsRouteImport } from './routes/_portal/accounts'
 import { Route as PortalForbiddenRouteImport } from './routes/_portal/forbidden'
 import { Route as PortalLoginRouteImport } from './routes/_portal/login'
 import { Route as PortalProfileRouteImport } from './routes/_portal/profile'
@@ -52,11 +51,6 @@ const PortalIndexRoute = PortalIndexRouteImport.update({
 const PortalAccountLinksRoute = PortalAccountLinksRouteImport.update({
   id: '/account-links',
   path: '/account-links',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalAccountsRoute = PortalAccountsRouteImport.update({
-  id: '/accounts',
-  path: '/accounts',
   getParentRoute: () => PortalRoute,
 } as any)
 const PortalForbiddenRoute = PortalForbiddenRouteImport.update({
@@ -168,7 +162,6 @@ export interface FileRoutesByFullPath {
   '/': typeof PortalIndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/account-links': typeof PortalAccountLinksRouteWithChildren
-  '/accounts': typeof PortalAccountsRoute
   '/forbidden': typeof PortalForbiddenRoute
   '/login': typeof PortalLoginRoute
   '/profile': typeof PortalProfileRoute
@@ -191,7 +184,6 @@ export interface FileRoutesByFullPath {
   '/identity/users/$userId/characters': typeof PortalIdentityUsersUserIdCharactersRoute
 }
 export interface FileRoutesByTo {
-  '/accounts': typeof PortalAccountsRoute
   '/forbidden': typeof PortalForbiddenRoute
   '/login': typeof PortalLoginRoute
   '/profile': typeof PortalProfileRoute
@@ -217,7 +209,6 @@ export interface FileRoutesById {
   '/_portal': typeof PortalRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
   '/_portal/account-links': typeof PortalAccountLinksRouteWithChildren
-  '/_portal/accounts': typeof PortalAccountsRoute
   '/_portal/forbidden': typeof PortalForbiddenRoute
   '/_portal/login': typeof PortalLoginRoute
   '/_portal/profile': typeof PortalProfileRoute
@@ -246,7 +237,6 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/account-links'
-    | '/accounts'
     | '/forbidden'
     | '/login'
     | '/profile'
@@ -269,7 +259,6 @@ export interface FileRouteTypes {
     | '/identity/users/$userId/characters'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/accounts'
     | '/forbidden'
     | '/login'
     | '/profile'
@@ -294,7 +283,6 @@ export interface FileRouteTypes {
     | '/_portal'
     | '/admin'
     | '/_portal/account-links'
-    | '/_portal/accounts'
     | '/_portal/forbidden'
     | '/_portal/login'
     | '/_portal/profile'
@@ -351,13 +339,6 @@ declare module '@tanstack/react-router' {
       path: '/account-links'
       fullPath: '/account-links'
       preLoaderRoute: typeof PortalAccountLinksRouteImport
-      parentRoute: typeof PortalRoute
-    }
-    '/_portal/accounts': {
-      id: '/_portal/accounts'
-      path: '/accounts'
-      fullPath: '/accounts'
-      preLoaderRoute: typeof PortalAccountsRouteImport
       parentRoute: typeof PortalRoute
     }
     '/_portal/forbidden': {
@@ -545,7 +526,6 @@ const PortalStoreProductsRouteWithChildren =
 
 interface PortalRouteChildren {
   PortalAccountLinksRoute: typeof PortalAccountLinksRouteWithChildren
-  PortalAccountsRoute: typeof PortalAccountsRoute
   PortalForbiddenRoute: typeof PortalForbiddenRoute
   PortalLoginRoute: typeof PortalLoginRoute
   PortalProfileRoute: typeof PortalProfileRoute
@@ -562,7 +542,6 @@ interface PortalRouteChildren {
 
 const PortalRouteChildren: PortalRouteChildren = {
   PortalAccountLinksRoute: PortalAccountLinksRouteWithChildren,
-  PortalAccountsRoute: PortalAccountsRoute,
   PortalForbiddenRoute: PortalForbiddenRoute,
   PortalLoginRoute: PortalLoginRoute,
   PortalProfileRoute: PortalProfileRoute,

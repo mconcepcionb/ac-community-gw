@@ -174,10 +174,10 @@ claims (012).
 
 1. [001-two-surface-layouts.md](ticket/001-two-surface-layouts.md) - portal and console route layouts
 2. [002-landing-and-permission-nav.md](ticket/002-landing-and-permission-nav.md) - landing resolver, nav and forbidden state
-3. [003-console-moderation.md](ticket/003-console-moderation.md) - live moderation, account bans/GM level, character bans
+3. [003-console-moderation.md](ticket/003-console-moderation.md) - live moderation and merged account administration
 4. [004-console-community-360.md](ticket/004-console-community-360.md) - community users and the aggregate 360 view
 5. [005-console-catalog-store.md](ticket/005-console-catalog-store.md) - item catalog and store operations
-6. [006-console-delivery.md](ticket/006-console-delivery.md) - character search and mail delivery
+6. [006-console-delivery.md](ticket/006-console-delivery.md) - character search, mail delivery and character ban/unban
 7. [007-console-overview.md](ticket/007-console-overview.md) - operations overview dashboard
 8. [008-portal-home-profile-status.md](ticket/008-portal-home-profile-status.md) - portal dashboard, profile and status
 9. [009-portal-characters-mail.md](ticket/009-portal-characters-mail.md) - my characters, self-mail and board opt-in
