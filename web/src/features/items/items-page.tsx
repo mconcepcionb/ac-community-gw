@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/common/page-header";
 import { Pagination } from "@/components/common/pagination";
 import { Input } from "@/components/ui/input";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
+import { ItemNameWithTooltip } from "./item-tooltip";
 import { useItems } from "./use-items";
 
 const route = getRouteApi("/admin/items/");
@@ -30,7 +31,11 @@ const columns: ColumnDef<AzerothItem, unknown>[] = [
     accessorKey: "name",
     header: "Name",
     cell: ({ row }) => (
-      <span style={{ color: row.original.quality_color }}>{row.original.name}</span>
+      <ItemNameWithTooltip item={row.original}>
+        <span style={{ color: row.original.quality_color }} className="cursor-help">
+          {row.original.name}
+        </span>
+      </ItemNameWithTooltip>
     ),
   },
   { accessorKey: "quality_name", header: "Quality" },

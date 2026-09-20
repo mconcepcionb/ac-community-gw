@@ -21,6 +21,15 @@ source exists), instead of a plain field grid.
 - The detail page is a field grid and does not colour the item name by quality
   (`web/src/features/items/item-detail-page.tsx:47-65`).
 
+## Outcome
+
+Implemented: `WoWItemTooltip` renders an in-game-style tooltip from the data the
+API already returns, used on the item detail header and as a hover on item names
+in the catalog list. **Icons are deferred**: the dev/real world DB exposes only
+`displayid`, and there is no `displayid -> icon` mapping in the gateway's data
+sources, so no reliable icon source exists today. Item-id input autocompletion in
+the mail/grant forms is likewise left as a follow-up.
+
 ## Investigation (do before deciding)
 
 1. Determine an icon source: a bundled `display_id → icon` map exported from the

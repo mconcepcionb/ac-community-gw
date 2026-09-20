@@ -2,6 +2,7 @@ import { ErrorState } from "@/components/common/error-state";
 import { LoadingState } from "@/components/common/loading-state";
 import { PageHeader } from "@/components/common/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { WoWItemTooltip } from "./item-tooltip";
 import { isValidEntry, useItem } from "./use-items";
 
 export function ItemDetailPage({ entry }: { entry: number }) {
@@ -50,6 +51,12 @@ export function ItemDetailPage({ entry }: { entry: number }) {
         title={item?.name ?? `Item ${entry}`}
         description={item?.description || "Item detail."}
       />
+
+      {item ? (
+        <div className="mb-8 w-fit rounded-md border border-border bg-card p-4">
+          <WoWItemTooltip item={item} />
+        </div>
+      ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {fields.map((field) => (

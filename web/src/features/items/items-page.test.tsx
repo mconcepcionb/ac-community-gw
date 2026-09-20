@@ -81,7 +81,7 @@ describe("ItemDetailPage", () => {
 
     renderAt("/admin/items/19019");
 
-    expect(await screen.findByText("Thunderfury")).toBeInTheDocument();
+    expect((await screen.findAllByText("Thunderfury")).length).toBeGreaterThan(0);
     expect(screen.getByText("Legendary")).toBeInTheDocument();
   });
 });
