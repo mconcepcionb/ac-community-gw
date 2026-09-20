@@ -22,7 +22,7 @@ plugins (and vice versa), which will not survive a second game.
 | Move the permission catalog out of `apikeys` | implemented (006) |
 | SPA console route and nav split (core vs per-game) | planned |
 | SPA portal route split (core vs per-game) | planned |
-| Split `azeroth-store` into a gateway `store` plugin | roadmap |
+| Split `azeroth-store` into a gateway `store` plugin | implemented (007) |
 
 ## Context
 

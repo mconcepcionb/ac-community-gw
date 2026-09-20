@@ -1,4 +1,4 @@
-// Package repository implements the azeroth-store persistence.
+// Package repository implements the store persistence.
 package repository
 
 import (
@@ -10,19 +10,19 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgconn"
 
-	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore/domain"
-	azerothstorerepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore/repository/generated"
+	"github.com/mconcepcionb/ac-community-gw/internal/plugins/store/domain"
+	storerepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/store/repository/generated"
 )
 
-// Store implements the azeroth-store persistence operations.
+// Store implements the store persistence operations.
 type Store struct {
 	db *sql.DB
-	q  *azerothstorerepo.Queries
+	q  *storerepo.Queries
 }
 
 // New creates a store over an open database pool.
 func New(db *sql.DB) *Store {
-	return &Store{db: db, q: azerothstorerepo.New(db)}
+	return &Store{db: db, q: storerepo.New(db)}
 }
 
 // Products returns the active catalog.
@@ -67,7 +67,7 @@ func (s *Store) CreateProduct(ctx context.Context, product domain.Product) (doma
 	defer func() { _ = tx.Rollback() }()
 	q := s.q.WithTx(tx)
 
-	row, err := q.InsertProduct(ctx, azerothstorerepo.InsertProductParams{
+	row, err := q.InsertProduct(ctx, storerepo.InsertProductParams{
 		ID:          product.ID,
 		Sku:         product.SKU,
 		Name:        product.Name,
@@ -100,7 +100,7 @@ func (s *Store) UpdateProduct(ctx context.Context, product domain.Product) (doma
 	defer func() { _ = tx.Rollback() }()
 	q := s.q.WithTx(tx)
 
-	row, err := q.UpdateProduct(ctx, azerothstorerepo.UpdateProductParams{
+	row, err := q.UpdateProduct(ctx, storerepo.UpdateProductParams{
 		Sku:         product.SKU,
 		Name:        product.Name,
 		Description: product.Description,
@@ -128,7 +128,7 @@ func (s *Store) UpdateProduct(ctx context.Context, product domain.Product) (doma
 
 // SetProductActive enables or disables a product.
 func (s *Store) SetProductActive(ctx context.Context, sku string, active bool) (domain.Product, error) {
-	row, err := s.q.SetProductActive(ctx, azerothstorerepo.SetProductActiveParams{Sku: sku, Active: active})
+	row, err := s.q.SetProductActive(ctx, storerepo.SetProductActiveParams{Sku: sku, Active: active})
 	if errors.Is(err, sql.ErrNoRows) {
 		return domain.Product{}, domain.ErrProductNotFound
 	}
@@ -138,9 +138,9 @@ func (s *Store) SetProductActive(ctx context.Context, sku string, active bool) (
 	return s.productWithItems(ctx, row)
 }
 
-func insertProductItems(ctx context.Context, q *azerothstorerepo.Queries, productID uuid.UUID, items []domain.ProductItem) error {
+func insertProductItems(ctx context.Context, q *storerepo.Queries, productID uuid.UUID, items []domain.ProductItem) error {
 	for _, item := range items {
-		if err := q.InsertProductItem(ctx, azerothstorerepo.InsertProductItemParams{
+		if err := q.InsertProductItem(ctx, storerepo.InsertProductItemParams{
 			ProductID: productID,
 			ItemID:    int32(item.ItemID),
 			Count:     int32(item.Count),
@@ -180,11 +180,11 @@ func (s *Store) Grant(ctx context.Context, userID uuid.UUID, points int64, reaso
 	if err := q.EnsureWallet(ctx, userID); err != nil {
 		return 0, fmt.Errorf("repository: ensure wallet: %w", err)
 	}
-	balance, err := q.CreditWallet(ctx, azerothstorerepo.CreditWalletParams{UserID: userID, Balance: points})
+	balance, err := q.CreditWallet(ctx, storerepo.CreditWalletParams{UserID: userID, Balance: points})
 	if err != nil {
 		return 0, fmt.Errorf("repository: credit wallet: %w", err)
 	}
-	if err := q.InsertWalletEntry(ctx, azerothstorerepo.InsertWalletEntryParams{
+	if err := q.InsertWalletEntry(ctx, storerepo.InsertWalletEntryParams{
 		UserID:       userID,
 		Delta:        points,
 		BalanceAfter: balance,
@@ -211,7 +211,7 @@ func (s *Store) CreateOrder(ctx context.Context, userID uuid.UUID, product domai
 	if err := q.EnsureWallet(ctx, userID); err != nil {
 		return domain.Order{}, fmt.Errorf("repository: ensure wallet: %w", err)
 	}
-	balance, err := q.DebitWallet(ctx, azerothstorerepo.DebitWalletParams{UserID: userID, Balance: product.PricePoints})
+	balance, err := q.DebitWallet(ctx, storerepo.DebitWalletParams{UserID: userID, Balance: product.PricePoints})
 	if errors.Is(err, sql.ErrNoRows) {
 		return domain.Order{}, domain.ErrInsufficientFunds
 	}
@@ -220,7 +220,7 @@ func (s *Store) CreateOrder(ctx context.Context, userID uuid.UUID, product domai
 	}
 
 	orderID := uuid.New()
-	row, err := q.InsertOrder(ctx, azerothstorerepo.InsertOrderParams{
+	row, err := q.InsertOrder(ctx, storerepo.InsertOrderParams{
 		ID:            orderID,
 		UserID:        userID,
 		ProductID:     product.ID,
@@ -233,7 +233,7 @@ func (s *Store) CreateOrder(ctx context.Context, userID uuid.UUID, product domai
 	if err != nil {
 		return domain.Order{}, fmt.Errorf("repository: insert order: %w", err)
 	}
-	if err := q.InsertWalletEntry(ctx, azerothstorerepo.InsertWalletEntryParams{
+	if err := q.InsertWalletEntry(ctx, storerepo.InsertWalletEntryParams{
 		UserID:       userID,
 		Delta:        -product.PricePoints,
 		BalanceAfter: balance,
@@ -251,7 +251,7 @@ func (s *Store) CreateOrder(ctx context.Context, userID uuid.UUID, product domai
 // CompleteOrder marks a pending order delivered. Completing an already
 // delivered order is an idempotent no-op; any other terminal state is rejected.
 func (s *Store) CompleteOrder(ctx context.Context, orderID uuid.UUID, output string) error {
-	_, err := s.q.UpdateOrderStatus(ctx, azerothstorerepo.UpdateOrderStatusParams{
+	_, err := s.q.UpdateOrderStatus(ctx, storerepo.UpdateOrderStatusParams{
 		ID:            orderID,
 		Status:        string(domain.OrderDelivered),
 		CommandOutput: output,
@@ -300,7 +300,7 @@ func (s *Store) FailOrder(ctx context.Context, orderID uuid.UUID, output string)
 		return domain.Order{}, fmt.Errorf("repository: ensure wallet: %w", err)
 	}
 
-	row, err := q.UpdateOrderStatus(ctx, azerothstorerepo.UpdateOrderStatusParams{
+	row, err := q.UpdateOrderStatus(ctx, storerepo.UpdateOrderStatusParams{
 		ID:            orderID,
 		Status:        string(domain.OrderFailed),
 		CommandOutput: output,
@@ -311,11 +311,11 @@ func (s *Store) FailOrder(ctx context.Context, orderID uuid.UUID, output string)
 	if err != nil {
 		return domain.Order{}, fmt.Errorf("repository: fail order: %w", err)
 	}
-	balance, err := q.CreditWallet(ctx, azerothstorerepo.CreditWalletParams{UserID: row.UserID, Balance: row.PricePoints})
+	balance, err := q.CreditWallet(ctx, storerepo.CreditWalletParams{UserID: row.UserID, Balance: row.PricePoints})
 	if err != nil {
 		return domain.Order{}, fmt.Errorf("repository: refund wallet: %w", err)
 	}
-	if err := q.InsertWalletEntry(ctx, azerothstorerepo.InsertWalletEntryParams{
+	if err := q.InsertWalletEntry(ctx, storerepo.InsertWalletEntryParams{
 		UserID:       row.UserID,
 		Delta:        row.PricePoints,
 		BalanceAfter: balance,
@@ -334,7 +334,7 @@ func (s *Store) FailOrder(ctx context.Context, orderID uuid.UUID, output string)
 // changing its status. It is used when CompleteOrder fails so reconciliation can
 // finish the order later.
 func (s *Store) SetOrderOutput(ctx context.Context, orderID uuid.UUID, output string) error {
-	if err := s.q.SetOrderOutput(ctx, azerothstorerepo.SetOrderOutputParams{
+	if err := s.q.SetOrderOutput(ctx, storerepo.SetOrderOutputParams{
 		ID:            orderID,
 		CommandOutput: output,
 	}); err != nil {
@@ -355,7 +355,7 @@ func (s *Store) ReconcilePendingOrders(ctx context.Context, limit int) (int, err
 	}
 	completed := 0
 	for _, row := range rows {
-		if _, err := s.q.UpdateOrderStatus(ctx, azerothstorerepo.UpdateOrderStatusParams{
+		if _, err := s.q.UpdateOrderStatus(ctx, storerepo.UpdateOrderStatusParams{
 			ID:            row.ID,
 			Status:        string(domain.OrderDelivered),
 			CommandOutput: row.CommandOutput,
@@ -381,7 +381,7 @@ func (s *Store) Orders(ctx context.Context, userID uuid.UUID, limit, offset int)
 	if offset < 0 {
 		offset = 0
 	}
-	rows, err := s.q.ListOrdersByUser(ctx, azerothstorerepo.ListOrdersByUserParams{
+	rows, err := s.q.ListOrdersByUser(ctx, storerepo.ListOrdersByUserParams{
 		UserID: userID,
 		Limit:  int32(limit),
 		Offset: int32(offset),
@@ -407,7 +407,7 @@ func (s *Store) AdminOrders(ctx context.Context, status string, limit, offset in
 	if offset < 0 {
 		offset = 0
 	}
-	rows, err := s.q.ListOrders(ctx, azerothstorerepo.ListOrdersParams{
+	rows, err := s.q.ListOrders(ctx, storerepo.ListOrdersParams{
 		Limit:   int32(limit),
 		Offset:  int32(offset),
 		Column3: status,
@@ -434,7 +434,7 @@ func (s *Store) OrderByID(ctx context.Context, id uuid.UUID) (domain.Order, erro
 	return toOrder(row), nil
 }
 
-func (s *Store) productWithItems(ctx context.Context, row azerothstorerepo.StoreProduct) (domain.Product, error) {
+func (s *Store) productWithItems(ctx context.Context, row storerepo.StoreProduct) (domain.Product, error) {
 	items, err := s.q.ListProductItems(ctx, row.ID)
 	if err != nil {
 		return domain.Product{}, fmt.Errorf("repository: list product items: %w", err)
@@ -455,7 +455,7 @@ func (s *Store) productWithItems(ctx context.Context, row azerothstorerepo.Store
 	return product, nil
 }
 
-func toOrder(row azerothstorerepo.StoreOrder) domain.Order {
+func toOrder(row storerepo.StoreOrder) domain.Order {
 	return domain.Order{
 		ID:            row.ID,
 		UserID:        row.UserID,

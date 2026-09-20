@@ -1,4 +1,4 @@
-package azerothstore
+package store
 
 import (
 	"context"
@@ -17,7 +17,7 @@ import (
 	"github.com/mconcepcionb/ac-community-gw/internal/core/delivery"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/httpapi"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/itemview"
-	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore/domain"
+	"github.com/mconcepcionb/ac-community-gw/internal/plugins/store/domain"
 )
 
 var (

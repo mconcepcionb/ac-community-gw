@@ -1,4 +1,4 @@
-package azerothstore
+package store
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 	"github.com/mconcepcionb/ac-community-gw/internal/core/auth"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/delivery"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/userdir"
-	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore/domain"
+	"github.com/mconcepcionb/ac-community-gw/internal/plugins/store/domain"
 )
 
 type fakeStore struct {

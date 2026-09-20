@@ -1,4 +1,4 @@
-package azerothstore
+package store
 
 import (
 	"context"

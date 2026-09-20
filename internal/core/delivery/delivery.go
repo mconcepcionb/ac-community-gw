@@ -34,7 +34,7 @@ type Request struct {
 }
 
 // Service delivers mail, items and money. It is implemented by azeroth-character
-// and consumed by other plugins (for example azeroth-store).
+// and consumed by other plugins (for example store).
 type Service interface {
 	Deliver(ctx context.Context, req Request) (output string, err error)
 }

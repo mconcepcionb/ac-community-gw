@@ -69,7 +69,7 @@ Cross-plugin interaction happens only through core registries.
 | `azeroth-account` | account create / password / email, account links |
 | `azeroth-admin` | account ban / unban / gmlevel |
 | `azeroth-info` | read-only server information |
-| `azeroth-store` | store boundary, permissions and event contracts (stub) |
+| `store` | gateway store: product catalog, wallets, orders and reward delivery |
 
 Planned: `azeroth-character`, `azeroth-guild`, `azeroth-support`,
 `azeroth-events`, `azeroth-rewards`, `azeroth-realm`, `discord-bot`.

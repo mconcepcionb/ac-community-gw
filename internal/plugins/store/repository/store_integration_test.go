@@ -12,7 +12,7 @@ import (
 	"github.com/google/uuid"
 	_ "github.com/jackc/pgx/v5/stdlib"
 
-	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore/domain"
+	"github.com/mconcepcionb/ac-community-gw/internal/plugins/store/domain"
 )
 
 func openTestDB(t *testing.T) *sql.DB {

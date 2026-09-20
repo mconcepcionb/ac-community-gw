@@ -46,7 +46,7 @@ type characterDirectory interface {
 	CharactersByUser(ctx context.Context, userID string) ([]azerothdb.Character, error)
 }
 
-// storeAccount is the capability published by azeroth-store.
+// storeAccount is the capability published by the gateway store.
 type storeAccount interface {
 	Wallet(ctx context.Context, userID uuid.UUID) (int64, error)
 	Orders(ctx context.Context, userID uuid.UUID, limit, offset int) ([]storeview.Order, error)

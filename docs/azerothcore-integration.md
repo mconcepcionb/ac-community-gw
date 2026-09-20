@@ -52,7 +52,7 @@ There is no global package containing every AzerothCore command.
 ## Application command vs AzerothCore command
 
 ```
-azeroth-store
+store
     |  character.send-item          (application command, typed)
     v
 core command registry
@@ -65,7 +65,7 @@ owner plugin handler              (builds the AzerothCore CLI string)
 SOAP CommandExecutor
 ```
 
-`azeroth-store` never knows `.send items`; only the owning plugin does.
+`store` never knows `.send items`; only the owning plugin does.
 
 Example in this iteration:
 

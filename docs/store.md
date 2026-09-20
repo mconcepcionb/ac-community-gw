@@ -1,6 +1,6 @@
 # Store
 
-The `azeroth-store` plugin owns the community store: a points wallet per
+The `store` plugin owns the community store: a points wallet per
 community user, a product catalog and orders. Points live in the gateway
 database; rewards are delivered in-game through the `azeroth-character`
 delivery capability.

@@ -27,7 +27,7 @@ Tables have a conceptual owner even though the schema lifecycle is global.
 | core | `roles`, `permissions`, `role_permissions`, `audit_log` |
 | identity-discord | `community_users`, `discord_identities`, `sessions` |
 | azeroth-account | `azeroth_account_links` |
-| azeroth-store (planned) | `wallets`, `ledger_entries`, `products`, `orders` |
+| store | `store_wallets`, `store_wallet_entries`, `store_products`, `store_orders` |
 
 ## Migrations
 

@@ -1,4 +1,4 @@
-// Package domain holds the azeroth-store module's shared types.
+// Package domain holds the store module's shared types.
 package domain
 
 import (
@@ -10,16 +10,16 @@ import (
 
 var (
 	// ErrProductNotFound is returned when a SKU does not exist.
-	ErrProductNotFound = errors.New("azerothstore: product not found")
+	ErrProductNotFound = errors.New("store: product not found")
 	// ErrProductExists is returned when a SKU is already taken.
-	ErrProductExists = errors.New("azerothstore: product already exists")
+	ErrProductExists = errors.New("store: product already exists")
 	// ErrInsufficientFunds is returned when the wallet cannot cover the price.
-	ErrInsufficientFunds = errors.New("azerothstore: insufficient funds")
+	ErrInsufficientFunds = errors.New("store: insufficient funds")
 	// ErrOrderNotFound is returned when an order does not exist.
-	ErrOrderNotFound = errors.New("azerothstore: order not found")
+	ErrOrderNotFound = errors.New("store: order not found")
 	// ErrOrderNotPending is returned when an order is already in a terminal
 	// state and the requested transition would be a no-op or a double refund.
-	ErrOrderNotPending = errors.New("azerothstore: order is not pending")
+	ErrOrderNotPending = errors.New("store: order is not pending")
 )
 
 // ProductItem is one item stack granted by a product.

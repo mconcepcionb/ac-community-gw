@@ -1,4 +1,4 @@
-package azerothstore
+package store
 
 import "github.com/mconcepcionb/ac-community-gw/internal/core/permissions"
 

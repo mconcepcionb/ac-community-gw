@@ -1,7 +1,7 @@
-// Package azerothstore owns the community store domain: products, wallets and
+// Package store owns the community store domain: products, wallets and
 // orders. Purchases are paid with points held by the gateway and delivered
 // in-game through the azeroth-character delivery capability.
-package azerothstore
+package store
 
 import (
 	"context"
@@ -16,11 +16,11 @@ import (
 	"github.com/mconcepcionb/ac-community-gw/internal/core/plugins"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/services"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/userdir"
-	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore/domain"
+	"github.com/mconcepcionb/ac-community-gw/internal/plugins/store/domain"
 )
 
 // Name is the stable plugin name.
-const Name = "azeroth-store"
+const Name = "store"
 
 const (
 	accountDirectoryService = "azeroth.account.directory"
@@ -53,7 +53,7 @@ type Store interface {
 	OrderByID(ctx context.Context, id uuid.UUID) (domain.Order, error)
 }
 
-// Config configures the azeroth-store plugin.
+// Config configures the store plugin.
 type Config struct {
 	Store Store
 	Audit audit.Recorder
@@ -69,7 +69,7 @@ type Plugin struct {
 	catalog  azerothdb.Catalog
 }
 
-// New creates the azeroth-store plugin.
+// New creates the store plugin.
 func New(cfg Config) *Plugin {
 	recorder := cfg.Audit
 	if recorder == nil {
@@ -91,19 +91,19 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 
 	accounts, err := services.Consume[accountDirectory](reg.Services, accountDirectoryService)
 	if err != nil {
-		return fmt.Errorf("azeroth-store: account directory unavailable: %w", err)
+		return fmt.Errorf("store: account directory unavailable: %w", err)
 	}
 	deliveryService, err := services.Consume[delivery.Service](reg.Services, deliveryService)
 	if err != nil {
-		return fmt.Errorf("azeroth-store: delivery service unavailable: %w", err)
+		return fmt.Errorf("store: delivery service unavailable: %w", err)
 	}
 	users, err := services.Consume[userdir.Directory](reg.Services, identityUserDirectory)
 	if err != nil {
-		return fmt.Errorf("azeroth-store: user directory unavailable: %w", err)
+		return fmt.Errorf("store: user directory unavailable: %w", err)
 	}
 	catalog, err := services.Consume[azerothdb.Catalog](reg.Services, itemCatalogService)
 	if err != nil {
-		return fmt.Errorf("azeroth-store: item catalog unavailable: %w", err)
+		return fmt.Errorf("store: item catalog unavailable: %w", err)
 	}
 	p.accounts = accounts
 	p.delivery = deliveryService

@@ -1,4 +1,4 @@
-package azerothstore
+package store
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/mconcepcionb/ac-community-gw/internal/core/azerothdb"
-	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore/domain"
+	"github.com/mconcepcionb/ac-community-gw/internal/plugins/store/domain"
 )
 
 type fakeCatalog struct {

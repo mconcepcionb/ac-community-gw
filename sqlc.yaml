@@ -33,11 +33,11 @@ sql:
 
   - engine: "postgresql"
     schema: "migrations"
-    queries: "internal/plugins/azerothstore/repository/queries.sql"
+    queries: "internal/plugins/store/repository/queries.sql"
     gen:
       go:
-        package: "azerothstorerepo"
-        out: "internal/plugins/azerothstore/repository/generated"
+        package: "storerepo"
+        out: "internal/plugins/store/repository/generated"
         sql_package: "database/sql"
         emit_json_tags: false
         emit_interface: false

@@ -44,13 +44,13 @@ import (
 	azerothcharacterrepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothcharacter/repository"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothinfo"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothitem"
-	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore"
-	azerothstorerepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore/repository"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/gatewayadmin"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/identitydiscord"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/identitydiscord/repository"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/reports"
 	reportsrepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/reports/repository"
+	storeplugin "github.com/mconcepcionb/ac-community-gw/internal/plugins/store"
+	storerepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/store/repository"
 )
 
 // @title			ac-community-gw API
@@ -131,7 +131,7 @@ func run() error {
 	var identityRepo *repository.Store
 	var accountLinks azerothaccount.LinkStore
 	var accountClaims azerothaccount.ClaimStore
-	var storeRepo azerothstore.Store
+	var storeRepo storeplugin.Store
 	var characterVisibility azerothcharacter.VisibilityStore
 	var reportsStore reports.Store
 	var adminNotesStore adminnotes.Store
@@ -142,7 +142,7 @@ func run() error {
 		accountRepo := azerothaccountrepo.New(database.SQL())
 		accountLinks = accountRepo
 		accountClaims = accountRepo
-		storeRepo = azerothstorerepo.New(database.SQL())
+		storeRepo = storerepo.New(database.SQL())
 		characterVisibility = azerothcharacterrepo.New(database.SQL())
 		reportsStore = reportsrepo.New(database.SQL())
 		adminNotesStore = adminnotesrepo.New(database.SQL())
@@ -282,7 +282,7 @@ func run() error {
 	manager.Add(azerothadmin.New(executor, azerothadmin.WithAudit(auditRecorder)))
 	manager.Add(azerothinfo.New(executor))
 	manager.Add(azerothitem.New(azerothitem.Config{Items: itemReader}))
-	manager.Add(azerothstore.New(azerothstore.Config{
+	manager.Add(storeplugin.New(storeplugin.Config{
 		Store: storeRepo,
 		Audit: auditRecorder,
 	}))
@@ -436,7 +436,7 @@ func identityRepository(store *repository.Store) identitydiscord.Repository {
 
 // runStoreReconciliation periodically completes pending orders whose delivery
 // output is already known.
-func runStoreReconciliation(ctx context.Context, store azerothstore.Store, logger *slog.Logger) {
+func runStoreReconciliation(ctx context.Context, store storeplugin.Store, logger *slog.Logger) {
 	ticker := time.NewTicker(5 * time.Minute)
 	defer ticker.Stop()
 	for {

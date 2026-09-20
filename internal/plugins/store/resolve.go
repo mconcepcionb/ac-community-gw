@@ -1,4 +1,4 @@
-package azerothstore
+package store
 
 import (
 	"errors"
@@ -10,7 +10,7 @@ import (
 	"github.com/mconcepcionb/ac-community-gw/internal/core/audit"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/delivery"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/httpapi"
-	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothstore/domain"
+	"github.com/mconcepcionb/ac-community-gw/internal/plugins/store/domain"
 )
 
 var (
