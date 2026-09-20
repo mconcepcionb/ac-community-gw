@@ -20,6 +20,8 @@ plugins (and vice versa), which will not survive a second game.
 | Correct game routes wrongly under `/admin` | planned |
 | Decide the `/public/*` surface ownership | planned |
 | Move the permission catalog out of `apikeys` | planned |
+| SPA console route and nav split (core vs per-game) | planned |
+| SPA portal route split (core vs per-game) | planned |
 | Split `azeroth-store` into a gateway `store` plugin | roadmap |
 
 ## Context
@@ -61,6 +63,8 @@ not a data change.
 - Deciding and implementing the `/public/*` surface ownership.
 - Renaming the generated OpenAPI operation ids and the SPA call sites where the
   route moves.
+- Splitting the SPA route tree and navigation into gateway-core and per-game
+  sections, mirroring the API.
 - Keeping `task check` / `task web:check` green at every step.
 
 ## Out of scope
@@ -83,6 +87,26 @@ not a data change.
 - **A permission's namespace matches its owner's kind**, not the route it gates.
   A game permission may gate a game route; a gateway route uses a gateway
   permission.
+
+### SPA route conventions
+
+The SPA mirrors the API split. The SPA is not deployed, so routes are moved
+outright (no redirects).
+
+- **Console core** stays under `/admin/*`: `/admin` (overview), `/admin/users`,
+  `/admin/roles`, `/admin/audit`, `/admin/api-clients`, `/admin/moderation`,
+  `/admin/store`.
+- **Console per-game** moves under `/admin/<game>/*`:
+  `/admin/azeroth/accounts`, `/admin/azeroth/characters`,
+  `/admin/azeroth/items`, `/admin/azeroth/online`.
+- **Portal core** stays at the root: `/`, `/login`, `/profile`, `/wallet`,
+  `/store`, `/report`, `/forbidden`.
+- **Portal per-game** moves under `/<game>/*`: `/azeroth/characters`,
+  `/azeroth/leaderboards`, `/azeroth/status`, `/azeroth/onboarding`.
+- The game id is a single constant (`azeroth` today) so a second game adds a
+  route subtree rather than rewriting links.
+- The console nav and the overview cards group core links first, then a
+  game-labelled section.
 
 ### The gateway admin plugin
 
@@ -144,18 +168,20 @@ no-login surface.
 | A - Gateway admin plugin | 001-003 |
 | B - Route namespace corrections | 004-005 |
 | C - Catalog and store | 006-007 |
+| D - SPA route split | 008-009 |
 
 ### Dependency graph
 
 ```
 001 -> 002, 003, 006
-002 -> (SPA user detail, entity history)
-003 -> (SPA audit page, entity history)
-004, 005 -> (SPA route updates)
+002, 003, 004, 005 -> 008, 009
+008, 009 -> (nav and overview updates)
 ```
 
 001 creates the plugin and moves `gw.audit.read`; 002 and 003 move the two
 routes into it. 004/005 fix the game routes. 006 moves the permission catalog.
+008/009 restructure the SPA after the API paths settle, so the call-site updates
+and the route moves land once.
 
 ## Risks
 
@@ -163,7 +189,7 @@ routes into it. 004/005 fix the game routes. 006 moves the permission catalog.
 | --- | --- |
 | The 360 loses game data when moved | It already resolves game capabilities lazily; move the resolution code verbatim and cover it with the existing user-360 tests |
 | Operation-id rename breaks the SPA | Rename `@ID`s and regenerate the client in the same ticket; update the SPA call sites (`azerothAdminUsersGet`, `azerothAdminAuditList`, `azerothAdminAccountClaimsList`, `azerothAdminCharactersMail`) |
-| Route moves break deep links | `/admin/users` and `/admin/audit` keep their URLs; the game-route moves update the SPA in the same ticket |
+| Route moves break deep links | The SPA is not deployed, so routes move outright; the API `/admin/users` and `/admin/audit` keep their URLs |
 | Two plugins briefly own `gw.audit.read` | Remove the old definition in the same change; the registry rejects duplicates |
 | Gateway plugin becomes a god object | Keep it to console aggregates; no game domain logic, only capability composition |
 
@@ -184,3 +210,8 @@ routes into it. 004/005 fix the game routes. 006 moves the permission catalog.
 
 6. [006-permission-catalog.md](ticket/006-permission-catalog.md) - move the permission catalog out of `apikeys`
 7. [007-store-gateway-split.md](ticket/007-store-gateway-split.md) - split the store into a gateway plugin (roadmap)
+
+### Milestone D - SPA route split
+
+8. [008-spa-console-split.md](ticket/008-spa-console-split.md) - core vs per-game console routes and nav
+9. [009-spa-portal-split.md](ticket/009-spa-portal-split.md) - core vs per-game portal routes
