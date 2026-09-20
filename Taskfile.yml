@@ -1,0 +1,216 @@
+version: "3"
+
+dotenv: [".env"]
+
+vars:
+  BINARY: ac-community-gw
+  SERVER_PKG: ./cmd/server
+  MIGRATIONS_DIR: migrations
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+
+  run:
+    desc: Run the gateway locally
+    cmds:
+      - go run {{.SERVER_PKG}}
+
+  dev:
+    desc: Run the API and the Vite dev server (HMR) together
+    deps:
+      - run
+      - web:dev
+
+  fake:ac:
+    desc: Run the fake AzerothCore SOAP server on 127.0.0.1:7878
+    cmds:
+      - go run ./cmd/fakeazerothcore -addr 127.0.0.1:7878 -user acgw -pass acgw
+
+  build:
+    desc: Build the API server binary into bin/
+    cmds:
+      - go build -trimpath -o bin/{{.BINARY}} {{.SERVER_PKG}}
+
+  test:
+    desc: Run the unit test suite
+    cmds:
+      - go test -count=1 ./...
+
+  test:race:
+    desc: Run the unit test suite with the race detector
+    cmds:
+      - go test -race -count=1 ./...
+
+  test:integration:
+    desc: Run integration tests (requires ACGW_DATABASE_URL and the MySQL fixtures)
+    cmds:
+      - go test -tags integration -count=1 ./...
+
+  coverage:
+    desc: Run tests with coverage
+    cmds:
+      - go test -count=1 -coverprofile=coverage.txt ./...
+      - go tool cover -func=coverage.txt
+
+  fmt:
+    desc: Format all Go source files
+    cmds:
+      - gofmt -w .
+
+  fmt:check:
+    desc: Verify that all Go source files are gofmt-ed
+    cmds:
+      - go test ./internal/architecture/ -run TestSourceIsFormatted -count=1
+
+  vet:
+    desc: Run go vet
+    cmds:
+      - go vet ./...
+
+  check:
+    desc: Format check, vet, tests, race, OpenAPI drift and SPA checks
+    cmds:
+      - task: fmt:check
+      - task: vet
+      - task: test
+      - task: test:race
+      - task: openapi:check
+      - task: web:check
+
+  codegen:
+    desc: Regenerate all generated code
+    cmds:
+      - task: codegen:sqlc
+
+  codegen:sqlc:
+    desc: Generate typed PostgreSQL access with sqlc
+    cmds:
+      - sqlc generate
+
+  openapi:spec:
+    desc: Generate api/swagger.yaml from Go annotations (swag) and normalize it
+    cmds:
+      - go tool swag init --v3.1 -g main.go -d ./cmd/server,./internal --parseInternal -o ./api --ot yaml --quiet
+      - go run ./cmd/openapi-postprocess
+
+  openapi:check:spec:
+    desc: Verify api/swagger.yaml is up to date
+    cmds:
+      - task: openapi:spec
+      - git diff --exit-code -- api/
+
+  openapi:client:
+    desc: Generate the typed TypeScript client from api/swagger.yaml
+    dir: web
+    cmds:
+      - pnpm codegen:api
+
+  openapi:
+    desc: Regenerate the OpenAPI spec and the TypeScript client
+    cmds:
+      - task: openapi:spec
+      - task: openapi:client
+
+  openapi:check:
+    desc: Verify the OpenAPI spec and the generated client are up to date
+    cmds:
+      - task: openapi:spec
+      - task: openapi:client
+      - git diff --exit-code -- api/ web/src/api/generated
+
+  web:install:
+    desc: Install SPA dependencies with pnpm
+    dir: web
+    cmds:
+      - pnpm install
+
+  web:dev:
+    desc: Run the SPA dev server with API proxy
+    dir: web
+    cmds:
+      - pnpm dev
+
+  web:build:
+    desc: Build the SPA into web/dist
+    dir: web
+    cmds:
+      - pnpm build
+
+  web:test:
+    desc: Run SPA unit tests
+    dir: web
+    cmds:
+      - pnpm test
+
+  web:typecheck:
+    desc: Type-check the SPA
+    dir: web
+    cmds:
+      - pnpm typecheck
+
+  web:lint:
+    desc: Lint and format-check the SPA with Biome
+    dir: web
+    cmds:
+      - pnpm lint
+
+  web:format:
+    desc: Format the SPA with Biome
+    dir: web
+    cmds:
+      - pnpm format
+
+  web:check:
+    desc: SPA lint, typecheck and tests
+    cmds:
+      - task: web:lint
+      - task: web:typecheck
+      - task: web:test
+
+  db:up:
+    desc: Start the development PostgreSQL container
+    cmds:
+      - docker compose up -d postgres
+
+  db:down:
+    desc: Stop the development PostgreSQL container
+    cmds:
+      - docker compose down
+
+  db:migrate:
+    desc: Apply all pending migrations (Goose)
+    cmds:
+      - goose -dir {{.MIGRATIONS_DIR}} postgres "{{.ACGW_DATABASE_URL}}" up
+
+  db:rollback:
+    desc: Roll back the most recent migration (Goose)
+    cmds:
+      - goose -dir {{.MIGRATIONS_DIR}} postgres "{{.ACGW_DATABASE_URL}}" down
+
+  db:status:
+    desc: Show migration status (Goose)
+    cmds:
+      - goose -dir {{.MIGRATIONS_DIR}} postgres "{{.ACGW_DATABASE_URL}}" status
+
+  web:image:
+    desc: Build the SPA reverse-proxy (Caddy) image
+    cmds:
+      - docker build -f web/Dockerfile -t ac-community-gw-web:local .
+
+  docker:build:
+    desc: Build the production API Docker image
+    cmds:
+      - docker build -t ac-community-gw:local .
+
+  docker:up:
+    desc: Start the development stack (proxy + app + postgres)
+    cmds:
+      - docker compose up --build -d
+
+  docker:down:
+    desc: Stop the development stack
+    cmds:
+      - docker compose down

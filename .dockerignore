@@ -1,0 +1,17 @@
+.git
+.gitignore
+bin
+*.log
+.env
+.env.*
+!.env.example
+docs
+README.md
+Taskfile.yml
+
+# Frontend build artifacts are produced inside the image
+web/node_modules
+web/dist
+web/.vite
+web/coverage
+web/.tanstack

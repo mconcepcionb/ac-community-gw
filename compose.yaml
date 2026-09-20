@@ -1,0 +1,104 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: acgw
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: acgw
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U acgw -d acgw"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Development double of the AzerothCore login database (read-only from the
+  # gateway's point of view; the fake worldserver mirrors account state here).
+  mariadb:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?set MARIADB_ROOT_PASSWORD in .env}
+      MARIADB_DATABASE: acore_auth
+      MARIADB_USER: acgw
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:?set MARIADB_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - mariadbdata:/var/lib/mysql
+      - ./scripts/mysql/init:/docker-entrypoint-initdb.d:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+    environment:
+      ACGW_ENV: development
+      ACGW_HTTP_ADDR: ":8080"
+      ACGW_LOG_LEVEL: info
+      ACGW_LOG_FORMAT: text
+      ACGW_DATABASE_URL: postgres://acgw:${POSTGRES_PASSWORD:?}@postgres:5432/acgw?sslmode=disable
+      ACGW_DB_AUTO_MIGRATE: "true"
+      ACGW_SESSION_COOKIE_SECURE: "false"
+      ACGW_DISCORD_CLIENT_ID: ${ACGW_DISCORD_CLIENT_ID:-}
+      ACGW_DISCORD_CLIENT_SECRET: ${ACGW_DISCORD_CLIENT_SECRET:-}
+      ACGW_DISCORD_REDIRECT_URL: ${ACGW_DISCORD_REDIRECT_URL:-http://localhost:8080/api/v1/auth/discord/callback}
+      ACGW_DISCORD_GUILD_ID: ${ACGW_DISCORD_GUILD_ID:-}
+      ACGW_DISCORD_ROLE_MAPPINGS: ${ACGW_DISCORD_ROLE_MAPPINGS:-}
+      ACGW_DISCORD_POST_LOGIN_REDIRECT_URL: ${ACGW_DISCORD_POST_LOGIN_REDIRECT_URL:-}
+      ACGW_AZEROTH_SOAP_URL: ${ACGW_AZEROTH_SOAP_URL:-}
+      ACGW_AZEROTH_SOAP_USERNAME: ${ACGW_AZEROTH_SOAP_USERNAME:-}
+      ACGW_AZEROTH_SOAP_PASSWORD: ${ACGW_AZEROTH_SOAP_PASSWORD:-}
+      ACGW_AZEROTH_LOGIN_DB_DSN: ${ACGW_AZEROTH_LOGIN_DB_DSN:-acgw:${MARIADB_PASSWORD:?}@tcp(mariadb:3306)/acore_auth?parseTime=true}
+      ACGW_AZEROTH_CHARACTER_DB_DSN: ${ACGW_AZEROTH_CHARACTER_DB_DSN:-acgw:${MARIADB_PASSWORD:?}@tcp(mariadb:3306)/acore_characters?parseTime=true}
+      ACGW_AZEROTH_WORLD_DB_DSN: ${ACGW_AZEROTH_WORLD_DB_DSN:-acgw:${MARIADB_PASSWORD:?}@tcp(mariadb:3306)/acore_world?parseTime=true}
+    expose:
+      - "8080"
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
+
+  # Public origin: serves the SPA and reverse-proxies the gateway. This is the
+  # only service that publishes a port. See docs/ADR/0012.
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    environment:
+      ACGW_SITE_ADDRESS: ${ACGW_SITE_ADDRESS:-:8080}
+      ACGW_API_HOST: app
+      ACGW_API_PORT: "8080"
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+
+  # Optional HTTPS tunnel for Discord OAuth2 callback testing.
+  # Quick tunnel:  docker compose --profile tunnel up
+  #   then read the https://<random>.trycloudflare.com URL from its logs.
+  # Named tunnel:  set CLOUDFLARE_TUNNEL_TOKEN and uncomment the command below.
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate --url http://web:8080
+    # command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    restart: unless-stopped
+    profiles: ["tunnel"]
+    depends_on:
+      - web
+
+volumes:
+  pgdata:
+  mariadbdata:
