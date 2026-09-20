@@ -192,8 +192,11 @@ export type AzerothAdminClaimsResponse = {
 };
 
 export type AzerothCharacter = {
+    ban_reason?: string;
+    banned?: boolean;
     class?: number;
     class_name?: string;
+    equipment?: Array<AzerothEquipmentSlot>;
     gender?: number;
     guid?: number;
     guild?: string;
@@ -219,6 +222,14 @@ export type AzerothCharacterVisibilityResponse = {
 export type AzerothCharactersResponse = {
     characters?: Array<AzerothCharacter>;
     total?: number;
+};
+
+export type AzerothEquipmentSlot = {
+    count?: number;
+    entry?: number;
+    name?: string;
+    quality?: number;
+    slot?: number;
 };
 
 export type AzerothItem = {
@@ -1032,6 +1043,59 @@ export type AzerothAdminAuditListResponses = {
 };
 
 export type AzerothAdminAuditListResponse = AzerothAdminAuditListResponses[keyof AzerothAdminAuditListResponses];
+
+export type AzerothAdminCharactersMailData = {
+    /**
+     * delivery request
+     */
+    body: AzerothSendMailRequest;
+    path: {
+        /**
+         * character name
+         */
+        name: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/characters/{name}/mail';
+};
+
+export type AzerothAdminCharactersMailErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Bad Gateway
+     */
+    502: ErrorResponse;
+};
+
+export type AzerothAdminCharactersMailError = AzerothAdminCharactersMailErrors[keyof AzerothAdminCharactersMailErrors];
+
+export type AzerothAdminCharactersMailResponses = {
+    /**
+     * OK
+     */
+    200: AzerothSendMailResponse;
+};
+
+export type AzerothAdminCharactersMailResponse = AzerothAdminCharactersMailResponses[keyof AzerothAdminCharactersMailResponses];
 
 export type IdentityAdminDiscordMappingsDeleteData = {
     body?: never;

@@ -68,6 +68,7 @@ INSERT INTO permissions (name, description, owner) VALUES
     ('azeroth.character.self', 'Read your own characters', 'azeroth-character'),
     ('azeroth.mail.send', 'Send in-game mail, items and money', 'azeroth-character'),
     ('azeroth.mail.self', 'Mail your own characters', 'azeroth-character'),
+    ('azeroth.admin.mail.send', 'Send in-game mail to any character as staff', 'azeroth-character'),
     ('azeroth.leaderboard.read', 'Read character leaderboards', 'azeroth-character'),
     ('azeroth.item.list', 'Search the AzerothCore item catalog', 'azeroth-item'),
     ('azeroth.admin.accounts.ban', 'Ban and unban AzerothCore accounts', 'azeroth-admin'),

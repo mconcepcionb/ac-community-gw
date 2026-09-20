@@ -94,7 +94,7 @@ func TestListCharactersExactJSON(t *testing.T) {
 	if rec.Code != http.StatusOK {
 		t.Fatalf("status = %d body=%s", rec.Code, rec.Body.String())
 	}
-	want := `{"characters":[{"guid":7,"name":"Thrall","race":2,"race_name":"Orc","class":7,"class_name":"Shaman","gender":0,"level":80,"online":true,"guild":"Horde","money":999,"total_time":1234,"logout_time":"2024-01-02T03:04:05Z"}],"total":1}` + "\n"
+	want := `{"characters":[{"guid":7,"name":"Thrall","race":2,"race_name":"Orc","class":7,"class_name":"Shaman","gender":0,"level":80,"online":true,"guild":"Horde","money":999,"total_time":1234,"logout_time":"2024-01-02T03:04:05Z","banned":false}],"total":1}` + "\n"
 	if rec.Body.String() != want {
 		t.Fatalf("body = %s\nwant = %s", rec.Body.String(), want)
 	}
@@ -112,7 +112,7 @@ func TestGetCharacterExactJSONNullLogout(t *testing.T) {
 	if rec.Code != http.StatusOK {
 		t.Fatalf("status = %d body=%s", rec.Code, rec.Body.String())
 	}
-	want := `{"guid":1,"name":"Thrall","race":0,"race_name":"Unknown","class":0,"class_name":"Unknown","gender":0,"level":0,"online":false,"guild":"","money":0,"total_time":0,"logout_time":null}` + "\n"
+	want := `{"guid":1,"name":"Thrall","race":0,"race_name":"Unknown","class":0,"class_name":"Unknown","gender":0,"level":0,"online":false,"guild":"","money":0,"total_time":0,"logout_time":null,"banned":false}` + "\n"
 	if rec.Body.String() != want {
 		t.Fatalf("body = %s\nwant = %s", rec.Body.String(), want)
 	}

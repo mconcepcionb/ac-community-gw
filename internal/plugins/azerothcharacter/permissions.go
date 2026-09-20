@@ -7,6 +7,8 @@ const (
 	PermissionCharacterList permissions.Permission = "azeroth.character.list"
 	// PermissionMailSend allows sending in-game mail, items and money.
 	PermissionMailSend permissions.Permission = "azeroth.mail.send"
+	// PermissionAdminMailSend allows sending mail to any character as staff.
+	PermissionAdminMailSend permissions.Permission = "azeroth.admin.mail.send"
 	// PermissionCharacterSelf allows a user to read their own characters.
 	PermissionCharacterSelf permissions.Permission = "azeroth.character.self"
 	// PermissionMailSelf allows a user to mail their own characters.
@@ -26,6 +28,12 @@ func permissionDefs() []permissions.Definition {
 		{
 			Name:        PermissionMailSend,
 			Description: "Send in-game mail, items and money",
+			Owner:       Name,
+			Namespace:   "azeroth",
+		},
+		{
+			Name:        PermissionAdminMailSend,
+			Description: "Send in-game mail to any character as staff",
 			Owner:       Name,
 			Namespace:   "azeroth",
 		},

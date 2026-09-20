@@ -33,7 +33,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 /** CharacterBanActions bans or unbans a character from the console. */
-export function CharacterBanActions({ name }: { name: string }) {
+export function CharacterBanActions({ name, banned = false }: { name: string; banned?: boolean }) {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const form = useForm<FormValues>({
@@ -76,46 +76,49 @@ export function CharacterBanActions({ name }: { name: string }) {
   return (
     <PermissionGate permission="azeroth.admin.characters.ban">
       <div className="flex gap-2">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button variant="destructive" size="sm">
-              Ban
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Ban character</DialogTitle>
-              <DialogDescription>Ban {name} from the game server.</DialogDescription>
-            </DialogHeader>
-            <Form {...form}>
-              <form onSubmit={submit} className="space-y-4">
-                <TextField
-                  control={form.control}
-                  name="duration"
-                  label="Duration"
-                  placeholder="1d"
-                />
-                <TextField control={form.control} name="reason" label="Reason" />
-                <DialogFooter>
-                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button type="submit" variant="destructive" disabled={ban.isPending}>
-                    Confirm ban
-                  </Button>
-                </DialogFooter>
-              </form>
-            </Form>
-          </DialogContent>
-        </Dialog>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => void onUnban()}
-          disabled={unban.isPending}
-        >
-          Unban
-        </Button>
+        {banned ? (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => void onUnban()}
+            disabled={unban.isPending}
+          >
+            Unban
+          </Button>
+        ) : (
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button variant="destructive" size="sm">
+                Ban
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Ban character</DialogTitle>
+                <DialogDescription>Ban {name} from the game server.</DialogDescription>
+              </DialogHeader>
+              <Form {...form}>
+                <form onSubmit={submit} className="space-y-4">
+                  <TextField
+                    control={form.control}
+                    name="duration"
+                    label="Duration"
+                    placeholder="1d"
+                  />
+                  <TextField control={form.control} name="reason" label="Reason" />
+                  <DialogFooter>
+                    <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button type="submit" variant="destructive" disabled={ban.isPending}>
+                      Confirm ban
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
     </PermissionGate>
   );

@@ -24,6 +24,15 @@ type Character struct {
 	Money       int64
 	GuildName   string
 	ArenaPoints int
+	Banned      bool
+	BanReason   string
+}
+
+// Equipment is one equipped item in a character slot.
+type Equipment struct {
+	Slot  int
+	Entry int64
+	Count int
 }
 
 // Leaderboard board names.
@@ -64,6 +73,8 @@ type CharacterReader interface {
 	// CountCharacters returns the number of characters matching the query,
 	// ignoring limit and offset.
 	CountCharacters(ctx context.Context, query CharacterQuery) (int, error)
+	// Equipment returns the character's equipped items, ordered by slot.
+	Equipment(ctx context.Context, guid int64) ([]Equipment, error)
 	// FindCharacter returns one character by name or ErrCharacterNotFound.
 	FindCharacter(ctx context.Context, name string) (Character, error)
 	// TopCharacters returns one leaderboard page ordered by the board metric.
@@ -90,6 +101,14 @@ func (u UnavailableCharacters) CountCharacters(context.Context, CharacterQuery) 
 		return 0, fmt.Errorf("%w: %v", ErrUnavailable, u.Err)
 	}
 	return 0, ErrUnavailable
+}
+
+// Equipment implements CharacterReader.
+func (u UnavailableCharacters) Equipment(context.Context, int64) ([]Equipment, error) {
+	if u.Err != nil {
+		return nil, fmt.Errorf("%w: %v", ErrUnavailable, u.Err)
+	}
+	return nil, ErrUnavailable
 }
 
 // FindCharacter implements CharacterReader.

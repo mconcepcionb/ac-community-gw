@@ -64,6 +64,45 @@ func TestSendMailRejectsNoLinkedAccount(t *testing.T) {
 	}
 }
 
+func TestAdminMailBypassesOwnership(t *testing.T) {
+	executor := &fakeExecutor{result: "Mail sent"}
+	plugin := New(Config{
+		Executor:   executor,
+		Characters: &fakeCharacters{characters: []azerothdb.Character{{Name: "Thrall", AccountID: 5}}},
+	})
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/admin/characters/Thrall/mail",
+		strings.NewReader(`{"money":100}`))
+	req.SetPathValue("name", "Thrall")
+	rec := httptest.NewRecorder()
+	plugin.handleAdminMail(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("status = %d body=%s", rec.Code, rec.Body.String())
+	}
+	if !strings.Contains(executor.last, ".send money Thrall") {
+		t.Fatalf("command = %q", executor.last)
+	}
+}
+
+func TestAdminMailRejectsUnknownCharacter(t *testing.T) {
+	executor := &fakeExecutor{result: "should not run"}
+	plugin := New(Config{Executor: executor, Characters: &fakeCharacters{}})
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/admin/characters/Ghost/mail",
+		strings.NewReader(`{"money":100}`))
+	req.SetPathValue("name", "Ghost")
+	rec := httptest.NewRecorder()
+	plugin.handleAdminMail(rec, req)
+
+	if rec.Code != http.StatusNotFound {
+		t.Fatalf("status = %d body=%s", rec.Code, rec.Body.String())
+	}
+	if executor.last != "" {
+		t.Fatalf("mail reached executor: %q", executor.last)
+	}
+}
+
 func TestSendMailFailsClosedWithoutCharacterDB(t *testing.T) {
 	accountID := int64(5)
 	executor := &fakeExecutor{result: "should not run"}

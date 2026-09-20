@@ -49,10 +49,12 @@ const thrall = {
 };
 
 let banBody: unknown;
+let mailBody: unknown;
 
 describe("CharactersPage", () => {
   beforeEach(() => {
     banBody = undefined;
+    mailBody = undefined;
   });
 
   it("lists characters for an account", async () => {
@@ -88,7 +90,19 @@ describe("CharactersPage", () => {
 describe("CharacterDetailPage", () => {
   beforeEach(() => {
     banBody = undefined;
+    mailBody = undefined;
   });
+
+  function detailHandlers() {
+    return [
+      http.get("http://localhost:8080/api/v1/admin/annotations", () =>
+        HttpResponse.json({ annotations: [] }),
+      ),
+      http.get("http://localhost:8080/api/v1/admin/audit", () =>
+        HttpResponse.json({ entries: [] }),
+      ),
+    ];
+  }
 
   it("renders the character detail", async () => {
     server.use(
@@ -96,6 +110,7 @@ describe("CharacterDetailPage", () => {
       http.get("http://localhost:8080/api/v1/azeroth/characters/Thrall", () =>
         HttpResponse.json(thrall),
       ),
+      ...detailHandlers(),
     );
 
     renderAt("/admin/characters/Thrall");
@@ -110,6 +125,7 @@ describe("CharacterDetailPage", () => {
       http.get("http://localhost:8080/api/v1/azeroth/characters/Thrall", () =>
         HttpResponse.json(thrall),
       ),
+      ...detailHandlers(),
       http.post(
         "http://localhost:8080/api/v1/azeroth/characters/Thrall/ban",
         async ({ request }) => {
@@ -129,5 +145,33 @@ describe("CharacterDetailPage", () => {
 
     await waitFor(() => expect(banBody).toBeDefined());
     expect(banBody).toMatchObject({ duration: "1d", reason: "cheating" });
+  });
+
+  it("sends mail to a character as staff", async () => {
+    server.use(
+      authorized(["azeroth.character.list", "azeroth.admin.mail.send"]),
+      http.get("http://localhost:8080/api/v1/azeroth/characters/Thrall", () =>
+        HttpResponse.json(thrall),
+      ),
+      ...detailHandlers(),
+      http.post(
+        "http://localhost:8080/api/v1/admin/characters/Thrall/mail",
+        async ({ request }) => {
+          mailBody = await request.json();
+          return HttpResponse.json({ recipient: "Thrall", results: ["sent"] });
+        },
+      ),
+    );
+
+    renderAt("/admin/characters/Thrall");
+    expect(await screen.findByText("80")).toBeInTheDocument();
+
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: "Send mail" }));
+    await user.type(await screen.findByLabelText("Money (copper)"), "100");
+    await user.click(screen.getByRole("button", { name: "Send" }));
+
+    await waitFor(() => expect(mailBody).toBeDefined());
+    expect(mailBody).toMatchObject({ money: 100 });
   });
 });

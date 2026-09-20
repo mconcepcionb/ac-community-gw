@@ -1,6 +1,7 @@
 package azerothcharacter
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strconv"
@@ -40,20 +41,32 @@ var (
 
 // Character is the JSON representation of an AzerothCore character.
 type Character struct {
-	GUID       int64   `json:"guid"`
-	Name       string  `json:"name"`
-	Race       int     `json:"race"`
-	RaceName   string  `json:"race_name"`
-	Class      int     `json:"class"`
-	ClassName  string  `json:"class_name"`
-	Gender     int     `json:"gender"`
-	Level      int     `json:"level"`
-	Online     bool    `json:"online"`
-	Guild      string  `json:"guild"`
-	Money      int64   `json:"money"`
-	TotalTime  int     `json:"total_time"`
-	LogoutTime *string `json:"logout_time"`
+	GUID       int64           `json:"guid"`
+	Name       string          `json:"name"`
+	Race       int             `json:"race"`
+	RaceName   string          `json:"race_name"`
+	Class      int             `json:"class"`
+	ClassName  string          `json:"class_name"`
+	Gender     int             `json:"gender"`
+	Level      int             `json:"level"`
+	Online     bool            `json:"online"`
+	Guild      string          `json:"guild"`
+	Money      int64           `json:"money"`
+	TotalTime  int             `json:"total_time"`
+	LogoutTime *string         `json:"logout_time"`
+	Banned     bool            `json:"banned"`
+	BanReason  string          `json:"ban_reason,omitempty"`
+	Equipment  []EquipmentSlot `json:"equipment,omitempty"`
 } // @name AzerothCharacter
+
+// EquipmentSlot is one equipped item with its resolved name when available.
+type EquipmentSlot struct {
+	Slot    int    `json:"slot"`
+	Entry   int64  `json:"entry"`
+	Count   int    `json:"count"`
+	Name    string `json:"name,omitempty"`
+	Quality int    `json:"quality,omitempty"`
+} // @name AzerothEquipmentSlot
 
 // CharactersResponse is the body of the character listing endpoints.
 type CharactersResponse struct {
@@ -169,7 +182,45 @@ func (p *Plugin) handleGetCharacter(w http.ResponseWriter, r *http.Request) {
 		httpapi.WriteError(w, r, errCharacterDBUnavailable)
 		return
 	}
-	httpapi.WriteJSON(w, http.StatusOK, characterDTO(character))
+	dto := characterDTO(character)
+	if equipment, equipErr := p.characters.Equipment(r.Context(), character.GUID); equipErr == nil {
+		dto.Equipment = p.equipmentDTO(r.Context(), equipment)
+	}
+	httpapi.WriteJSON(w, http.StatusOK, dto)
+}
+
+// equipmentDTO resolves equipped item names through the item catalog.
+func (p *Plugin) equipmentDTO(ctx context.Context, equipment []azerothdb.Equipment) []EquipmentSlot {
+	slots := make([]EquipmentSlot, 0, len(equipment))
+	for _, item := range equipment {
+		slot := EquipmentSlot{Slot: item.Slot, Entry: item.Entry, Count: item.Count}
+		if catalog, found := p.lookupItem(ctx, item.Entry); found {
+			slot.Name = catalog.Name
+			slot.Quality = catalog.Quality
+		}
+		slots = append(slots, slot)
+	}
+	return slots
+}
+
+// lookupItem resolves an item through the lazily-resolved item catalog.
+func (p *Plugin) lookupItem(ctx context.Context, entry int64) (azerothdb.Item, bool) {
+	if p.registry == nil {
+		return azerothdb.Item{}, false
+	}
+	value, err := p.registry.Resolve(itemCatalogService)
+	if err != nil {
+		return azerothdb.Item{}, false
+	}
+	catalog, ok := value.(azerothdb.Catalog)
+	if !ok {
+		return azerothdb.Item{}, false
+	}
+	item, found, err := catalog.LookupItem(ctx, entry)
+	if err != nil {
+		return azerothdb.Item{}, false
+	}
+	return item, found
 }
 
 func (p *Plugin) accountQuery(r *http.Request) (azerothdb.CharacterQuery, error) {
@@ -253,6 +304,8 @@ func characterDTO(character azerothdb.Character) Character {
 		Guild:     character.GuildName,
 		Money:     character.Money,
 		TotalTime: character.TotalTime,
+		Banned:    character.Banned,
+		BanReason: character.BanReason,
 	}
 	if character.LogoutTime > 0 {
 		logout := time.Unix(character.LogoutTime, 0).UTC().Format(time.RFC3339)

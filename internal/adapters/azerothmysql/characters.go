@@ -23,7 +23,14 @@ const characterColumns = `
        c.totaltime,
        c.money,
        c.arenaPoints,
-       COALESCE(g.name, '') AS guild_name`
+       COALESCE(g.name, '') AS guild_name,
+       COALESCE((SELECT cb.active FROM character_banned cb
+                 WHERE cb.guid = c.guid AND cb.active = 1
+                   AND cb.unbandate > UNIX_TIMESTAMP()
+                 ORDER BY cb.bandate DESC LIMIT 1), 0) AS banned,
+       COALESCE((SELECT cb.banreason FROM character_banned cb
+                 WHERE cb.guid = c.guid
+                 ORDER BY cb.bandate DESC LIMIT 1), '') AS ban_reason`
 
 const listCharactersQuery = `SELECT ` + characterColumns + `
 FROM characters c
@@ -180,8 +187,38 @@ func scanCharacter(row rowScanner) (azerothdb.Character, error) {
 		&character.Money,
 		&character.ArenaPoints,
 		&character.GuildName,
+		&character.Banned,
+		&character.BanReason,
 	); err != nil {
 		return azerothdb.Character{}, err
 	}
 	return character, nil
+}
+
+const equipmentQuery = `SELECT ci.slot, ii.itemEntry, ii.count
+FROM character_inventory ci
+JOIN item_instance ii ON ii.guid = ci.item
+WHERE ci.guid = ? AND ci.bag = 0 AND ci.slot < 19
+ORDER BY ci.slot`
+
+// Equipment implements azerothdb.CharacterReader.
+func (c *CharacterStore) Equipment(ctx context.Context, guid int64) ([]azerothdb.Equipment, error) {
+	rows, err := c.db.QueryContext(ctx, equipmentQuery, guid)
+	if err != nil {
+		return nil, fmt.Errorf("azerothmysql: equipment: %w", err)
+	}
+	defer func() { _ = rows.Close() }()
+
+	equipment := make([]azerothdb.Equipment, 0)
+	for rows.Next() {
+		var slot azerothdb.Equipment
+		if err := rows.Scan(&slot.Slot, &slot.Entry, &slot.Count); err != nil {
+			return nil, fmt.Errorf("azerothmysql: scan equipment: %w", err)
+		}
+		equipment = append(equipment, slot)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("azerothmysql: iterate equipment: %w", err)
+	}
+	return equipment, nil
 }

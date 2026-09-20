@@ -187,9 +187,29 @@ export const zAzerothAdminClaimsResponse = z.object({
     claims: z.array(zAzerothAdminClaim).optional()
 });
 
+export const zAzerothCharacterVisibility = z.object({
+    name: z.string().optional(),
+    public: z.boolean().optional()
+});
+
+export const zAzerothCharacterVisibilityResponse = z.object({
+    items: z.array(zAzerothCharacterVisibility).optional()
+});
+
+export const zAzerothEquipmentSlot = z.object({
+    count: z.int().optional(),
+    entry: z.int().optional(),
+    name: z.string().optional(),
+    quality: z.int().optional(),
+    slot: z.int().optional()
+});
+
 export const zAzerothCharacter = z.object({
+    ban_reason: z.string().optional(),
+    banned: z.boolean().optional(),
     class: z.int().optional(),
     class_name: z.string().optional(),
+    equipment: z.array(zAzerothEquipmentSlot).optional(),
     gender: z.int().optional(),
     guid: z.int().optional(),
     guild: z.string().optional(),
@@ -201,15 +221,6 @@ export const zAzerothCharacter = z.object({
     race: z.int().optional(),
     race_name: z.string().optional(),
     total_time: z.int().optional()
-});
-
-export const zAzerothCharacterVisibility = z.object({
-    name: z.string().optional(),
-    public: z.boolean().optional()
-});
-
-export const zAzerothCharacterVisibilityResponse = z.object({
-    items: z.array(zAzerothCharacterVisibility).optional()
 });
 
 export const zAzerothCharactersResponse = z.object({
@@ -661,6 +672,20 @@ export const zAzerothAdminAuditListQuery = z.object({
  * OK
  */
 export const zAzerothAdminAuditListResponse = zAdminAuditResponse;
+
+/**
+ * delivery request
+ */
+export const zAzerothAdminCharactersMailBody = zAzerothSendMailRequest;
+
+export const zAzerothAdminCharactersMailPath = z.object({
+    name: z.string()
+});
+
+/**
+ * OK
+ */
+export const zAzerothAdminCharactersMailResponse = zAzerothSendMailResponse;
 
 export const zIdentityAdminDiscordMappingsDeletePath = z.object({
     discord_role_id: z.string()

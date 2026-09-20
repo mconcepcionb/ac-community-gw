@@ -23,6 +23,9 @@ const Name = "azeroth-character"
 // accountDirectory is the cross-plugin capability published by azeroth-account.
 const accountDirectoryService = "azeroth.account.directory"
 
+// itemCatalogService is the cross-plugin item lookup published by azeroth-item.
+const itemCatalogService = "azeroth.item.catalog"
+
 type accountDirectory interface {
 	LinkedAccount(ctx context.Context, userID string) (username string, accountID *int64, err error)
 }
@@ -47,6 +50,7 @@ type Plugin struct {
 	visibility   VisibilityStore
 	noticeItemID int
 	boardCache   *ttlcache.Cache[LeaderboardResponse]
+	registry     *services.Registry
 }
 
 // New creates the azeroth-character plugin.
@@ -82,6 +86,7 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		return fmt.Errorf("azeroth-character: account directory unavailable: %w", err)
 	}
 	p.directory = directory
+	p.registry = reg.Services
 
 	reg.Mux.Handle("GET /api/v1/azeroth/characters",
 		reg.RequirePermission(PermissionCharacterList, http.HandlerFunc(p.handleListCharacters)))
@@ -91,6 +96,8 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 		reg.RequirePermission(PermissionCharacterList, http.HandlerFunc(p.handleListUserCharacters)))
 	reg.Mux.Handle("POST /api/v1/azeroth/mail",
 		reg.RequirePermission(PermissionMailSend, http.HandlerFunc(p.handleSendMail)))
+	reg.Mux.Handle("POST /api/v1/admin/characters/{name}/mail",
+		reg.RequirePermission(PermissionAdminMailSend, http.HandlerFunc(p.handleAdminMail)))
 	reg.Mux.Handle("GET /api/v1/azeroth/me/characters",
 		reg.RequirePermission(PermissionCharacterSelf, http.HandlerFunc(p.handleMyCharacters)))
 	reg.Mux.Handle("POST /api/v1/azeroth/me/mail",

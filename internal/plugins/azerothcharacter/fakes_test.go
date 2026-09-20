@@ -34,6 +34,10 @@ func (f *fakeCharacters) CountCharacters(_ context.Context, query azerothdb.Char
 	return len(f.characters), nil
 }
 
+func (f *fakeCharacters) Equipment(context.Context, int64) ([]azerothdb.Equipment, error) {
+	return nil, nil
+}
+
 func (f *fakeCharacters) TopCharacters(_ context.Context, _ string, _, _ int) ([]azerothdb.Character, error) {
 	return f.characters, nil
 }

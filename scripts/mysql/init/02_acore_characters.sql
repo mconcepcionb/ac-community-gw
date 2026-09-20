@@ -101,6 +101,41 @@ CREATE TABLE `characters` (
   KEY `idx_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Player System';
 
+DROP TABLE IF EXISTS `character_banned`;
+CREATE TABLE `character_banned` (
+  `guid` int unsigned NOT NULL DEFAULT '0',
+  `bandate` int unsigned NOT NULL DEFAULT '0',
+  `unbandate` int unsigned NOT NULL DEFAULT '0',
+  `bannedby` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `banreason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `active` tinyint unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (`guid`,`bandate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Player System';
+
+DROP TABLE IF EXISTS `item_instance`;
+CREATE TABLE `item_instance` (
+  `guid` int unsigned NOT NULL DEFAULT '0',
+  `itemEntry` int unsigned NOT NULL DEFAULT '0',
+  `owner_guid` int unsigned NOT NULL DEFAULT '0',
+  `creatorGuid` int unsigned NOT NULL DEFAULT '0',
+  `giftCreatorGuid` int unsigned NOT NULL DEFAULT '0',
+  `count` int unsigned NOT NULL DEFAULT '1',
+  `duration` int NOT NULL DEFAULT '0',
+  `charges` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`guid`),
+  KEY `idx_owner_guid` (`owner_guid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Item System';
+
+DROP TABLE IF EXISTS `character_inventory`;
+CREATE TABLE `character_inventory` (
+  `guid` int unsigned NOT NULL DEFAULT '0',
+  `bag` int unsigned NOT NULL DEFAULT '0',
+  `slot` tinyint unsigned NOT NULL DEFAULT '0',
+  `item` int unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`guid`,`bag`,`slot`),
+  KEY `idx_item` (`item`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Player System';
+
 DROP TABLE IF EXISTS `guild`;
 CREATE TABLE `guild` (
   `guildid` int unsigned NOT NULL DEFAULT '0',
@@ -141,6 +176,17 @@ ON DUPLICATE KEY UPDATE level = VALUES(level);
 INSERT INTO `characters` (guid, account, name, race, class, gender, level, money, online, taximask, innTriggerId)
 SELECT 3, id, 'Arthas', 1, 6, 0, 70, 250000, 0, '', 0 FROM acore_auth.account WHERE username = 'PLAYER'
 ON DUPLICATE KEY UPDATE level = VALUES(level);
+
+-- Equipped items for Thrall (guid 1). Entries exist in the world fixture.
+INSERT INTO `item_instance` (guid, itemEntry, owner_guid, count) VALUES
+  (100, 19019, 1, 1),
+  (101, 6948, 1, 1)
+ON DUPLICATE KEY UPDATE itemEntry = VALUES(itemEntry), count = VALUES(count);
+
+INSERT INTO `character_inventory` (guid, bag, slot, item) VALUES
+  (1, 0, 15, 100),
+  (1, 0, 16, 101)
+ON DUPLICATE KEY UPDATE item = VALUES(item);
 
 INSERT INTO `guild` (guildid, name, leaderguid) VALUES (1, 'Community', 1)
 ON DUPLICATE KEY UPDATE name = VALUES(name);

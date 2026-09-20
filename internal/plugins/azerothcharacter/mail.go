@@ -1,6 +1,7 @@
 package azerothcharacter
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -12,6 +13,7 @@ import (
 	"github.com/mconcepcionb/ac-community-gw/internal/core/auth"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/azerothdb"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/httpapi"
+	"github.com/mconcepcionb/ac-community-gw/internal/core/permissions"
 )
 
 var (
@@ -72,21 +74,10 @@ func (p *Plugin) handleSendMail(w http.ResponseWriter, r *http.Request) {
 		httpapi.WriteError(w, r, err)
 		return
 	}
-
-	recipient := strings.TrimSpace(req.Character)
-	if !characterNamePattern.MatchString(recipient) {
-		httpapi.WriteError(w, r, errInvalidRecipient)
+	recipient, err := validateMailRequest(req)
+	if err != nil {
+		httpapi.WriteError(w, r, err)
 		return
-	}
-	if len(req.Items) == 0 && req.Money <= 0 {
-		httpapi.WriteError(w, r, errEmptyDelivery)
-		return
-	}
-	for _, item := range req.Items {
-		if item.ID <= 0 || item.Count <= 0 {
-			httpapi.WriteError(w, r, errInvalidItem)
-			return
-		}
 	}
 
 	if p.characters == nil {
@@ -117,6 +108,89 @@ func (p *Plugin) handleSendMail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	results, err := p.executeDelivery(r.Context(), recipient, req)
+	if err != nil {
+		p.recordMail(r, recipient, PermissionMailSend, "azeroth.mail.send", audit.ResultFailure)
+		httpapi.WriteError(w, r, errMailFailed)
+		return
+	}
+	p.recordMail(r, recipient, PermissionMailSend, "azeroth.mail.send", audit.ResultSuccess)
+	httpapi.WriteJSON(w, http.StatusOK, SendMailResponse{Recipient: recipient, Results: results})
+}
+
+// handleAdminMail handles POST /api/v1/admin/characters/{name}/mail. It sends
+// mail to any character without an ownership check.
+//
+//	@Summary		Send in-game mail as staff
+//	@Description	Delivers items and/or money to any character. Requires the azeroth.admin.mail.send permission.
+//	@Tags			azeroth-character
+//	@ID				azeroth.admin.characters.mail
+//	@Accept			json
+//	@Produce		json
+//	@Param			name	path	string			true	"character name"
+//	@Param			request	body	SendMailRequest	true	"delivery request"
+//	@Success		200	{object}	SendMailResponse
+//	@Failure		400	{object}	httpapi.ErrorResponse
+//	@Failure		401	{object}	httpapi.ErrorResponse
+//	@Failure		403	{object}	httpapi.ErrorResponse
+//	@Failure		404	{object}	httpapi.ErrorResponse
+//	@Failure		422	{object}	httpapi.ErrorResponse
+//	@Failure		502	{object}	httpapi.ErrorResponse
+//	@Router			/api/v1/admin/characters/{name}/mail [post]
+func (p *Plugin) handleAdminMail(w http.ResponseWriter, r *http.Request) {
+	var req SendMailRequest
+	if err := httpapi.DecodeJSON(r, &req); err != nil {
+		httpapi.WriteError(w, r, err)
+		return
+	}
+	req.Character = strings.TrimSpace(r.PathValue("name"))
+	recipient, err := validateMailRequest(req)
+	if err != nil {
+		httpapi.WriteError(w, r, err)
+		return
+	}
+	if p.characters == nil {
+		httpapi.WriteError(w, r, errCharacterDBNotConfigured)
+		return
+	}
+	if _, err := p.characters.FindCharacter(r.Context(), recipient); errors.Is(err, azerothdb.ErrCharacterNotFound) {
+		httpapi.WriteError(w, r, errCharacterNotFound)
+		return
+	} else if err != nil {
+		httpapi.WriteError(w, r, errCharacterDBUnavailable)
+		return
+	}
+
+	results, err := p.executeDelivery(r.Context(), recipient, req)
+	if err != nil {
+		p.recordMail(r, recipient, PermissionAdminMailSend, "azeroth.admin.mail.send", audit.ResultFailure)
+		httpapi.WriteError(w, r, errMailFailed)
+		return
+	}
+	p.recordMail(r, recipient, PermissionAdminMailSend, "azeroth.admin.mail.send", audit.ResultSuccess)
+	httpapi.WriteJSON(w, http.StatusOK, SendMailResponse{Recipient: recipient, Results: results})
+}
+
+// validateMailRequest checks the recipient and delivery, returning the trimmed
+// recipient name.
+func validateMailRequest(req SendMailRequest) (string, error) {
+	recipient := strings.TrimSpace(req.Character)
+	if !characterNamePattern.MatchString(recipient) {
+		return "", errInvalidRecipient
+	}
+	if len(req.Items) == 0 && req.Money <= 0 {
+		return "", errEmptyDelivery
+	}
+	for _, item := range req.Items {
+		if item.ID <= 0 || item.Count <= 0 {
+			return "", errInvalidItem
+		}
+	}
+	return recipient, nil
+}
+
+// executeDelivery builds and runs the .send commands for a validated request.
+func (p *Plugin) executeDelivery(ctx context.Context, recipient string, req SendMailRequest) ([]string, error) {
 	subject, body := sanitizeMailText(req.Subject), sanitizeMailText(req.Body)
 	if subject == "" {
 		subject = "Reward"
@@ -127,31 +201,20 @@ func (p *Plugin) handleSendMail(w http.ResponseWriter, r *http.Request) {
 
 	results := make([]string, 0, 2)
 	if len(req.Items) > 0 {
-		command := buildSendItems(recipient, subject, body, req.Items)
-		output, err := p.executor.Execute(r.Context(), command)
+		output, err := p.executor.Execute(ctx, buildSendItems(recipient, subject, body, req.Items))
 		if err != nil {
-			p.recordMail(r, recipient, audit.ResultFailure)
-			httpapi.WriteError(w, r, errMailFailed)
-			return
+			return nil, err
 		}
 		results = append(results, output)
 	}
 	if req.Money > 0 {
-		command := buildSendMoney(recipient, subject, body, req.Money)
-		output, err := p.executor.Execute(r.Context(), command)
+		output, err := p.executor.Execute(ctx, buildSendMoney(recipient, subject, body, req.Money))
 		if err != nil {
-			p.recordMail(r, recipient, audit.ResultFailure)
-			httpapi.WriteError(w, r, errMailFailed)
-			return
+			return nil, err
 		}
 		results = append(results, output)
 	}
-
-	p.recordMail(r, recipient, audit.ResultSuccess)
-	httpapi.WriteJSON(w, http.StatusOK, SendMailResponse{
-		Recipient: recipient,
-		Results:   results,
-	})
+	return results, nil
 }
 
 func buildSendItems(recipient, subject, body string, items []MailItem) string {
@@ -177,14 +240,20 @@ func sanitizeMailText(value string) string {
 	return cleaned
 }
 
-func (p *Plugin) recordMail(r *http.Request, recipient string, result audit.Result) {
+func (p *Plugin) recordMail(
+	r *http.Request,
+	recipient string,
+	permission permissions.Permission,
+	action string,
+	result audit.Result,
+) {
 	principal, _ := auth.PrincipalFromContext(r.Context())
 	_ = p.audit.Record(r.Context(), audit.Entry{
 		Timestamp:      time.Now(),
 		ActorID:        principal.UserID,
 		ActorDiscordID: principal.DiscordID,
-		Action:         "azeroth.mail.send",
-		Permission:     string(PermissionMailSend),
+		Action:         action,
+		Permission:     string(permission),
 		TargetType:     "character",
 		TargetID:       recipient,
 		Result:         result,
