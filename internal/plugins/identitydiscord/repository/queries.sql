@@ -17,6 +17,18 @@ SELECT * FROM community_users WHERE id = $1;
 -- name: GetCommunityUserByDiscordID :one
 SELECT * FROM community_users WHERE discord_id = $1;
 
+-- name: GetUserProfile :one
+SELECT cu.id,
+       cu.discord_id,
+       cu.display_name,
+       cu.created_at,
+       COALESCE(di.username, '') AS username,
+       COALESCE(di.global_name, '') AS global_name,
+       COALESCE(di.avatar, '') AS avatar
+FROM community_users cu
+LEFT JOIN discord_identities di ON di.user_id = cu.id
+WHERE cu.id = $1;
+
 -- name: UpdateCommunityUserRoles :exec
 UPDATE community_users
 SET roles = $2::text[],

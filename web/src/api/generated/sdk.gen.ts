@@ -301,7 +301,7 @@ export const identityUsersList = <ThrowOnError extends boolean = false>(options?
 /**
  * Current principal
  *
- * Returns the authenticated community user with internal roles and effective permissions.
+ * Returns the authenticated community user with their Discord profile, internal roles and effective permissions.
  */
 export const authMe = <ThrowOnError extends boolean = false>(options?: Options<AuthMeData, ThrowOnError>): RequestResult<AuthMeResponses, AuthMeErrors, ThrowOnError> => (options?.client ?? client).get<AuthMeResponses, AuthMeErrors, ThrowOnError>({ url: '/api/v1/me', ...options });
 

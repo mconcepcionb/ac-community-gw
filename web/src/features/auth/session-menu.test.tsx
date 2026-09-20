@@ -1,4 +1,11 @@
 import { QueryClientProvider } from "@tanstack/react-query";
+import {
+  createMemoryHistory,
+  createRootRoute,
+  createRoute,
+  createRouter,
+  RouterProvider,
+} from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import { describe, expect, it } from "vitest";
@@ -10,10 +17,25 @@ import { SessionMenu } from "./session-menu";
 const meUrl = "http://localhost:8080/api/v1/me";
 
 function renderMenu() {
+  const rootRoute = createRootRoute();
+  const indexRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/",
+    component: () => <SessionMenu />,
+  });
+  const profileRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/profile",
+    component: () => <span>profile page</span>,
+  });
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([indexRoute, profileRoute]),
+    history: createMemoryHistory({ initialEntries: ["/"] }),
+  });
   const queryClient = createQueryClient();
   return render(
     <QueryClientProvider client={queryClient}>
-      <SessionMenu />
+      <RouterProvider router={router} />
     </QueryClientProvider>,
   );
 }

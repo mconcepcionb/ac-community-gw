@@ -217,10 +217,15 @@ export type ListUsersResponse = {
 };
 
 export type MeResponse = {
+    avatar?: string;
+    created_at?: string;
     discord_id?: string;
+    display_name?: string;
+    global_name?: string;
     permissions?: Array<string>;
     roles?: Array<string>;
     user_id?: string;
+    username?: string;
 };
 
 export type MutePlayerRequest = {

@@ -16,6 +16,7 @@ type User struct {
 	Username    string
 	GlobalName  string
 	DisplayName string
+	Avatar      string
 	CreatedAt   time.Time
 }
 

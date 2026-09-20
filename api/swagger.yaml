@@ -374,7 +374,15 @@ components:
       type: object
     MeResponse:
       properties:
+        avatar:
+          type: string
+        created_at:
+          type: string
         discord_id:
+          type: string
+        display_name:
+          type: string
+        global_name:
           type: string
         permissions:
           items:
@@ -387,6 +395,8 @@ components:
           type: array
           uniqueItems: false
         user_id:
+          type: string
+        username:
           type: string
       type: object
     MutePlayerRequest:
@@ -2054,8 +2064,8 @@ paths:
       - identity
   /api/v1/me:
     get:
-      description: Returns the authenticated community user with internal roles and
-        effective permissions.
+      description: Returns the authenticated community user with their Discord profile,
+        internal roles and effective permissions.
       operationId: auth.me
       responses:
         "200":

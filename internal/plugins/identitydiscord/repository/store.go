@@ -22,6 +22,9 @@ import (
 // ErrStateNotFound is returned when an OAuth state is unknown or expired.
 var ErrStateNotFound = errors.New("repository: oauth state not found")
 
+// ErrUserNotFound is returned when a community user does not exist.
+var ErrUserNotFound = errors.New("repository: community user not found")
+
 // Store implements the identity-discord persistence operations.
 type Store struct {
 	db *sql.DB
@@ -206,6 +209,26 @@ func (s *Store) ResolveUserByName(ctx context.Context, name string) ([]userdir.U
 		})
 	}
 	return users, nil
+}
+
+// UserProfile returns a community user together with its Discord profile.
+func (s *Store) UserProfile(ctx context.Context, userID uuid.UUID) (userdir.User, error) {
+	row, err := s.q.GetUserProfile(ctx, userID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return userdir.User{}, ErrUserNotFound
+	}
+	if err != nil {
+		return userdir.User{}, fmt.Errorf("repository: get user profile: %w", err)
+	}
+	return userdir.User{
+		ID:          row.ID,
+		DiscordID:   row.DiscordID,
+		Username:    row.Username,
+		GlobalName:  row.GlobalName,
+		DisplayName: row.DisplayName,
+		Avatar:      row.Avatar,
+		CreatedAt:   row.CreatedAt,
+	}, nil
 }
 
 // MappedRoles returns the internal roles mapped from Discord role ids.

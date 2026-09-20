@@ -64,6 +64,7 @@ type fakeRepo struct {
 	roles     []string
 	byDiscord map[string]uuid.UUID
 	users     []userdir.User
+	profile   userdir.User
 }
 
 func (f *fakeRepo) ListUsers(_ context.Context, _ string, _, _ int) ([]userdir.User, error) {
@@ -72,6 +73,10 @@ func (f *fakeRepo) ListUsers(_ context.Context, _ string, _, _ int) ([]userdir.U
 
 func (f *fakeRepo) ResolveUserByName(_ context.Context, _ string) ([]userdir.User, error) {
 	return f.users, nil
+}
+
+func (f *fakeRepo) UserProfile(_ context.Context, _ uuid.UUID) (userdir.User, error) {
+	return f.profile, nil
 }
 
 func (f *fakeRepo) UserIDByDiscordID(_ context.Context, discordID string) (uuid.UUID, bool, error) {
@@ -339,6 +344,41 @@ func TestHandleMeIncludesRolesAndPermissions(t *testing.T) {
 		if payload.Permissions[i] != want[i] {
 			t.Fatalf("permissions = %v, want %v", payload.Permissions, want)
 		}
+	}
+}
+
+func TestHandleMeIncludesDiscordProfile(t *testing.T) {
+	userID := uuid.New()
+	created := time.Date(2024, 1, 2, 3, 4, 5, 0, time.UTC)
+	plugin := New(Config{
+		Sessions: auth.NewManager(auth.ManagerOptions{Store: auth.NewMemoryStore(), TTL: time.Hour}),
+		Repository: &fakeRepo{profile: userdir.User{
+			ID:          userID,
+			DiscordID:   "42",
+			Username:    "alice",
+			GlobalName:  "Alice",
+			DisplayName: "Alice",
+			Avatar:      "abc123",
+			CreatedAt:   created,
+		}},
+	})
+	principal := auth.Principal{UserID: userID, DiscordID: "42"}
+	rec := httptest.NewRecorder()
+	plugin.handleMe(rec, httptest.NewRequest(http.MethodGet, "/api/v1/me", nil).WithContext(auth.WithPrincipal(context.Background(), principal)))
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("status = %d", rec.Code)
+	}
+	var payload MeResponse
+	if err := json.Unmarshal(rec.Body.Bytes(), &payload); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+	if payload.Username != "alice" || payload.GlobalName != "Alice" ||
+		payload.DisplayName != "Alice" || payload.Avatar != "abc123" {
+		t.Fatalf("profile = %+v", payload)
+	}
+	if payload.CreatedAt != created.Format(time.RFC3339) {
+		t.Fatalf("created_at = %q", payload.CreatedAt)
 	}
 }
 

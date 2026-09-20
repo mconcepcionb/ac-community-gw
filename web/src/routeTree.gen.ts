@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountLinksRouteImport } from './routes/account-links'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as AccountLinksIndexRouteImport } from './routes/account-links.index'
 import { Route as AccountLinksUserIdRouteImport } from './routes/account-links.$userId'
 import { Route as AdminAccountsRouteImport } from './routes/admin/accounts'
@@ -48,6 +49,11 @@ const AccountsRoute = AccountsRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountLinksIndexRoute = AccountLinksIndexRouteImport.update({
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/account-links': typeof AccountLinksRouteWithChildren
   '/accounts': typeof AccountsRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/account-links/$userId': typeof AccountLinksUserIdRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/online': typeof AdminOnlineRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/account-links/$userId': typeof AccountLinksUserIdRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/online': typeof AdminOnlineRoute
@@ -179,6 +187,7 @@ export interface FileRoutesById {
   '/account-links': typeof AccountLinksRouteWithChildren
   '/accounts': typeof AccountsRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/account-links/$userId': typeof AccountLinksUserIdRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/online': typeof AdminOnlineRoute
@@ -203,6 +212,7 @@ export interface FileRouteTypes {
     | '/account-links'
     | '/accounts'
     | '/login'
+    | '/profile'
     | '/account-links/$userId'
     | '/admin/accounts'
     | '/admin/online'
@@ -224,6 +234,7 @@ export interface FileRouteTypes {
     | '/'
     | '/accounts'
     | '/login'
+    | '/profile'
     | '/account-links/$userId'
     | '/admin/accounts'
     | '/admin/online'
@@ -244,6 +255,7 @@ export interface FileRouteTypes {
     | '/account-links'
     | '/accounts'
     | '/login'
+    | '/profile'
     | '/account-links/$userId'
     | '/admin/accounts'
     | '/admin/online'
@@ -267,6 +279,7 @@ export interface RootRouteChildren {
   AccountLinksRoute: typeof AccountLinksRouteWithChildren
   AccountsRoute: typeof AccountsRoute
   LoginRoute: typeof LoginRoute
+  ProfileRoute: typeof ProfileRoute
   AdminAccountsRoute: typeof AdminAccountsRoute
   AdminOnlineRoute: typeof AdminOnlineRoute
   AzerothStatusRoute: typeof AzerothStatusRoute
@@ -307,6 +320,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account-links/': {
@@ -471,6 +491,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountLinksRoute: AccountLinksRouteWithChildren,
   AccountsRoute: AccountsRoute,
   LoginRoute: LoginRoute,
+  ProfileRoute: ProfileRoute,
   AdminAccountsRoute: AdminAccountsRoute,
   AdminOnlineRoute: AdminOnlineRoute,
   AzerothStatusRoute: AzerothStatusRoute,

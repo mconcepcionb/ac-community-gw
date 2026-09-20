@@ -227,6 +227,44 @@ func (q *Queries) GetSession(ctx context.Context, id string) (GetSessionRow, err
 	return i, err
 }
 
+const getUserProfile = `-- name: GetUserProfile :one
+SELECT cu.id,
+       cu.discord_id,
+       cu.display_name,
+       cu.created_at,
+       COALESCE(di.username, '') AS username,
+       COALESCE(di.global_name, '') AS global_name,
+       COALESCE(di.avatar, '') AS avatar
+FROM community_users cu
+LEFT JOIN discord_identities di ON di.user_id = cu.id
+WHERE cu.id = $1
+`
+
+type GetUserProfileRow struct {
+	ID          uuid.UUID
+	DiscordID   string
+	DisplayName string
+	CreatedAt   time.Time
+	Username    string
+	GlobalName  string
+	Avatar      string
+}
+
+func (q *Queries) GetUserProfile(ctx context.Context, id uuid.UUID) (GetUserProfileRow, error) {
+	row := q.db.QueryRowContext(ctx, getUserProfile, id)
+	var i GetUserProfileRow
+	err := row.Scan(
+		&i.ID,
+		&i.DiscordID,
+		&i.DisplayName,
+		&i.CreatedAt,
+		&i.Username,
+		&i.GlobalName,
+		&i.Avatar,
+	)
+	return i, err
+}
+
 const listCommunityUsers = `-- name: ListCommunityUsers :many
 SELECT cu.id,
        cu.discord_id,

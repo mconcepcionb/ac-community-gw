@@ -57,6 +57,7 @@ type Repository interface {
 	UserIDByDiscordID(ctx context.Context, discordID string) (userID uuid.UUID, found bool, err error)
 	ListUsers(ctx context.Context, filter string, limit, offset int) ([]userdir.User, error)
 	ResolveUserByName(ctx context.Context, name string) ([]userdir.User, error)
+	UserProfile(ctx context.Context, userID uuid.UUID) (userdir.User, error)
 }
 
 // Cleaner removes expired sessions and OAuth states.
@@ -219,7 +220,7 @@ func (p *Plugin) handleLogout(w http.ResponseWriter, r *http.Request) {
 // handleMe returns the authenticated principal.
 //
 //	@Summary		Current principal
-//	@Description	Returns the authenticated community user with internal roles and effective permissions.
+//	@Description	Returns the authenticated community user with their Discord profile, internal roles and effective permissions.
 //	@Tags			auth
 //	@ID				auth.me
 //	@Produce		json
@@ -233,10 +234,25 @@ func (p *Plugin) handleMe(w http.ResponseWriter, r *http.Request) {
 		httpapi.WriteError(w, r, httpapi.ErrUnauthorized)
 		return
 	}
-	httpapi.WriteJSON(w, http.StatusOK, MeResponse{
+	response := MeResponse{
 		UserID:      principal.UserID.String(),
 		DiscordID:   principal.DiscordID,
 		Roles:       rolesOrEmpty(principal.Roles),
 		Permissions: p.effectivePermissions(principal.Roles),
-	})
+	}
+	if p.repo != nil {
+		profile, err := p.repo.UserProfile(r.Context(), principal.UserID)
+		if err != nil {
+			p.logger.Warn("identity-discord: user profile unavailable", "error", err)
+		} else {
+			response.Username = profile.Username
+			response.GlobalName = profile.GlobalName
+			response.DisplayName = profile.DisplayName
+			response.Avatar = profile.Avatar
+			if !profile.CreatedAt.IsZero() {
+				response.CreatedAt = profile.CreatedAt.UTC().Format(time.RFC3339)
+			}
+		}
+	}
+	httpapi.WriteJSON(w, http.StatusOK, response)
 }

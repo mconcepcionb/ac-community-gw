@@ -211,10 +211,15 @@ export const zKickPlayerRequest = z.object({
 });
 
 export const zMeResponse = z.object({
+    avatar: z.string().optional(),
+    created_at: z.string().optional(),
     discord_id: z.string().optional(),
+    display_name: z.string().optional(),
+    global_name: z.string().optional(),
     permissions: z.array(z.string()).optional(),
     roles: z.array(z.string()).optional(),
-    user_id: z.string().optional()
+    user_id: z.string().optional(),
+    username: z.string().optional()
 });
 
 export const zMutePlayerRequest = z.object({

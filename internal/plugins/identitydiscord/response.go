@@ -8,6 +8,11 @@ import (
 type MeResponse struct {
 	UserID      string   `json:"user_id"`
 	DiscordID   string   `json:"discord_id"`
+	Username    string   `json:"username"`
+	GlobalName  string   `json:"global_name"`
+	DisplayName string   `json:"display_name"`
+	Avatar      string   `json:"avatar"`
+	CreatedAt   string   `json:"created_at"`
 	Roles       []string `json:"roles"`
 	Permissions []string `json:"permissions"`
 } // @name MeResponse

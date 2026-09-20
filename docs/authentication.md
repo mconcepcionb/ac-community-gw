@@ -37,6 +37,11 @@ to the gateway instead of the SPA:
 The Discord HTTP client lives in `internal/adapters/discord` and is injected
 through the core `auth.DiscordProvider` interface, mirroring the SOAP adapter.
 
+`GET /api/v1/me` returns the authenticated principal: the community user id,
+Discord id, Discord profile (username, global name, display name, avatar hash)
+and join date, plus the effective roles and permissions. The SPA renders it at
+`/profile`.
+
 Degradation is explicit: when Discord credentials are missing the auth endpoints
 return `503 discord_not_configured`; when the session/identity store is
 unavailable they return `503 identity_storage_unavailable`. The gateway itself

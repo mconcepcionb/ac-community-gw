@@ -797,7 +797,7 @@ export const authMeQueryKey = (options?: Options<AuthMeData>) => createQueryKey(
 /**
  * Current principal
  *
- * Returns the authenticated community user with internal roles and effective permissions.
+ * Returns the authenticated community user with their Discord profile, internal roles and effective permissions.
  */
 export const authMeOptions = (options?: Options<AuthMeData>) => queryOptions<AuthMeResponse, AuthMeError, AuthMeResponse, ReturnType<typeof authMeQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
