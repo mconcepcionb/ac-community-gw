@@ -24,6 +24,7 @@ import { Route as AdminAccountsRouteImport } from './routes/admin/accounts'
 import { Route as AdminAuditRouteImport } from './routes/admin/audit'
 import { Route as AdminModerationRouteImport } from './routes/admin/moderation'
 import { Route as AdminOnlineRouteImport } from './routes/admin/online'
+import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminStoreRouteImport } from './routes/admin/store'
 import { Route as PortalCharactersIndexRouteImport } from './routes/_portal/characters/index'
 import { Route as PortalStoreIndexRouteImport } from './routes/_portal/store/index'
@@ -113,6 +114,11 @@ const AdminOnlineRoute = AdminOnlineRouteImport.update({
   path: '/online',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminRolesRoute = AdminRolesRouteImport.update({
+  id: '/roles',
+  path: '/roles',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminStoreRoute = AdminStoreRouteImport.update({
   id: '/store',
   path: '/store',
@@ -198,6 +204,7 @@ export interface FileRoutesByFullPath {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/online': typeof AdminOnlineRoute
+  '/admin/roles': typeof AdminRolesRoute
   '/admin/store': typeof AdminStoreRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/admin/characters/$name': typeof AdminCharactersNameRoute
@@ -226,6 +233,7 @@ export interface FileRoutesByTo {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/online': typeof AdminOnlineRoute
+  '/admin/roles': typeof AdminRolesRoute
   '/': typeof PortalIndexRoute
   '/admin': typeof AdminIndexRoute
   '/admin/characters/$name': typeof AdminCharactersNameRoute
@@ -257,6 +265,7 @@ export interface FileRoutesById {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/admin/online': typeof AdminOnlineRoute
+  '/admin/roles': typeof AdminRolesRoute
   '/admin/store': typeof AdminStoreRouteWithChildren
   '/_portal/': typeof PortalIndexRoute
   '/admin/': typeof AdminIndexRoute
@@ -290,6 +299,7 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/moderation'
     | '/admin/online'
+    | '/admin/roles'
     | '/admin/store'
     | '/admin/'
     | '/admin/characters/$name'
@@ -318,6 +328,7 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/moderation'
     | '/admin/online'
+    | '/admin/roles'
     | '/'
     | '/admin'
     | '/admin/characters/$name'
@@ -348,6 +359,7 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/moderation'
     | '/admin/online'
+    | '/admin/roles'
     | '/admin/store'
     | '/_portal/'
     | '/admin/'
@@ -476,6 +488,13 @@ declare module '@tanstack/react-router' {
       path: '/online'
       fullPath: '/admin/online'
       preLoaderRoute: typeof AdminOnlineRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/roles': {
+      id: '/admin/roles'
+      path: '/roles'
+      fullPath: '/admin/roles'
+      preLoaderRoute: typeof AdminRolesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/store': {
@@ -633,6 +652,7 @@ interface AdminRouteChildren {
   AdminAuditRoute: typeof AdminAuditRoute
   AdminModerationRoute: typeof AdminModerationRoute
   AdminOnlineRoute: typeof AdminOnlineRoute
+  AdminRolesRoute: typeof AdminRolesRoute
   AdminStoreRoute: typeof AdminStoreRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCharactersNameRoute: typeof AdminCharactersNameRoute
@@ -648,6 +668,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditRoute: AdminAuditRoute,
   AdminModerationRoute: AdminModerationRoute,
   AdminOnlineRoute: AdminOnlineRoute,
+  AdminRolesRoute: AdminRolesRoute,
   AdminStoreRoute: AdminStoreRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
   AdminCharactersNameRoute: AdminCharactersNameRoute,

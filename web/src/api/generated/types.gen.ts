@@ -20,6 +20,29 @@ export type AdminAuditResponse = {
     entries?: Array<AdminAuditEntry>;
 };
 
+export type AdminDiscordRoleMapping = {
+    discord_role_id?: string;
+    role?: string;
+};
+
+export type AdminMappingRequest = {
+    role?: string;
+};
+
+export type AdminPermissionRequest = {
+    permission?: string;
+};
+
+export type AdminRoleGrant = {
+    permission?: string;
+    role?: string;
+};
+
+export type AdminRolesResponse = {
+    grants?: Array<AdminRoleGrant>;
+    mappings?: Array<AdminDiscordRoleMapping>;
+};
+
 export type AdminUser = {
     account_id?: number;
     account_username?: string;
@@ -548,6 +571,93 @@ export type AzerothAdminAuditListResponses = {
 
 export type AzerothAdminAuditListResponse = AzerothAdminAuditListResponses[keyof AzerothAdminAuditListResponses];
 
+export type IdentityAdminDiscordMappingsDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * Discord role id
+         */
+        discord_role_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/discord-role-mappings/{discord_role_id}';
+};
+
+export type IdentityAdminDiscordMappingsDeleteErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type IdentityAdminDiscordMappingsDeleteError = IdentityAdminDiscordMappingsDeleteErrors[keyof IdentityAdminDiscordMappingsDeleteErrors];
+
+export type IdentityAdminDiscordMappingsDeleteResponses = {
+    /**
+     * Deleted
+     */
+    204: void;
+};
+
+export type IdentityAdminDiscordMappingsDeleteResponse = IdentityAdminDiscordMappingsDeleteResponses[keyof IdentityAdminDiscordMappingsDeleteResponses];
+
+export type IdentityAdminDiscordMappingsUpsertData = {
+    /**
+     * internal role
+     */
+    body: AdminMappingRequest;
+    path: {
+        /**
+         * Discord role id
+         */
+        discord_role_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/discord-role-mappings/{discord_role_id}';
+};
+
+export type IdentityAdminDiscordMappingsUpsertErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type IdentityAdminDiscordMappingsUpsertError = IdentityAdminDiscordMappingsUpsertErrors[keyof IdentityAdminDiscordMappingsUpsertErrors];
+
+export type IdentityAdminDiscordMappingsUpsertResponses = {
+    /**
+     * Mapped
+     */
+    204: void;
+};
+
+export type IdentityAdminDiscordMappingsUpsertResponse = IdentityAdminDiscordMappingsUpsertResponses[keyof IdentityAdminDiscordMappingsUpsertResponses];
+
 export type ReportsListData = {
     body?: never;
     path?: never;
@@ -639,6 +749,134 @@ export type ReportsCloseResponses = {
 };
 
 export type ReportsCloseResponse = ReportsCloseResponses[keyof ReportsCloseResponses];
+
+export type IdentityAdminRolesListData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/admin/roles';
+};
+
+export type IdentityAdminRolesListErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type IdentityAdminRolesListError = IdentityAdminRolesListErrors[keyof IdentityAdminRolesListErrors];
+
+export type IdentityAdminRolesListResponses = {
+    /**
+     * OK
+     */
+    200: AdminRolesResponse;
+};
+
+export type IdentityAdminRolesListResponse = IdentityAdminRolesListResponses[keyof IdentityAdminRolesListResponses];
+
+export type IdentityAdminRolesGrantData = {
+    /**
+     * permission
+     */
+    body: AdminPermissionRequest;
+    path: {
+        /**
+         * role
+         */
+        role: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/roles/{role}/permissions';
+};
+
+export type IdentityAdminRolesGrantErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type IdentityAdminRolesGrantError = IdentityAdminRolesGrantErrors[keyof IdentityAdminRolesGrantErrors];
+
+export type IdentityAdminRolesGrantResponses = {
+    /**
+     * Granted
+     */
+    204: void;
+};
+
+export type IdentityAdminRolesGrantResponse = IdentityAdminRolesGrantResponses[keyof IdentityAdminRolesGrantResponses];
+
+export type IdentityAdminRolesRevokeData = {
+    body?: never;
+    path: {
+        /**
+         * role
+         */
+        role: string;
+        /**
+         * permission
+         */
+        permission: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/roles/{role}/permissions/{permission}';
+};
+
+export type IdentityAdminRolesRevokeErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type IdentityAdminRolesRevokeError = IdentityAdminRolesRevokeErrors[keyof IdentityAdminRolesRevokeErrors];
+
+export type IdentityAdminRolesRevokeResponses = {
+    /**
+     * Revoked
+     */
+    204: void;
+};
+
+export type IdentityAdminRolesRevokeResponse = IdentityAdminRolesRevokeResponses[keyof IdentityAdminRolesRevokeResponses];
 
 export type StoreAdminOrdersListData = {
     body?: never;

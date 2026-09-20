@@ -81,6 +81,31 @@ SET role = EXCLUDED.role,
 -- name: ListRolePermissions :many
 SELECT role, permission FROM role_permissions;
 
+-- name: UpsertPermission :exec
+INSERT INTO permissions (name, description, owner)
+VALUES ($1, $2, $3)
+ON CONFLICT (name) DO UPDATE
+SET description = EXCLUDED.description,
+    owner = EXCLUDED.owner;
+
+-- name: UpsertRole :exec
+INSERT INTO roles (name) VALUES ($1)
+ON CONFLICT (name) DO NOTHING;
+
+-- name: GrantRolePermission :exec
+INSERT INTO role_permissions (role, permission)
+VALUES ($1, $2)
+ON CONFLICT (role, permission) DO NOTHING;
+
+-- name: RevokeRolePermission :exec
+DELETE FROM role_permissions WHERE role = $1 AND permission = $2;
+
+-- name: ListDiscordRoleMappings :many
+SELECT * FROM discord_role_mappings ORDER BY discord_role_id;
+
+-- name: DeleteDiscordRoleMapping :exec
+DELETE FROM discord_role_mappings WHERE discord_role_id = $1;
+
 -- name: CreateOAuthState :exec
 INSERT INTO oauth_states (state, code_verifier, return_to, expires_at)
 VALUES ($1, $2, $3, $4);

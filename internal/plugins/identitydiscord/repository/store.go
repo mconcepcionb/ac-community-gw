@@ -15,6 +15,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/mconcepcionb/ac-community-gw/internal/core/auth"
+	"github.com/mconcepcionb/ac-community-gw/internal/core/permissions"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/userdir"
 	identitydiscordrepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/identitydiscord/repository/generated"
 )
@@ -274,6 +275,75 @@ func (s *Store) ListRolePermissions(ctx context.Context) ([]identitydiscordrepo.
 		return nil, fmt.Errorf("repository: list role permissions: %w", err)
 	}
 	return rows, nil
+}
+
+// SyncPermissions upserts the registered permission definitions.
+func (s *Store) SyncPermissions(ctx context.Context, defs []permissions.Definition) error {
+	for _, def := range defs {
+		if err := s.q.UpsertPermission(ctx, identitydiscordrepo.UpsertPermissionParams{
+			Name:        string(def.Name),
+			Description: def.Description,
+			Owner:       def.Owner,
+		}); err != nil {
+			return fmt.Errorf("repository: upsert permission %s: %w", def.Name, err)
+		}
+	}
+	return nil
+}
+
+// UpsertRole ensures an internal role exists.
+func (s *Store) UpsertRole(ctx context.Context, role string) error {
+	if err := s.q.UpsertRole(ctx, role); err != nil {
+		return fmt.Errorf("repository: upsert role: %w", err)
+	}
+	return nil
+}
+
+// GrantRolePermission grants a permission to a role.
+func (s *Store) GrantRolePermission(ctx context.Context, role, permission string) error {
+	if err := s.q.GrantRolePermission(ctx, identitydiscordrepo.GrantRolePermissionParams{
+		Role:       role,
+		Permission: permission,
+	}); err != nil {
+		return fmt.Errorf("repository: grant role permission: %w", err)
+	}
+	return nil
+}
+
+// RevokeRolePermission revokes a permission from a role.
+func (s *Store) RevokeRolePermission(ctx context.Context, role, permission string) error {
+	if err := s.q.RevokeRolePermission(ctx, identitydiscordrepo.RevokeRolePermissionParams{
+		Role:       role,
+		Permission: permission,
+	}); err != nil {
+		return fmt.Errorf("repository: revoke role permission: %w", err)
+	}
+	return nil
+}
+
+// ListDiscordRoleMappings returns every Discord role -> internal role mapping.
+func (s *Store) ListDiscordRoleMappings(ctx context.Context) ([]identitydiscordrepo.DiscordRoleMapping, error) {
+	rows, err := s.q.ListDiscordRoleMappings(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("repository: list discord role mappings: %w", err)
+	}
+	return rows, nil
+}
+
+// UpsertDiscordRoleMapping maps a Discord role to an internal role.
+func (s *Store) UpsertDiscordRoleMapping(ctx context.Context, discordRoleID, role string) error {
+	if err := s.q.UpsertDiscordRoleMapping(ctx, identitydiscordrepo.UpsertDiscordRoleMappingParams{
+		DiscordRoleID: discordRoleID,
+		Role:          role,
+	}); err != nil {
+		return fmt.Errorf("repository: upsert discord role mapping: %w", err)
+	}
+	return nil
+}
+
+// DeleteDiscordRoleMapping removes a Discord role mapping.
+func (s *Store) DeleteDiscordRoleMapping(ctx context.Context, discordRoleID string) error {
+	return s.q.DeleteDiscordRoleMapping(ctx, discordRoleID)
 }
 
 func displayName(user auth.DiscordUser) string {

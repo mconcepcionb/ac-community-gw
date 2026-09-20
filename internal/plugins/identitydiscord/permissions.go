@@ -9,6 +9,9 @@ const (
 	PermissionSessionRevoke permissions.Permission = "identity.session.revoke"
 	// PermissionUserList allows searching community users.
 	PermissionUserList permissions.Permission = "identity.user.list"
+	// PermissionRolesManage allows managing roles, permission grants and Discord
+	// role mappings.
+	PermissionRolesManage permissions.Permission = "identity.roles.manage"
 )
 
 func permissionDefs() []permissions.Definition {
@@ -26,6 +29,11 @@ func permissionDefs() []permissions.Definition {
 		{
 			Name:        PermissionUserList,
 			Description: "Search community users",
+			Owner:       Name,
+		},
+		{
+			Name:        PermissionRolesManage,
+			Description: "Manage roles, permission grants and Discord role mappings",
 			Owner:       Name,
 		},
 	}

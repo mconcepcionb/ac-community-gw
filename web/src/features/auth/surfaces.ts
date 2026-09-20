@@ -26,6 +26,7 @@ export const CONSOLE_PERMISSIONS = [
   "azeroth.admin.claims.read",
   "audit.read",
   "report.read",
+  "identity.roles.manage",
 ] as const;
 
 /** hasAnyConsolePermission reports whether the principal may open the console. */

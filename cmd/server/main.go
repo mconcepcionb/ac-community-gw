@@ -283,6 +283,12 @@ func run() error {
 	}
 
 	if identityRepo != nil {
+		if err := identityRepo.SyncPermissions(ctx, permissionRegistry.Definitions()); err != nil {
+			logger.Warn("permissions: sync to database failed", "error", err)
+		}
+	}
+
+	if identityRepo != nil {
 		roles, grants, err := loadAuthorizer(ctx, identityRepo, authorizer)
 		if err != nil {
 			return err

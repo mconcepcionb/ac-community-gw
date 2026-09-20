@@ -113,6 +113,15 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (S
 	return i, err
 }
 
+const deleteDiscordRoleMapping = `-- name: DeleteDiscordRoleMapping :exec
+DELETE FROM discord_role_mappings WHERE discord_role_id = $1
+`
+
+func (q *Queries) DeleteDiscordRoleMapping(ctx context.Context, discordRoleID string) error {
+	_, err := q.db.ExecContext(ctx, deleteDiscordRoleMapping, discordRoleID)
+	return err
+}
+
 const deleteExpiredOAuthStates = `-- name: DeleteExpiredOAuthStates :exec
 DELETE FROM oauth_states WHERE expires_at < now()
 `
@@ -265,6 +274,22 @@ func (q *Queries) GetUserProfile(ctx context.Context, id uuid.UUID) (GetUserProf
 	return i, err
 }
 
+const grantRolePermission = `-- name: GrantRolePermission :exec
+INSERT INTO role_permissions (role, permission)
+VALUES ($1, $2)
+ON CONFLICT (role, permission) DO NOTHING
+`
+
+type GrantRolePermissionParams struct {
+	Role       string
+	Permission string
+}
+
+func (q *Queries) GrantRolePermission(ctx context.Context, arg GrantRolePermissionParams) error {
+	_, err := q.db.ExecContext(ctx, grantRolePermission, arg.Role, arg.Permission)
+	return err
+}
+
 const listCommunityUsers = `-- name: ListCommunityUsers :many
 SELECT cu.id,
        cu.discord_id,
@@ -317,6 +342,38 @@ func (q *Queries) ListCommunityUsers(ctx context.Context, arg ListCommunityUsers
 			&i.CreatedAt,
 			&i.Username,
 			&i.GlobalName,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listDiscordRoleMappings = `-- name: ListDiscordRoleMappings :many
+SELECT discord_role_id, role, created_at, updated_at FROM discord_role_mappings ORDER BY discord_role_id
+`
+
+func (q *Queries) ListDiscordRoleMappings(ctx context.Context) ([]DiscordRoleMapping, error) {
+	rows, err := q.db.QueryContext(ctx, listDiscordRoleMappings)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []DiscordRoleMapping{}
+	for rows.Next() {
+		var i DiscordRoleMapping
+		if err := rows.Scan(
+			&i.DiscordRoleID,
+			&i.Role,
+			&i.CreatedAt,
+			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -443,6 +500,20 @@ func (q *Queries) ResolveUserByName(ctx context.Context, name string) ([]Resolve
 	return items, nil
 }
 
+const revokeRolePermission = `-- name: RevokeRolePermission :exec
+DELETE FROM role_permissions WHERE role = $1 AND permission = $2
+`
+
+type RevokeRolePermissionParams struct {
+	Role       string
+	Permission string
+}
+
+func (q *Queries) RevokeRolePermission(ctx context.Context, arg RevokeRolePermissionParams) error {
+	_, err := q.db.ExecContext(ctx, revokeRolePermission, arg.Role, arg.Permission)
+	return err
+}
+
 const updateCommunityUserRoles = `-- name: UpdateCommunityUserRoles :exec
 UPDATE community_users
 SET roles = $2::text[],
@@ -558,5 +629,34 @@ type UpsertDiscordRoleMappingParams struct {
 
 func (q *Queries) UpsertDiscordRoleMapping(ctx context.Context, arg UpsertDiscordRoleMappingParams) error {
 	_, err := q.db.ExecContext(ctx, upsertDiscordRoleMapping, arg.DiscordRoleID, arg.Role)
+	return err
+}
+
+const upsertPermission = `-- name: UpsertPermission :exec
+INSERT INTO permissions (name, description, owner)
+VALUES ($1, $2, $3)
+ON CONFLICT (name) DO UPDATE
+SET description = EXCLUDED.description,
+    owner = EXCLUDED.owner
+`
+
+type UpsertPermissionParams struct {
+	Name        string
+	Description string
+	Owner       string
+}
+
+func (q *Queries) UpsertPermission(ctx context.Context, arg UpsertPermissionParams) error {
+	_, err := q.db.ExecContext(ctx, upsertPermission, arg.Name, arg.Description, arg.Owner)
+	return err
+}
+
+const upsertRole = `-- name: UpsertRole :exec
+INSERT INTO roles (name) VALUES ($1)
+ON CONFLICT (name) DO NOTHING
+`
+
+func (q *Queries) UpsertRole(ctx context.Context, name string) error {
+	_, err := q.db.ExecContext(ctx, upsertRole, name)
 	return err
 }

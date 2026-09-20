@@ -3,8 +3,8 @@
 import { type InfiniteData, infiniteQueryOptions, queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { authDiscordCallback, authDiscordLogin, authLogout, authMe, azerothAccountLinksCreate, azerothAccountLinksDelete, azerothAccountLinksGet, azerothAccountLinksList, azerothAccountsBan, azerothAccountsCreate, azerothAccountsList, azerothAccountsSetEmail, azerothAccountsSetGmlevel, azerothAccountsSetPassword, azerothAccountsUnban, azerothAdminAccountClaimsList, azerothAdminAuditList, azerothAdminUsersGet, azerothAnnounceSend, azerothCharactersBan, azerothCharactersGet, azerothCharactersList, azerothCharactersUnban, azerothInfoStatus, azerothItemsGet, azerothItemsList, azerothMailSend, azerothMeAccountClaimStart, azerothMeAccountClaimVerify, azerothMeAccountCreate, azerothMeAccountGet, azerothMeCharactersList, azerothMeCharactersVisibilityList, azerothMeCharactersVisibilitySet, azerothMeMailSend, azerothOnlineList, azerothPlayersKick, azerothPlayersMute, azerothPlayersUnmute, azerothUserCharactersList, identityUsersList, operationsHealth, operationsReady, type Options, reportsClose, reportsCreate, reportsList, reportsMine, storeAdminOrdersList, storeAdminOrdersRefund, storeAdminOrdersRetry, storeOrdersCreate, storeOrdersList, storeProductsCreate, storeProductsDelete, storeProductsGet, storeProductsList, storeProductsUpdate, storeWalletGet, storeWalletsGrant } from '../sdk.gen';
-import type { AuthDiscordCallbackData, AuthDiscordCallbackError, AuthDiscordCallbackResponse, AuthDiscordLoginData, AuthDiscordLoginError, AuthLogoutData, AuthLogoutError, AuthLogoutResponse, AuthMeData, AuthMeError, AuthMeResponse, AzerothAccountLinksCreateData, AzerothAccountLinksCreateError, AzerothAccountLinksCreateResponse, AzerothAccountLinksDeleteData, AzerothAccountLinksDeleteError, AzerothAccountLinksDeleteResponse, AzerothAccountLinksGetData, AzerothAccountLinksGetError, AzerothAccountLinksGetResponse, AzerothAccountLinksListData, AzerothAccountLinksListError, AzerothAccountLinksListResponse, AzerothAccountsBanData, AzerothAccountsBanError, AzerothAccountsBanResponse, AzerothAccountsCreateData, AzerothAccountsCreateError, AzerothAccountsCreateResponse, AzerothAccountsListData, AzerothAccountsListError, AzerothAccountsListResponse, AzerothAccountsSetEmailData, AzerothAccountsSetEmailError, AzerothAccountsSetEmailResponse, AzerothAccountsSetGmlevelData, AzerothAccountsSetGmlevelError, AzerothAccountsSetGmlevelResponse, AzerothAccountsSetPasswordData, AzerothAccountsSetPasswordError, AzerothAccountsSetPasswordResponse, AzerothAccountsUnbanData, AzerothAccountsUnbanError, AzerothAccountsUnbanResponse, AzerothAdminAccountClaimsListData, AzerothAdminAccountClaimsListError, AzerothAdminAccountClaimsListResponse, AzerothAdminAuditListData, AzerothAdminAuditListError, AzerothAdminAuditListResponse, AzerothAdminUsersGetData, AzerothAdminUsersGetError, AzerothAdminUsersGetResponse, AzerothAnnounceSendData, AzerothAnnounceSendError, AzerothAnnounceSendResponse, AzerothCharactersBanData, AzerothCharactersBanError, AzerothCharactersBanResponse, AzerothCharactersGetData, AzerothCharactersGetError, AzerothCharactersGetResponse, AzerothCharactersListData, AzerothCharactersListError, AzerothCharactersListResponse, AzerothCharactersUnbanData, AzerothCharactersUnbanError, AzerothCharactersUnbanResponse, AzerothInfoStatusData, AzerothInfoStatusError, AzerothInfoStatusResponse, AzerothItemsGetData, AzerothItemsGetError, AzerothItemsGetResponse, AzerothItemsListData, AzerothItemsListError, AzerothItemsListResponse, AzerothMailSendData, AzerothMailSendError, AzerothMailSendResponse, AzerothMeAccountClaimStartData, AzerothMeAccountClaimStartError, AzerothMeAccountClaimStartResponse, AzerothMeAccountClaimVerifyData, AzerothMeAccountClaimVerifyError, AzerothMeAccountClaimVerifyResponse, AzerothMeAccountCreateData, AzerothMeAccountCreateError, AzerothMeAccountCreateResponse, AzerothMeAccountGetData, AzerothMeAccountGetError, AzerothMeAccountGetResponse, AzerothMeCharactersListData, AzerothMeCharactersListError, AzerothMeCharactersListResponse, AzerothMeCharactersVisibilityListData, AzerothMeCharactersVisibilityListError, AzerothMeCharactersVisibilityListResponse, AzerothMeCharactersVisibilitySetData, AzerothMeCharactersVisibilitySetError, AzerothMeCharactersVisibilitySetResponse, AzerothMeMailSendData, AzerothMeMailSendError, AzerothMeMailSendResponse, AzerothOnlineListData, AzerothOnlineListError, AzerothOnlineListResponse2, AzerothPlayersKickData, AzerothPlayersKickError, AzerothPlayersKickResponse, AzerothPlayersMuteData, AzerothPlayersMuteError, AzerothPlayersMuteResponse, AzerothPlayersUnmuteData, AzerothPlayersUnmuteError, AzerothPlayersUnmuteResponse, AzerothUserCharactersListData, AzerothUserCharactersListError, AzerothUserCharactersListResponse, IdentityUsersListData, IdentityUsersListError, IdentityUsersListResponse, OperationsHealthData, OperationsHealthError, OperationsHealthResponse, OperationsReadyData, OperationsReadyError, OperationsReadyResponse, ReportsCloseData, ReportsCloseError, ReportsCloseResponse, ReportsCreateData, ReportsCreateError, ReportsCreateResponse, ReportsListData, ReportsListError, ReportsListResponse, ReportsMineData, ReportsMineError, ReportsMineResponse, StoreAdminOrdersListData, StoreAdminOrdersListError, StoreAdminOrdersListResponse, StoreAdminOrdersRefundData, StoreAdminOrdersRefundError, StoreAdminOrdersRefundResponse, StoreAdminOrdersRetryData, StoreAdminOrdersRetryError, StoreAdminOrdersRetryResponse, StoreOrdersCreateData, StoreOrdersCreateError, StoreOrdersCreateResponse, StoreOrdersListData, StoreOrdersListError, StoreOrdersListResponse, StoreProductsCreateData, StoreProductsCreateError, StoreProductsCreateResponse, StoreProductsDeleteData, StoreProductsDeleteError, StoreProductsDeleteResponse, StoreProductsGetData, StoreProductsGetError, StoreProductsGetResponse, StoreProductsListData, StoreProductsListError, StoreProductsListResponse, StoreProductsUpdateData, StoreProductsUpdateError, StoreProductsUpdateResponse, StoreWalletGetData, StoreWalletGetError, StoreWalletGetResponse, StoreWalletsGrantData, StoreWalletsGrantError, StoreWalletsGrantResponse } from '../types.gen';
+import { authDiscordCallback, authDiscordLogin, authLogout, authMe, azerothAccountLinksCreate, azerothAccountLinksDelete, azerothAccountLinksGet, azerothAccountLinksList, azerothAccountsBan, azerothAccountsCreate, azerothAccountsList, azerothAccountsSetEmail, azerothAccountsSetGmlevel, azerothAccountsSetPassword, azerothAccountsUnban, azerothAdminAccountClaimsList, azerothAdminAuditList, azerothAdminUsersGet, azerothAnnounceSend, azerothCharactersBan, azerothCharactersGet, azerothCharactersList, azerothCharactersUnban, azerothInfoStatus, azerothItemsGet, azerothItemsList, azerothMailSend, azerothMeAccountClaimStart, azerothMeAccountClaimVerify, azerothMeAccountCreate, azerothMeAccountGet, azerothMeCharactersList, azerothMeCharactersVisibilityList, azerothMeCharactersVisibilitySet, azerothMeMailSend, azerothOnlineList, azerothPlayersKick, azerothPlayersMute, azerothPlayersUnmute, azerothUserCharactersList, identityAdminDiscordMappingsDelete, identityAdminDiscordMappingsUpsert, identityAdminRolesGrant, identityAdminRolesList, identityAdminRolesRevoke, identityUsersList, operationsHealth, operationsReady, type Options, reportsClose, reportsCreate, reportsList, reportsMine, storeAdminOrdersList, storeAdminOrdersRefund, storeAdminOrdersRetry, storeOrdersCreate, storeOrdersList, storeProductsCreate, storeProductsDelete, storeProductsGet, storeProductsList, storeProductsUpdate, storeWalletGet, storeWalletsGrant } from '../sdk.gen';
+import type { AuthDiscordCallbackData, AuthDiscordCallbackError, AuthDiscordCallbackResponse, AuthDiscordLoginData, AuthDiscordLoginError, AuthLogoutData, AuthLogoutError, AuthLogoutResponse, AuthMeData, AuthMeError, AuthMeResponse, AzerothAccountLinksCreateData, AzerothAccountLinksCreateError, AzerothAccountLinksCreateResponse, AzerothAccountLinksDeleteData, AzerothAccountLinksDeleteError, AzerothAccountLinksDeleteResponse, AzerothAccountLinksGetData, AzerothAccountLinksGetError, AzerothAccountLinksGetResponse, AzerothAccountLinksListData, AzerothAccountLinksListError, AzerothAccountLinksListResponse, AzerothAccountsBanData, AzerothAccountsBanError, AzerothAccountsBanResponse, AzerothAccountsCreateData, AzerothAccountsCreateError, AzerothAccountsCreateResponse, AzerothAccountsListData, AzerothAccountsListError, AzerothAccountsListResponse, AzerothAccountsSetEmailData, AzerothAccountsSetEmailError, AzerothAccountsSetEmailResponse, AzerothAccountsSetGmlevelData, AzerothAccountsSetGmlevelError, AzerothAccountsSetGmlevelResponse, AzerothAccountsSetPasswordData, AzerothAccountsSetPasswordError, AzerothAccountsSetPasswordResponse, AzerothAccountsUnbanData, AzerothAccountsUnbanError, AzerothAccountsUnbanResponse, AzerothAdminAccountClaimsListData, AzerothAdminAccountClaimsListError, AzerothAdminAccountClaimsListResponse, AzerothAdminAuditListData, AzerothAdminAuditListError, AzerothAdminAuditListResponse, AzerothAdminUsersGetData, AzerothAdminUsersGetError, AzerothAdminUsersGetResponse, AzerothAnnounceSendData, AzerothAnnounceSendError, AzerothAnnounceSendResponse, AzerothCharactersBanData, AzerothCharactersBanError, AzerothCharactersBanResponse, AzerothCharactersGetData, AzerothCharactersGetError, AzerothCharactersGetResponse, AzerothCharactersListData, AzerothCharactersListError, AzerothCharactersListResponse, AzerothCharactersUnbanData, AzerothCharactersUnbanError, AzerothCharactersUnbanResponse, AzerothInfoStatusData, AzerothInfoStatusError, AzerothInfoStatusResponse, AzerothItemsGetData, AzerothItemsGetError, AzerothItemsGetResponse, AzerothItemsListData, AzerothItemsListError, AzerothItemsListResponse, AzerothMailSendData, AzerothMailSendError, AzerothMailSendResponse, AzerothMeAccountClaimStartData, AzerothMeAccountClaimStartError, AzerothMeAccountClaimStartResponse, AzerothMeAccountClaimVerifyData, AzerothMeAccountClaimVerifyError, AzerothMeAccountClaimVerifyResponse, AzerothMeAccountCreateData, AzerothMeAccountCreateError, AzerothMeAccountCreateResponse, AzerothMeAccountGetData, AzerothMeAccountGetError, AzerothMeAccountGetResponse, AzerothMeCharactersListData, AzerothMeCharactersListError, AzerothMeCharactersListResponse, AzerothMeCharactersVisibilityListData, AzerothMeCharactersVisibilityListError, AzerothMeCharactersVisibilityListResponse, AzerothMeCharactersVisibilitySetData, AzerothMeCharactersVisibilitySetError, AzerothMeCharactersVisibilitySetResponse, AzerothMeMailSendData, AzerothMeMailSendError, AzerothMeMailSendResponse, AzerothOnlineListData, AzerothOnlineListError, AzerothOnlineListResponse2, AzerothPlayersKickData, AzerothPlayersKickError, AzerothPlayersKickResponse, AzerothPlayersMuteData, AzerothPlayersMuteError, AzerothPlayersMuteResponse, AzerothPlayersUnmuteData, AzerothPlayersUnmuteError, AzerothPlayersUnmuteResponse, AzerothUserCharactersListData, AzerothUserCharactersListError, AzerothUserCharactersListResponse, IdentityAdminDiscordMappingsDeleteData, IdentityAdminDiscordMappingsDeleteError, IdentityAdminDiscordMappingsDeleteResponse, IdentityAdminDiscordMappingsUpsertData, IdentityAdminDiscordMappingsUpsertError, IdentityAdminDiscordMappingsUpsertResponse, IdentityAdminRolesGrantData, IdentityAdminRolesGrantError, IdentityAdminRolesGrantResponse, IdentityAdminRolesListData, IdentityAdminRolesListError, IdentityAdminRolesListResponse, IdentityAdminRolesRevokeData, IdentityAdminRolesRevokeError, IdentityAdminRolesRevokeResponse, IdentityUsersListData, IdentityUsersListError, IdentityUsersListResponse, OperationsHealthData, OperationsHealthError, OperationsHealthResponse, OperationsReadyData, OperationsReadyError, OperationsReadyResponse, ReportsCloseData, ReportsCloseError, ReportsCloseResponse, ReportsCreateData, ReportsCreateError, ReportsCreateResponse, ReportsListData, ReportsListError, ReportsListResponse, ReportsMineData, ReportsMineError, ReportsMineResponse, StoreAdminOrdersListData, StoreAdminOrdersListError, StoreAdminOrdersListResponse, StoreAdminOrdersRefundData, StoreAdminOrdersRefundError, StoreAdminOrdersRefundResponse, StoreAdminOrdersRetryData, StoreAdminOrdersRetryError, StoreAdminOrdersRetryResponse, StoreOrdersCreateData, StoreOrdersCreateError, StoreOrdersCreateResponse, StoreOrdersListData, StoreOrdersListError, StoreOrdersListResponse, StoreProductsCreateData, StoreProductsCreateError, StoreProductsCreateResponse, StoreProductsDeleteData, StoreProductsDeleteError, StoreProductsDeleteResponse, StoreProductsGetData, StoreProductsGetError, StoreProductsGetResponse, StoreProductsListData, StoreProductsListError, StoreProductsListResponse, StoreProductsUpdateData, StoreProductsUpdateError, StoreProductsUpdateResponse, StoreWalletGetData, StoreWalletGetError, StoreWalletGetResponse, StoreWalletsGrantData, StoreWalletsGrantError, StoreWalletsGrantResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -140,6 +140,44 @@ export const azerothAdminAuditListInfiniteOptions = (options?: Options<AzerothAd
     return opts as Omit<typeof opts, 'initialData'>;
 };
 
+/**
+ * Delete a Discord role mapping
+ *
+ * Removes a Discord role mapping. Requires the identity.roles.manage permission.
+ */
+export const identityAdminDiscordMappingsDeleteMutation = (options?: Partial<Options<IdentityAdminDiscordMappingsDeleteData>>): UseMutationOptions<IdentityAdminDiscordMappingsDeleteResponse, IdentityAdminDiscordMappingsDeleteError, Options<IdentityAdminDiscordMappingsDeleteData>> => {
+    const mutationOptions: UseMutationOptions<IdentityAdminDiscordMappingsDeleteResponse, IdentityAdminDiscordMappingsDeleteError, Options<IdentityAdminDiscordMappingsDeleteData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await identityAdminDiscordMappingsDelete({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Map a Discord role to an internal role
+ *
+ * Creates or updates a Discord role mapping. Requires the identity.roles.manage permission.
+ */
+export const identityAdminDiscordMappingsUpsertMutation = (options?: Partial<Options<IdentityAdminDiscordMappingsUpsertData>>): UseMutationOptions<IdentityAdminDiscordMappingsUpsertResponse, IdentityAdminDiscordMappingsUpsertError, Options<IdentityAdminDiscordMappingsUpsertData>> => {
+    const mutationOptions: UseMutationOptions<IdentityAdminDiscordMappingsUpsertResponse, IdentityAdminDiscordMappingsUpsertError, Options<IdentityAdminDiscordMappingsUpsertData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await identityAdminDiscordMappingsUpsert({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
 export const reportsListQueryKey = (options?: Options<ReportsListData>) => createQueryKey('reportsList', options);
 
 /**
@@ -201,6 +239,64 @@ export const reportsCloseMutation = (options?: Partial<Options<ReportsCloseData>
     const mutationOptions: UseMutationOptions<ReportsCloseResponse, ReportsCloseError, Options<ReportsCloseData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await reportsClose({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const identityAdminRolesListQueryKey = (options?: Options<IdentityAdminRolesListData>) => createQueryKey('identityAdminRolesList', options);
+
+/**
+ * List roles and mappings
+ *
+ * Returns every role -> permission grant and Discord role mapping. Requires the identity.roles.manage permission.
+ */
+export const identityAdminRolesListOptions = (options?: Options<IdentityAdminRolesListData>) => queryOptions<IdentityAdminRolesListResponse, IdentityAdminRolesListError, IdentityAdminRolesListResponse, ReturnType<typeof identityAdminRolesListQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await identityAdminRolesList({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: identityAdminRolesListQueryKey(options)
+});
+
+/**
+ * Grant a permission to a role
+ *
+ * Grants a permission to a role (creating the role if needed). Requires the identity.roles.manage permission.
+ */
+export const identityAdminRolesGrantMutation = (options?: Partial<Options<IdentityAdminRolesGrantData>>): UseMutationOptions<IdentityAdminRolesGrantResponse, IdentityAdminRolesGrantError, Options<IdentityAdminRolesGrantData>> => {
+    const mutationOptions: UseMutationOptions<IdentityAdminRolesGrantResponse, IdentityAdminRolesGrantError, Options<IdentityAdminRolesGrantData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await identityAdminRolesGrant({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Revoke a permission from a role
+ *
+ * Revokes a permission from a role. Requires the identity.roles.manage permission.
+ */
+export const identityAdminRolesRevokeMutation = (options?: Partial<Options<IdentityAdminRolesRevokeData>>): UseMutationOptions<IdentityAdminRolesRevokeResponse, IdentityAdminRolesRevokeError, Options<IdentityAdminRolesRevokeData>> => {
+    const mutationOptions: UseMutationOptions<IdentityAdminRolesRevokeResponse, IdentityAdminRolesRevokeError, Options<IdentityAdminRolesRevokeData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await identityAdminRolesRevoke({
                 ...options,
                 ...fnOptions,
                 throwOnError: true

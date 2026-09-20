@@ -19,6 +19,7 @@ import (
 	"github.com/mconcepcionb/ac-community-gw/internal/core/plugins"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/services"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/userdir"
+	identitydiscordrepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/identitydiscord/repository/generated"
 )
 
 // Name is the stable plugin name.
@@ -71,6 +72,15 @@ type Repository interface {
 	ListUsers(ctx context.Context, filter string, limit, offset int) ([]userdir.User, error)
 	ResolveUserByName(ctx context.Context, name string) ([]userdir.User, error)
 	UserProfile(ctx context.Context, userID uuid.UUID) (userdir.User, error)
+	// Role and permission administration.
+	SyncPermissions(ctx context.Context, defs []permissions.Definition) error
+	ListRolePermissions(ctx context.Context) ([]identitydiscordrepo.RolePermission, error)
+	UpsertRole(ctx context.Context, role string) error
+	GrantRolePermission(ctx context.Context, role, permission string) error
+	RevokeRolePermission(ctx context.Context, role, permission string) error
+	ListDiscordRoleMappings(ctx context.Context) ([]identitydiscordrepo.DiscordRoleMapping, error)
+	UpsertDiscordRoleMapping(ctx context.Context, discordRoleID, role string) error
+	DeleteDiscordRoleMapping(ctx context.Context, discordRoleID string) error
 }
 
 // Cleaner removes expired sessions and OAuth states.
@@ -180,6 +190,16 @@ func (p *Plugin) Register(_ context.Context, reg *plugins.Registry) error {
 	reg.Mux.Handle("GET /api/v1/me", reg.RequireAuth(http.HandlerFunc(p.handleMe)))
 	reg.Mux.Handle("GET /api/v1/identity/users",
 		reg.RequirePermission(PermissionUserList, http.HandlerFunc(p.handleListUsers)))
+	reg.Mux.Handle("GET /api/v1/admin/roles",
+		reg.RequirePermission(PermissionRolesManage, http.HandlerFunc(p.handleListRoles)))
+	reg.Mux.Handle("POST /api/v1/admin/roles/{role}/permissions",
+		reg.RequirePermission(PermissionRolesManage, http.HandlerFunc(p.handleGrantRolePermission)))
+	reg.Mux.Handle("DELETE /api/v1/admin/roles/{role}/permissions/{permission}",
+		reg.RequirePermission(PermissionRolesManage, http.HandlerFunc(p.handleRevokeRolePermission)))
+	reg.Mux.Handle("PUT /api/v1/admin/discord-role-mappings/{discord_role_id}",
+		reg.RequirePermission(PermissionRolesManage, http.HandlerFunc(p.handleUpsertDiscordMapping)))
+	reg.Mux.Handle("DELETE /api/v1/admin/discord-role-mappings/{discord_role_id}",
+		reg.RequirePermission(PermissionRolesManage, http.HandlerFunc(p.handleDeleteDiscordMapping)))
 	return nil
 }
 

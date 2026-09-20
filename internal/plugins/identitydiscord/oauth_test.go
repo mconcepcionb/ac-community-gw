@@ -17,6 +17,7 @@ import (
 	"github.com/mconcepcionb/ac-community-gw/internal/core/metrics"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/permissions"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/userdir"
+	identitydiscordrepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/identitydiscord/repository/generated"
 )
 
 var errFake = errors.New("fake upstream failure")
@@ -106,6 +107,26 @@ func (f *fakeRepo) UpdateUserRoles(_ context.Context, _ uuid.UUID, roles []strin
 	f.roles = roles
 	return nil
 }
+
+func (f *fakeRepo) SyncPermissions(context.Context, []permissions.Definition) error { return nil }
+
+func (f *fakeRepo) ListRolePermissions(context.Context) ([]identitydiscordrepo.RolePermission, error) {
+	return nil, nil
+}
+
+func (f *fakeRepo) UpsertRole(context.Context, string) error { return nil }
+
+func (f *fakeRepo) GrantRolePermission(context.Context, string, string) error { return nil }
+
+func (f *fakeRepo) RevokeRolePermission(context.Context, string, string) error { return nil }
+
+func (f *fakeRepo) ListDiscordRoleMappings(context.Context) ([]identitydiscordrepo.DiscordRoleMapping, error) {
+	return nil, nil
+}
+
+func (f *fakeRepo) UpsertDiscordRoleMapping(context.Context, string, string) error { return nil }
+
+func (f *fakeRepo) DeleteDiscordRoleMapping(context.Context, string) error { return nil }
 
 func newTestPlugin(t *testing.T, provider auth.DiscordProvider, repo Repository) (*Plugin, *auth.Manager, *MemoryStateStore) {
 	t.Helper()
