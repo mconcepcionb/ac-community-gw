@@ -3,8 +3,8 @@
 import { type InfiniteData, infiniteQueryOptions, queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { apikeysCreate, apikeysList, apikeysPermissionsList, apikeysRevoke, apikeysRotate, authDiscordCallback, authDiscordLogin, authLogout, authMe, azerothAccountLinksCreate, azerothAccountLinksDelete, azerothAccountLinksGet, azerothAccountLinksList, azerothAccountsBan, azerothAccountsCreate, azerothAccountsList, azerothAccountsSetEmail, azerothAccountsSetGmlevel, azerothAccountsSetPassword, azerothAccountsUnban, azerothAdminAccountClaimsList, azerothAdminAuditList, azerothAdminUsersGet, azerothAnnounceSend, azerothCharactersBan, azerothCharactersGet, azerothCharactersList, azerothCharactersUnban, azerothInfoStatus, azerothItemsGet, azerothItemsList, azerothLeaderboardsGet, azerothMailSend, azerothMeAccountClaimStart, azerothMeAccountClaimVerify, azerothMeAccountCreate, azerothMeAccountGet, azerothMeCharactersList, azerothMeCharactersVisibilityList, azerothMeCharactersVisibilitySet, azerothMeMailSend, azerothOnlineList, azerothPlayersKick, azerothPlayersMute, azerothPlayersUnmute, azerothPublicLeaderboardsGet, azerothPublicStatus, azerothUserCharactersList, identityAdminDiscordMappingsDelete, identityAdminDiscordMappingsUpsert, identityAdminRolesGrant, identityAdminRolesList, identityAdminRolesRevoke, identityUsersList, operationsHealth, operationsReady, type Options, reportsClose, reportsCreate, reportsList, reportsMine, storeAdminOrdersList, storeAdminOrdersRefund, storeAdminOrdersRetry, storeOrdersCreate, storeOrdersList, storeProductsCreate, storeProductsDelete, storeProductsGet, storeProductsList, storeProductsUpdate, storeWalletGet, storeWalletsGrant } from '../sdk.gen';
-import type { ApikeysCreateData, ApikeysCreateError, ApikeysCreateResponse, ApikeysListData, ApikeysListError, ApikeysListResponse, ApikeysPermissionsListData, ApikeysPermissionsListError, ApikeysPermissionsListResponse, ApikeysRevokeData, ApikeysRevokeError, ApikeysRevokeResponse, ApikeysRotateData, ApikeysRotateError, ApikeysRotateResponse, AuthDiscordCallbackData, AuthDiscordCallbackError, AuthDiscordCallbackResponse, AuthDiscordLoginData, AuthDiscordLoginError, AuthLogoutData, AuthLogoutError, AuthLogoutResponse, AuthMeData, AuthMeError, AuthMeResponse, AzerothAccountLinksCreateData, AzerothAccountLinksCreateError, AzerothAccountLinksCreateResponse, AzerothAccountLinksDeleteData, AzerothAccountLinksDeleteError, AzerothAccountLinksDeleteResponse, AzerothAccountLinksGetData, AzerothAccountLinksGetError, AzerothAccountLinksGetResponse, AzerothAccountLinksListData, AzerothAccountLinksListError, AzerothAccountLinksListResponse, AzerothAccountsBanData, AzerothAccountsBanError, AzerothAccountsBanResponse, AzerothAccountsCreateData, AzerothAccountsCreateError, AzerothAccountsCreateResponse, AzerothAccountsListData, AzerothAccountsListError, AzerothAccountsListResponse, AzerothAccountsSetEmailData, AzerothAccountsSetEmailError, AzerothAccountsSetEmailResponse, AzerothAccountsSetGmlevelData, AzerothAccountsSetGmlevelError, AzerothAccountsSetGmlevelResponse, AzerothAccountsSetPasswordData, AzerothAccountsSetPasswordError, AzerothAccountsSetPasswordResponse, AzerothAccountsUnbanData, AzerothAccountsUnbanError, AzerothAccountsUnbanResponse, AzerothAdminAccountClaimsListData, AzerothAdminAccountClaimsListError, AzerothAdminAccountClaimsListResponse, AzerothAdminAuditListData, AzerothAdminAuditListError, AzerothAdminAuditListResponse, AzerothAdminUsersGetData, AzerothAdminUsersGetError, AzerothAdminUsersGetResponse, AzerothAnnounceSendData, AzerothAnnounceSendError, AzerothAnnounceSendResponse, AzerothCharactersBanData, AzerothCharactersBanError, AzerothCharactersBanResponse, AzerothCharactersGetData, AzerothCharactersGetError, AzerothCharactersGetResponse, AzerothCharactersListData, AzerothCharactersListError, AzerothCharactersListResponse, AzerothCharactersUnbanData, AzerothCharactersUnbanError, AzerothCharactersUnbanResponse, AzerothInfoStatusData, AzerothInfoStatusError, AzerothInfoStatusResponse, AzerothItemsGetData, AzerothItemsGetError, AzerothItemsGetResponse, AzerothItemsListData, AzerothItemsListError, AzerothItemsListResponse, AzerothLeaderboardsGetData, AzerothLeaderboardsGetError, AzerothLeaderboardsGetResponse, AzerothMailSendData, AzerothMailSendError, AzerothMailSendResponse, AzerothMeAccountClaimStartData, AzerothMeAccountClaimStartError, AzerothMeAccountClaimStartResponse, AzerothMeAccountClaimVerifyData, AzerothMeAccountClaimVerifyError, AzerothMeAccountClaimVerifyResponse, AzerothMeAccountCreateData, AzerothMeAccountCreateError, AzerothMeAccountCreateResponse, AzerothMeAccountGetData, AzerothMeAccountGetError, AzerothMeAccountGetResponse, AzerothMeCharactersListData, AzerothMeCharactersListError, AzerothMeCharactersListResponse, AzerothMeCharactersVisibilityListData, AzerothMeCharactersVisibilityListError, AzerothMeCharactersVisibilityListResponse, AzerothMeCharactersVisibilitySetData, AzerothMeCharactersVisibilitySetError, AzerothMeCharactersVisibilitySetResponse, AzerothMeMailSendData, AzerothMeMailSendError, AzerothMeMailSendResponse, AzerothOnlineListData, AzerothOnlineListError, AzerothOnlineListResponse2, AzerothPlayersKickData, AzerothPlayersKickError, AzerothPlayersKickResponse, AzerothPlayersMuteData, AzerothPlayersMuteError, AzerothPlayersMuteResponse, AzerothPlayersUnmuteData, AzerothPlayersUnmuteError, AzerothPlayersUnmuteResponse, AzerothPublicLeaderboardsGetData, AzerothPublicLeaderboardsGetError, AzerothPublicLeaderboardsGetResponse, AzerothPublicStatusData, AzerothPublicStatusError, AzerothPublicStatusResponse, AzerothUserCharactersListData, AzerothUserCharactersListError, AzerothUserCharactersListResponse, IdentityAdminDiscordMappingsDeleteData, IdentityAdminDiscordMappingsDeleteError, IdentityAdminDiscordMappingsDeleteResponse, IdentityAdminDiscordMappingsUpsertData, IdentityAdminDiscordMappingsUpsertError, IdentityAdminDiscordMappingsUpsertResponse, IdentityAdminRolesGrantData, IdentityAdminRolesGrantError, IdentityAdminRolesGrantResponse, IdentityAdminRolesListData, IdentityAdminRolesListError, IdentityAdminRolesListResponse, IdentityAdminRolesRevokeData, IdentityAdminRolesRevokeError, IdentityAdminRolesRevokeResponse, IdentityUsersListData, IdentityUsersListError, IdentityUsersListResponse, OperationsHealthData, OperationsHealthError, OperationsHealthResponse, OperationsReadyData, OperationsReadyError, OperationsReadyResponse, ReportsCloseData, ReportsCloseError, ReportsCloseResponse, ReportsCreateData, ReportsCreateError, ReportsCreateResponse, ReportsListData, ReportsListError, ReportsListResponse, ReportsMineData, ReportsMineError, ReportsMineResponse, StoreAdminOrdersListData, StoreAdminOrdersListError, StoreAdminOrdersListResponse, StoreAdminOrdersRefundData, StoreAdminOrdersRefundError, StoreAdminOrdersRefundResponse, StoreAdminOrdersRetryData, StoreAdminOrdersRetryError, StoreAdminOrdersRetryResponse, StoreOrdersCreateData, StoreOrdersCreateError, StoreOrdersCreateResponse, StoreOrdersListData, StoreOrdersListError, StoreOrdersListResponse, StoreProductsCreateData, StoreProductsCreateError, StoreProductsCreateResponse, StoreProductsDeleteData, StoreProductsDeleteError, StoreProductsDeleteResponse, StoreProductsGetData, StoreProductsGetError, StoreProductsGetResponse, StoreProductsListData, StoreProductsListError, StoreProductsListResponse, StoreProductsUpdateData, StoreProductsUpdateError, StoreProductsUpdateResponse, StoreWalletGetData, StoreWalletGetError, StoreWalletGetResponse, StoreWalletsGrantData, StoreWalletsGrantError, StoreWalletsGrantResponse } from '../types.gen';
+import { adminNotesCreate, adminNotesDelete, adminNotesList, adminNotesUpdate, apikeysCreate, apikeysList, apikeysPermissionsList, apikeysRevoke, apikeysRotate, authDiscordCallback, authDiscordLogin, authLogout, authMe, azerothAccountLinksCreate, azerothAccountLinksDelete, azerothAccountLinksGet, azerothAccountLinksList, azerothAccountsBan, azerothAccountsCreate, azerothAccountsList, azerothAccountsSetEmail, azerothAccountsSetGmlevel, azerothAccountsSetPassword, azerothAccountsUnban, azerothAdminAccountClaimsList, azerothAdminAuditList, azerothAdminUsersGet, azerothAnnounceSend, azerothCharactersBan, azerothCharactersGet, azerothCharactersList, azerothCharactersUnban, azerothInfoStatus, azerothItemsGet, azerothItemsList, azerothLeaderboardsGet, azerothMailSend, azerothMeAccountClaimStart, azerothMeAccountClaimVerify, azerothMeAccountCreate, azerothMeAccountGet, azerothMeCharactersList, azerothMeCharactersVisibilityList, azerothMeCharactersVisibilitySet, azerothMeMailSend, azerothOnlineList, azerothPlayersKick, azerothPlayersMute, azerothPlayersUnmute, azerothPublicLeaderboardsGet, azerothPublicStatus, azerothUserCharactersList, identityAdminDiscordMappingsDelete, identityAdminDiscordMappingsUpsert, identityAdminRolesGrant, identityAdminRolesList, identityAdminRolesRevoke, identityUsersList, operationsHealth, operationsReady, type Options, reportsClose, reportsCreate, reportsList, reportsMine, storeAdminOrdersList, storeAdminOrdersRefund, storeAdminOrdersRetry, storeOrdersCreate, storeOrdersList, storeProductsCreate, storeProductsDelete, storeProductsGet, storeProductsList, storeProductsUpdate, storeWalletGet, storeWalletsGrant } from '../sdk.gen';
+import type { AdminNotesCreateData, AdminNotesCreateError, AdminNotesCreateResponse, AdminNotesDeleteData, AdminNotesDeleteError, AdminNotesDeleteResponse, AdminNotesListData, AdminNotesListError, AdminNotesListResponse, AdminNotesUpdateData, AdminNotesUpdateError, AdminNotesUpdateResponse, ApikeysCreateData, ApikeysCreateError, ApikeysCreateResponse, ApikeysListData, ApikeysListError, ApikeysListResponse, ApikeysPermissionsListData, ApikeysPermissionsListError, ApikeysPermissionsListResponse, ApikeysRevokeData, ApikeysRevokeError, ApikeysRevokeResponse, ApikeysRotateData, ApikeysRotateError, ApikeysRotateResponse, AuthDiscordCallbackData, AuthDiscordCallbackError, AuthDiscordCallbackResponse, AuthDiscordLoginData, AuthDiscordLoginError, AuthLogoutData, AuthLogoutError, AuthLogoutResponse, AuthMeData, AuthMeError, AuthMeResponse, AzerothAccountLinksCreateData, AzerothAccountLinksCreateError, AzerothAccountLinksCreateResponse, AzerothAccountLinksDeleteData, AzerothAccountLinksDeleteError, AzerothAccountLinksDeleteResponse, AzerothAccountLinksGetData, AzerothAccountLinksGetError, AzerothAccountLinksGetResponse, AzerothAccountLinksListData, AzerothAccountLinksListError, AzerothAccountLinksListResponse, AzerothAccountsBanData, AzerothAccountsBanError, AzerothAccountsBanResponse, AzerothAccountsCreateData, AzerothAccountsCreateError, AzerothAccountsCreateResponse, AzerothAccountsListData, AzerothAccountsListError, AzerothAccountsListResponse, AzerothAccountsSetEmailData, AzerothAccountsSetEmailError, AzerothAccountsSetEmailResponse, AzerothAccountsSetGmlevelData, AzerothAccountsSetGmlevelError, AzerothAccountsSetGmlevelResponse, AzerothAccountsSetPasswordData, AzerothAccountsSetPasswordError, AzerothAccountsSetPasswordResponse, AzerothAccountsUnbanData, AzerothAccountsUnbanError, AzerothAccountsUnbanResponse, AzerothAdminAccountClaimsListData, AzerothAdminAccountClaimsListError, AzerothAdminAccountClaimsListResponse, AzerothAdminAuditListData, AzerothAdminAuditListError, AzerothAdminAuditListResponse, AzerothAdminUsersGetData, AzerothAdminUsersGetError, AzerothAdminUsersGetResponse, AzerothAnnounceSendData, AzerothAnnounceSendError, AzerothAnnounceSendResponse, AzerothCharactersBanData, AzerothCharactersBanError, AzerothCharactersBanResponse, AzerothCharactersGetData, AzerothCharactersGetError, AzerothCharactersGetResponse, AzerothCharactersListData, AzerothCharactersListError, AzerothCharactersListResponse, AzerothCharactersUnbanData, AzerothCharactersUnbanError, AzerothCharactersUnbanResponse, AzerothInfoStatusData, AzerothInfoStatusError, AzerothInfoStatusResponse, AzerothItemsGetData, AzerothItemsGetError, AzerothItemsGetResponse, AzerothItemsListData, AzerothItemsListError, AzerothItemsListResponse, AzerothLeaderboardsGetData, AzerothLeaderboardsGetError, AzerothLeaderboardsGetResponse, AzerothMailSendData, AzerothMailSendError, AzerothMailSendResponse, AzerothMeAccountClaimStartData, AzerothMeAccountClaimStartError, AzerothMeAccountClaimStartResponse, AzerothMeAccountClaimVerifyData, AzerothMeAccountClaimVerifyError, AzerothMeAccountClaimVerifyResponse, AzerothMeAccountCreateData, AzerothMeAccountCreateError, AzerothMeAccountCreateResponse, AzerothMeAccountGetData, AzerothMeAccountGetError, AzerothMeAccountGetResponse, AzerothMeCharactersListData, AzerothMeCharactersListError, AzerothMeCharactersListResponse, AzerothMeCharactersVisibilityListData, AzerothMeCharactersVisibilityListError, AzerothMeCharactersVisibilityListResponse, AzerothMeCharactersVisibilitySetData, AzerothMeCharactersVisibilitySetError, AzerothMeCharactersVisibilitySetResponse, AzerothMeMailSendData, AzerothMeMailSendError, AzerothMeMailSendResponse, AzerothOnlineListData, AzerothOnlineListError, AzerothOnlineListResponse2, AzerothPlayersKickData, AzerothPlayersKickError, AzerothPlayersKickResponse, AzerothPlayersMuteData, AzerothPlayersMuteError, AzerothPlayersMuteResponse, AzerothPlayersUnmuteData, AzerothPlayersUnmuteError, AzerothPlayersUnmuteResponse, AzerothPublicLeaderboardsGetData, AzerothPublicLeaderboardsGetError, AzerothPublicLeaderboardsGetResponse, AzerothPublicStatusData, AzerothPublicStatusError, AzerothPublicStatusResponse, AzerothUserCharactersListData, AzerothUserCharactersListError, AzerothUserCharactersListResponse, IdentityAdminDiscordMappingsDeleteData, IdentityAdminDiscordMappingsDeleteError, IdentityAdminDiscordMappingsDeleteResponse, IdentityAdminDiscordMappingsUpsertData, IdentityAdminDiscordMappingsUpsertError, IdentityAdminDiscordMappingsUpsertResponse, IdentityAdminRolesGrantData, IdentityAdminRolesGrantError, IdentityAdminRolesGrantResponse, IdentityAdminRolesListData, IdentityAdminRolesListError, IdentityAdminRolesListResponse, IdentityAdminRolesRevokeData, IdentityAdminRolesRevokeError, IdentityAdminRolesRevokeResponse, IdentityUsersListData, IdentityUsersListError, IdentityUsersListResponse, OperationsHealthData, OperationsHealthError, OperationsHealthResponse, OperationsReadyData, OperationsReadyError, OperationsReadyResponse, ReportsCloseData, ReportsCloseError, ReportsCloseResponse, ReportsCreateData, ReportsCreateError, ReportsCreateResponse, ReportsListData, ReportsListError, ReportsListResponse, ReportsMineData, ReportsMineError, ReportsMineResponse, StoreAdminOrdersListData, StoreAdminOrdersListError, StoreAdminOrdersListResponse, StoreAdminOrdersRefundData, StoreAdminOrdersRefundError, StoreAdminOrdersRefundResponse, StoreAdminOrdersRetryData, StoreAdminOrdersRetryError, StoreAdminOrdersRetryResponse, StoreOrdersCreateData, StoreOrdersCreateError, StoreOrdersCreateResponse, StoreOrdersListData, StoreOrdersListError, StoreOrdersListResponse, StoreProductsCreateData, StoreProductsCreateError, StoreProductsCreateResponse, StoreProductsDeleteData, StoreProductsDeleteError, StoreProductsDeleteResponse, StoreProductsGetData, StoreProductsGetError, StoreProductsGetResponse, StoreProductsListData, StoreProductsListError, StoreProductsListResponse, StoreProductsUpdateData, StoreProductsUpdateError, StoreProductsUpdateResponse, StoreWalletGetData, StoreWalletGetError, StoreWalletGetResponse, StoreWalletsGrantData, StoreWalletsGrantError, StoreWalletsGrantResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -58,6 +58,144 @@ export const azerothAdminAccountClaimsListOptions = (options?: Options<AzerothAd
     },
     queryKey: azerothAdminAccountClaimsListQueryKey(options)
 });
+
+export const adminNotesListQueryKey = (options: Options<AdminNotesListData>) => createQueryKey('adminNotesList', options);
+
+/**
+ * List annotations
+ *
+ * Lists the staff annotations of one target, newest first. Requires gw.notes.read.
+ */
+export const adminNotesListOptions = (options: Options<AdminNotesListData>) => queryOptions<AdminNotesListResponse, AdminNotesListError, AdminNotesListResponse, ReturnType<typeof adminNotesListQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await adminNotesList({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: adminNotesListQueryKey(options)
+});
+
+const createInfiniteParams = <K extends Pick<QueryKey<Options>[0], 'body' | 'headers' | 'path' | 'query'>>(queryKey: QueryKey<Options>, page: K) => {
+    const params = { ...queryKey[0] };
+    if (page.body) {
+        params.body = {
+            ...queryKey[0].body as any,
+            ...page.body as any
+        };
+    }
+    if (page.headers) {
+        params.headers = {
+            ...queryKey[0].headers,
+            ...page.headers
+        };
+    }
+    if (page.path) {
+        params.path = {
+            ...queryKey[0].path as any,
+            ...page.path as any
+        };
+    }
+    if (page.query) {
+        params.query = {
+            ...queryKey[0].query as any,
+            ...page.query as any
+        };
+    }
+    return params as unknown as typeof page;
+};
+
+export const adminNotesListInfiniteQueryKey = (options: Options<AdminNotesListData>): QueryKey<Options<AdminNotesListData>> => createQueryKey('adminNotesList', options, true);
+
+/**
+ * List annotations
+ *
+ * Lists the staff annotations of one target, newest first. Requires gw.notes.read.
+ */
+export const adminNotesListInfiniteOptions = (options: Options<AdminNotesListData>) => {
+    const opts = infiniteQueryOptions<AdminNotesListResponse, AdminNotesListError, InfiniteData<AdminNotesListResponse>, QueryKey<Options<AdminNotesListData>>, number | Pick<QueryKey<Options<AdminNotesListData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
+    // @ts-ignore
+    {
+        queryFn: async ({ pageParam, queryKey, signal }) => {
+            // @ts-ignore
+            const page: Pick<QueryKey<Options<AdminNotesListData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
+                query: {
+                    offset: pageParam
+                }
+            };
+            const params = createInfiniteParams(queryKey, page);
+            const { data } = await adminNotesList({
+                ...options,
+                ...params,
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: adminNotesListInfiniteQueryKey(options)
+    });
+    return opts as Omit<typeof opts, 'initialData'>;
+};
+
+/**
+ * Create an annotation
+ *
+ * Attaches a staff note to a target. Requires gw.notes.write.
+ */
+export const adminNotesCreateMutation = (options?: Partial<Options<AdminNotesCreateData>>): UseMutationOptions<AdminNotesCreateResponse, AdminNotesCreateError, Options<AdminNotesCreateData>> => {
+    const mutationOptions: UseMutationOptions<AdminNotesCreateResponse, AdminNotesCreateError, Options<AdminNotesCreateData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await adminNotesCreate({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Delete an annotation
+ *
+ * Deletes an annotation. Authors may delete their own; gw.notes.manage may delete any. Requires gw.notes.write.
+ */
+export const adminNotesDeleteMutation = (options?: Partial<Options<AdminNotesDeleteData>>): UseMutationOptions<AdminNotesDeleteResponse, AdminNotesDeleteError, Options<AdminNotesDeleteData>> => {
+    const mutationOptions: UseMutationOptions<AdminNotesDeleteResponse, AdminNotesDeleteError, Options<AdminNotesDeleteData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await adminNotesDelete({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+/**
+ * Update an annotation
+ *
+ * Edits an annotation body. Authors may edit their own; gw.notes.manage may edit any. Requires gw.notes.write.
+ */
+export const adminNotesUpdateMutation = (options?: Partial<Options<AdminNotesUpdateData>>): UseMutationOptions<AdminNotesUpdateResponse, AdminNotesUpdateError, Options<AdminNotesUpdateData>> => {
+    const mutationOptions: UseMutationOptions<AdminNotesUpdateResponse, AdminNotesUpdateError, Options<AdminNotesUpdateData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await adminNotesUpdate({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
 
 export const apikeysListQueryKey = (options?: Options<ApikeysListData>) => createQueryKey('apikeysList', options);
 
@@ -155,35 +293,6 @@ export const azerothAdminAuditListOptions = (options?: Options<AzerothAdminAudit
     },
     queryKey: azerothAdminAuditListQueryKey(options)
 });
-
-const createInfiniteParams = <K extends Pick<QueryKey<Options>[0], 'body' | 'headers' | 'path' | 'query'>>(queryKey: QueryKey<Options>, page: K) => {
-    const params = { ...queryKey[0] };
-    if (page.body) {
-        params.body = {
-            ...queryKey[0].body as any,
-            ...page.body as any
-        };
-    }
-    if (page.headers) {
-        params.headers = {
-            ...queryKey[0].headers,
-            ...page.headers
-        };
-    }
-    if (page.path) {
-        params.path = {
-            ...queryKey[0].path as any,
-            ...page.path as any
-        };
-    }
-    if (page.query) {
-        params.query = {
-            ...queryKey[0].query as any,
-            ...page.query as any
-        };
-    }
-    return params as unknown as typeof page;
-};
 
 export const azerothAdminAuditListInfiniteQueryKey = (options?: Options<AzerothAdminAuditListData>): QueryKey<Options<AzerothAdminAuditListData>> => createQueryKey('azerothAdminAuditList', options, true);
 

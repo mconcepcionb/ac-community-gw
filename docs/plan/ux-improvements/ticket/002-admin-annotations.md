@@ -22,9 +22,12 @@ manually").
   - Index on `(target_type, target_id, created_at)`.
 - Endpoints under `GET/POST/PATCH/DELETE /api/v1/admin/annotations` with
   `?target_type=&target_id=` filtering and `limit`/`offset`.
-- Permissions: a dedicated gateway permission `gw.notes.manage` for write,
-  `gw.audit.read` (or the same) for read; authorship is taken from the session,
-  never the body. Both are gateway-generic (ADR 0014).
+- Permissions (gateway-generic, ADR 0014): `gw.notes.read` to read,
+  `gw.notes.write` to create and edit/delete your own, and `gw.notes.manage` to
+  moderate (edit/delete) any note. Authorship is taken from the session, never
+  the body.
+- Frontend: a reusable `AnnotationsPanel` (list, add, edit, delete) plus hooks,
+  built in this ticket and embedded by the detail pages (005, 008).
 - Every create/update/delete is itself recorded in the audit log.
 
 ## Acceptance criteria
@@ -45,8 +48,8 @@ manually").
 
 ## Tests
 
-- Go unit + integration (build tag `integration`) for the store.
-- RTL + MSW test for the annotations panel once wired in 005.
+- Go handler tests for validation and authorship/moderation authorization.
+- RTL + MSW test for the annotations panel (list, add, write-gated controls).
 
 ## Dependencies
 

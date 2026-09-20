@@ -2,6 +2,30 @@
 
 import * as z from 'zod';
 
+export const zAdminAnnotation = z.object({
+    author_id: z.string().optional(),
+    body: z.string().optional(),
+    created_at: z.string().optional(),
+    id: z.string().optional(),
+    target_id: z.string().optional(),
+    target_type: z.string().optional(),
+    updated_at: z.string().optional()
+});
+
+export const zAdminAnnotationRequest = z.object({
+    body: z.string().optional(),
+    target_id: z.string().optional(),
+    target_type: z.string().optional()
+});
+
+export const zAdminAnnotationUpdateRequest = z.object({
+    body: z.string().optional()
+});
+
+export const zAdminAnnotationsResponse = z.object({
+    annotations: z.array(zAdminAnnotation).optional()
+});
+
 export const zAdminAuditEntry = z.object({
     action: z.string().optional(),
     actor_discord_id: z.string().optional(),
@@ -526,6 +550,51 @@ export const zListUsersResponse = z.object({
  * OK
  */
 export const zAzerothAdminAccountClaimsListResponse = zAzerothAdminClaimsResponse;
+
+export const zAdminNotesListQuery = z.object({
+    target_type: z.string(),
+    target_id: z.string(),
+    limit: z.int().optional().default(50),
+    offset: z.int().optional().default(0)
+});
+
+/**
+ * OK
+ */
+export const zAdminNotesListResponse = zAdminAnnotationsResponse;
+
+/**
+ * annotation
+ */
+export const zAdminNotesCreateBody = zAdminAnnotationRequest;
+
+/**
+ * Created
+ */
+export const zAdminNotesCreateResponse = zAdminAnnotation;
+
+export const zAdminNotesDeletePath = z.object({
+    id: z.string()
+});
+
+/**
+ * No Content
+ */
+export const zAdminNotesDeleteResponse = z.void();
+
+/**
+ * annotation
+ */
+export const zAdminNotesUpdateBody = zAdminAnnotationUpdateRequest;
+
+export const zAdminNotesUpdatePath = z.object({
+    id: z.string()
+});
+
+/**
+ * OK
+ */
+export const zAdminNotesUpdateResponse = zAdminAnnotation;
 
 /**
  * OK

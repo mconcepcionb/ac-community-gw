@@ -78,6 +78,21 @@ sql:
 
   - engine: "postgresql"
     schema: "migrations"
+    queries: "internal/plugins/adminnotes/repository/queries.sql"
+    gen:
+      go:
+        package: "adminnotesrepo"
+        out: "internal/plugins/adminnotes/repository/generated"
+        sql_package: "database/sql"
+        emit_json_tags: false
+        emit_interface: false
+        emit_empty_slices: true
+        overrides:
+          - db_type: "uuid"
+            go_type: "github.com/google/uuid.UUID"
+
+  - engine: "postgresql"
+    schema: "migrations"
     queries: "internal/plugins/apikeys/repository/queries.sql"
     gen:
       go:

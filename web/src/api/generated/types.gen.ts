@@ -4,6 +4,30 @@ export type ClientOptions = {
     baseUrl: `${string}://${string}` | (string & {});
 };
 
+export type AdminAnnotation = {
+    author_id?: string;
+    body?: string;
+    created_at?: string;
+    id?: string;
+    target_id?: string;
+    target_type?: string;
+    updated_at?: string;
+};
+
+export type AdminAnnotationRequest = {
+    body?: string;
+    target_id?: string;
+    target_type?: string;
+};
+
+export type AdminAnnotationUpdateRequest = {
+    body?: string;
+};
+
+export type AdminAnnotationsResponse = {
+    annotations?: Array<AdminAnnotation>;
+};
+
 export type AdminAuditEntry = {
     action?: string;
     actor_discord_id?: string;
@@ -558,6 +582,203 @@ export type AzerothAdminAccountClaimsListResponses = {
 };
 
 export type AzerothAdminAccountClaimsListResponse = AzerothAdminAccountClaimsListResponses[keyof AzerothAdminAccountClaimsListResponses];
+
+export type AdminNotesListData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * target type (account, user, character)
+         */
+        target_type: string;
+        /**
+         * target identifier
+         */
+        target_id: string;
+        /**
+         * page size
+         */
+        limit?: number;
+        /**
+         * page offset
+         */
+        offset?: number;
+    };
+    url: '/api/v1/admin/annotations';
+};
+
+export type AdminNotesListErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AdminNotesListError = AdminNotesListErrors[keyof AdminNotesListErrors];
+
+export type AdminNotesListResponses = {
+    /**
+     * OK
+     */
+    200: AdminAnnotationsResponse;
+};
+
+export type AdminNotesListResponse = AdminNotesListResponses[keyof AdminNotesListResponses];
+
+export type AdminNotesCreateData = {
+    /**
+     * annotation
+     */
+    body: AdminAnnotationRequest;
+    path?: never;
+    query?: never;
+    url: '/api/v1/admin/annotations';
+};
+
+export type AdminNotesCreateErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AdminNotesCreateError = AdminNotesCreateErrors[keyof AdminNotesCreateErrors];
+
+export type AdminNotesCreateResponses = {
+    /**
+     * Created
+     */
+    201: AdminAnnotation;
+};
+
+export type AdminNotesCreateResponse = AdminNotesCreateResponses[keyof AdminNotesCreateResponses];
+
+export type AdminNotesDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * annotation id
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/annotations/{id}';
+};
+
+export type AdminNotesDeleteErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AdminNotesDeleteError = AdminNotesDeleteErrors[keyof AdminNotesDeleteErrors];
+
+export type AdminNotesDeleteResponses = {
+    /**
+     * No Content
+     */
+    204: void;
+};
+
+export type AdminNotesDeleteResponse = AdminNotesDeleteResponses[keyof AdminNotesDeleteResponses];
+
+export type AdminNotesUpdateData = {
+    /**
+     * annotation
+     */
+    body: AdminAnnotationUpdateRequest;
+    path: {
+        /**
+         * annotation id
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/annotations/{id}';
+};
+
+export type AdminNotesUpdateErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorResponse;
+    /**
+     * Unauthorized
+     */
+    401: ErrorResponse;
+    /**
+     * Forbidden
+     */
+    403: ErrorResponse;
+    /**
+     * Not Found
+     */
+    404: ErrorResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ErrorResponse;
+    /**
+     * Service Unavailable
+     */
+    503: ErrorResponse;
+};
+
+export type AdminNotesUpdateError = AdminNotesUpdateErrors[keyof AdminNotesUpdateErrors];
+
+export type AdminNotesUpdateResponses = {
+    /**
+     * OK
+     */
+    200: AdminAnnotation;
+};
+
+export type AdminNotesUpdateResponse = AdminNotesUpdateResponses[keyof AdminNotesUpdateResponses];
 
 export type ApikeysListData = {
     body?: never;

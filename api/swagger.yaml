@@ -5,6 +5,45 @@ components:
       in: cookie
       name: acgw_session
   schemas:
+    AdminAnnotation:
+      properties:
+        author_id:
+          type: string
+        body:
+          type: string
+        created_at:
+          type: string
+        id:
+          type: string
+        target_id:
+          type: string
+        target_type:
+          type: string
+        updated_at:
+          type: string
+      type: object
+    AdminAnnotationRequest:
+      properties:
+        body:
+          type: string
+        target_id:
+          type: string
+        target_type:
+          type: string
+      type: object
+    AdminAnnotationUpdateRequest:
+      properties:
+        body:
+          type: string
+      type: object
+    AdminAnnotationsResponse:
+      properties:
+        annotations:
+          items:
+            $ref: '#/components/schemas/AdminAnnotation'
+          type: array
+          uniqueItems: false
+      type: object
     AdminAuditEntry:
       properties:
         action:
@@ -951,6 +990,232 @@ paths:
       summary: List account claims
       tags:
       - azeroth-account
+  /api/v1/admin/annotations:
+    get:
+      description: Lists the staff annotations of one target, newest first. Requires
+        gw.notes.read.
+      operationId: admin.notes.list
+      parameters:
+      - description: target type (account, user, character)
+        in: query
+        name: target_type
+        required: true
+        schema:
+          type: string
+      - description: target identifier
+        in: query
+        name: target_id
+        required: true
+        schema:
+          type: string
+      - description: page size
+        in: query
+        name: limit
+        schema:
+          default: 50
+          type: integer
+      - description: page offset
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminAnnotationsResponse'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: List annotations
+      tags:
+      - admin-notes
+    post:
+      description: Attaches a staff note to a target. Requires gw.notes.write.
+      operationId: admin.notes.create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminAnnotationRequest'
+        description: annotation
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminAnnotation'
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Create an annotation
+      tags:
+      - admin-notes
+  /api/v1/admin/annotations/{id}:
+    delete:
+      description: Deletes an annotation. Authors may delete their own; gw.notes.manage
+        may delete any. Requires gw.notes.write.
+      operationId: admin.notes.delete
+      parameters:
+      - description: annotation id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Delete an annotation
+      tags:
+      - admin-notes
+    patch:
+      description: Edits an annotation body. Authors may edit their own; gw.notes.manage
+        may edit any. Requires gw.notes.write.
+      operationId: admin.notes.update
+      parameters:
+      - description: annotation id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminAnnotationUpdateRequest'
+        description: annotation
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminAnnotation'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Entity
+        "503":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service Unavailable
+      summary: Update an annotation
+      tags:
+      - admin-notes
   /api/v1/admin/api-keys:
     get:
       description: Lists every API key (without secrets). Requires the apikeys.manage

@@ -22,6 +22,16 @@ type AccountClaim struct {
 	UpdatedAt       time.Time
 }
 
+type AdminAnnotation struct {
+	ID         uuid.UUID
+	TargetType string
+	TargetID   string
+	AuthorID   uuid.UUID
+	Body       string
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+}
+
 type ApiKey struct {
 	ID          uuid.UUID
 	Name        string

@@ -33,6 +33,8 @@ import (
 	"github.com/mconcepcionb/ac-community-gw/internal/core/persistence"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/plugins"
 	"github.com/mconcepcionb/ac-community-gw/internal/core/services"
+	"github.com/mconcepcionb/ac-community-gw/internal/plugins/adminnotes"
+	adminnotesrepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/adminnotes/repository"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/apikeys"
 	apikeysrepo "github.com/mconcepcionb/ac-community-gw/internal/plugins/apikeys/repository"
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothaccount"
@@ -131,6 +133,7 @@ func run() error {
 	var storeRepo azerothstore.Store
 	var characterVisibility azerothcharacter.VisibilityStore
 	var reportsStore reports.Store
+	var adminNotesStore adminnotes.Store
 	var apiKeyStore *apikeysrepo.Store
 	if database != nil {
 		identityRepo = repository.New(database.SQL())
@@ -141,6 +144,7 @@ func run() error {
 		storeRepo = azerothstorerepo.New(database.SQL())
 		characterVisibility = azerothcharacterrepo.New(database.SQL())
 		reportsStore = reportsrepo.New(database.SQL())
+		adminNotesStore = adminnotesrepo.New(database.SQL())
 		apiKeyStore = apikeysrepo.New(database.SQL())
 	}
 	if storeRepo != nil {
@@ -286,6 +290,11 @@ func run() error {
 	manager.Add(reports.New(reports.Config{
 		Store: reportsStore,
 		Audit: auditRecorder,
+	}))
+	manager.Add(adminnotes.New(adminnotes.Config{
+		Store:      adminNotesStore,
+		Audit:      auditRecorder,
+		Authorizer: authorizer,
 	}))
 	var apiKeyPluginStore apikeys.Store
 	if apiKeyStore != nil {
