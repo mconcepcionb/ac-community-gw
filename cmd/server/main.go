@@ -257,10 +257,13 @@ func run() error {
 	}
 
 	if identityRepo != nil {
-		if err := loadAuthorizer(ctx, identityRepo, authorizer, logger); err != nil {
+		roles, grants, err := loadAuthorizer(ctx, identityRepo, authorizer)
+		if err != nil {
 			return err
 		}
+		logger.Info("permissions: loaded role grants", "roles", roles, "grants", grants)
 		go identitydiscord.RunCleanup(ctx, cfg.Session.CleanupInterval, logger, identityRepo)
+		go runPermissionRefresh(ctx, identityRepo, authorizer, cfg.Permissions.RefreshInterval, logger)
 	}
 
 	logger.Info("ac-community-gw started",
@@ -414,18 +417,39 @@ func (f roleSourceFunc) RolesForUser(ctx context.Context, userID uuid.UUID) ([]s
 	return f(ctx, userID)
 }
 
-func loadAuthorizer(ctx context.Context, repo *repository.Store, authorizer *permissions.Authorizer, logger *slog.Logger) error {
+func loadAuthorizer(ctx context.Context, repo *repository.Store, authorizer *permissions.Authorizer) (int, int, error) {
 	grants, err := repo.ListRolePermissions(ctx)
 	if err != nil {
-		return err
+		return 0, 0, err
 	}
-	byRole := make(map[string][]permissions.Permission)
+	byRole := make(map[permissions.Role][]permissions.Permission)
 	for _, grant := range grants {
-		byRole[grant.Role] = append(byRole[grant.Role], permissions.Permission(grant.Permission))
+		role := permissions.Role(grant.Role)
+		byRole[role] = append(byRole[role], permissions.Permission(grant.Permission))
 	}
-	for role, perms := range byRole {
-		authorizer.Grant(permissions.Role(role), perms...)
+	authorizer.Replace(byRole)
+	return len(byRole), len(grants), nil
+}
+
+// runPermissionRefresh reloads role -> permission grants from the database on an
+// interval so grants changed in the database take effect without a restart.
+func runPermissionRefresh(ctx context.Context, repo *repository.Store, authorizer *permissions.Authorizer, interval time.Duration, logger *slog.Logger) {
+	if interval <= 0 {
+		return
 	}
-	logger.Info("permissions: loaded role grants", "roles", len(byRole), "grants", len(grants))
-	return nil
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case <-ticker.C:
+			roles, grants, err := loadAuthorizer(ctx, repo, authorizer)
+			if err != nil {
+				logger.Warn("permissions: refresh failed", "error", err)
+				continue
+			}
+			logger.Debug("permissions: refreshed role grants", "roles", roles, "grants", grants)
+		}
+	}
 }

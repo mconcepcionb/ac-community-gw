@@ -32,6 +32,22 @@ func (a *Authorizer) Grant(role Role, permissions ...Permission) {
 	}
 }
 
+// Replace atomically replaces every role -> permission grant. It is used to
+// reload grants from the database without restarting the gateway.
+func (a *Authorizer) Replace(rolePerms map[Role][]Permission) {
+	next := make(map[Role]map[Permission]struct{}, len(rolePerms))
+	for role, perms := range rolePerms {
+		set := make(map[Permission]struct{}, len(perms))
+		for _, p := range perms {
+			set[p] = struct{}{}
+		}
+		next[role] = set
+	}
+	a.mu.Lock()
+	a.rolePerms = next
+	a.mu.Unlock()
+}
+
 // Can reports whether any of the given roles grants p.
 func (a *Authorizer) Can(roles []Role, p Permission) bool {
 	a.mu.RLock()

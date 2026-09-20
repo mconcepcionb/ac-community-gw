@@ -30,6 +30,8 @@ type Config struct {
 	Session  Session
 	Auth     Auth
 	Metrics  Metrics
+	// Permissions configures the role -> permission reload.
+	Permissions Permissions
 }
 
 // Database configures the gateway-owned PostgreSQL database.
@@ -93,6 +95,13 @@ type Metrics struct {
 	Token   string
 }
 
+// Permissions configures how often role -> permission grants are reloaded from
+// the database so changes take effect without a restart. A non-positive value
+// disables the reload.
+type Permissions struct {
+	RefreshInterval time.Duration
+}
+
 // Load reads configuration from the process environment, applying defaults
 // and validating the result.
 func Load() (*Config, error) {
@@ -151,6 +160,9 @@ func Load() (*Config, error) {
 		Metrics: Metrics{
 			Enabled: p.boolean("ACGW_METRICS_ENABLED", false),
 			Token:   env("ACGW_METRICS_TOKEN", ""),
+		},
+		Permissions: Permissions{
+			RefreshInterval: p.duration("ACGW_PERMISSIONS_REFRESH_INTERVAL", 30*time.Second),
 		},
 	}
 
@@ -254,6 +266,9 @@ func (c *Config) validate() error {
 	}
 	if _, err := ParseTrustedProxies(c.Auth.TrustedProxies); err != nil {
 		return err
+	}
+	if c.Permissions.RefreshInterval < 0 {
+		return fmt.Errorf("config: ACGW_PERMISSIONS_REFRESH_INTERVAL must not be negative")
 	}
 	if strings.EqualFold(c.Env, "production") {
 		if !c.Session.Secure {

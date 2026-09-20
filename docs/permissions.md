@@ -61,6 +61,12 @@ Role -> permission grants live in the core (`permissions.Authorizer`, backed by
 in-memory authorizer; a PostgreSQL-backed implementation can replace it without
 changing the middleware contract.
 
+The authorizer is loaded from `role_permissions` at startup and **reloaded on an
+interval** (`ACGW_PERMISSIONS_REFRESH_INTERVAL`, default `30s`; `0` disables it),
+so changing grants in the database takes effect without a restart. The SPA also
+polls `GET /api/v1/me` while the tab is focused, so the visible roles,
+permissions and gated navigation update automatically.
+
 ## See also
 
 - [ADR 0005](ADR/0005-module-owned-permissions.md)

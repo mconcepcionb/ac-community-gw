@@ -65,3 +65,22 @@ func TestAuthorizerPermissionsAreSortedAndDeduplicated(t *testing.T) {
 		t.Fatalf("no roles must grant nothing, got %v", permissions)
 	}
 }
+
+func TestAuthorizerReplaceRemovesStaleGrants(t *testing.T) {
+	authorizer := NewAuthorizer()
+	authorizer.Grant("admin", "azeroth.account.read", "azeroth.account.manage")
+
+	authorizer.Replace(map[Role][]Permission{
+		"admin": {"azeroth.account.read"},
+	})
+
+	if !authorizer.Can([]Role{"admin"}, "azeroth.account.read") {
+		t.Fatal("retained permission should still be granted")
+	}
+	if authorizer.Can([]Role{"admin"}, "azeroth.account.manage") {
+		t.Fatal("removed permission must no longer be granted")
+	}
+	if got := authorizer.Permissions([]Role{"admin"}); len(got) != 1 {
+		t.Fatalf("permissions = %v, want exactly the retained one", got)
+	}
+}

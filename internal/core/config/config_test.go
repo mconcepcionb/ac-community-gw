@@ -3,6 +3,7 @@ package config
 import (
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestLoadDefaults(t *testing.T) {
@@ -140,6 +141,16 @@ func TestLoadAcceptsWarningLogLevel(t *testing.T) {
 	}
 }
 
+func TestLoadPermissionsRefreshDefault(t *testing.T) {
+	cfg, err := Load()
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if cfg.Permissions.RefreshInterval != 30*time.Second {
+		t.Fatalf("refresh interval = %v, want 30s", cfg.Permissions.RefreshInterval)
+	}
+}
+
 func TestLoadProductionMetricsRequiresToken(t *testing.T) {
 	t.Setenv("ACGW_ENV", "production")
 	t.Setenv("ACGW_SESSION_COOKIE_SECURE", "true")
@@ -172,6 +183,10 @@ func TestLoadProductionAllowsLoopbackHTTP(t *testing.T) {
 	t.Setenv("ACGW_ENV", "production")
 	t.Setenv("ACGW_SESSION_COOKIE_SECURE", "true")
 	t.Setenv("ACGW_AZEROTH_SOAP_URL", "http://127.0.0.1:7878/")
+	// Public redirect URLs must be HTTPS in production. The Taskfile loads
+	// .env, so set them explicitly instead of relying on the environment.
+	t.Setenv("ACGW_DISCORD_REDIRECT_URL", "https://example.test/api/v1/auth/discord/callback")
+	t.Setenv("ACGW_DISCORD_POST_LOGIN_REDIRECT_URL", "https://example.test/")
 	if _, err := Load(); err != nil {
 		t.Fatalf("Load: %v", err)
 	}

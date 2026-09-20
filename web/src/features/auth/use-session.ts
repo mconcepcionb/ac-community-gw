@@ -12,7 +12,13 @@ export type SessionStatus = "loading" | "anonymous" | "authenticated" | "error";
  * `error` so the UI can react to it.
  */
 export function useSession() {
-  const query = useQuery({ ...authMeOptions(), retry: false });
+  const query = useQuery({
+    ...authMeOptions(),
+    retry: false,
+    // Poll while the tab is focused so role/permission changes appear without a
+    // full reload.
+    refetchInterval: 30_000,
+  });
   const anonymous = isUnauthorized(query.error);
 
   let status: SessionStatus;
