@@ -23,6 +23,7 @@ task run
 `task run` loads `.env` through Task's `dotenv` support.
 
 Secrets are managed with **SOPS + age** (see
+[ADR 0015](ADR/0015-sops-age-secrets.md) and
 [plan/secrets/README.md](plan/secrets/README.md)). Once that plan lands, the
 plaintext `.env` is produced from the encrypted set with
 `task secrets:decrypt ENV=development` instead of copied from `.env.example`;

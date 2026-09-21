@@ -11,8 +11,8 @@ credentials that were exposed in the local `.env` as part of the rollout.
 
 | Area | State |
 | --- | --- |
-| ADR, threat model and recipient design | planned (S1) |
-| Age identity ceremony and `.sops.yaml` | planned (S2) |
+| ADR, threat model and recipient design | implemented (S1) |
+| Age identity ceremony and `.sops.yaml` | implemented (S2) |
 | Encrypted secret set, scripts and `.gitignore` | planned (S3) |
 | Local/compose materialization flow | planned (S4) |
 | Plaintext leak guard in CI | planned (S5) |

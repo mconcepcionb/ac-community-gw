@@ -1,0 +1,14 @@
+creation_rules:
+  # Development secrets: readable by the admin workstation (administration and
+  # recovery) and the development host. Recipients are dedicated to this
+  # repository; the homelab identities are deliberately not reused.
+  - path_regex: '^secrets[/\\]development\.sops\.env$'
+    age: >-
+      age185rgzn80jkd52v5qkn83nvm5zura2fz40kzgvuxp93p5x0xe24ks74qj6g,
+      age16xss2yhvxhf2y7k7gy05rtn8k7v74rjp9vnq8vg8ddflln45w3gsrxn9n4
+
+  # Production secrets: readable by the admin workstation and the deploy host.
+  - path_regex: '^secrets[/\\]production\.sops\.env$'
+    age: >-
+      age185rgzn80jkd52v5qkn83nvm5zura2fz40kzgvuxp93p5x0xe24ks74qj6g,
+      age1056k70l74x3thhkvkv7f2csj7t2g5gw95c575qlr354mqnaal45qyydsh3
