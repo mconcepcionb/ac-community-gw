@@ -17,9 +17,9 @@ horizons in incremental, always-green vertical slices.
 | Portal: dashboard, characters, storefront, wallet | implemented |
 | Self-service onboarding (create/link and claim) | implemented |
 | Retire legacy routes, docs and ADR | implemented |
-| Player reports and the unified moderation queue | planned |
-| Audit viewer, roles and Discord-role mapping admin | planned |
-| Leaderboards, public surface, API keys | planned |
+| Player reports and the unified moderation queue | implemented (014, 015) |
+| Audit viewer, roles and Discord-role mapping admin | implemented (016, 017) |
+| Leaderboards, public surface, API keys | implemented (018-020) |
 | Vision horizon (events, webhooks, widgets, metrics, hosted docs) | roadmap |
 
 ## Context

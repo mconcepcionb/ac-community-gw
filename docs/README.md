@@ -10,7 +10,8 @@ This directory separates documentation by purpose:
 | `docs/runbooks/` | **How to operate** the system |
 
 Stable documents are not a backlog. When a plan is delivered, its knowledge is
-consolidated here and its decisions into an ADR.
+consolidated here and its decisions into an ADR. The plan index and the single,
+consolidated roadmap live in [plan/README.md](plan/README.md).
 
 ## Stable documents
 

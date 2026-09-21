@@ -53,6 +53,13 @@ Never logged, never stored in events, never written to the audit log:
 Configuration is read from environment variables. `.env` files are ignored by
 git; only `.env.example` is committed.
 
+Secrets are moving to **SOPS + age**: encrypted `secrets/*.sops.env` files are
+committed and decrypted on the machine that needs them, with the private age
+identities held outside the repository. Only `*.sops.env` (encrypted) and
+`*.env.example` (templates) may be committed. The rollout, recipients and the
+plaintext leak guard are specified in
+[plan/secrets/README.md](plan/secrets/README.md).
+
 ## Audit
 
 Administrative and sensitive actions can record:
