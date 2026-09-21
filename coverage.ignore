@@ -8,4 +8,5 @@
 internal/plugins/*/repository/generated
 internal/architecture
 internal/fake/azerothcore
+internal/testsupport
 cmd/

@@ -63,6 +63,8 @@ func TestImportBoundaries(t *testing.T) {
 			sub := strings.TrimPrefix(imported, modulePath+"/")
 
 			switch {
+			case strings.HasPrefix(rel, "internal/testsupport/") && strings.HasPrefix(sub, "internal/plugins/"):
+				violations = append(violations, rel+" imports plugin "+sub)
 			case fileKind == kindCore && strings.HasPrefix(sub, "internal/plugins/"):
 				violations = append(violations, rel+" imports plugin "+sub)
 			case fileKind == kindCore && strings.HasPrefix(sub, "internal/adapters/"):
@@ -176,6 +178,8 @@ func classify(rel string) (kind, string, bool) {
 	case strings.HasPrefix(rel, "internal/architecture/"):
 		return kindOther, "", true
 	case strings.HasPrefix(rel, "internal/fake/"):
+		return kindOther, "", true
+	case strings.HasPrefix(rel, "internal/testsupport/"):
 		return kindOther, "", true
 	case strings.HasPrefix(rel, "migrations/"):
 		return kindOther, "", true

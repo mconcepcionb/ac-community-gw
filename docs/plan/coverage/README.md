@@ -13,7 +13,7 @@ Go linter, and wire a **ratchet** into CI so coverage only goes up.
 | Baseline measured (2026-09-21) | done |
 | Coverage tooling, measured set and gate | implemented (C1) |
 | `golangci-lint` in the Go gate | implemented (C2) |
-| Shared test support + core packages | planned (C3) |
+| Shared test support + core packages | implemented (C3) |
 | Plugin domain packages | planned (C4-C8) |
 | Repository/adapters + CI integration job | planned (C9) |
 | Frontend coverage thresholds | planned (C10) |
