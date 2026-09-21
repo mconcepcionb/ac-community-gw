@@ -5,6 +5,7 @@ bin
 .env
 .env.*
 !.env.example
+secrets
 docs
 README.md
 Taskfile.yml

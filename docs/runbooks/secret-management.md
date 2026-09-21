@@ -66,9 +66,27 @@ sops updatekeys secrets/development.sops.env
 
 ## Delivery
 
-The encrypted set is decrypted only on a machine that holds a recipient key.
-The `task secrets:*` helpers and the materialize flow are described in the
-[secrets plan](../plan/secrets/README.md). CI never decrypts.
+SOPS resolves the age identity from `SOPS_AGE_KEY_FILE` (or its default,
+`~/.config/sops/age/keys.txt`). Each host points it at its own identity:
+
+| Host | `SOPS_AGE_KEY_FILE` |
+| --- | --- |
+| admin workstation | `~/.config/ac-community-gw/age/admin.key.txt` |
+| dev host | `~/.config/ac-community-gw/age/dev-host.key.txt` |
+| deploy host | `~/.config/ac-community-gw/age/deploy-host.key.txt` |
+
+Then:
+
+```sh
+task secrets:edit ENV=development        # edit the encrypted set in place
+task secrets:decrypt ENV=development     # decrypt secrets/development.sops.env into .env
+task secrets:check                       # static leak guard (also runs in CI)
+```
+
+`task secrets:encrypt ENV=development FROM=.env` (re)encrypts a flat env file
+into `secrets/development.sops.env`. The set is a flat `KEY=VALUE` file: the
+SOPS dotenv codec rejects comments and blank lines, so keep the documentation in
+`secrets/<environment>.env.example`. CI never decrypts.
 
 ## Related
 

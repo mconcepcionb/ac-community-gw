@@ -202,6 +202,40 @@ tasks:
       - task: web:typecheck
       - task: web:test
 
+  secrets:edit:
+    desc: Edit an encrypted secret set with sops (ENV defaults to development)
+    vars:
+      ENV: '{{.ENV | default "development"}}'
+    cmds:
+      - sops secrets/{{.ENV}}.sops.env
+
+  secrets:encrypt:
+    desc: Encrypt a plaintext file (FROM defaults to .env) into secrets/<ENV>.sops.env
+    vars:
+      ENV: '{{.ENV | default "development"}}'
+      FROM: '{{.FROM | default ".env"}}'
+    cmds:
+      - cp {{.FROM}} secrets/{{.ENV}}.sops.env
+      - sops encrypt --input-type dotenv --output-type dotenv --in-place secrets/{{.ENV}}.sops.env
+
+  secrets:decrypt:
+    desc: Decrypt secrets/<ENV>.sops.env into .env (ENV defaults to development)
+    vars:
+      ENV: '{{.ENV | default "development"}}'
+    cmds:
+      - cmd: pwsh -NoProfile -File scripts/secrets/materialize.ps1 -Environment {{.ENV}}
+        platforms: [windows]
+      - cmd: sh scripts/secrets/materialize.sh {{.ENV}}
+        platforms: [linux, darwin]
+
+  secrets:check:
+    desc: Fail if a plaintext secret or an age private key is tracked
+    cmds:
+      - cmd: pwsh -NoProfile -File scripts/secrets/check-no-plaintext.ps1
+        platforms: [windows]
+      - cmd: sh scripts/secrets/check-no-plaintext.sh
+        platforms: [linux, darwin]
+
   db:up:
     desc: Start the development PostgreSQL container
     cmds:

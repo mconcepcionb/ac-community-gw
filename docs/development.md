@@ -22,12 +22,21 @@ task run
 
 `task run` loads `.env` through Task's `dotenv` support.
 
-Secrets are managed with **SOPS + age** (see
-[ADR 0015](ADR/0015-sops-age-secrets.md) and
-[plan/secrets/README.md](plan/secrets/README.md)). Once that plan lands, the
-plaintext `.env` is produced from the encrypted set with
-`task secrets:decrypt ENV=development` instead of copied from `.env.example`;
-until then, keep using the `cp` step above.
+### Secrets (SOPS + age)
+
+The committed secrets live encrypted at `secrets/<environment>.sops.env`
+(see [ADR 0015](ADR/0015-sops-age-secrets.md)). Point SOPS at your age identity
+and decrypt the development set instead of copying `.env.example`:
+
+```bash
+export SOPS_AGE_KEY_FILE=~/.config/ac-community-gw/age/admin.key.txt
+task secrets:decrypt ENV=development   # writes .env
+task secrets:edit ENV=development      # edit the encrypted set
+task secrets:check                     # fail if a plaintext secret is tracked
+```
+
+`cp .env.example .env` remains the fallback for a machine without an age
+identity. See [runbooks/secret-management.md](runbooks/secret-management.md).
 
 For the SPA, install its dependencies once:
 

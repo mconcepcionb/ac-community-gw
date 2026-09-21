@@ -21,6 +21,12 @@ go.work.sum
 .env.*
 !.env.example
 
+# Encrypted secret sets (SOPS + age). Only the encrypted file and the plaintext
+# template are tracked; decrypted output stays out of git.
+secrets/**
+!secrets/*.env.example
+!secrets/*.sops.env
+
 # IDE / editor
 .idea/
 .vscode/
