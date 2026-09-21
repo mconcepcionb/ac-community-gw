@@ -34,13 +34,17 @@ are consolidated into the stable docs and an ADR.
 
 ## Active work
 
-1. **[coverage](coverage/README.md)** - raise the measured coverage of
-   handwritten Go and the SPA, exclude generated code, add `golangci-lint`, and
-   ratchet the floor in CI. Start with C1 (tooling/measured set) and C2 (linter).
-2. **[secrets](secrets/README.md)** - adopt SOPS + age (modeled on
-   `homelab-config`), commit encrypted `secrets/*.sops.env`, add the leak guard,
-   and rotate the currently exposed Discord client secret and SOAP password.
-   Start with S1 (ADR/threat model) and S2 (files/scripts).
+Both active plans are split into tickets under their `ticket/` directories.
+
+1. **[coverage](coverage/README.md)** (C1-C11) - raise the measured coverage of
+   handwritten Go and the SPA, exclude generated code, add `golangci-lint`, add a
+   CI integration job (Postgres + MariaDB), and ratchet a 60% floor. Start with
+   C1 (tooling/measured set) and C2 (linter), then C3 (shared test support).
+2. **[secrets](secrets/README.md)** (S1-S7) - adopt SOPS + age (modeled on but
+   isolated from `homelab-config`) with a dedicated age identity, commit
+   encrypted `secrets/*.sops.env`, add a static leak guard, and rotate the
+   exposed Discord client secret and SOAP password. CI stays secret-free. Start
+   with S1 (ADR 0015/threat model) and S2 (identities/creation rules).
 
 ## Roadmap
 

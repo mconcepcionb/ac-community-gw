@@ -11,13 +11,25 @@ Go linter, and wire a **ratchet** into CI so coverage only goes up.
 | Area | State |
 | --- | --- |
 | Baseline measured (2026-09-21) | done |
-| Coverage tooling and generated-code exclusion | planned |
-| `golangci-lint` in the Go gate | planned |
-| Core packages at 0% | planned |
-| Plugin domain packages | planned |
-| Repository/adapters via integration tests | planned |
-| Frontend coverage thresholds | planned |
-| Ratchet gate in CI | planned |
+| Coverage tooling, measured set and gate | planned (C1) |
+| `golangci-lint` in the Go gate | planned (C2) |
+| Shared test support + core packages | planned (C3) |
+| Plugin domain packages | planned (C4-C8) |
+| Repository/adapters + CI integration job | planned (C9) |
+| Frontend coverage thresholds | planned (C10) |
+| Ratchet and documentation | planned (C11) |
+
+## Decisions
+
+- **Global floor: 60%** of the measured set (handwritten Go, excluding
+  generated/wiring-only packages), enforced by a ratchet (C1 sets the baseline,
+  C11 raises it to the achieved total).
+- **`golangci-lint` with a curated config** is added to the Go gate (C2).
+- **CI gains an integration job** with Postgres + MariaDB service containers
+  (C9); without it repository/adapter coverage cannot be verified.
+- **SPA: 60% statements**, plumbing and thresholds first (C10); behavioural gaps
+  stay in `review-remediation/041`.
+- **CI stays secret-free**; the integration job uses ephemeral credentials.
 
 ## Context
 
@@ -65,15 +77,39 @@ global figure, which hides the real signal.
 | `internal/plugins/*/repository` (+`generated`) | 0.0% |
 | `cmd/*` | 0.0% |
 
+### Findings that shape the work
+
+- **No shared test harness.** Every plugin declares its own unexported fakes and
+  calls unexported handler methods directly with `httptest`
+  (`internal/plugins/store/handlers_test.go`, `.../reports/handlers_test.go`,
+  `.../azerothadmin/http_test.go`). A small shared support package should remove
+  the repeated request/decode/auth boilerplate; fakes stay per package.
+- **`Register()` and `permissionDefs` are untested in every plugin.** No test
+  builds `plugins.Registry` or calls `Manager.RegisterAll`
+  (`internal/core/plugins/registry.go:32`), so route/permission wiring is
+  unverified (C8).
+- **Integration infrastructure is duplicated and absent from CI.** Six
+  `//go:build integration` files, `openTestDB` copy-pasted three times, all skip
+  on a missing env var; CI has no DB services and never runs
+  `task test:integration` (C9).
+- **The profile includes generated code.** The default `coverage.txt` contains
+  the 0% `repository/generated` packages, so a cross-platform filter is needed
+  (C1 ships a small Go checker rather than `grep`/`awk`, since developers use
+  Windows).
+- **The SPA has no coverage provider.** `@vitest/coverage-v8` is absent from
+  `web/package.json` and the lockfile; there is no `coverage` block in
+  `web/vite.config.ts` and no `test:coverage` script (C10).
+
 ## Scope
 
 - Tooling: a coverage task that excludes generated/wiring-only packages and
   prints a per-package table; a threshold check; `golangci-lint`.
 - Backend tests for the low-coverage **domain and handler** packages, test-first
   where a defect is known and behaviour-first otherwise.
-- Repository/adapters covered through the existing `-tags integration` suite
-  (the code path that needs a real database).
-- Frontend coverage thresholds for `web/src` with Vitest.
+- A shared, non-plugin test support package.
+- Repository/adapters covered through the existing `-tags integration` suite,
+  run in a new CI job with service containers.
+- Frontend coverage plumbing and thresholds for `web/src`.
 - CI wiring and a documented floor that ratchets.
 
 ## Out of scope
@@ -81,9 +117,11 @@ global figure, which hides the real signal.
 - A percentage target for its own sake. A package may stay low if its uncovered
   lines are wiring that no test can meaningfully exercise *and* it is excluded
   from the denominator.
-- Covering `cmd/*` boots (server wiring, `openapi-postprocess`,
-  `fakeazerothcore`) beyond a smoke test.
+- Covering `cmd/*` boots (`cmd/server` wiring, `openapi-postprocess`,
+  `fakeazerothcore`) beyond what is cheaply reachable.
 - Rewriting well-covered core packages.
+- Reimplementing the behavioural frontend gaps already listed in
+  `review-remediation/041`; C10 owns the plumbing and thresholds.
 
 ## Principles
 
@@ -95,22 +133,22 @@ global figure, which hides the real signal.
    from the report.
 4. **Ratchet.** The gate fails when coverage of the measured set drops below the
    recorded floor. The floor rises when a ticket raises it.
-5. **Integration tests count.** The `-tags integration` suite runs in CI with
-   service containers; its coverage is merged with the unit profile.
+5. **Integration tests count.** The `-tags integration` suite runs in CI; its
+   profile is merged into the measured total.
 
 ## Design
 
 ### Measurement set
 
-`internal/...` excluding:
+`./internal/...` excluding:
 
 - `internal/.../repository/generated`
 - `internal/architecture` (test-only, no statements)
 - `internal/fake/azerothcore` (test double)
 
-`cmd/*` is reported but excluded from the floor. The measured set is defined in
-one place (a `coverage:ignore` list read by the tooling task and CI) so the
-numerator and denominator cannot drift.
+`cmd/*` is reported but excluded from the floor. The excluded prefixes live in a
+checked-in `coverage.ignore` file read by the tooling (C1), so the numerator and
+denominator cannot drift.
 
 ### Targets
 
@@ -123,48 +161,54 @@ Targets are floors for the floor-raising tickets; they are deliberately below
 | Domain plugins | `reports`, `azerothaccount`, `azerothcharacter`, `store`, `adminnotes`, `identitydiscord`, `apikeys` | ≥ 60% |
 | Repository layer | each `*/repository` (handwritten wrapper) | ≥ 60% via integration |
 | Adapters | `postgres`, `azerothmysql` | ≥ 50% via integration |
-| Measured set (global) | all of the above | floor set by ticket C1, ≥ 60% by C7 |
-| SPA (`web/src`, excluding generated + `routes/*.gen.ts`) | — | ≥ 60% statements |
+| Measured set (global) | all of the above | floor set by C1, 60% by C11 |
+| SPA (`web/src`, excluding generated + `routeTree.gen.ts`) | — | ≥ 60% statements |
 
 ### Tooling
 
-- `task coverage` gains `-coverpkg` over the measured set, a per-package summary
-  and a machine-readable total.
-- `task coverage:check` compares the total against `coverage.floor` (checked in)
-  and fails on regression.
-- `task lint` runs `golangci-lint run`; CI runs it in the Go job.
-- Frontend: Vitest `--coverage` with `thresholds` in `web/vite.config.ts` (or a
-  dedicated coverage config) and a `task web:coverage:check`.
+- `cmd/covercheck` (Go, cross-platform) reads one or more coverage profiles,
+  applies `coverage.ignore`, prints a per-package table and a total, and with
+  `-floor coverage.floor` fails on regression.
+- `task coverage` runs unit tests with `-coverprofile`, then `covercheck` for
+  the table. `task coverage:integration` adds the integration-tagged profile.
+- `task coverage:check` runs both and enforces the floor; it is added to the Go
+  CI job.
+- `task lint` runs `golangci-lint run` with `.golangci.yml`; CI runs it in the
+  Go job.
+- Frontend: Vitest coverage (`@vitest/coverage-v8`) with `thresholds` in
+  `web/vite.config.ts`, a `test:coverage` script and a `task web:coverage:check`.
 
 ## Backend gaps
 
 | Gap | Needed by |
 | --- | --- |
-| Coverage-ignore list + measured-set task | C1 |
-| `golangci-lint` config and task | C2 |
-| Fake services/fixtures reusable across handler tests | C3, C4 |
-| Integration harness that seeds Postgres + MariaDB | C5 |
-| Frontend coverage provider wired | C6 |
+| `cmd/covercheck`, `coverage.ignore`, `coverage.floor` | C1 |
+| `.golangci.yml` and `task lint` | C2 |
+| `internal/testsupport` (request/decode/auth helpers, no plugin imports) | C3 |
+| CI integration job with Postgres + MariaDB services | C9 |
+| Vitest coverage provider and thresholds | C10 |
 
 ## Milestones
 
 | Milestone | Tickets |
 | --- | --- |
 | A - Tooling and gate | C1, C2 |
-| B - Core and plugins | C3, C4 |
-| C - Repository and adapters | C5 |
-| D - Frontend and ratchet | C6, C7 |
+| B - Support, core and plugins | C3, C4, C5, C6, C7, C8 |
+| C - Repository, adapters and CI | C9 |
+| D - Frontend and ratchet | C10, C11 |
 
 ### Dependency graph
 
 ```
-C1 -> C2, C3, C4, C5, C6
-C3, C4, C5 -> C7
-C6 -> C7
+C1 -> C2, C3, C4, C5, C6, C7, C8, C9, C10
+C3 -> C4, C5, C6, C7, C8
+C4..C8 -> C11
+C9 -> C11
+C10 -> C11
 ```
 
-C1 defines the measured set and the floor everything else is judged against.
-C2 adds the linter independently. C7 only after the test tickets land, so the
+C1 defines the measured set and the floor everything else is judged against; C3
+introduces the shared support the plugin tickets reuse. C11 runs last so the
 floor is raised once.
 
 ## Risks
@@ -173,58 +217,33 @@ floor is raised once.
 | --- | --- |
 | Chasing the number produces brittle tests | Principles 1-2: test behaviour at seams; review each test for signal |
 | Generated code keeps dragging the global figure | C1 excludes it from the denominator in the tooling and CI |
-| Integration tests never run locally | C5 uses the same service containers as CI and `task test:integration` |
+| Integration tests never run locally | C9 uses the same service containers as CI and `task test:integration` |
 | Coverage floor blocks unrelated work | The floor only fails on regression; fix forward by adding tests |
-| `golangci-lint` floods the build with pre-existing findings | C2 lands with a curated linter set and a triaged baseline, no unrelated refactors |
+| `golangci-lint` floods the build with pre-existing findings | C2 lands a curated linter set with a triaged baseline, no unrelated refactors |
+| Newest golangci-lint does not yet support Go 1.27 | C2 pins the version in CI and the config; keep the rule set small and stable |
+| `internal/testsupport` becomes a god package / crosses boundaries | Helpers only (stdlib + `core/auth`), never imports a plugin; enforced by the architecture test |
 
 ## Tickets
 
 ### Milestone A - Tooling and gate
 
-- **C1 - Coverage tooling and measured set.** Add the coverage-ignore list and a
-  `task coverage` that reports the measured set per package and writes the total
-  to `coverage.txt`; add `task coverage:check` with a checked-in
-  `coverage.floor`. Record the baseline. Wire the check into the Go CI job.
-  *Gate:* `task coverage:check` passes at the recorded floor; generated packages
-  are absent from the denominator.
+1. [001-coverage-tooling-and-gate.md](ticket/001-coverage-tooling-and-gate.md) - `covercheck`, measured set, floor, CI step
+2. [002-go-linter.md](ticket/002-go-linter.md) - curated `golangci-lint` config, task and CI step
 
-- **C2 - Go linter.** Add `.golangci.yml` (curated: `govet`, `staticcheck`,
-  `errcheck`, `ineffassign`, `unused`, `gofmt`/`goimports`, `revive` subset),
-  a `task lint`, and a CI step. Triage or explicitly disable rules that conflict
-  with documented decisions. *Gate:* `task lint` clean; no behaviour change.
+### Milestone B - Support, core and plugins
 
-### Milestone B - Core and plugins
+3. [003-test-support-and-core.md](ticket/003-test-support-and-core.md) - `internal/testsupport` + core packages at 0%
+4. [004-apikeys-and-reports.md](ticket/004-apikeys-and-reports.md) - the two lowest-covered plugins
+5. [005-store.md](ticket/005-store.md) - refund/retry, wallet/order service, product CRUD
+6. [006-azerothaccount-and-character.md](ticket/006-azerothaccount-and-character.md) - claims, self-service, leaderboards, visibility
+7. [007-identitydiscord-and-adminnotes.md](ticket/007-identitydiscord-and-adminnotes.md) - roles admin, provisioning, notes delete/audit
+8. [008-plugin-registration.md](ticket/008-plugin-registration.md) - `Register`/`permissionDefs` convergence across plugins
 
-- **C3 - Core packages at 0%.** Tests for `core/ttlcache`, `core/plugins`
-  (registry), `core/audit` (recorder contract, redaction of sensitive fields),
-  `core/azerothdb` (row→domain mapping with a fake DB), `core/logging` and
-  `core/itemview`. *Gate:* each reaches its target; no production change without
-  a test-first defect.
+### Milestone C - Repository, adapters and CI
 
-- **C4 - Domain plugins.** Behavioural tests per ticket-sized slice for
-  `reports` (submission, lifecycle, queue read), `store` (purchase, idempotency,
-  refund/retry, reconciliation), `azerothaccount` and `azerothcharacter`
-  (authorization, ownership, admin actions), `adminnotes`, `identitydiscord`
-  (role mapping, permission matrix) and `apikeys` (scopes, auth). Reuse the
-  handler test harness from C3. *Gate:* each reaches its target; every fix has a
-  regression test.
-
-### Milestone C - Repository and adapters
-
-- **C5 - Repository/adapters via integration.** A seeding harness for Postgres
-  (goose + fixtures) and MariaDB (the fake AC fixture); integration tests for
-  each handwritten `*/repository` and both adapters, including error paths,
-  pagination bounds and `LIKE` escaping. Merge integration coverage into the
-  measured profile. *Gate:* targets met; `task test:integration` green in CI.
+9. [009-repository-adapters-and-ci.md](ticket/009-repository-adapters-and-ci.md) - shared integration harness, repository/adapter tests, CI integration job
 
 ### Milestone D - Frontend and ratchet
 
-- **C6 - Frontend coverage.** Enable Vitest coverage for `web/src` excluding
-  generated client and `routeTree.gen.ts`; add thresholds and
-  `task web:coverage:check`; fill the highest-value gaps (auth flow, mutations,
-  error states). *Gate:* `task web:check` and the new check green.
-
-- **C7 - Ratchet and documentation.** Raise `coverage.floor` to the achieved
-  total, document the measurement set, the floor and how to raise it in
-  `docs/development.md`, and add the coverage step to the CI gate description.
-  *Gate:* floor ≥ 60% on the measured set; docs updated.
+10. [010-frontend-coverage.md](ticket/010-frontend-coverage.md) - coverage provider, thresholds, high-value gaps
+11. [011-ratchet-and-docs.md](ticket/011-ratchet-and-docs.md) - raise the floor, document the measurement set
