@@ -18,13 +18,17 @@ import (
 )
 
 type fakeStore struct {
-	product     domain.Product
-	hasProduct  bool
-	balance     int64
-	orders      map[uuid.UUID]domain.Order
-	products    map[string]domain.Product
-	completeErr error
-	outputSet   uuid.UUID
+	product       domain.Product
+	hasProduct    bool
+	balance       int64
+	orders        map[uuid.UUID]domain.Order
+	products      map[string]domain.Product
+	completeErr   error
+	outputSet     uuid.UUID
+	createErr     error
+	updateErr     error
+	deactivateErr error
+	grantErr      error
 }
 
 func newFakeStore() *fakeStore {
@@ -32,6 +36,9 @@ func newFakeStore() *fakeStore {
 }
 
 func (f *fakeStore) CreateProduct(_ context.Context, product domain.Product) (domain.Product, error) {
+	if f.createErr != nil {
+		return domain.Product{}, f.createErr
+	}
 	if product.ID == uuid.Nil {
 		product.ID = uuid.New()
 	}
@@ -40,6 +47,9 @@ func (f *fakeStore) CreateProduct(_ context.Context, product domain.Product) (do
 }
 
 func (f *fakeStore) UpdateProduct(_ context.Context, product domain.Product) (domain.Product, error) {
+	if f.updateErr != nil {
+		return domain.Product{}, f.updateErr
+	}
 	if _, ok := f.products[product.SKU]; !ok {
 		return domain.Product{}, domain.ErrProductNotFound
 	}
@@ -48,6 +58,9 @@ func (f *fakeStore) UpdateProduct(_ context.Context, product domain.Product) (do
 }
 
 func (f *fakeStore) SetProductActive(_ context.Context, sku string, active bool) (domain.Product, error) {
+	if f.deactivateErr != nil {
+		return domain.Product{}, f.deactivateErr
+	}
 	product, ok := f.products[sku]
 	if !ok {
 		return domain.Product{}, domain.ErrProductNotFound
@@ -74,6 +87,9 @@ func (f *fakeStore) ProductBySKU(_ context.Context, sku string) (domain.Product,
 func (f *fakeStore) Wallet(context.Context, uuid.UUID) (int64, error) { return f.balance, nil }
 
 func (f *fakeStore) Grant(_ context.Context, _ uuid.UUID, points int64, _ string, _ uuid.UUID) (int64, error) {
+	if f.grantErr != nil {
+		return 0, f.grantErr
+	}
 	f.balance += points
 	return f.balance, nil
 }
