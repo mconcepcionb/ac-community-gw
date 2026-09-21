@@ -53,7 +53,7 @@ tasks:
   test:integration:
     desc: Run integration tests (requires ACGW_DATABASE_URL and the MySQL fixtures)
     cmds:
-      - go test -tags integration -count=1 ./...
+      - go test -tags integration -count=1 -p 1 ./...
 
   coverage:
     desc: Run unit tests and report coverage over the measured set
@@ -65,7 +65,7 @@ tasks:
     desc: Report coverage over the measured set including the integration profile
     cmds:
       - go test -count=1 -coverprofile=coverage.txt ./...
-      - go test -tags integration -count=1 -coverprofile=coverage-integration.txt ./...
+      - go test -tags integration -count=1 -p 1 -coverprofile=coverage-integration.txt ./...
       - go run ./cmd/covercheck -profile coverage.txt -profile coverage-integration.txt
 
   coverage:check:

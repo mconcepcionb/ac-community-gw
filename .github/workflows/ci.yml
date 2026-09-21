@@ -41,8 +41,7 @@ jobs:
 
   web:
     name: web (lint, typecheck, test)
-    runs-on: ubuntu-latest
-    steps:
+    runs-on: ubuntu-latest    steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
@@ -56,3 +55,65 @@ jobs:
       - name: check
         working-directory: web
         run: pnpm lint && pnpm typecheck && pnpm test
+
+  integration:
+    name: go (integration: postgres + mariadb)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: acgw
+          POSTGRES_PASSWORD: acgw
+          POSTGRES_DB: acgw
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U acgw -d acgw"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      mariadb:
+        image: mariadb:11
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: acore_auth
+          MARIADB_USER: acgw
+          MARIADB_PASSWORD: acgw
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "healthcheck.sh --connect --innodb_initialized"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # Ephemeral credentials for the job's own service containers: this job
+      # never decrypts a repository secret.
+      ACGW_DATABASE_URL: postgres://acgw:acgw@127.0.0.1:5432/acgw?sslmode=disable
+      ACGW_AZEROTH_LOGIN_DB_DSN: acgw:acgw@tcp(127.0.0.1:3306)/acore_auth?parseTime=true
+      ACGW_AZEROTH_CHARACTER_DB_DSN: acgw:acgw@tcp(127.0.0.1:3306)/acore_characters?parseTime=true
+      ACGW_AZEROTH_WORLD_DB_DSN: acgw:acgw@tcp(127.0.0.1:3306)/acore_world?parseTime=true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: seed the AzerothCore fixtures
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y default-mysql-client
+          for file in scripts/mysql/init/*.sql; do
+            mysql -h 127.0.0.1 -P 3306 -u root -proot < "$file"
+          done
+      - name: install goose
+        run: go install github.com/pressly/goose/v3/cmd/goose@v3.28.0
+      - name: migrate
+        run: task db:migrate
+      - name: integration tests
+        run: task test:integration

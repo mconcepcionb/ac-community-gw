@@ -7,31 +7,12 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"os"
 	"testing"
 	"time"
 
-	_ "github.com/jackc/pgx/v5/stdlib"
-
 	"github.com/mconcepcionb/ac-community-gw/internal/core/auth"
+	"github.com/mconcepcionb/ac-community-gw/internal/testsupport/integration"
 )
-
-func openTestDB(t *testing.T) *sql.DB {
-	t.Helper()
-	url := os.Getenv("ACGW_DATABASE_URL")
-	if url == "" {
-		t.Skip("ACGW_DATABASE_URL is not set")
-	}
-	db, err := sql.Open("pgx", url)
-	if err != nil {
-		t.Fatalf("open: %v", err)
-	}
-	if err := db.Ping(); err != nil {
-		t.Fatalf("ping: %v", err)
-	}
-	t.Cleanup(func() { _ = db.Close() })
-	return db
-}
 
 func reset(t *testing.T, db *sql.DB) {
 	t.Helper()
@@ -44,7 +25,7 @@ func reset(t *testing.T, db *sql.DB) {
 }
 
 func TestConsumeOAuthStateRejectsExpired(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	reset(t, db)
 	store := New(db)
 	ctx := context.Background()
@@ -72,7 +53,7 @@ func TestConsumeOAuthStateRejectsExpired(t *testing.T) {
 }
 
 func TestResolveUserByNameFindsExactMatchBeyondFuzzyPage(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	reset(t, db)
 	store := New(db)
 	ctx := context.Background()
@@ -106,7 +87,7 @@ func TestResolveUserByNameFindsExactMatchBeyondFuzzyPage(t *testing.T) {
 }
 
 func TestProvisionIsIdempotent(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	reset(t, db)
 	store := New(db)
 	ctx := context.Background()
@@ -140,7 +121,7 @@ func TestProvisionIsIdempotent(t *testing.T) {
 }
 
 func TestSessionRoundTrip(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	reset(t, db)
 	store := New(db)
 	ctx := context.Background()
@@ -178,7 +159,7 @@ func TestSessionRoundTrip(t *testing.T) {
 }
 
 func TestSessionWithEmptyRoles(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	reset(t, db)
 	store := New(db)
 	ctx := context.Background()
@@ -215,7 +196,7 @@ func TestSessionWithEmptyRoles(t *testing.T) {
 }
 
 func TestOAuthStateIsSingleUse(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	reset(t, db)
 	store := New(db)
 	ctx := context.Background()
@@ -236,7 +217,7 @@ func TestOAuthStateIsSingleUse(t *testing.T) {
 }
 
 func TestMappedRoles(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	reset(t, db)
 	store := New(db)
 	ctx := context.Background()
@@ -267,7 +248,7 @@ func TestMappedRoles(t *testing.T) {
 }
 
 func TestListCommunityUsers(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	reset(t, db)
 	store := New(db)
 	ctx := context.Background()

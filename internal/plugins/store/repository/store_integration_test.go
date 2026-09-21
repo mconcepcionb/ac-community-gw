@@ -4,36 +4,17 @@ package repository
 
 import (
 	"context"
-	"database/sql"
 	"errors"
-	"os"
 	"testing"
 
 	"github.com/google/uuid"
-	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/store/domain"
+	"github.com/mconcepcionb/ac-community-gw/internal/testsupport/integration"
 )
 
-func openTestDB(t *testing.T) *sql.DB {
-	t.Helper()
-	url := os.Getenv("ACGW_DATABASE_URL")
-	if url == "" {
-		t.Skip("ACGW_DATABASE_URL is not set")
-	}
-	db, err := sql.Open("pgx", url)
-	if err != nil {
-		t.Fatalf("open: %v", err)
-	}
-	if err := db.Ping(); err != nil {
-		t.Fatalf("ping: %v", err)
-	}
-	t.Cleanup(func() { _ = db.Close() })
-	return db
-}
-
 func TestProductAdmin(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	ctx := context.Background()
 	store := New(db)
 
@@ -82,7 +63,7 @@ func TestProductAdmin(t *testing.T) {
 }
 
 func TestCreateProductAssignsID(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	ctx := context.Background()
 	store := New(db)
 
@@ -110,7 +91,7 @@ func TestCreateProductAssignsID(t *testing.T) {
 }
 
 func TestFailOrderIsIdempotent(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	ctx := context.Background()
 	store := New(db)
 
@@ -177,7 +158,7 @@ func TestFailOrderIsIdempotent(t *testing.T) {
 }
 
 func TestOrderStatusConstraintRejectsUnknownStatus(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	userID := uuid.New()
 	if _, err := db.Exec(`INSERT INTO community_users (id, discord_id, display_name)
 		VALUES ($1, $2, 'it-status')`, userID, "itstatus-"+userID.String()); err != nil {
@@ -201,7 +182,7 @@ func TestOrderStatusConstraintRejectsUnknownStatus(t *testing.T) {
 }
 
 func TestDeletingUserWithFinancialHistoryIsRestricted(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	ctx := context.Background()
 	store := New(db)
 
@@ -222,7 +203,7 @@ func TestDeletingUserWithFinancialHistoryIsRestricted(t *testing.T) {
 }
 
 func TestStoreFlow(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	ctx := context.Background()
 	store := New(db)
 

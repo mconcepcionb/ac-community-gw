@@ -6,31 +6,13 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"os"
 	"testing"
 
 	"github.com/google/uuid"
-	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"github.com/mconcepcionb/ac-community-gw/internal/plugins/azerothaccount/domain"
+	"github.com/mconcepcionb/ac-community-gw/internal/testsupport/integration"
 )
-
-func openTestDB(t *testing.T) *sql.DB {
-	t.Helper()
-	url := os.Getenv("ACGW_DATABASE_URL")
-	if url == "" {
-		t.Skip("ACGW_DATABASE_URL is not set")
-	}
-	db, err := sql.Open("pgx", url)
-	if err != nil {
-		t.Fatalf("open: %v", err)
-	}
-	if err := db.Ping(); err != nil {
-		t.Fatalf("ping: %v", err)
-	}
-	t.Cleanup(func() { _ = db.Close() })
-	return db
-}
 
 func seedUser(t *testing.T, db *sql.DB, discordID string) uuid.UUID {
 	t.Helper()
@@ -44,7 +26,7 @@ func seedUser(t *testing.T, db *sql.DB, discordID string) uuid.UUID {
 }
 
 func TestAccountLinkRoundTrip(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	_, _ = db.Exec(`DELETE FROM community_users WHERE discord_id LIKE 'itlink-%'`)
 
 	store := New(db)
@@ -92,7 +74,7 @@ func TestAccountLinkRoundTrip(t *testing.T) {
 }
 
 func TestAccountLinkUsernameIsCaseInsensitive(t *testing.T) {
-	db := openTestDB(t)
+	db := integration.Postgres(t)
 	_, _ = db.Exec(`DELETE FROM community_users WHERE discord_id LIKE 'itcase-%'`)
 	t.Cleanup(func() { _, _ = db.Exec(`DELETE FROM community_users WHERE discord_id LIKE 'itcase-%'`) })
 
