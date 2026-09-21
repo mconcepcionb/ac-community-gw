@@ -24,6 +24,8 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: format check
         run: task fmt:check
+      - name: secrets leak guard
+        run: task secrets:check
       - name: vet
         run: task vet
       - name: install golangci-lint

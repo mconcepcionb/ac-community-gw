@@ -13,11 +13,11 @@ credentials that were exposed in the local `.env` as part of the rollout.
 | --- | --- |
 | ADR, threat model and recipient design | implemented (S1) |
 | Age identity ceremony and `.sops.yaml` | implemented (S2) |
-| Encrypted secret set, scripts and `.gitignore` | planned (S3) |
-| Local/compose materialization flow | planned (S4) |
-| Plaintext leak guard in CI | planned (S5) |
-| Rotate exposed credentials and runbooks | planned (S6) |
-| Deploy-host recipient and documentation | planned (S7) |
+| Encrypted secret set, scripts and `.gitignore` | implemented (S3) |
+| Local/compose materialization flow | implemented (S4) |
+| Plaintext leak guard in CI | implemented (S5) |
+| Rotate exposed credentials and runbooks | runbooks updated (S6); the actual Discord/SOAP rotation is a pending operator action |
+| Deploy-host recipient and documentation | flow + template implemented (S7); `secrets/production.sops.env` is created by the operator at first deploy |
 
 ## Decisions
 

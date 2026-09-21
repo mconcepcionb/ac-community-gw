@@ -26,8 +26,8 @@ for file in $(git ls-files 'secrets/*.sops.env'); do
 done
 
 # 3. No tracked file may contain an age private key header.
-if git grep -I -l 'AGE-SECRET-KEY-1' -- . >/dev/null 2>&1; then
-    git grep -I -l 'AGE-SECRET-KEY-1' -- . >&2
+if git grep -I -l 'AGE-SECRET-KEY[-]1' -- . >/dev/null 2>&1; then
+    git grep -I -l 'AGE-SECRET-KEY[-]1' -- . >&2
     echo "an age private key is tracked (see the files above)" >&2
     status=1
 fi

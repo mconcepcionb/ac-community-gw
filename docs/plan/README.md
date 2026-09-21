@@ -34,11 +34,12 @@ are consolidated into the stable docs and an ADR.
 
 ## Active work
 
-1. **[secrets](secrets/README.md)** (S1-S7) - adopt SOPS + age (modeled on but
-   isolated from `homelab-config`) with a dedicated age identity, commit
-   encrypted `secrets/*.sops.env`, add a static leak guard, and rotate the
-   exposed Discord client secret and SOAP password. CI stays secret-free. Start
-   with S1 (ADR 0015/threat model) and S2 (identities/creation rules).
+1. **[secrets](secrets/README.md)** (S1-S7) - SOPS + age secret management with
+   a dedicated age identity, an encrypted `secrets/development.sops.env`, a
+   static leak guard in CI and the `task secrets:*` flow. S1-S5 are implemented;
+   **S6 (rotate the exposed Discord/SOAP credentials) and S7 (the production
+   secret set on the deploy host) are pending operator actions** - the runbooks
+   and `secrets/production.env.example` are in place.
 
 ## Delivered
 

@@ -38,6 +38,10 @@ task secrets:check                     # fail if a plaintext secret is tracked
 `cp .env.example .env` remains the fallback for a machine without an age
 identity. See [runbooks/secret-management.md](runbooks/secret-management.md).
 
+`task secrets:check` runs in CI and should be a required branch-protection
+check: it fails if a plaintext secret under `secrets/` or an age private key is
+tracked. CI never decrypts.
+
 For the SPA, install its dependencies once:
 
 ```bash

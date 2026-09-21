@@ -22,7 +22,7 @@ foreach ($file in git ls-files 'secrets/*.sops.env') {
 }
 
 # 3. No tracked file may contain an age private key header.
-$ageHits = git grep -I -l 'AGE-SECRET-KEY-1' -- .
+$ageHits = git grep -I -l 'AGE-SECRET-KEY[-]1' -- .
 if ($LASTEXITCODE -eq 0 -and $ageHits) {
     $ageHits | ForEach-Object { Write-Error "age private key tracked: $_" }
     $status = 1
