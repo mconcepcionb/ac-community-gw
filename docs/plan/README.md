@@ -24,7 +24,7 @@ are consolidated into the stable docs and an ADR.
 | [ux-improvements](ux-improvements/README.md) | Console primitives, detail pages, roles matrix, online, item tooltips | delivered |
 | [gateway-admin](gateway-admin/README.md) | Route/permission ownership split; gateway vs game plugins | delivered |
 | [review-remediation](review-remediation/README.md) | 42-ticket code-review remediation (security, correctness, hardening) | delivered |
-| [coverage](coverage/README.md) | Coverage tooling, linter, domain/repository tests, ratchet | active |
+| [coverage](coverage/README.md) | Coverage tooling, linter, domain/repository tests, ratchet | delivered |
 | [secrets](secrets/README.md) | SOPS + age secret management and credential rotation | active |
 
 > **Portal note:** tickets 014-020 (player reports, moderation queue, audit
@@ -34,22 +34,18 @@ are consolidated into the stable docs and an ADR.
 
 ## Active work
 
-Both active plans are split into tickets under their `ticket/` directories.
-
-1. **[coverage](coverage/README.md)** (C1-C11) - raise the measured coverage of
-   handwritten Go and the SPA, exclude generated code, add `golangci-lint`, add a
-   CI integration job (Postgres + MariaDB), and ratchet a 60% floor. C1 (tooling,
-   measured set, `coverage.floor`, CI gate), C2 (`golangci-lint`) and C3 (shared
-   `internal/testsupport` + core packages), C4 (apikeys/reports), C5 (store),
-   C6 (azerothaccount/character), C7 (identitydiscord/adminnotes) and C8 (plugin
-   registration) are implemented; measured coverage is 61.4% unit / 76.3% with
-   integration. C9 (repository + CI integration job) and C10 (frontend coverage,
-   68% statements) are implemented. Continue with C11 (ratchet + docs).
-2. **[secrets](secrets/README.md)** (S1-S7) - adopt SOPS + age (modeled on but
+1. **[secrets](secrets/README.md)** (S1-S7) - adopt SOPS + age (modeled on but
    isolated from `homelab-config`) with a dedicated age identity, commit
    encrypted `secrets/*.sops.env`, add a static leak guard, and rotate the
    exposed Discord client secret and SOAP password. CI stays secret-free. Start
    with S1 (ADR 0015/threat model) and S2 (identities/creation rules).
+
+## Delivered
+
+- **[coverage](coverage/README.md)** (C1-C11) - delivered. Measured coverage
+  61.4% unit / 76.3% with integration; `coverage.floor` 61.0; SPA 68.4%
+  statements with a 60% threshold; `golangci-lint` in the Go gate; a CI
+  integration job with Postgres + MariaDB.
 
 ## Roadmap
 

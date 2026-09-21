@@ -95,9 +95,15 @@ test-only architecture package, the fake AzerothCore double and `cmd/`). Those
 excluded packages are still shown, but they are not counted in the total.
 
 `task coverage:check` (also run in CI) fails when the total falls below
-`coverage.floor`. The floor only ratchets up: raise it in the same change that
-adds coverage. `task coverage:integration` merges the `-tags integration`
-profile into the total.
+`coverage.floor` (currently **61.0**). The floor only ratchets up: raise it in
+the same change that adds coverage. `task coverage:integration` merges the
+`-tags integration` profile into the total (currently **76.3%**).
+
+The SPA gate is separate: `task web:coverage` enforces 60% statements/lines over
+`web/src` (currently **68.4%** statements) and excludes the generated client and
+`routeTree.gen.ts`. CI runs `task coverage:check` in the Go job,
+`pnpm test:coverage` in the web job, and `task test:integration` in the
+integration job.
 
 ## Code generation
 

@@ -1,12 +1,8 @@
 # Test coverage
 
-## Goal
-
-Raise the measured coverage of the handwritten Go code (and the SPA) to a
-meaningful floor, stop counting generated code against the denominator, add a
-Go linter, and wire a **ratchet** into CI so coverage only goes up.
-
 ## Status
+
+**Delivered.** All eleven tickets (C1-C11) are implemented on `main`.
 
 | Area | State |
 | --- | --- |
@@ -14,11 +10,21 @@ Go linter, and wire a **ratchet** into CI so coverage only goes up.
 | Coverage tooling, measured set and gate | implemented (C1) |
 | `golangci-lint` in the Go gate | implemented (C2) |
 | Shared test support + core packages | implemented (C3) |
-| Plugin domain packages | implemented (C4-C7): apikeys 81%, reports 81%, store 82%, azerothaccount 82%, azerothcharacter 77%, identitydiscord 81%, adminnotes 87% |
+| Plugin domain packages | implemented (C4-C7) |
 | Plugin registration convergence | implemented (C8) |
-| Repository/adapters + CI integration job | implemented (C9); repositories 73-87%, postgres 94%, azerothmysql 58% |
-| Frontend coverage thresholds | implemented (C10): 68% statements / 74% branches |
-| Ratchet and documentation | planned (C11) |
+| Repository/adapters + CI integration job | implemented (C9) |
+| Frontend coverage thresholds | implemented (C10) |
+| Ratchet and documentation | implemented (C11) |
+
+**Achieved:** measured Go coverage **61.4% unit / 76.3% with integration**;
+`coverage.floor` is set to **61.0**; SPA coverage is **68.4% statements /
+74.8% branches** with a 60% threshold.
+
+## Goal
+
+Raise the measured coverage of the handwritten Go code (and the SPA) to a
+meaningful floor, stop counting generated code against the denominator, add a
+Go linter, and wire a **ratchet** into CI so coverage only goes up.
 
 ## Decisions
 
