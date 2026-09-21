@@ -171,6 +171,12 @@ tasks:
     cmds:
       - pnpm test
 
+  web:coverage:
+    desc: Run SPA tests with coverage thresholds (see web/vite.config.ts)
+    dir: web
+    cmds:
+      - pnpm test:coverage
+
   web:typecheck:
     desc: Type-check the SPA
     dir: web

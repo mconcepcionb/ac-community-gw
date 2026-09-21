@@ -55,6 +55,9 @@ jobs:
       - name: check
         working-directory: web
         run: pnpm lint && pnpm typecheck && pnpm test
+      - name: coverage
+        working-directory: web
+        run: pnpm test:coverage
 
   integration:
     name: go (integration: postgres + mariadb)

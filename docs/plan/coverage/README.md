@@ -17,7 +17,7 @@ Go linter, and wire a **ratchet** into CI so coverage only goes up.
 | Plugin domain packages | implemented (C4-C7): apikeys 81%, reports 81%, store 82%, azerothaccount 82%, azerothcharacter 77%, identitydiscord 81%, adminnotes 87% |
 | Plugin registration convergence | implemented (C8) |
 | Repository/adapters + CI integration job | implemented (C9); repositories 73-87%, postgres 94%, azerothmysql 58% |
-| Frontend coverage thresholds | planned (C10) |
+| Frontend coverage thresholds | implemented (C10): 68% statements / 74% branches |
 | Ratchet and documentation | planned (C11) |
 
 ## Decisions

@@ -43,8 +43,8 @@ Both active plans are split into tickets under their `ticket/` directories.
    `internal/testsupport` + core packages), C4 (apikeys/reports), C5 (store),
    C6 (azerothaccount/character), C7 (identitydiscord/adminnotes) and C8 (plugin
    registration) are implemented; measured coverage is 61.4% unit / 76.3% with
-   integration. C9 (repository + CI integration job) is implemented. Continue
-   with C10 (frontend coverage).
+   integration. C9 (repository + CI integration job) and C10 (frontend coverage,
+   68% statements) are implemented. Continue with C11 (ratchet + docs).
 2. **[secrets](secrets/README.md)** (S1-S7) - adopt SOPS + age (modeled on but
    isolated from `homelab-config`) with a dedicated age identity, commit
    encrypted `secrets/*.sops.env`, add a static leak guard, and rotate the

@@ -57,6 +57,7 @@ task openapi:check
 task web:dev
 task web:build
 task web:test
+task web:coverage    # vitest --coverage with thresholds (web/vite.config.ts)
 task web:lint
 task web:check
 task db:up
@@ -125,6 +126,10 @@ The SPA lives under `web/` (React + TypeScript + Vite). See
 - `task web:build` builds the SPA into `web/dist`. Caddy serves it in front of
   the gateway (`web/Caddyfile`, `web/Dockerfile`); the gateway itself never
   serves the SPA.
+- `task web:coverage` runs the Vitest coverage gate (60% statements/lines over
+  `web/src`, excluding the generated client and `routeTree.gen.ts`). It runs
+  test files serially so the threshold is stable on slow machines; CI runs the
+  same command.
 
 ## Conventions
 

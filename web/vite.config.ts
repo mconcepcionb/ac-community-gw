@@ -30,6 +30,24 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
     css: false,
+    testTimeout: 20000,
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json-summary", "lcov"],
+      reportsDirectory: "./coverage",
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "src/api/generated/**",
+        "src/routeTree.gen.ts",
+        "src/test/**",
+        "src/**/*.d.ts",
+        "src/**/*.{test,spec}.{ts,tsx}",
+      ],
+      thresholds: {
+        statements: 60,
+        lines: 60,
+      },
+    },
   },
 });
