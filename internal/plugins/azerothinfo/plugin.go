@@ -92,15 +92,7 @@ func (p *Plugin) handlePublicStatus(w http.ResponseWriter, r *http.Request) {
 		httpapi.WriteError(w, r, httpapi.ErrBadGateway)
 		return
 	}
-	response := StatusResponse{
-		Output:            info.Output,
-		Version:           info.Version,
-		ConnectedPlayers:  info.ConnectedPlayers,
-		CharactersInWorld: info.CharactersInWorld,
-		ConnectionPeak:    info.ConnectionPeak,
-		Queue:             info.Queue,
-		Uptime:            info.Uptime,
-	}
+	response := StatusResponse(info)
 	p.statusCache.Set("status", response)
 	httpapi.WriteJSON(w, http.StatusOK, response)
 }
@@ -151,13 +143,5 @@ func (p *Plugin) handleStatus(w http.ResponseWriter, r *http.Request) {
 		httpapi.WriteError(w, r, httpapi.ErrBadGateway)
 		return
 	}
-	httpapi.WriteJSON(w, http.StatusOK, StatusResponse{
-		Output:            info.Output,
-		Version:           info.Version,
-		ConnectedPlayers:  info.ConnectedPlayers,
-		CharactersInWorld: info.CharactersInWorld,
-		ConnectionPeak:    info.ConnectionPeak,
-		Queue:             info.Queue,
-		Uptime:            info.Uptime,
-	})
+	httpapi.WriteJSON(w, http.StatusOK, StatusResponse(info))
 }

@@ -510,15 +510,6 @@ func writeDeliveryError(w http.ResponseWriter, r *http.Request, err error) {
 	}
 }
 
-func writeGrantError(w http.ResponseWriter, r *http.Request, err error) {
-	var apiErr *httpapi.APIError
-	if errors.As(err, &apiErr) {
-		httpapi.WriteError(w, r, apiErr)
-		return
-	}
-	httpapi.WriteError(w, r, httpapi.ErrInternal)
-}
-
 func (p *Plugin) productDTO(ctx context.Context, product domain.Product) Product {
 	items := make([]ProductItem, 0, len(product.Items))
 	for _, item := range product.Items {

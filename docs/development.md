@@ -6,6 +6,7 @@
 - Task
 - sqlc
 - Goose
+- golangci-lint 2.x (see `.golangci.yml`)
 - Docker + Docker Compose (optional)
 - PostgreSQL 16+ (or `task db:up`)
 - Node 22+ and pnpm (only for the SPA under `web/`)
@@ -43,9 +44,12 @@ task test
 task test:race
 task test:integration  # needs ACGW_DATABASE_URL and the MySQL fixtures
 task coverage
+task coverage:check    # fail when measured coverage drops below coverage.floor
+task coverage:integration  # unit + integration profiles
 task fmt
 task fmt:check
 task vet
+task lint              # golangci-lint (see .golangci.yml)
 task check          # fmt:check + vet + test + test:race + openapi:check + web:check
 task codegen:sqlc
 task openapi        # regenerate api/swagger.yaml and the TS client
@@ -80,6 +84,19 @@ task test
 - The SOAP transport is tested with a fake SOAP server.
 - The architectural import boundaries are enforced by tests in
   `internal/architecture`, including a `gofmt` check.
+
+### Coverage
+
+`task coverage` writes `coverage.txt` and prints a per-package table produced by
+`cmd/covercheck`, which measures only the **measured set**: `./internal/...`
+minus the prefixes listed in `coverage.ignore` (generated code, the
+test-only architecture package, the fake AzerothCore double and `cmd/`). Those
+excluded packages are still shown, but they are not counted in the total.
+
+`task coverage:check` (also run in CI) fails when the total falls below
+`coverage.floor`. The floor only ratchets up: raise it in the same change that
+adds coverage. `task coverage:integration` merges the `-tags integration`
+profile into the total.
 
 ## Code generation
 

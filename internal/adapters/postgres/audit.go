@@ -110,7 +110,7 @@ FROM audit_log WHERE %s ORDER BY occurred_at DESC LIMIT $%d OFFSET $%d`,
 	if err != nil {
 		return nil, fmt.Errorf("postgres: query audit: %w", err)
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }()
 
 	entries := make([]audit.Entry, 0)
 	for rows.Next() {

@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	// Register the MySQL driver with database/sql.
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/mconcepcionb/ac-community-gw/internal/core/azerothdb"

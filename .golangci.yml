@@ -1,0 +1,42 @@
+version: "2"
+
+run:
+  timeout: 5m
+
+linters:
+  default: none
+  enable:
+    - govet
+    - staticcheck
+    - errcheck
+    - ineffassign
+    - unused
+    - revive
+  settings:
+    revive:
+      rules:
+        - name: blank-imports
+        - name: context-as-argument
+        - name: error-return
+        - name: error-strings
+        - name: error-naming
+        - name: errorf
+        - name: indent-error-flow
+        - name: var-naming
+        - name: var-declaration
+        - name: range
+        - name: unreachable-code
+        - name: superfluous-else
+        - name: redefines-builtin-id
+  exclusions:
+    generated: lax
+    paths:
+      - internal/plugins/.*/repository/generated
+      - internal/fake/azerothcore
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax

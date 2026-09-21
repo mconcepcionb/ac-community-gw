@@ -56,10 +56,23 @@ tasks:
       - go test -tags integration -count=1 ./...
 
   coverage:
-    desc: Run tests with coverage
+    desc: Run unit tests and report coverage over the measured set
     cmds:
       - go test -count=1 -coverprofile=coverage.txt ./...
-      - go tool cover -func=coverage.txt
+      - go run ./cmd/covercheck -profile coverage.txt
+
+  coverage:integration:
+    desc: Report coverage over the measured set including the integration profile
+    cmds:
+      - go test -count=1 -coverprofile=coverage.txt ./...
+      - go test -tags integration -count=1 -coverprofile=coverage-integration.txt ./...
+      - go run ./cmd/covercheck -profile coverage.txt -profile coverage-integration.txt
+
+  coverage:check:
+    desc: Fail when measured coverage drops below coverage.floor
+    cmds:
+      - go test -count=1 -coverprofile=coverage.txt ./...
+      - go run ./cmd/covercheck -profile coverage.txt -floor coverage.floor
 
   fmt:
     desc: Format all Go source files
@@ -76,13 +89,20 @@ tasks:
     cmds:
       - go vet ./...
 
+  lint:
+    desc: Run golangci-lint (see .golangci.yml)
+    cmds:
+      - golangci-lint run ./...
+
   check:
-    desc: Format check, vet, tests, race, OpenAPI drift and SPA checks
+    desc: Format check, vet, lint, tests, coverage, race, OpenAPI drift and SPA checks
     cmds:
       - task: fmt:check
       - task: vet
+      - task: lint
       - task: test
       - task: test:race
+      - task: coverage:check
       - task: openapi:check
       - task: web:check
 

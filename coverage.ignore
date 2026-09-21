@@ -1,0 +1,11 @@
+# Packages excluded from the measured coverage denominator.
+#
+# These carry no meaningful test signal for the floor: generated code, the
+# test-only architecture package, the fake AzerothCore double and command
+# wiring. They are still reported, but never counted in the total.
+#
+# Globs: `*` and `?` do not cross a `/`, `**` does.
+internal/plugins/*/repository/generated
+internal/architecture
+internal/fake/azerothcore
+cmd/

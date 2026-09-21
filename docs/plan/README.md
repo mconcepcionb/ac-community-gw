@@ -38,8 +38,9 @@ Both active plans are split into tickets under their `ticket/` directories.
 
 1. **[coverage](coverage/README.md)** (C1-C11) - raise the measured coverage of
    handwritten Go and the SPA, exclude generated code, add `golangci-lint`, add a
-   CI integration job (Postgres + MariaDB), and ratchet a 60% floor. Start with
-   C1 (tooling/measured set) and C2 (linter), then C3 (shared test support).
+   CI integration job (Postgres + MariaDB), and ratchet a 60% floor. C1 (tooling,
+   measured set, `coverage.floor`, CI gate) and C2 (`golangci-lint`) are
+   implemented; continue with C3 (shared test support).
 2. **[secrets](secrets/README.md)** (S1-S7) - adopt SOPS + age (modeled on but
    isolated from `homelab-config`) with a dedicated age identity, commit
    encrypted `secrets/*.sops.env`, add a static leak guard, and rotate the

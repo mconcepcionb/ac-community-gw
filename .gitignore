@@ -9,6 +9,7 @@
 # Test and coverage output
 *.out
 coverage.txt
+coverage-integration.txt
 coverage.html
 
 # Go workspace files

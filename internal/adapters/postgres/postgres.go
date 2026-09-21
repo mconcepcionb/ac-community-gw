@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 
+	// Register the pgx stdlib driver with database/sql.
 	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"github.com/mconcepcionb/ac-community-gw/internal/core/config"

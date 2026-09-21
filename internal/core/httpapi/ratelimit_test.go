@@ -13,8 +13,11 @@ func TestRateLimiterBurstAndRefill(t *testing.T) {
 	limiter := NewRateLimiter(60, 2)
 	limiter.now = func() time.Time { return now }
 
-	if !limiter.Allow("a") || !limiter.Allow("a") {
-		t.Fatal("burst of 2 should be allowed")
+	if !limiter.Allow("a") {
+		t.Fatal("first request of the burst should be allowed")
+	}
+	if !limiter.Allow("a") {
+		t.Fatal("second request of the burst should be allowed")
 	}
 	if limiter.Allow("a") {
 		t.Fatal("third request should be denied")
