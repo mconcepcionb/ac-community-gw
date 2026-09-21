@@ -19,26 +19,44 @@ func (f *fakeExecutor) Execute(_ context.Context, command string) (string, error
 }
 
 type fakeCharacters struct {
-	characters []azerothdb.Character
-	last       azerothdb.CharacterQuery
-	findErr    error
+	characters    []azerothdb.Character
+	last          azerothdb.CharacterQuery
+	findErr       error
+	listErr       error
+	topErr        error
+	topCalls      int
+	lastTopLimit  int
+	lastTopOffset int
+	equipment     []azerothdb.Equipment
+	equipmentErr  error
 }
 
 func (f *fakeCharacters) ListCharacters(_ context.Context, query azerothdb.CharacterQuery) ([]azerothdb.Character, error) {
 	f.last = query
+	if f.listErr != nil {
+		return nil, f.listErr
+	}
 	return f.characters, nil
 }
 
 func (f *fakeCharacters) CountCharacters(_ context.Context, query azerothdb.CharacterQuery) (int, error) {
 	f.last = query
+	if f.listErr != nil {
+		return 0, f.listErr
+	}
 	return len(f.characters), nil
 }
 
 func (f *fakeCharacters) Equipment(context.Context, int64) ([]azerothdb.Equipment, error) {
-	return nil, nil
+	return f.equipment, f.equipmentErr
 }
 
-func (f *fakeCharacters) TopCharacters(_ context.Context, _ string, _, _ int) ([]azerothdb.Character, error) {
+func (f *fakeCharacters) TopCharacters(_ context.Context, _ string, limit, offset int) ([]azerothdb.Character, error) {
+	f.topCalls++
+	f.lastTopLimit, f.lastTopOffset = limit, offset
+	if f.topErr != nil {
+		return nil, f.topErr
+	}
 	return f.characters, nil
 }
 

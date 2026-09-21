@@ -55,6 +55,7 @@ type fakeLinks struct {
 	links     map[uuid.UUID]domain.Link
 	byUser    map[string]uuid.UUID
 	upsertErr error
+	getErr    error
 }
 
 func newFakeLinks() *fakeLinks {
@@ -75,6 +76,9 @@ func (f *fakeLinks) Upsert(_ context.Context, userID uuid.UUID, username string,
 }
 
 func (f *fakeLinks) Get(_ context.Context, userID uuid.UUID) (domain.Link, error) {
+	if f.getErr != nil {
+		return domain.Link{}, f.getErr
+	}
 	link, ok := f.links[userID]
 	if !ok {
 		return domain.Link{}, domain.ErrLinkNotFound
