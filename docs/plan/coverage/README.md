@@ -14,7 +14,7 @@ Go linter, and wire a **ratchet** into CI so coverage only goes up.
 | Coverage tooling, measured set and gate | implemented (C1) |
 | `golangci-lint` in the Go gate | implemented (C2) |
 | Shared test support + core packages | implemented (C3) |
-| Plugin domain packages | in progress (C4-C6): apikeys 81%, reports 81%, store 82%, azerothaccount 82%, azerothcharacter 77% |
+| Plugin domain packages | implemented (C4-C7): apikeys 81%, reports 81%, store 82%, azerothaccount 82%, azerothcharacter 77%, identitydiscord 81%, adminnotes 87% |
 | Repository/adapters + CI integration job | planned (C9) |
 | Frontend coverage thresholds | planned (C10) |
 | Ratchet and documentation | planned (C11) |

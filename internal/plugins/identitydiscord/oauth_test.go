@@ -66,6 +66,20 @@ type fakeRepo struct {
 	byDiscord map[string]uuid.UUID
 	users     []userdir.User
 	profile   userdir.User
+
+	rolesList     []string
+	roleGrants    []identitydiscordrepo.RolePermission
+	mappings      []identitydiscordrepo.DiscordRoleMapping
+	listRolesErr  error
+	replaceErr    error
+	upsertErr     error
+	upsertRoleErr error
+	deleteErr     error
+
+	lastReplaceRole  string
+	lastReplacePerms []string
+	lastMappingID    string
+	lastMappingRole  string
 }
 
 func (f *fakeRepo) ListUsers(_ context.Context, _ string, _, _ int) ([]userdir.User, error) {
@@ -111,26 +125,34 @@ func (f *fakeRepo) UpdateUserRoles(_ context.Context, _ uuid.UUID, roles []strin
 func (f *fakeRepo) SyncPermissions(context.Context, []permissions.Definition) error { return nil }
 
 func (f *fakeRepo) ListRolePermissions(context.Context) ([]identitydiscordrepo.RolePermission, error) {
-	return nil, nil
+	return f.roleGrants, nil
 }
 
-func (f *fakeRepo) ListRoles(context.Context) ([]string, error) { return nil, nil }
+func (f *fakeRepo) ListRoles(context.Context) ([]string, error) {
+	return f.rolesList, f.listRolesErr
+}
 
-func (f *fakeRepo) UpsertRole(context.Context, string) error { return nil }
+func (f *fakeRepo) UpsertRole(context.Context, string) error { return f.upsertRoleErr }
 
 func (f *fakeRepo) GrantRolePermission(context.Context, string, string) error { return nil }
 
 func (f *fakeRepo) RevokeRolePermission(context.Context, string, string) error { return nil }
 
-func (f *fakeRepo) ReplaceRolePermissions(context.Context, string, []string) error { return nil }
-
-func (f *fakeRepo) ListDiscordRoleMappings(context.Context) ([]identitydiscordrepo.DiscordRoleMapping, error) {
-	return nil, nil
+func (f *fakeRepo) ReplaceRolePermissions(_ context.Context, role string, perms []string) error {
+	f.lastReplaceRole, f.lastReplacePerms = role, perms
+	return f.replaceErr
 }
 
-func (f *fakeRepo) UpsertDiscordRoleMapping(context.Context, string, string) error { return nil }
+func (f *fakeRepo) ListDiscordRoleMappings(context.Context) ([]identitydiscordrepo.DiscordRoleMapping, error) {
+	return f.mappings, nil
+}
 
-func (f *fakeRepo) DeleteDiscordRoleMapping(context.Context, string) error { return nil }
+func (f *fakeRepo) UpsertDiscordRoleMapping(_ context.Context, discordRoleID, role string) error {
+	f.lastMappingID, f.lastMappingRole = discordRoleID, role
+	return f.upsertErr
+}
+
+func (f *fakeRepo) DeleteDiscordRoleMapping(context.Context, string) error { return f.deleteErr }
 
 func newTestPlugin(t *testing.T, provider auth.DiscordProvider, repo Repository) (*Plugin, *auth.Manager, *MemoryStateStore) {
 	t.Helper()

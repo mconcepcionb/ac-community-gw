@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 
@@ -15,8 +16,15 @@ import (
 )
 
 type fakeStore struct {
-	annotation domain.Annotation
-	getErr     error
+	annotation  domain.Annotation
+	getErr      error
+	byTargetErr error
+	updateErr   error
+	deleteErr   error
+	createErr   error
+	annotations []domain.Annotation
+	created     domain.Annotation
+	deleted     uuid.UUID
 }
 
 func (f *fakeStore) Create(
@@ -25,17 +33,24 @@ func (f *fakeStore) Create(
 	authorID uuid.UUID,
 	body string,
 ) (domain.Annotation, error) {
-	return domain.Annotation{
+	if f.createErr != nil {
+		return domain.Annotation{}, f.createErr
+	}
+	annotation := domain.Annotation{
 		ID:         uuid.New(),
 		TargetType: targetType,
 		TargetID:   targetID,
 		AuthorID:   authorID,
 		Body:       body,
-	}, nil
+		CreatedAt:  time.Now(),
+		UpdatedAt:  time.Now(),
+	}
+	f.created = annotation
+	return annotation, nil
 }
 
 func (f *fakeStore) ByTarget(context.Context, string, string, int, int) ([]domain.Annotation, error) {
-	return nil, nil
+	return f.annotations, f.byTargetErr
 }
 
 func (f *fakeStore) Get(context.Context, uuid.UUID) (domain.Annotation, error) {
@@ -43,13 +58,22 @@ func (f *fakeStore) Get(context.Context, uuid.UUID) (domain.Annotation, error) {
 }
 
 func (f *fakeStore) Update(_ context.Context, id uuid.UUID, body string) (domain.Annotation, error) {
+	if f.updateErr != nil {
+		return domain.Annotation{}, f.updateErr
+	}
 	annotation := f.annotation
 	annotation.ID = id
 	annotation.Body = body
 	return annotation, nil
 }
 
-func (f *fakeStore) Delete(context.Context, uuid.UUID) error { return nil }
+func (f *fakeStore) Delete(_ context.Context, id uuid.UUID) error {
+	if f.deleteErr != nil {
+		return f.deleteErr
+	}
+	f.deleted = id
+	return nil
+}
 
 func TestHandleCreateRejectsMissingFields(t *testing.T) {
 	plugin := New(Config{Store: &fakeStore{}})

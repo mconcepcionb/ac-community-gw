@@ -40,9 +40,10 @@ Both active plans are split into tickets under their `ticket/` directories.
    handwritten Go and the SPA, exclude generated code, add `golangci-lint`, add a
    CI integration job (Postgres + MariaDB), and ratchet a 60% floor. C1 (tooling,
    measured set, `coverage.floor`, CI gate), C2 (`golangci-lint`) and C3 (shared
-   `internal/testsupport` + core packages), C4 (apikeys/reports), C5 (store) and
-   C6 (azerothaccount/character) are implemented; continue with C7
-   (identitydiscord/adminnotes).
+   `internal/testsupport` + core packages), C4 (apikeys/reports), C5 (store),
+   C6 (azerothaccount/character) and C7 (identitydiscord/adminnotes) are
+   implemented; measured coverage is 61.4%. Continue with C8 (plugin
+   registration).
 2. **[secrets](secrets/README.md)** (S1-S7) - adopt SOPS + age (modeled on but
    isolated from `homelab-config`) with a dedicated age identity, commit
    encrypted `secrets/*.sops.env`, add a static leak guard, and rotate the
