@@ -18,6 +18,9 @@ import (
 	"github.com/mconcepcionb/ac-community-gw/internal/core/auth"
 )
 
+// NewRecorder returns a response recorder.
+func NewRecorder() *httptest.ResponseRecorder { return httptest.NewRecorder() }
+
 // NewRequest builds a request with an optional JSON body.
 func NewRequest(method, target, body string) *http.Request {
 	var reader io.Reader
