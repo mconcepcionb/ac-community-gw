@@ -26,6 +26,7 @@ are consolidated into the stable docs and an ADR.
 | [review-remediation](review-remediation/README.md) | 42-ticket code-review remediation (security, correctness, hardening) | delivered |
 | [coverage](coverage/README.md) | Coverage tooling, linter, domain/repository tests, ratchet | delivered |
 | [secrets](secrets/README.md) | SOPS + age secret management and credential rotation | active |
+| [demo](demo/README.md) | One-command local demo and scripted walkthrough | active |
 
 > **Portal note:** tickets 014-020 (player reports, moderation queue, audit
 > viewer, roles admin, leaderboards, public surface, API keys) are implemented
@@ -40,6 +41,10 @@ are consolidated into the stable docs and an ADR.
    **S6 (rotate the exposed Discord/SOAP credentials) and S7 (the production
    secret set on the deploy host) are pending operator actions** - the runbooks
    and `secrets/production.env.example` are in place.
+2. **[demo](demo/README.md)** (D1-D6) - a one-command local demo (`task demo`)
+   and a scripted walkthrough (`docs/demo.md`) for prospective server owners.
+   D1-D6 are implemented; the end-to-end run still needs verification on a
+   machine with a responsive Docker daemon.
 
 ## Delivered
 

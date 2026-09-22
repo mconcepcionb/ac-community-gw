@@ -202,6 +202,45 @@ tasks:
       - task: web:typecheck
       - task: web:test
 
+  demo:
+    desc: Run the full local demo (fake AzerothCore + gateway + SPA)
+    cmds:
+      - cmd: pwsh -NoProfile -File scripts/demo/run.ps1
+        platforms: [windows]
+      - cmd: sh scripts/demo/run.sh
+        platforms: [linux, darwin]
+
+  demo:setup:
+    desc: Prepare the demo (databases, migrations, seed)
+    cmds:
+      - docker compose up -d --wait postgres mariadb
+      - task: db:migrate
+      - task: demo:seed
+
+  demo:seed:
+    desc: Seed the demo catalog and admin role (idempotent)
+    cmds:
+      - cmd: pwsh -NoProfile -File scripts/demo/seed.ps1
+        platforms: [windows]
+      - cmd: sh scripts/demo/seed.sh
+        platforms: [linux, darwin]
+
+  demo:grant:
+    desc: Grant demo points to the user in ACGW_DEMO_DISCORD_ID
+    cmds:
+      - cmd: pwsh -NoProfile -File scripts/demo/grant.ps1
+        platforms: [windows]
+      - cmd: sh scripts/demo/grant.sh
+        platforms: [linux, darwin]
+
+  demo:reset:
+    desc: Reset the demo (fake AzerothCore state + re-seed)
+    cmds:
+      - cmd: pwsh -NoProfile -File scripts/demo/reset.ps1
+        platforms: [windows]
+      - cmd: sh scripts/demo/reset.sh
+        platforms: [linux, darwin]
+
   secrets:edit:
     desc: Edit an encrypted secret set with sops (ENV defaults to development)
     vars:

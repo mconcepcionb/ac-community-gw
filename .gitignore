@@ -41,6 +41,9 @@ Thumbs.db
 /tmp/
 *.log
 
+# Demo runtime output
+.demo/
+
 # Frontend (web/)
 web/node_modules/
 web/dist/

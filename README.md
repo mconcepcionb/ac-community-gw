@@ -57,6 +57,19 @@ same origin (`web/Caddyfile`; `task docker:up` runs the whole stack). The
 gateway never serves the SPA. See [docs/frontend.md](docs/frontend.md) and
 [ADR 0012](docs/ADR/0012-decoupled-spa-serving.md).
 
+## Demo
+
+A one-command local demo runs the gateway, the SPA, the compose databases and a
+fake AzerothCore with a live command dashboard:
+
+```bash
+task demo
+```
+
+A scripted five-minute walkthrough (player purchase -> in-game delivery -> staff
+console -> the SOAP/CLI layer the gateway hides) is in
+[docs/demo.md](docs/demo.md), including the Discord preflight.
+
 ## Taskfile
 
 | Task | Description |
